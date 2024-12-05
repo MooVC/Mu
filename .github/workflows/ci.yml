@@ -16,7 +16,7 @@ on:
 env:
   configuration: 'Debug'
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-  solution: 'Valuify.sln'
+  solution: 'Mu.sln'
 
 jobs:
   build:
