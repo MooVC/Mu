@@ -2,15 +2,15 @@
 
 ## Overview 
 
-Mu is a reimagining of the MooVC framework, designed to streamline the development of applications that adhere to the Domain-Driven Design (DDD) Architectural Style. Mu differentiates itself from its predecessor by placing the following principles at its core.
+Mu is a reimagining of the [MooVC Architectural Framework](https://github.com/MooVC/MooVC.Architecture), designed to streamline the development of applications that adhere to the Domain-Driven Design (DDD) Architectural Style. Mu differentiates itself from its predecessor by placing the following principles at its core.
 
 ### Maintain Alignment with the Domain Model
 
-Mu must faithfully represent the conceptual model of the target domain. As the domain language and understanding evolve, the framework should facilitate synchronization between the model’s expression and its implementation, ensuring changes are reflected without distortion.
+Mu must ensure that engineers can faithfully represent the conceptual model of the target domain through the framework. As the domain language and understanding evolve, the framework should facilitate synchronization between the modelâ€™s expression and its implementation, ensuring changes are reflected without distortion.
 
 ### Preserve the Ubiquitous Language
 
-Mu must ensure that the implementation remains a direct, untainted reflection of the domain’s ubiquitous language. Technical concerns should be isolated, keeping the domain model clear, intuitive, and free from jargon that obscures intent.
+Mu must ensure that the implementation remains a direct, untainted reflection of the domainâ€™s ubiquitous language. Technical concerns should be isolated, keeping the domain model clear, intuitive, and free from jargon that obscures intent.
 
 ### Facilitate Vertical Slices
 
@@ -24,7 +24,7 @@ Mu must embrace automation wherever possible, enabling engineers to concentrate 
 
 ## Removal of GUID as the Global Identifier for Aggregates
 
-The global identifier for an Aggregate is no longer constraint to the GUID, allowing for an Aggregate to utilize an identifier type that serves as a more clean expression of the domain.
+The global identifier for an Aggregate is no longer constrained to a GUID, allowing for an Aggregate to utilize an identifier type that serves as a more clean expression of the domain.
 
 This change aligns with:
 
@@ -40,7 +40,7 @@ This change aligns with:
 
 ## Renaming of Expressions of Intent and Consequence
 
-The concepts of a Command, Domain Event, Result, and Query have been decomposed and rearranges to better reflect their nature. Commands and Queries are now considered a UseCase. Usecases are divided into two categories, Mutational and NonMutational. Mutational usecases are further subdivided as Creational and Transitional. Finally, Domain Events are now known as Facts.
+The concepts of a Command, Domain Event, Result, and Query have been decomposed and rearranged to better reflect their nature. Commands and Queries are now considered a UseCase. Usecases are divided into two categories, Mutational and NonMutational. Mutational usecases are further subdivided as Creational and Transitional. Finally, Domain Events are now known as Facts.
 
 ```mermaid
 classDiagram
@@ -174,7 +174,7 @@ This change aligns with:
 
 ## Separation of IPC from Expressions of Intent and Consequence
 
-Command, Domain Event, Result, and Query all derived from Message, a mechanism that facilitates IPC. The IPC elements have now been extracted and decomposed, with the relationship between the communications mechanism and the expresssion of intent and consequence more clearly defined. Usecases are considered Synchronous Messages, with an Intent and an Outcome. Events are considered Asynchronous Messages, correlating a Fact with its Origin and the time is was deemed to have happened. 
+Command, Domain Event, Result, and Query all derived from Message, a mechanism that facilitates IPC. The IPC elements have now been extracted and decomposed, with the relationship between the communications mechanism and the expresssion of intent and consequence more clearly defined. Usecases are considered synchronous communications, expressed through an an Intent and observed through an Outcome. Events are considered asynchronous communications, correlating a Fact with its Origin and the time is was deemed to have happened. 
 
 ```mermaid
 classDiagram
