@@ -1,4 +1,5 @@
 ﻿namespace Mu.Modelling.Behavior;
+
 public abstract record Query
     : NonMutational
 {

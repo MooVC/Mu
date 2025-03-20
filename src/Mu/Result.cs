@@ -13,7 +13,7 @@ public record Result<T>
     {
     }
 
-    private Result(params ReadOnlySpan<ValidationResult> failures)
+    private Result(params IEnumerable<ValidationResult> failures)
         : this([.. failures], false, default)
     {
         if (Failures.Length == 0)
@@ -51,22 +51,40 @@ public record Result<T>
         return new(failure);
     }
 
-    public static implicit operator Result<T>(ValidationResult[] failures)
+    public static implicit operator Result<T>(ImmutableArray<ValidationResult> failures)
     {
-        return new(failures);
+        return new(failures, false, default);
     }
 
-    public Task Switch(Func<ImmutableArray<ValidationResult>, Task> failure, Func<T, Task> success)
+    public async Task<Result<T>> When(Func<ImmutableArray<ValidationResult>, Task>? failure = default, Func<T, Task>? success = default)
     {
-        ArgumentNullException.ThrowIfNull(success);
-        ArgumentNullException.ThrowIfNull(failure);
+        failure ??= _ => Task.CompletedTask;
+        success ??= _ => Task.CompletedTask;
 
-        return IsSuccessful
+        Task action = IsSuccessful
             ? success(Value)
             : failure(Failures);
+
+        await action.ConfigureAwait(false);
+
+        return this;
     }
 
-    public Task<TResult> Match<TResult>(Func<ImmutableArray<ValidationResult>, Task<TResult>> failure, Func<T, Task<TResult>> success)
+    public async Task<Result<TResult>> Select<TResult>(Func<T, Task<TResult>> success)
+        where TResult : notnull
+    {
+        ArgumentNullException.ThrowIfNull(success);
+
+        if (IsSuccessful)
+        {
+            return await success(Value)
+                .ConfigureAwait(false);
+        }
+
+        return Failures;
+    }
+
+    public Task<TResult> Select<TResult>(Func<ImmutableArray<ValidationResult>, Task<TResult>> failure, Func<T, Task<TResult>> success)
     {
         ArgumentNullException.ThrowIfNull(success);
         ArgumentNullException.ThrowIfNull(failure);

@@ -32,7 +32,7 @@ public sealed record Intent<TUseCase>
         return request.UseCase;
     }
 
-    public Outcome<TResult> Yields<TResult>(TResult result)
+    public Outcome<TResult> Yields<TResult>(Result<TResult> result)
         where TResult : notnull
     {
         Ledger ledger = Ledger.Next(UseCase.Identity);

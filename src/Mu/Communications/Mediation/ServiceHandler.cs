@@ -11,7 +11,7 @@ public sealed class ServiceHandler<TUseCase, TResult>(IService<TUseCase, TResult
 {
     public async Task<Outcome<TResult>> Handle(Intent<TUseCase> intent, CancellationToken cancellationToken)
     {
-        TResult result = await service
+        Result<TResult> result = await service
             .Execute(intent.UseCase, cancellationToken)
             .ConfigureAwait(false);
 

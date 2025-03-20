@@ -1,5 +1,6 @@
 ﻿namespace Mu.Sample.Open;
 
+using System.Threading;
 using Mu.Persistence;
 using Mu.Sample.Account;
 using Mu.Services;
@@ -7,17 +8,20 @@ using Mu.Services;
 public sealed class Service(IRoot<Account, Open> root, IWriteStore<Account, Guid> store)
     : IService<Open, Guid>
 {
-    public async Task<Guid> Execute(Open open, CancellationToken cancellationToken)
+    public Task<Result<Guid>> Execute(Open open, CancellationToken cancellationToken)
     {
         var account = new Account();
         var identity = Guid.CreateVersion7();
 
-        account = root.Apply(account, open);
+        Result<Account> opened = root.Apply(account, open);
 
-        await store
-            .Save(account, identity, cancellationToken)
-            .ConfigureAwait(false);
+        return opened.Select(async opened =>
+        {
+            await store
+                .Save(account, identity, cancellationToken)
+                .ConfigureAwait(false);
 
-        return identity;
+            return identity;
+        });
     }
 }

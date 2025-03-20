@@ -7,5 +7,5 @@ public interface IRoot<TAggregate, in TMutation>
     where TAggregate : Aggregate
     where TMutation : Mutational
 {
-    TAggregate Apply(TAggregate aggregate, TMutation mutation);
+    Result<TAggregate> Apply(TAggregate aggregate, TMutation mutation);
 }

@@ -1,6 +1,7 @@
 ﻿namespace Mu.Services;
 
 public interface IService<in TUseCase, TResult>
+    where TResult : notnull
 {
-    Task<TResult> Execute(TUseCase useCase, CancellationToken cancellationToken);
+    Task<Result<TResult>> Execute(TUseCase useCase, CancellationToken cancellationToken);
 }
