@@ -56,6 +56,23 @@ public record Result<T>
         return new(failures, false, default);
     }
 
+    public Result<T> When(Action<ImmutableArray<ValidationResult>>? failure = default, Action<T>? success = default)
+    {
+        failure ??= _ => { };
+        success ??= _ => { };
+
+        if (IsSuccessful)
+        {
+            success(Value);
+        }
+        else
+        {
+            failure(Failures);
+        }
+
+        return this;
+    }
+
     public async Task<Result<T>> When(Func<ImmutableArray<ValidationResult>, Task>? failure = default, Func<T, Task>? success = default)
     {
         failure ??= _ => Task.CompletedTask;
@@ -70,6 +87,19 @@ public record Result<T>
         return this;
     }
 
+    public Result<TResult> Select<TResult>(Func<T, TResult> success)
+        where TResult : notnull
+    {
+        ArgumentNullException.ThrowIfNull(success);
+
+        if (IsSuccessful)
+        {
+            return success(Value);
+        }
+
+        return Failures;
+    }
+
     public async Task<Result<TResult>> Select<TResult>(Func<T, Task<TResult>> success)
         where TResult : notnull
     {
@@ -82,6 +112,16 @@ public record Result<T>
         }
 
         return Failures;
+    }
+
+    public TResult Select<TResult>(Func<ImmutableArray<ValidationResult>, TResult> failure, Func<T, TResult> success)
+    {
+        ArgumentNullException.ThrowIfNull(success);
+        ArgumentNullException.ThrowIfNull(failure);
+
+        return IsSuccessful
+            ? success(Value)
+            : failure(Failures);
     }
 
     public Task<TResult> Select<TResult>(Func<ImmutableArray<ValidationResult>, Task<TResult>> failure, Func<T, Task<TResult>> success)

@@ -20,4 +20,9 @@ public sealed record Opened
     }
 
     public Owner Owner { get; }
+
+    public static implicit operator Opened(Open open)
+    {
+        return new Opened(open.Owner);
+    }
 }

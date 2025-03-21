@@ -1,13 +1,12 @@
 ﻿namespace Mu.Persistence;
 
 using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
 using Mu.Communications.Messaging;
 using Mu.Modelling.State;
 
 public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream)
     : IWriteStore<TAggregate, TIdentity>
-    where TAggregate : Aggregate
+    where TAggregate : Aggregate, new()
     where TIdentity : struct
 {
     public async Task<TAggregate?> Get(TIdentity identity, ulong revision, CancellationToken cancellationToken)
