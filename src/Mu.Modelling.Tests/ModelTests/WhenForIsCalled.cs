@@ -7,7 +7,7 @@ public sealed class WhenForIsCalled
     private const string UpdatedCompanyValue = "Updated";
 
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         Model original = ModellingTestData.CreateModel();
@@ -17,9 +17,9 @@ public sealed class WhenForIsCalled
         Model result = original.For(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Company.ShouldBe(updated);
-        result.Name.ShouldBe(original.Name);
-        result.Areas.ShouldBe(original.Areas);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Company).IsEqualTo(updated);
+        await Assert.That(result.Name).IsEqualTo(original.Name);
+        await Assert.That(result.Areas).IsEquivalentTo(original.Areas);
     }
 }

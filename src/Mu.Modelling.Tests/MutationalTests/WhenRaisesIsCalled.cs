@@ -7,7 +7,7 @@ public sealed class WhenRaisesIsCalled
     private const string UpdatedFactValue = "Updated";
 
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         Mutational original = ModellingTestData.CreateMutational();
@@ -17,8 +17,8 @@ public sealed class WhenRaisesIsCalled
         Mutational result = original.Raises(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Fact.ShouldBe(updated);
-        result.Type.ShouldBe(original.Type);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Fact).IsEqualTo(updated);
+        await Assert.That(result.Type).IsEqualTo(original.Type);
     }
 }

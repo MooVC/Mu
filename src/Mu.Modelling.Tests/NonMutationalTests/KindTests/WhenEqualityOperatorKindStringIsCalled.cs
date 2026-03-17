@@ -6,7 +6,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
     private const string WriteStoreValue = "WriteStore";
 
     [Test]
-    public void GivenMatchingValueThenReturnsTrue()
+    public async Task GivenMatchingValueThenReturnsTrue()
     {
         // Arrange
         NonMutational.Kind subject = NonMutational.Kind.ReadStore;
@@ -16,11 +16,11 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
         bool result = subject == value;
 
         // Assert
-        result.ShouldBeTrue();
+        await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenDifferentValueThenReturnsFalse()
+    public async Task GivenDifferentValueThenReturnsFalse()
     {
         // Arrange
         NonMutational.Kind subject = NonMutational.Kind.ReadStore;
@@ -30,6 +30,6 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
         bool result = subject == value;
 
         // Assert
-        result.ShouldBeFalse();
+        await Assert.That(result).IsFalse();
     }
 }

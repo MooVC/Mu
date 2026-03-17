@@ -8,7 +8,7 @@ public sealed class WhenValidateIsCalled
     private const string CompanyNameValue = "Company";
 
     [Test]
-    public void GivenUndefinedThenValidationIsSkipped()
+    public async Task GivenUndefinedThenValidationIsSkipped()
     {
         // Arrange
         Model subject = Model.Undefined;
@@ -19,12 +19,12 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeTrue();
-        results.ShouldBeEmpty();
+        await Assert.That(valid).IsTrue();
+        await Assert.That(results.Count == 0).IsTrue();
     }
 
     [Test]
-    public void GivenUnnamedNameThenValidationErrorReturned()
+    public async Task GivenUnnamedNameThenValidationErrorReturned()
     {
         // Arrange
         Model subject = Model.Undefined.For(CompanyNameValue);
@@ -35,8 +35,8 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeFalse();
-        _ = results.ShouldHaveSingleItem();
-        results[0].MemberNames.ShouldContain(nameof(Model.Name));
+        await Assert.That(valid).IsFalse();
+        await Assert.That(results.Count == 1).IsTrue();
+        await Assert.That(results[0].MemberNames.Contains(nameof(Model.Name))).IsTrue();
     }
 }

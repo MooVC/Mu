@@ -9,7 +9,7 @@ public sealed class WhenRenderedOnIsCalled
     private const string SecondaryQualifierValue = "Mu.Modelling.Secondary";
 
     [Test]
-    public void GivenQualifierThenReturnsUpdatedInstance()
+    public async Task GivenQualifierThenReturnsUpdatedInstance()
     {
         // Arrange
         Qualifier existing = ModellingTestData.CreateQualifier();
@@ -20,8 +20,8 @@ public sealed class WhenRenderedOnIsCalled
         View result = original.RenderedOn(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Facts.ShouldBe(original.Facts.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Facts).IsEquivalentTo(original.Facts.Concat([additional]));
+        await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -7,7 +7,7 @@ public sealed class WhenUsingIsCalled
     private const string UpdatedViewValue = "Updated";
 
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         NonMutational original = ModellingTestData.CreateNonMutational();
@@ -17,8 +17,8 @@ public sealed class WhenUsingIsCalled
         NonMutational result = original.Using(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.View.ShouldBe(updated);
-        result.Source.ShouldBe(original.Source);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.View).IsEqualTo(updated);
+        await Assert.That(result.Source).IsEqualTo(original.Source);
     }
 }

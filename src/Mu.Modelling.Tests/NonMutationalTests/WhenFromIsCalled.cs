@@ -3,7 +3,7 @@ namespace Mu.Modelling.NonMutationalTests;
 public sealed class WhenFromIsCalled
 {
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         NonMutational original = ModellingTestData.CreateNonMutational();
@@ -12,8 +12,8 @@ public sealed class WhenFromIsCalled
         NonMutational result = original.From(NonMutational.Kind.WriteStore);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Source.ShouldBe(NonMutational.Kind.WriteStore);
-        result.View.ShouldBe(original.View);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.WriteStore);
+        await Assert.That(result.View).IsEqualTo(original.View);
     }
 }

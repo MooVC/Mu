@@ -5,7 +5,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 public sealed class WhenGetHashCodeIsCalled
 {
     [Test]
-    public void GivenSameValuesThenHashesMatch()
+    public async Task GivenSameValuesThenHashesMatch()
     {
         // Arrange
         ModellingAttribute left = ModellingTestData.CreateAttribute();
@@ -16,11 +16,11 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldBe(rightHash);
+        await Assert.That(leftHash).IsEqualTo(rightHash);
     }
 
     [Test]
-    public void GivenDifferentValuesThenHashesDiffer()
+    public async Task GivenDifferentValuesThenHashesDiffer()
     {
         // Arrange
         ModellingAttribute left = ModellingTestData.CreateAttribute();
@@ -31,11 +31,11 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldNotBe(rightHash);
+        await Assert.That(leftHash).IsNotEqualTo(rightHash);
     }
 
     [Test]
-    public void GivenSameInstanceThenHashIsStable()
+    public async Task GivenSameInstanceThenHashIsStable()
     {
         // Arrange
         ModellingAttribute subject = ModellingTestData.CreateAttribute();
@@ -45,6 +45,6 @@ public sealed class WhenGetHashCodeIsCalled
         int secondHash = subject.GetHashCode();
 
         // Assert
-        firstHash.ShouldBe(secondHash);
+        await Assert.That(firstHash).IsEqualTo(secondHash);
     }
 }

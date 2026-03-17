@@ -3,7 +3,7 @@ namespace Mu.Modelling.UnitTests;
 public sealed class WhenEqualityOperatorUnitUnitIsCalled
 {
     [Test]
-    public void GivenEqualValuesThenReturnsTrue()
+    public async Task GivenEqualValuesThenReturnsTrue()
     {
         // Arrange
         Unit left = ModellingTestData.CreateUnit();
@@ -14,12 +14,12 @@ public sealed class WhenEqualityOperatorUnitUnitIsCalled
         bool resultRightLeft = right == left;
 
         // Assert
-        resultLeftRight.ShouldBeTrue();
-        resultRightLeft.ShouldBeTrue();
+        await Assert.That(resultLeftRight).IsTrue();
+        await Assert.That(resultRightLeft).IsTrue();
     }
 
     [Test]
-    public void GivenDifferentValuesThenReturnsFalse()
+    public async Task GivenDifferentValuesThenReturnsFalse()
     {
         // Arrange
         Unit left = ModellingTestData.CreateUnit();
@@ -30,7 +30,7 @@ public sealed class WhenEqualityOperatorUnitUnitIsCalled
         bool resultRightLeft = right == left;
 
         // Assert
-        resultLeftRight.ShouldBeFalse();
-        resultRightLeft.ShouldBeFalse();
+        await Assert.That(resultLeftRight).IsFalse();
+        await Assert.That(resultRightLeft).IsFalse();
     }
 }

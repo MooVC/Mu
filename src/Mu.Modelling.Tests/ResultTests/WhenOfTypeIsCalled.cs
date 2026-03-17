@@ -5,7 +5,7 @@ using Symbol = MooVC.Syntax.CSharp.Elements.Symbol;
 public sealed class WhenOfTypeIsCalled
 {
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         Result original = ModellingTestData.CreateResult();
@@ -15,8 +15,8 @@ public sealed class WhenOfTypeIsCalled
         Result result = original.OfType(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Type.ShouldBe(updated);
-        result.Name.ShouldBe(original.Name);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Type).IsEqualTo(updated);
+        await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 public sealed class WhenAddModelNavigatorIsCalled
 {
     [Test]
-    public void GivenServicesThenNavigatorIsRegistered()
+    public async Task GivenServicesThenNavigatorIsRegistered()
     {
         // Arrange
         ServiceCollection services = new();
@@ -17,6 +17,6 @@ public sealed class WhenAddModelNavigatorIsCalled
         INavigator<Model>? navigator = provider.GetService<INavigator<Model>>();
 
         // Assert
-        _ = navigator.ShouldNotBeNull();
+        await Assert.That(_ = navigator is not null).IsTrue();
     }
 }

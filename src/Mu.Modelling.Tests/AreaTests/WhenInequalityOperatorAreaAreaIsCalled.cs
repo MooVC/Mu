@@ -3,7 +3,7 @@ namespace Mu.Modelling.AreaTests;
 public sealed class WhenInequalityOperatorAreaAreaIsCalled
 {
     [Test]
-    public void GivenDifferentValuesThenReturnsTrue()
+    public async Task GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
         Area left = ModellingTestData.CreateArea();
@@ -14,12 +14,12 @@ public sealed class WhenInequalityOperatorAreaAreaIsCalled
         bool resultRightLeft = right != left;
 
         // Assert
-        resultLeftRight.ShouldBeTrue();
-        resultRightLeft.ShouldBeTrue();
+        await Assert.That(resultLeftRight).IsTrue();
+        await Assert.That(resultRightLeft).IsTrue();
     }
 
     [Test]
-    public void GivenEqualValuesThenReturnsFalse()
+    public async Task GivenEqualValuesThenReturnsFalse()
     {
         // Arrange
         Area left = ModellingTestData.CreateArea();
@@ -30,7 +30,7 @@ public sealed class WhenInequalityOperatorAreaAreaIsCalled
         bool resultRightLeft = right != left;
 
         // Assert
-        resultLeftRight.ShouldBeFalse();
-        resultRightLeft.ShouldBeFalse();
+        await Assert.That(resultLeftRight).IsFalse();
+        await Assert.That(resultRightLeft).IsFalse();
     }
 }

@@ -3,7 +3,7 @@ namespace Mu.Modelling.FeatureTests.KindTests;
 public sealed class WhenGetHashCodeIsCalled
 {
     [Test]
-    public void GivenSameValueThenHashesMatch()
+    public async Task GivenSameValueThenHashesMatch()
     {
         // Arrange
         Feature.Kind left = Feature.Kind.Mutational;
@@ -14,11 +14,11 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldBe(rightHash);
+        await Assert.That(leftHash).IsEqualTo(rightHash);
     }
 
     [Test]
-    public void GivenDifferentValueThenHashesDiffer()
+    public async Task GivenDifferentValueThenHashesDiffer()
     {
         // Arrange
         Feature.Kind left = Feature.Kind.Mutational;
@@ -29,6 +29,6 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldNotBe(rightHash);
+        await Assert.That(leftHash).IsNotEqualTo(rightHash);
     }
 }

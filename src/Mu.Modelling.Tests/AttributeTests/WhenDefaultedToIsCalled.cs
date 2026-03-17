@@ -8,7 +8,7 @@ public sealed class WhenDefaultedToIsCalled
     private const string UpdatedDefaultValue = "Updated";
 
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         ModellingAttribute original = ModellingTestData.CreateAttribute();
@@ -18,9 +18,9 @@ public sealed class WhenDefaultedToIsCalled
         ModellingAttribute result = original.DefaultedTo(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Default.ShouldBe(updated);
-        result.Name.ShouldBe(original.Name);
-        result.Type.ShouldBe(original.Type);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Default).IsEqualTo(updated);
+        await Assert.That(result.Name).IsEqualTo(original.Name);
+        await Assert.That(result.Type).IsEqualTo(original.Type);
     }
 }

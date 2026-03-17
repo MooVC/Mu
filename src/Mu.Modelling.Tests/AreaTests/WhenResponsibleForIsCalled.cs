@@ -5,7 +5,7 @@ using System.Linq;
 public sealed class WhenResponsibleForIsCalled
 {
     [Test]
-    public void GivenUnitThenReturnsUpdatedInstance()
+    public async Task GivenUnitThenReturnsUpdatedInstance()
     {
         // Arrange
         Unit existing = ModellingTestData.CreateUnit();
@@ -16,8 +16,8 @@ public sealed class WhenResponsibleForIsCalled
         Area result = original.ResponsibleFor(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Units.ShouldBe(original.Units.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Units).IsEquivalentTo(original.Units.Concat([additional]));
+        await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

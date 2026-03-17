@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 public sealed class WhenValidateIsCalled
 {
     [Test]
-    public void GivenUndefinedThenValidationIsSkipped()
+    public async Task GivenUndefinedThenValidationIsSkipped()
     {
         // Arrange
         Area subject = Area.Undefined;
@@ -17,12 +17,12 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeTrue();
-        results.ShouldBeEmpty();
+        await Assert.That(valid).IsTrue();
+        await Assert.That(results.Count == 0).IsTrue();
     }
 
     [Test]
-    public void GivenUndefinedUnitThenValidationErrorReturned()
+    public async Task GivenUndefinedUnitThenValidationErrorReturned()
     {
         // Arrange
         Area subject = Area.Undefined.ResponsibleFor(Unit.Undefined);
@@ -33,9 +33,9 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeFalse();
-        results.Count.ShouldBe(2);
-        results[0].MemberNames.ShouldContain(nameof(Area.Units));
-        results[1].MemberNames.ShouldContain(nameof(Unit.Name));
+        await Assert.That(valid).IsFalse();
+        await Assert.That(results.Count).IsEqualTo(2);
+        await Assert.That(results[0].MemberNames.Contains(nameof(Area.Units))).IsTrue();
+        await Assert.That(results[1].MemberNames.Contains(nameof(Unit.Name))).IsTrue();
     }
 }

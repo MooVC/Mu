@@ -7,7 +7,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 public sealed class WhenAttributedWithIsCalled
 {
     [Test]
-    public void GivenAttributeThenReturnsUpdatedInstance()
+    public async Task GivenAttributeThenReturnsUpdatedInstance()
     {
         // Arrange
         ModellingAttribute existing = ModellingTestData.CreateAttribute();
@@ -18,8 +18,8 @@ public sealed class WhenAttributedWithIsCalled
         Unit result = original.AttributedWith(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Attributes.ShouldBe(original.Attributes.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        await Assert.That(result.Attributes).IsEquivalentTo(original.Attributes.Concat([additional]));
+        await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -3,7 +3,7 @@ namespace Mu.Modelling.FeatureTests.KindTests;
 public sealed class WhenEqualsIsCalled
 {
     [Test]
-    public void GivenSameValueThenReturnsTrue()
+    public async Task GivenSameValueThenReturnsTrue()
     {
         // Arrange
         Feature.Kind subject = Feature.Kind.Mutational;
@@ -13,11 +13,11 @@ public sealed class WhenEqualsIsCalled
         bool result = subject.Equals(other);
 
         // Assert
-        result.ShouldBeTrue();
+        await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenDifferentValueThenReturnsFalse()
+    public async Task GivenDifferentValueThenReturnsFalse()
     {
         // Arrange
         Feature.Kind subject = Feature.Kind.Mutational;
@@ -27,6 +27,6 @@ public sealed class WhenEqualsIsCalled
         bool result = subject.Equals(other);
 
         // Assert
-        result.ShouldBeFalse();
+        await Assert.That(result).IsFalse();
     }
 }

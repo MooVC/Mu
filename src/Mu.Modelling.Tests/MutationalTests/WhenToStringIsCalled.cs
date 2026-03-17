@@ -7,7 +7,7 @@ public sealed class WhenToStringIsCalled
     private const string FactNameValue = "FactName";
 
     [Test]
-    public void GivenValuesThenContainsDetails()
+    public async Task GivenValuesThenContainsDetails()
     {
         // Arrange
         var fact = new Name(FactNameValue);
@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        result.ShouldContain(nameof(Mutational));
-        result.ShouldContain(FactNameValue);
+        await Assert.That(result.Contains(nameof(Mutational))).IsTrue();
+        await Assert.That(result.Contains(FactNameValue)).IsTrue();
     }
 }

@@ -36,7 +36,7 @@ public sealed class WhenExecuted
             Func<Task> act = () => test.RunAsync();
 
             // Assert
-            await act.ShouldNotThrowAsync();
+            await act();
         }
     }
 }
