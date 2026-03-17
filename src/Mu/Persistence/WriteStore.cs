@@ -2,9 +2,11 @@
 
 using System.Collections.Immutable;
 using Mu.Communications.Messaging;
+using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
+using Mu.Services;
 
-public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream)
+public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream, ITransform<TAggregate, Fact> transform)
     : IWriteStore<TAggregate, TIdentity>
     where TAggregate : Aggregate, new()
     where TIdentity : struct
@@ -21,7 +23,17 @@ public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream)
                 cancellationToken)
             .ConfigureAwait(false);
 
-        return Task.FromResult<TAggregate?>(default);
+        if (events.Length == 0)
+        {
+            return default;
+        }
+
+        IEnumerable<Fact> facts = events.Select(@event => @event.Fact);
+        TAggregate aggregate = new();
+
+        aggregate = transform.ApplyAll(aggregate, facts);
+
+        return aggregate;
     }
 
     public async Task Save(TAggregate aggregate, TIdentity identity, CancellationToken cancellationToken)
@@ -34,7 +46,7 @@ public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream)
         }
 
         _ = await stream
-            .Append(aggregate.Propositions, identity, cancellationToken)
+            .Append(aggregate.Propositions, identity, aggregate.Revision, cancellationToken)
             .ConfigureAwait(false);
     }
 }

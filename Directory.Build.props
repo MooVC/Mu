@@ -5,14 +5,15 @@
     <Copyright>Paul Martins © 2024-$([System.DateTime]::Now.Year)</Copyright>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <NoWarn>$(NoWarn);CS0618;NU5105</NoWarn>
     <Nullable>enable</Nullable>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/MooVC/Mu</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>CSharp;DDD;Domain;Dotnet</PackageTags>
+    <PackageTags>Automation;CSharp;DDD;Domain-Driven-Design;Dotnet;Vertical Slices;</PackageTags>
     <Product>Mu</Product>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -21,7 +22,7 @@
   <PropertyGroup Condition="'$(CODESPACES)' == 'true'">
     <IsCodespace>true</IsCodespace>
   </PropertyGroup>
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Analyzers')) OR $(MSBuildProjectName.EndsWith('.Generators'))">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Analyzers')) OR $(MSBuildProjectName.EndsWith('.Generators')) OR $(MSBuildProjectName.EndsWith('ify'))">
     <IsRoslynProject>true</IsRoslynProject>
   </PropertyGroup>
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
@@ -46,6 +47,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <None Include="../../icon.png" Pack="true" PackagePath="" />
     <None Include="../../README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <Import Condition="'$(IsLibraryProject)' == 'true'" Project="build/Libraries.props" />

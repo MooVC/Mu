@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IsRoslynProject>true</IsRoslynProject>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="MooVC" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="MooVC.Syntax" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="MooVC.Syntax.CSharp" GeneratePathProperty="true" PrivateAssets="all" />
+    <PackageReference Include="System.Collections.Immutable" GeneratePathProperty="true" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <None Include="$(PkgArdalis_GuardClauses)\lib\netstandard2.0\ardalis.guardclauses.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+    <None Include="$(PkgMooVC)\lib\netstandard2.0\MooVC.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+    <None Include="$(PkgMooVC_Syntax)\lib\netstandard2.0\MooVC.Syntax.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+    <None Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+    <None Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+  </ItemGroup>
+  <Target Name="GetDependencyTargetPaths">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgArdalis_GuardClauses)\lib\netstandard2.0\Ardalis.GuardClauses.dll"
+                                           IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC)\lib\netstandard2.0\MooVC.dll"
+                                           IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax)\lib\netstandard2.0\MooVC.Syntax.dll"
+                                           IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll"
+                                           IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll"
+                                           IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+</Project>

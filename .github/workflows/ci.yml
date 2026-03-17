@@ -1,58 +1,67 @@
-#name: .NET Build & Test
-#
-#on:
-#  pull_request:
-#    types: [opened, synchronize, reopened]
-#  push:
-#    branches:
-#      - master
-#      - develop
-#      - release/*
-#      - feature/*
-#      - hotfix/*
-#  schedule:
-#    - cron: '0 3 * * *'
-#
-#env:
-#  configuration: 'Debug'
-#  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-#  solution: 'Mu.sln'
-#
-#jobs:
-#  build:
-#    name: Build & Test
-#    runs-on: windows-latest
-#
-#    steps:
-#    - name: Checkout
-#      uses: actions/checkout@v4.1.1
-#      with:
-#        fetch-depth: 0
-#        
-#    - name: Use .NET SDKs
-#      uses: actions/setup-dotnet@v4
-#      with:
-#        dotnet-version: | 
-#          9.0.x
-#
-#    - name: Cache NuGet Packages
-#      uses: actions/cache@v4.0.1
-#      with:
-#        path: ${{ github.workspace }}/.nuget/packages
-#        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-#        restore-keys: |
-#          ${{ runner.os }}-nuget-
-#    
-#    - name: Restore Nuget Packages for Solution
-#      run: dotnet restore ${{ env.solution }}
-#
-#    - name: Build Solution
-#      run: dotnet build ${{ env.solution }} --configuration ${{ env.configuration }} -p:DefineConstants="CI" --no-restore
-#
-#    - name: Test Solution
-#      run: dotnet test ${{ env.solution }} --configuration ${{ env.configuration }} --no-build
-#
-#    - name: Upload Code Coverage
-#      uses: codecov/codecov-action@v4.1.0
-#      with:
-#        token: ${{ secrets.CODECOV_TOKEN }}
+name: .NET Build & Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+      - develop
+      - release/*
+      - feature/*
+      - hotfix/*
+    paths:
+      - '.github/workflows/**'
+      - 'build/**'
+      - 'src/**'
+  schedule:
+    - cron: '0 3 * * *'
+
+env:
+  configuration: 'Debug'
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  solution: 'Mu.slnx'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6.0.2
+      with:
+        fetch-depth: 0
+        
+    - name: Use .NET SDKs
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: |
+          9.0.x
+          10.0.x
+
+    - name: Cache NuGet Packages
+      uses: actions/cache@v5.0.3
+      with:
+        path: ${{ github.workspace }}/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    
+    - name: Restore Nuget Packages for Solution
+      run: dotnet restore ${{ env.solution }}
+
+    - name: Build Solution
+      run: dotnet build ${{ env.solution }} --configuration ${{ env.configuration }} --no-restore
+
+    - name: Test Solution
+      run: dotnet test ${{ env.solution }} --configuration ${{ env.configuration }} --no-build
+
+    - name: Upload Code Coverage
+      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

@@ -7,9 +7,11 @@ using Mu.Modelling.Behavior;
 public abstract record Aggregate
 {
     [JsonIgnore]
-    public bool HasChanges => Propositions.Length > 0;
+    internal bool HasChanges => Propositions.Length > 0;
 
     [JsonPropertyName("$propositions")]
     [JsonInclude]
     internal ImmutableArray<Fact> Propositions { get; init; }
+
+    internal Revision Revision { get; init; }
 }

@@ -477,5 +477,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-/Merge.bat
-/Merged.txt

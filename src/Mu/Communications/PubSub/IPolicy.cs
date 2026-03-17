@@ -1,7 +1,6 @@
-﻿using Mu.Communications.Messaging;
+﻿namespace Mu.Communications.PubSub;
 
-namespace Mu.Communications.PubSub;
-
+using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
 
 public interface IPolicy<TFact, TIdentity>
