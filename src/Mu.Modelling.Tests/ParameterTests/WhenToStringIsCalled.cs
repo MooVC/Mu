@@ -6,7 +6,7 @@ public sealed class WhenToStringIsCalled
 {
     private const string ParameterNameValue = "ParameterName";
 
-    [Fact]
+    [Test]
     public void GivenValuesThenContainsDetails()
     {
         // Arrange

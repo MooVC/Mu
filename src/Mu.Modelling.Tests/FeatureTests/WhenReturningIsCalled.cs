@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 
 public sealed class WhenReturningIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenResultThenReturnsUpdatedInstance()
     {
         // Arrange

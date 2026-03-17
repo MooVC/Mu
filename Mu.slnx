@@ -20,8 +20,9 @@
     <File Path=".filenesting.json" />
     <File Path=".github/CODEOWNERS" />
     <File Path=".gitignore" />
-    <File Path=".runsettings" />
+    <File Path="AGENTS.md" />
     <File Path="codecov.yml" />
+    <File Path="global.json" />
     <File Path="nuget.config" />
   </Folder>
   <Folder Name="/Documentation/">

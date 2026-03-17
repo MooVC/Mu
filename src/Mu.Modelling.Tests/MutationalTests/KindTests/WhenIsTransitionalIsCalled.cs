@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalTests.KindTests;
 
 public sealed class WhenIsTransitionalIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenTransitionalKindThenReturnsTrue()
     {
         // Arrange
@@ -15,7 +15,7 @@ public sealed class WhenIsTransitionalIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenCreationalKindThenReturnsFalse()
     {
         // Arrange

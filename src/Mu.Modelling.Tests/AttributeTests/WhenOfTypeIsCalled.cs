@@ -5,7 +5,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 
 public sealed class WhenOfTypeIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

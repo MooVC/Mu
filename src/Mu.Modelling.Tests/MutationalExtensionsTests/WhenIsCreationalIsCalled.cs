@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalExtensionsTests;
 
 public sealed class WhenIsCreationalIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenMutationalThenReturnsUpdatedInstance()
     {
         // Arrange

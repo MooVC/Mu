@@ -2,7 +2,7 @@ namespace Mu.Modelling.FeatureTests.KindTests;
 
 public sealed class WhenToStringIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenMutationalValueThenReturnsName()
     {
         // Arrange
@@ -15,7 +15,7 @@ public sealed class WhenToStringIsCalled
         result.ShouldBe(nameof(Feature.Kind.Mutational));
     }
 
-    [Fact]
+    [Test]
     public void GivenNonMutationalValueThenReturnsName()
     {
         // Arrange

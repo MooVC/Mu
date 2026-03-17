@@ -7,7 +7,7 @@ public sealed class WhenToStringIsCalled
     private const string ModelNameValue = "ModelName";
     private const string CompanyNameValue = "CompanyName";
 
-    [Fact]
+    [Test]
     public void GivenValuesThenContainsDetails()
     {
         // Arrange

@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalExtensionsTests;
 
 public sealed class WhenIsTransitionalIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenMutationalThenReturnsUpdatedInstance()
     {
         // Arrange

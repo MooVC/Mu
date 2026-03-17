@@ -4,7 +4,7 @@ using System.Linq;
 
 public sealed class WhenWithAreaIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenAreaThenReturnsUpdatedInstance()
     {
         // Arrange

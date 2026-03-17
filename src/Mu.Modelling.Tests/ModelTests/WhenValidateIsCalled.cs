@@ -7,7 +7,7 @@ public sealed class WhenValidateIsCalled
 {
     private const string CompanyNameValue = "Company";
 
-    [Fact]
+    [Test]
     public void GivenUndefinedThenValidationIsSkipped()
     {
         // Arrange
@@ -23,7 +23,7 @@ public sealed class WhenValidateIsCalled
         results.ShouldBeEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GivenUnnamedNameThenValidationErrorReturned()
     {
         // Arrange

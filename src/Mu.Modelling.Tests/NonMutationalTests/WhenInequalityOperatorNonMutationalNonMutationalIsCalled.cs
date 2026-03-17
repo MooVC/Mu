@@ -2,7 +2,7 @@ namespace Mu.Modelling.NonMutationalTests;
 
 public sealed class WhenInequalityOperatorNonMutationalNonMutationalIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenInequalityOperatorNonMutationalNonMutationalIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsFalse()
     {
         // Arrange

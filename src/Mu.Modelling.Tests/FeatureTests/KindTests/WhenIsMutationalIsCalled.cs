@@ -2,7 +2,7 @@ namespace Mu.Modelling.FeatureTests.KindTests;
 
 public sealed class WhenIsMutationalIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenMutationalKindThenReturnsTrue()
     {
         // Arrange
@@ -15,7 +15,7 @@ public sealed class WhenIsMutationalIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenNonMutationalKindThenReturnsFalse()
     {
         // Arrange

@@ -8,7 +8,7 @@ public sealed class WhenRenderedOnIsCalled
 {
     private const string SecondaryQualifierValue = "Mu.Modelling.Secondary";
 
-    [Fact]
+    [Test]
     public void GivenQualifierThenReturnsUpdatedInstance()
     {
         // Arrange

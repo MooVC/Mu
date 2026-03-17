@@ -4,7 +4,7 @@ public sealed class WhenImplicitOperatorFromStringIsCalled
 {
     private const string ReadStoreValue = "ReadStore";
 
-    [Fact]
+    [Test]
     public void GivenValueThenRoundTripsSuccessfully()
     {
         // Arrange

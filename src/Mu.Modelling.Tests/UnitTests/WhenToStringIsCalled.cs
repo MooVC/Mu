@@ -6,7 +6,7 @@ public sealed class WhenToStringIsCalled
 {
     private const string UnitNameValue = "UnitName";
 
-    [Fact]
+    [Test]
     public void GivenValuesThenContainsDetails()
     {
         // Arrange

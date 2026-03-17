@@ -4,7 +4,7 @@ using System.Linq;
 
 public sealed class WhenUsingIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenParameterThenReturnsUpdatedInstance()
     {
         // Arrange

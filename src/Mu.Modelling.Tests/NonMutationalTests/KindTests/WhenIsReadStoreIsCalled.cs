@@ -2,7 +2,7 @@ namespace Mu.Modelling.NonMutationalTests.KindTests;
 
 public sealed class WhenIsReadStoreIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenReadStoreKindThenReturnsTrue()
     {
         // Arrange
@@ -15,7 +15,7 @@ public sealed class WhenIsReadStoreIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenWriteStoreKindThenReturnsFalse()
     {
         // Arrange

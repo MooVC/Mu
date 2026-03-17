@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalTests.KindTests;
 
 public sealed class WhenGetHashCodeIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenSameValueThenHashesMatch()
     {
         // Arrange
@@ -17,7 +17,7 @@ public sealed class WhenGetHashCodeIsCalled
         leftHash.ShouldBe(rightHash);
     }
 
-    [Fact]
+    [Test]
     public void GivenDifferentValueThenHashesDiffer()
     {
         // Arrange

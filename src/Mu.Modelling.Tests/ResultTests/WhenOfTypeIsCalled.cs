@@ -4,7 +4,7 @@ using Symbol = MooVC.Syntax.CSharp.Elements.Symbol;
 
 public sealed class WhenOfTypeIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

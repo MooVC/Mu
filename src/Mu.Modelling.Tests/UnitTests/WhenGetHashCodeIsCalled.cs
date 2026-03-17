@@ -2,7 +2,7 @@ namespace Mu.Modelling.UnitTests;
 
 public sealed class WhenGetHashCodeIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenSameValuesThenHashesMatch()
     {
         // Arrange
@@ -17,7 +17,7 @@ public sealed class WhenGetHashCodeIsCalled
         leftHash.ShouldBe(rightHash);
     }
 
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenHashesDiffer()
     {
         // Arrange
@@ -32,7 +32,7 @@ public sealed class WhenGetHashCodeIsCalled
         leftHash.ShouldNotBe(rightHash);
     }
 
-    [Fact]
+    [Test]
     public void GivenSameInstanceThenHashIsStable()
     {
         // Arrange

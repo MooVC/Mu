@@ -8,7 +8,7 @@ public sealed class WhenValidateIsCalled
 {
     private const string FeatureNameValue = "Feature";
 
-    [Fact]
+    [Test]
     public void GivenUndefinedThenValidationIsSkipped()
     {
         // Arrange
@@ -24,7 +24,7 @@ public sealed class WhenValidateIsCalled
         results.ShouldBeEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GivenUndefinedMutationalThenValidationErrorReturned()
     {
         // Arrange

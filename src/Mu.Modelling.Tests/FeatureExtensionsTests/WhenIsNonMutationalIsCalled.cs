@@ -7,7 +7,7 @@ public sealed class WhenIsNonMutationalIsCalled
     private const string FeatureNameValue = "Feature";
     private const string ViewNameValue = "View";
 
-    [Fact]
+    [Test]
     public void GivenBuilderThenFeatureIsNonMutational()
     {
         // Arrange

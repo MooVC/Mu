@@ -4,7 +4,7 @@ using System.Linq;
 
 public sealed class WhenResponsibleForIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenUnitThenReturnsUpdatedInstance()
     {
         // Arrange

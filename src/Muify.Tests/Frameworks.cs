@@ -24,30 +24,39 @@ internal static class Frameworks
         _languages = Enum.GetValues<LanguageVersion>();
     }
 
-    public static IEnumerable<object[]> All(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, object[]?>? prepare = default)
+    public static IEnumerable<Theory> Enumerate(LanguageVersion minimum)
+    {
+#if CI
+        return All(minimum);
+#else
+        return Supported(minimum);
+#endif
+    }
+
+    public static IEnumerable<Theory> All(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, Theory?>? prepare = default)
     {
         return Filter(InScope, maximum => _languages.Where(language => language >= minimum && language <= maximum), prepare);
     }
 
-    public static IEnumerable<object[]> Supported(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, object[]?>? prepare = default)
+    public static IEnumerable<Theory> Supported(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, Theory?>? prepare = default)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
         return Filter(InScope.Where(framework => framework.SupportTo >= today && framework.Maximum >= minimum), maximum => [maximum], prepare);
     }
 
-    private static IEnumerable<object[]> Filter(
+    private static IEnumerable<Theory> Filter(
         IEnumerable<(ReferenceAssemblies Assembly, LanguageVersion Maximum, DateOnly SupportedTo)> frameworks,
         Func<LanguageVersion, IEnumerable<LanguageVersion>> languages,
-        Func<ReferenceAssemblies, LanguageVersion, object[]?>? prepare)
+        Func<ReferenceAssemblies, LanguageVersion, Theory?>? prepare)
     {
-        prepare ??= (assembly, language) => [assembly, language];
+        prepare ??= (assembly, language) => new(assembly, language);
 
         foreach ((ReferenceAssemblies assembly, LanguageVersion maximum, DateOnly _) in frameworks)
         {
             foreach (LanguageVersion language in languages(maximum))
             {
-                object[]? payload = prepare(assembly, language);
+                Theory? payload = prepare(assembly, language);
 
                 if (payload is not null)
                 {

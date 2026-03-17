@@ -6,7 +6,7 @@ public sealed class WhenDefaultedToIsCalled
 {
     private const string UpdatedDefaultValue = "Updated";
 
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
