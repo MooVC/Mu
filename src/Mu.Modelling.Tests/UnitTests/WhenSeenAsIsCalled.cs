@@ -5,7 +5,7 @@ using System.Linq;
 
 public sealed class WhenSeenAsIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenViewThenReturnsUpdatedInstance()
     {
         // Arrange

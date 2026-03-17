@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalTests;
 
 public sealed class WhenInequalityOperatorMutationalMutationalIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenInequalityOperatorMutationalMutationalIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsFalse()
     {
         // Arrange

@@ -2,7 +2,7 @@ namespace Mu.Modelling.FeatureTests;
 
 public sealed class WhenInequalityOperatorFeatureFeatureIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenInequalityOperatorFeatureFeatureIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsFalse()
     {
         // Arrange

@@ -6,7 +6,7 @@ public sealed class WhenForIsCalled
 {
     private const string UpdatedCompanyValue = "Updated";
 
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

@@ -7,7 +7,7 @@ public sealed class WhenIsMutationalIsCalled
     private const string FeatureNameValue = "Feature";
     private const string RegisteredFactValue = "Registered";
 
-    [Fact]
+    [Test]
     public void GivenBuilderThenFeatureIsMutational()
     {
         // Arrange

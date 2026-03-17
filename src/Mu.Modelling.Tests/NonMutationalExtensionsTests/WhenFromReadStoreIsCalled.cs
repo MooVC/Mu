@@ -2,7 +2,7 @@ namespace Mu.Modelling.NonMutationalExtensionsTests;
 
 public sealed class WhenFromReadStoreIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenNonMutationalThenReturnsUpdatedInstance()
     {
         // Arrange

@@ -4,7 +4,7 @@ public sealed class WhenImplicitOperatorFromStringIsCalled
 {
     private const string MutationalValue = "Mutational";
 
-    [Fact]
+    [Test]
     public void GivenValueThenRoundTripsSuccessfully()
     {
         // Arrange

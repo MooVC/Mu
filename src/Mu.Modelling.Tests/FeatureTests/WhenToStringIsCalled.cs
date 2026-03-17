@@ -6,7 +6,7 @@ public sealed class WhenToStringIsCalled
 {
     private const string FeatureNameValue = "FeatureName";
 
-    [Fact]
+    [Test]
     public void GivenValuesThenContainsDetails()
     {
         // Arrange

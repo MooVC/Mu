@@ -2,7 +2,7 @@ namespace Mu.Modelling.ViewTests;
 
 public sealed class WhenInequalityOperatorViewViewIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenInequalityOperatorViewViewIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsFalse()
     {
         // Arrange

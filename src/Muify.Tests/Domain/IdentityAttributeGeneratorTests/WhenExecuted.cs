@@ -1,7 +1,6 @@
 ﻿namespace Muify.Domain.IdentityAttributeGeneratorTests;
 
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
 
 public sealed class WhenExecuted
 {
@@ -21,19 +20,21 @@ public sealed class WhenExecuted
         typeof(IdentityAttributeGenerator),
         IdentityAttributeGenerator.Hint);
 
-    [Theory]
-    [Frameworks]
-    public async Task GivenAnAssemblyThenTheAttributeIsGenerated(ReferenceAssemblies assemblies, LanguageVersion language)
+    [Test]
+    public async Task GivenAnAssemblyThenTheAttributeIsGenerated()
     {
-        // Arrange
-        var test = new GeneratorTest<IdentityAttributeGenerator>(assemblies, language);
+        foreach ((var assemblies, var language) in Frameworks.Enumerate(LanguageVersion.CSharp8))
+        {
+            // Arrange
+            var test = new GeneratorTest<IdentityAttributeGenerator>(assemblies, language);
 
-        Identity.IsExpectedIn(test.TestState);
+            Identity.IsExpectedIn(test.TestState);
 
-        // Act
-        Func<Task> act = () => test.RunAsync();
+            // Act
+            Func<Task> act = () => test.RunAsync();
 
-        // Assert
-        await act.ShouldNotThrowAsync();
+            // Assert
+            await act.ShouldNotThrowAsync();
+        }
     }
 }

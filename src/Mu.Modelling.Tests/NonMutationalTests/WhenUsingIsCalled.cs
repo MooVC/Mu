@@ -6,7 +6,7 @@ public sealed class WhenUsingIsCalled
 {
     private const string UpdatedViewValue = "Updated";
 
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

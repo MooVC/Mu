@@ -2,7 +2,7 @@ namespace Mu.Modelling.FeatureTests;
 
 public sealed class WhenEqualityOperatorFeatureFeatureIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenEqualityOperatorFeatureFeatureIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsFalse()
     {
         // Arrange

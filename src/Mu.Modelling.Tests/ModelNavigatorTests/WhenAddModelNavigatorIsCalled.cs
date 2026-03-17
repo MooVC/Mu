@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 public sealed class WhenAddModelNavigatorIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenServicesThenNavigatorIsRegistered()
     {
         // Arrange

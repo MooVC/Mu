@@ -7,7 +7,7 @@ public sealed class WhenToStringIsCalled
 {
     private const string AttributeNameValue = "AttributeName";
 
-    [Fact]
+    [Test]
     public void GivenValuesThenContainsDetails()
     {
         // Arrange

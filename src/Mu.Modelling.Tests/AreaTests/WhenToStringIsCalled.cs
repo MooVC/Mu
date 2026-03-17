@@ -6,7 +6,7 @@ public sealed class WhenToStringIsCalled
 {
     private const string AreaNameValue = "AreaName";
 
-    [Fact]
+    [Test]
     public void GivenValuesThenContainsDetails()
     {
         // Arrange

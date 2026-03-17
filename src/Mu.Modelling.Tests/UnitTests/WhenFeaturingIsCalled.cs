@@ -5,7 +5,7 @@ using System.Linq;
 
 public sealed class WhenFeaturingIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenFeatureThenReturnsUpdatedInstance()
     {
         // Arrange

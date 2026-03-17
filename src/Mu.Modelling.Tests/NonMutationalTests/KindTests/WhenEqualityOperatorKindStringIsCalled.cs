@@ -5,7 +5,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
     private const string ReadStoreValue = "ReadStore";
     private const string WriteStoreValue = "WriteStore";
 
-    [Fact]
+    [Test]
     public void GivenMatchingValueThenReturnsTrue()
     {
         // Arrange
@@ -19,7 +19,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenDifferentValueThenReturnsFalse()
     {
         // Arrange

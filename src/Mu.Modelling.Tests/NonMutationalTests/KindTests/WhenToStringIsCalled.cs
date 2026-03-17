@@ -2,7 +2,7 @@ namespace Mu.Modelling.NonMutationalTests.KindTests;
 
 public sealed class WhenToStringIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenReadStoreValueThenReturnsName()
     {
         // Arrange
@@ -15,7 +15,7 @@ public sealed class WhenToStringIsCalled
         result.ShouldBe(nameof(NonMutational.Kind.ReadStore));
     }
 
-    [Fact]
+    [Test]
     public void GivenWriteStoreValueThenReturnsName()
     {
         // Arrange

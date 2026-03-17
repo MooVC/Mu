@@ -11,7 +11,7 @@ public sealed class WhenContentsPathIsCalled
     private const string RelativePath = "source/File.cs";
     private const string Repository = "repository";
 
-    [Fact]
+    [Test]
     public void GivenGithubOptionsThenContentsPathsAreReturned()
     {
         // Arrange

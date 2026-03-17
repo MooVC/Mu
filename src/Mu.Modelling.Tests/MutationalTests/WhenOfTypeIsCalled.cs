@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalTests;
 
 public sealed class WhenOfTypeIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

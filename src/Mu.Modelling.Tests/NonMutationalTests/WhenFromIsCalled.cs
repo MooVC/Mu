@@ -2,7 +2,7 @@ namespace Mu.Modelling.NonMutationalTests;
 
 public sealed class WhenFromIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

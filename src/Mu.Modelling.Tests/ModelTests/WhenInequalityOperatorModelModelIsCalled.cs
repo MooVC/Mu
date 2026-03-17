@@ -2,7 +2,7 @@ namespace Mu.Modelling.ModelTests;
 
 public sealed class WhenInequalityOperatorModelModelIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenInequalityOperatorModelModelIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsFalse()
     {
         // Arrange

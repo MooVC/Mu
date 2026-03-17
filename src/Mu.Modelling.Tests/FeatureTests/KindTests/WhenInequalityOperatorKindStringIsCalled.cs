@@ -5,7 +5,7 @@ public sealed class WhenInequalityOperatorKindStringIsCalled
     private const string MutationalValue = "Mutational";
     private const string NonMutationalValue = "NonMutational";
 
-    [Fact]
+    [Test]
     public void GivenDifferentValueThenReturnsTrue()
     {
         // Arrange
@@ -19,7 +19,7 @@ public sealed class WhenInequalityOperatorKindStringIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenMatchingValueThenReturnsFalse()
     {
         // Arrange

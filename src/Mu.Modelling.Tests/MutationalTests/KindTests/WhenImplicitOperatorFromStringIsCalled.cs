@@ -4,7 +4,7 @@ public sealed class WhenImplicitOperatorFromStringIsCalled
 {
     private const string CreationalValue = "Creational";
 
-    [Fact]
+    [Test]
     public void GivenValueThenRoundTripsSuccessfully()
     {
         // Arrange

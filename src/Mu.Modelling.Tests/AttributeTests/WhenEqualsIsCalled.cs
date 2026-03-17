@@ -4,7 +4,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 
 public sealed class WhenEqualsIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsTrue()
     {
         // Arrange
@@ -18,7 +18,7 @@ public sealed class WhenEqualsIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenNullThenReturnsFalse()
     {
         // Arrange

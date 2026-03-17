@@ -7,7 +7,7 @@ using SyntaxOptions = MooVC.Syntax.CSharp.Concepts.Options;
 
 public sealed class WhenImplicitOperatorToSyntaxOptionsIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenOptionsThenSyntaxOptionsAreReturned()
     {
         // Arrange

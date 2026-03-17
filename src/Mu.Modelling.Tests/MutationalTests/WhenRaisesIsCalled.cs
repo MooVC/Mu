@@ -6,7 +6,7 @@ public sealed class WhenRaisesIsCalled
 {
     private const string UpdatedFactValue = "Updated";
 
-    [Fact]
+    [Test]
     public void GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange

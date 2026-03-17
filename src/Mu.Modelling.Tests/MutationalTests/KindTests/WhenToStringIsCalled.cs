@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalTests.KindTests;
 
 public sealed class WhenToStringIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenCreationalValueThenReturnsName()
     {
         // Arrange
@@ -15,7 +15,7 @@ public sealed class WhenToStringIsCalled
         result.ShouldBe(nameof(Mutational.Kind.Creational));
     }
 
-    [Fact]
+    [Test]
     public void GivenTransitionalValueThenReturnsName()
     {
         // Arrange

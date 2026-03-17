@@ -2,7 +2,7 @@ namespace Mu.Modelling.MutationalTests.KindTests;
 
 public sealed class WhenEqualsIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenSameValueThenReturnsTrue()
     {
         // Arrange
@@ -16,7 +16,7 @@ public sealed class WhenEqualsIsCalled
         result.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenDifferentValueThenReturnsFalse()
     {
         // Arrange

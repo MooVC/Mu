@@ -4,7 +4,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 
 public sealed class WhenEqualityOperatorAttributeAttributeIsCalled
 {
-    [Fact]
+    [Test]
     public void GivenEqualValuesThenReturnsTrue()
     {
         // Arrange
@@ -20,7 +20,7 @@ public sealed class WhenEqualityOperatorAttributeAttributeIsCalled
         resultRightLeft.ShouldBeTrue();
     }
 
-    [Fact]
+    [Test]
     public void GivenDifferentValuesThenReturnsFalse()
     {
         // Arrange

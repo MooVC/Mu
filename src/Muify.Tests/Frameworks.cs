@@ -24,6 +24,15 @@ internal static class Frameworks
         _languages = Enum.GetValues<LanguageVersion>();
     }
 
+    public static IEnumerable<(ReferenceAssemblies Assembly, LanguageVersion Language)> Enumerate(LanguageVersion minimum)
+    {
+#if CI
+        return All(minimum).Select(data => ((ReferenceAssemblies)data[0], (LanguageVersion)data[1]));
+#else
+        return Supported(minimum).Select(data => ((ReferenceAssemblies)data[0], (LanguageVersion)data[1]));
+#endif
+    }
+
     public static IEnumerable<object[]> All(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, object[]?>? prepare = default)
     {
         return Filter(InScope, maximum => _languages.Where(language => language >= minimum && language <= maximum), prepare);
