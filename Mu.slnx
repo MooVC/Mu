@@ -21,6 +21,7 @@
     <File Path=".github/CODEOWNERS" />
     <File Path=".gitignore" />
     <File Path=".runsettings" />
+    <File Path="AGENTS.md" />
     <File Path="codecov.yml" />
     <File Path="nuget.config" />
   </Folder>
