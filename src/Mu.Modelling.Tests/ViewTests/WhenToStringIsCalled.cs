@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result.Contains(nameof(View))).IsTrue();
-        await Assert.That(result.Contains(ViewNameValue)).IsTrue();
+        await Assert.That(result).Contains(nameof(View));
+        await Assert.That(result).Contains(ViewNameValue);
     }
 }

@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result.Contains(nameof(Mutational))).IsTrue();
-        await Assert.That(result.Contains(FactNameValue)).IsTrue();
+        await Assert.That(result).Contains(nameof(Mutational));
+        await Assert.That(result).Contains(FactNameValue);
     }
 }

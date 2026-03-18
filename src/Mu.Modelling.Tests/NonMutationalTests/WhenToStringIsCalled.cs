@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result.Contains(nameof(NonMutational))).IsTrue();
-        await Assert.That(result.Contains(ViewNameValue)).IsTrue();
+        await Assert.That(result).Contains(nameof(NonMutational));
+        await Assert.That(result).Contains(ViewNameValue);
     }
 }

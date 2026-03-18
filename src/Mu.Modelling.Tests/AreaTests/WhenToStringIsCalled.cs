@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result.Contains(nameof(Area))).IsTrue();
-        await Assert.That(result.Contains(AreaNameValue)).IsTrue();
+        await Assert.That(result).Contains(nameof(Area));
+        await Assert.That(result).Contains(AreaNameValue);
     }
 }

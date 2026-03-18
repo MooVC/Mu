@@ -19,8 +19,8 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result.Contains(nameof(Model))).IsTrue();
-        await Assert.That(result.Contains(ModelNameValue)).IsTrue();
-        await Assert.That(result.Contains(CompanyNameValue)).IsTrue();
+        await Assert.That(result).Contains(nameof(Model));
+        await Assert.That(result).Contains(ModelNameValue);
+        await Assert.That(result).Contains(CompanyNameValue);
     }
 }
