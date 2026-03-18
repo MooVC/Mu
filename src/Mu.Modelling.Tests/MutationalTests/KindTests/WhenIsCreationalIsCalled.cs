@@ -3,7 +3,7 @@ namespace Mu.Modelling.MutationalTests.KindTests;
 public sealed class WhenIsCreationalIsCalled
 {
     [Test]
-    public void GivenCreationalKindThenReturnsTrue()
+    public async Task GivenCreationalKindThenReturnsTrue()
     {
         // Arrange
         Mutational.Kind subject = Mutational.Kind.Creational;
@@ -12,11 +12,11 @@ public sealed class WhenIsCreationalIsCalled
         bool result = subject.IsCreational;
 
         // Assert
-        result.ShouldBeTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenTransitionalKindThenReturnsFalse()
+    public async Task GivenTransitionalKindThenReturnsFalse()
     {
         // Arrange
         Mutational.Kind subject = Mutational.Kind.Transitional;
@@ -25,6 +25,6 @@ public sealed class WhenIsCreationalIsCalled
         bool result = subject.IsCreational;
 
         // Assert
-        result.ShouldBeFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

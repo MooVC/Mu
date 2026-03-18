@@ -3,7 +3,7 @@ namespace Mu.Modelling.NonMutationalTests.KindTests;
 public sealed class WhenIsWriteStoreIsCalled
 {
     [Test]
-    public void GivenWriteStoreKindThenReturnsTrue()
+    public async Task GivenWriteStoreKindThenReturnsTrue()
     {
         // Arrange
         NonMutational.Kind subject = NonMutational.Kind.WriteStore;
@@ -12,11 +12,11 @@ public sealed class WhenIsWriteStoreIsCalled
         bool result = subject.IsWriteStore;
 
         // Assert
-        result.ShouldBeTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenReadStoreKindThenReturnsFalse()
+    public async Task GivenReadStoreKindThenReturnsFalse()
     {
         // Arrange
         NonMutational.Kind subject = NonMutational.Kind.ReadStore;
@@ -25,6 +25,6 @@ public sealed class WhenIsWriteStoreIsCalled
         bool result = subject.IsWriteStore;
 
         // Assert
-        result.ShouldBeFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

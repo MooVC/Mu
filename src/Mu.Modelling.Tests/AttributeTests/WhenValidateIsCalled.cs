@@ -9,7 +9,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 public sealed class WhenValidateIsCalled
 {
     [Test]
-    public void GivenUndefinedThenValidationIsSkipped()
+    public async Task GivenUndefinedThenValidationIsSkipped()
     {
         // Arrange
         ModellingAttribute subject = ModellingAttribute.Undefined;
@@ -20,12 +20,12 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeTrue();
-        results.ShouldBeEmpty();
+        _ = await Assert.That(valid).IsTrue();
+        _ = await Assert.That(results).IsEmpty();
     }
 
     [Test]
-    public void GivenMultiLineDefaultThenValidationErrorReturned()
+    public async Task GivenMultiLineDefaultThenValidationErrorReturned()
     {
         // Arrange
         Snippet defaultValue = Snippet.From($"Alpha{Environment.NewLine}Beta");
@@ -37,8 +37,8 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeFalse();
-        _ = results.ShouldHaveSingleItem();
-        results[0].MemberNames.ShouldContain(nameof(ModellingAttribute.Default));
+        _ = await Assert.That(valid).IsFalse();
+        _ = await Assert.That(results).HasSingleItem();
+        _ = await Assert.That(results[0].MemberNames).Contains(nameof(ModellingAttribute.Default));
     }
 }

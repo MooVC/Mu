@@ -3,7 +3,7 @@ namespace Mu.Modelling.NonMutationalExtensionsTests;
 public sealed class WhenFromWriteStoreIsCalled
 {
     [Test]
-    public void GivenNonMutationalThenReturnsUpdatedInstance()
+    public async Task GivenNonMutationalThenReturnsUpdatedInstance()
     {
         // Arrange
         NonMutational original = ModellingTestData.CreateNonMutational();
@@ -12,8 +12,8 @@ public sealed class WhenFromWriteStoreIsCalled
         NonMutational result = original.FromWriteStore();
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Source.ShouldBe(NonMutational.Kind.WriteStore);
-        result.View.ShouldBe(original.View);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.WriteStore);
+        _ = await Assert.That(result.View).IsEqualTo(original.View);
     }
 }

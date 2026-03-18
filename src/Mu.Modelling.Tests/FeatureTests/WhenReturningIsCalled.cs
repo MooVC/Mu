@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 public sealed class WhenReturningIsCalled
 {
     [Test]
-    public void GivenResultThenReturnsUpdatedInstance()
+    public async Task GivenResultThenReturnsUpdatedInstance()
     {
         // Arrange
         Result existing = ModellingTestData.CreateResult();
@@ -16,8 +16,8 @@ public sealed class WhenReturningIsCalled
         Feature result = original.Returning(existing).Returning(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Results.ShouldBe(ImmutableArray.Create(existing, additional));
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Results).IsEquivalentTo(ImmutableArray.Create(existing, additional));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

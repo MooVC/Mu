@@ -8,7 +8,7 @@ public sealed class WhenToStringIsCalled
     private const string AttributeNameValue = "AttributeName";
 
     [Test]
-    public void GivenValuesThenContainsDetails()
+    public async Task GivenValuesThenContainsDetails()
     {
         // Arrange
         var name = new Name(AttributeNameValue);
@@ -18,7 +18,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        result.ShouldContain(nameof(Attribute));
-        result.ShouldContain(AttributeNameValue);
+        _ = await Assert.That(result).Contains(nameof(Attribute));
+        _ = await Assert.That(result).Contains(AttributeNameValue);
     }
 }

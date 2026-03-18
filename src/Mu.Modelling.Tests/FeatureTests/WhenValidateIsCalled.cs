@@ -9,7 +9,7 @@ public sealed class WhenValidateIsCalled
     private const string FeatureNameValue = "Feature";
 
     [Test]
-    public void GivenUndefinedThenValidationIsSkipped()
+    public async Task GivenUndefinedThenValidationIsSkipped()
     {
         // Arrange
         Feature subject = Feature.Undefined;
@@ -20,12 +20,12 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeTrue();
-        results.ShouldBeEmpty();
+        _ = await Assert.That(valid).IsTrue();
+        _ = await Assert.That(results).IsEmpty();
     }
 
     [Test]
-    public void GivenUndefinedMutationalThenValidationErrorReturned()
+    public async Task GivenUndefinedMutationalThenValidationErrorReturned()
     {
         // Arrange
         Feature subject = Feature.Undefined.Named(FeatureNameValue);
@@ -36,8 +36,8 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        valid.ShouldBeFalse();
-        _ = results.ShouldHaveSingleItem();
-        results[0].MemberNames.ShouldContain(nameof(Feature.Mutational));
+        _ = await Assert.That(valid).IsFalse();
+        _ = await Assert.That(results).HasSingleItem();
+        _ = await Assert.That(results[0].MemberNames).Contains(nameof(Feature.Mutational));
     }
 }

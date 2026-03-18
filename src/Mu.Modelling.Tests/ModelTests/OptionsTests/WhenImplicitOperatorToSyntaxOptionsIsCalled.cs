@@ -8,7 +8,7 @@ using SyntaxOptions = MooVC.Syntax.CSharp.Concepts.Options;
 public sealed class WhenImplicitOperatorToSyntaxOptionsIsCalled
 {
     [Test]
-    public void GivenOptionsThenSyntaxOptionsAreReturned()
+    public async Task GivenOptionsThenSyntaxOptionsAreReturned()
     {
         // Arrange
         SyntaxOptions expected = SyntaxOptions.Default.WithNamespace(Qualifier.Options.Block);
@@ -18,6 +18,6 @@ public sealed class WhenImplicitOperatorToSyntaxOptionsIsCalled
         SyntaxOptions result = subject;
 
         // Assert
-        result.ShouldBe(expected);
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 }

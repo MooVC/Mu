@@ -6,7 +6,7 @@ using System.Linq;
 public sealed class WhenFeaturingIsCalled
 {
     [Test]
-    public void GivenFeatureThenReturnsUpdatedInstance()
+    public async Task GivenFeatureThenReturnsUpdatedInstance()
     {
         // Arrange
         Feature existing = ModellingTestData.CreateFeature();
@@ -17,8 +17,8 @@ public sealed class WhenFeaturingIsCalled
         Unit result = original.Featuring(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Features.ShouldBe(original.Features.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Features).IsEquivalentTo(original.Features.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

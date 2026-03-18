@@ -8,7 +8,7 @@ public sealed class WhenNamedIsCalled
     private const string UpdatedNameValue = "Updated";
 
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         ModellingAttribute original = ModellingTestData.CreateAttribute();
@@ -18,9 +18,9 @@ public sealed class WhenNamedIsCalled
         ModellingAttribute result = original.Named(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Name.ShouldBe(updated);
-        result.Default.ShouldBe(original.Default);
-        result.Type.ShouldBe(original.Type);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Name).IsEqualTo(updated);
+        _ = await Assert.That(result.Default).IsEqualTo(original.Default);
+        _ = await Assert.That(result.Type).IsEqualTo(original.Type);
     }
 }

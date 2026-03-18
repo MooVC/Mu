@@ -3,7 +3,7 @@ namespace Mu.Modelling.NonMutationalTests.KindTests;
 public sealed class WhenEqualsIsCalled
 {
     [Test]
-    public void GivenSameValueThenReturnsTrue()
+    public async Task GivenSameValueThenReturnsTrue()
     {
         // Arrange
         NonMutational.Kind subject = NonMutational.Kind.ReadStore;
@@ -13,11 +13,11 @@ public sealed class WhenEqualsIsCalled
         bool result = subject.Equals(other);
 
         // Assert
-        result.ShouldBeTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenDifferentValueThenReturnsFalse()
+    public async Task GivenDifferentValueThenReturnsFalse()
     {
         // Arrange
         NonMutational.Kind subject = NonMutational.Kind.ReadStore;
@@ -27,6 +27,6 @@ public sealed class WhenEqualsIsCalled
         bool result = subject.Equals(other);
 
         // Assert
-        result.ShouldBeFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

@@ -6,7 +6,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
     private const string NonMutationalValue = "NonMutational";
 
     [Test]
-    public void GivenMatchingValueThenReturnsTrue()
+    public async Task GivenMatchingValueThenReturnsTrue()
     {
         // Arrange
         Feature.Kind subject = Feature.Kind.Mutational;
@@ -16,11 +16,11 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
         bool result = subject == value;
 
         // Assert
-        result.ShouldBeTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenDifferentValueThenReturnsFalse()
+    public async Task GivenDifferentValueThenReturnsFalse()
     {
         // Arrange
         Feature.Kind subject = Feature.Kind.Mutational;
@@ -30,6 +30,6 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
         bool result = subject == value;
 
         // Assert
-        result.ShouldBeFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

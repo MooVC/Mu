@@ -3,7 +3,7 @@ namespace Mu.Modelling.MutationalTests;
 public sealed class WhenEqualityOperatorMutationalMutationalIsCalled
 {
     [Test]
-    public void GivenEqualValuesThenReturnsTrue()
+    public async Task GivenEqualValuesThenReturnsTrue()
     {
         // Arrange
         Mutational left = ModellingTestData.CreateMutational();
@@ -14,12 +14,12 @@ public sealed class WhenEqualityOperatorMutationalMutationalIsCalled
         bool resultRightLeft = right == left;
 
         // Assert
-        resultLeftRight.ShouldBeTrue();
-        resultRightLeft.ShouldBeTrue();
+        _ = await Assert.That(resultLeftRight).IsTrue();
+        _ = await Assert.That(resultRightLeft).IsTrue();
     }
 
     [Test]
-    public void GivenDifferentValuesThenReturnsFalse()
+    public async Task GivenDifferentValuesThenReturnsFalse()
     {
         // Arrange
         Mutational left = ModellingTestData.CreateMutational();
@@ -30,7 +30,7 @@ public sealed class WhenEqualityOperatorMutationalMutationalIsCalled
         bool resultRightLeft = right == left;
 
         // Assert
-        resultLeftRight.ShouldBeFalse();
-        resultRightLeft.ShouldBeFalse();
+        _ = await Assert.That(resultLeftRight).IsFalse();
+        _ = await Assert.That(resultRightLeft).IsFalse();
     }
 }

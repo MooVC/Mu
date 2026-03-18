@@ -3,7 +3,7 @@ namespace Mu.Modelling.NonMutationalTests.KindTests;
 public sealed class WhenGetHashCodeIsCalled
 {
     [Test]
-    public void GivenSameValueThenHashesMatch()
+    public async Task GivenSameValueThenHashesMatch()
     {
         // Arrange
         NonMutational.Kind left = NonMutational.Kind.ReadStore;
@@ -14,11 +14,11 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldBe(rightHash);
+        _ = await Assert.That(leftHash).IsEqualTo(rightHash);
     }
 
     [Test]
-    public void GivenDifferentValueThenHashesDiffer()
+    public async Task GivenDifferentValueThenHashesDiffer()
     {
         // Arrange
         NonMutational.Kind left = NonMutational.Kind.ReadStore;
@@ -29,6 +29,6 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldNotBe(rightHash);
+        _ = await Assert.That(leftHash).IsNotEqualTo(rightHash);
     }
 }

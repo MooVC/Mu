@@ -12,7 +12,7 @@ public sealed class WhenContentsPathIsCalled
     private const string Repository = "repository";
 
     [Test]
-    public void GivenGithubOptionsThenContentsPathsAreReturned()
+    public async Task GivenGithubOptionsThenContentsPathsAreReturned()
     {
         // Arrange
         var subject = new GithubOptions(ApiBaseAddress, JsonSerializerOptions.Default, Owner, Repository, Reference, string.Empty);
@@ -22,7 +22,7 @@ public sealed class WhenContentsPathIsCalled
         string filePath = subject.ContentsPath(RelativePath);
 
         // Assert
-        repositoryPath.ShouldBe($"repos/{Owner}/{Repository}/contents?ref={Reference}");
-        filePath.ShouldBe($"repos/{Owner}/{Repository}/contents/{RelativePath}?ref={Reference}");
+        _ = await Assert.That(repositoryPath).IsEqualTo($"repos/{Owner}/{Repository}/contents?ref={Reference}");
+        _ = await Assert.That(filePath).IsEqualTo($"repos/{Owner}/{Repository}/contents/{RelativePath}?ref={Reference}");
     }
 }

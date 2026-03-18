@@ -6,7 +6,7 @@ using System.Linq;
 public sealed class WhenSeenAsIsCalled
 {
     [Test]
-    public void GivenViewThenReturnsUpdatedInstance()
+    public async Task GivenViewThenReturnsUpdatedInstance()
     {
         // Arrange
         View existing = ModellingTestData.CreateView();
@@ -17,8 +17,8 @@ public sealed class WhenSeenAsIsCalled
         Unit result = original.SeenAs(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Views.ShouldBe(original.Views.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Views).IsEquivalentTo(original.Views.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

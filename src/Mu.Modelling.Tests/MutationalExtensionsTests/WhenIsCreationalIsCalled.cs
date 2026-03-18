@@ -3,7 +3,7 @@ namespace Mu.Modelling.MutationalExtensionsTests;
 public sealed class WhenIsCreationalIsCalled
 {
     [Test]
-    public void GivenMutationalThenReturnsUpdatedInstance()
+    public async Task GivenMutationalThenReturnsUpdatedInstance()
     {
         // Arrange
         Mutational original = ModellingTestData.CreateMutational();
@@ -12,8 +12,8 @@ public sealed class WhenIsCreationalIsCalled
         Mutational result = original.IsCreational();
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Type.ShouldBe(Mutational.Kind.Creational);
-        result.Fact.ShouldBe(original.Fact);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Creational);
+        _ = await Assert.That(result.Fact).IsEqualTo(original.Fact);
     }
 }

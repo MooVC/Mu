@@ -5,7 +5,7 @@ using System.Linq;
 public sealed class WhenWithAreaIsCalled
 {
     [Test]
-    public void GivenAreaThenReturnsUpdatedInstance()
+    public async Task GivenAreaThenReturnsUpdatedInstance()
     {
         // Arrange
         Area existing = ModellingTestData.CreateArea();
@@ -16,8 +16,8 @@ public sealed class WhenWithAreaIsCalled
         Model result = original.WithArea(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Areas.ShouldBe(original.Areas.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Areas).IsEquivalentTo(original.Areas.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -6,7 +6,7 @@ public sealed class WhenInequalityOperatorKindStringIsCalled
     private const string TransitionalValue = "Transitional";
 
     [Test]
-    public void GivenDifferentValueThenReturnsTrue()
+    public async Task GivenDifferentValueThenReturnsTrue()
     {
         // Arrange
         Mutational.Kind subject = Mutational.Kind.Creational;
@@ -16,11 +16,11 @@ public sealed class WhenInequalityOperatorKindStringIsCalled
         bool result = subject != value;
 
         // Assert
-        result.ShouldBeTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenMatchingValueThenReturnsFalse()
+    public async Task GivenMatchingValueThenReturnsFalse()
     {
         // Arrange
         Mutational.Kind subject = Mutational.Kind.Creational;
@@ -30,6 +30,6 @@ public sealed class WhenInequalityOperatorKindStringIsCalled
         bool result = subject != value;
 
         // Assert
-        result.ShouldBeFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

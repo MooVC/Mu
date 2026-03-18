@@ -5,7 +5,7 @@ using System.Linq;
 public sealed class WhenUsingIsCalled
 {
     [Test]
-    public void GivenParameterThenReturnsUpdatedInstance()
+    public async Task GivenParameterThenReturnsUpdatedInstance()
     {
         // Arrange
         Parameter existing = ModellingTestData.CreateParameter();
@@ -16,8 +16,8 @@ public sealed class WhenUsingIsCalled
         Feature result = original.Using(additional);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Parameters.ShouldBe(original.Parameters.Concat([additional]));
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Parameters).IsEquivalentTo(original.Parameters.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

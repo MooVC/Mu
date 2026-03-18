@@ -3,7 +3,7 @@ namespace Mu.Modelling.FeatureTests;
 public sealed class WhenOfTypeIsCalled
 {
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         Feature original = ModellingTestData.CreateFeature();
@@ -12,8 +12,8 @@ public sealed class WhenOfTypeIsCalled
         Feature result = original.OfType(Feature.Kind.NonMutational);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Type.ShouldBe(Feature.Kind.NonMutational);
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -8,7 +8,7 @@ public sealed class WhenIsMutationalIsCalled
     private const string RegisteredFactValue = "Registered";
 
     [Test]
-    public void GivenBuilderThenFeatureIsMutational()
+    public async Task GivenBuilderThenFeatureIsMutational()
     {
         // Arrange
         Feature original = Feature.Undefined.Named(new Name(FeatureNameValue));
@@ -19,8 +19,8 @@ public sealed class WhenIsMutationalIsCalled
             .Raises(new Name(RegisteredFactValue)));
 
         // Assert
-        result.Type.ShouldBe(Feature.Kind.Mutational);
-        result.Mutational.Fact.ShouldBe(new Name(RegisteredFactValue));
-        result.NonMutational.ShouldBe(NonMutational.Undefined);
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.Mutational);
+        _ = await Assert.That(result.Mutational.Fact).IsEqualTo(new Name(RegisteredFactValue));
+        _ = await Assert.That(result.NonMutational).IsEqualTo(NonMutational.Undefined);
     }
 }

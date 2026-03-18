@@ -6,7 +6,7 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 public sealed class WhenOfTypeIsCalled
 {
     [Test]
-    public void GivenValueThenReturnsUpdatedInstance()
+    public async Task GivenValueThenReturnsUpdatedInstance()
     {
         // Arrange
         ModellingAttribute original = ModellingTestData.CreateAttribute();
@@ -16,9 +16,9 @@ public sealed class WhenOfTypeIsCalled
         ModellingAttribute result = original.OfType(updated);
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Type.ShouldBe(updated);
-        result.Default.ShouldBe(original.Default);
-        result.Name.ShouldBe(original.Name);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Type).IsEqualTo(updated);
+        _ = await Assert.That(result.Default).IsEqualTo(original.Default);
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -3,7 +3,7 @@ namespace Mu.Modelling.NonMutationalTests;
 public sealed class WhenInequalityOperatorNonMutationalNonMutationalIsCalled
 {
     [Test]
-    public void GivenDifferentValuesThenReturnsTrue()
+    public async Task GivenDifferentValuesThenReturnsTrue()
     {
         // Arrange
         NonMutational left = ModellingTestData.CreateNonMutational();
@@ -14,12 +14,12 @@ public sealed class WhenInequalityOperatorNonMutationalNonMutationalIsCalled
         bool resultRightLeft = right != left;
 
         // Assert
-        resultLeftRight.ShouldBeTrue();
-        resultRightLeft.ShouldBeTrue();
+        _ = await Assert.That(resultLeftRight).IsTrue();
+        _ = await Assert.That(resultRightLeft).IsTrue();
     }
 
     [Test]
-    public void GivenEqualValuesThenReturnsFalse()
+    public async Task GivenEqualValuesThenReturnsFalse()
     {
         // Arrange
         NonMutational left = ModellingTestData.CreateNonMutational();
@@ -30,7 +30,7 @@ public sealed class WhenInequalityOperatorNonMutationalNonMutationalIsCalled
         bool resultRightLeft = right != left;
 
         // Assert
-        resultLeftRight.ShouldBeFalse();
-        resultRightLeft.ShouldBeFalse();
+        _ = await Assert.That(resultLeftRight).IsFalse();
+        _ = await Assert.That(resultRightLeft).IsFalse();
     }
 }

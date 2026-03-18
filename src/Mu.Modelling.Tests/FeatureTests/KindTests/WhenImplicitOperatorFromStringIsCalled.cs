@@ -5,7 +5,7 @@ public sealed class WhenImplicitOperatorFromStringIsCalled
     private const string MutationalValue = "Mutational";
 
     [Test]
-    public void GivenValueThenRoundTripsSuccessfully()
+    public async Task GivenValueThenRoundTripsSuccessfully()
     {
         // Arrange
         string value = MutationalValue;
@@ -15,8 +15,8 @@ public sealed class WhenImplicitOperatorFromStringIsCalled
         string result = subject;
 
         // Assert
-        result.ShouldBe(value);
-        (subject == value).ShouldBeTrue();
-        subject.Equals(value).ShouldBeTrue();
+        _ = await Assert.That(result).IsEqualTo(value);
+        _ = await Assert.That(subject == value).IsTrue();
+        _ = await Assert.That(subject.Equals(value)).IsTrue();
     }
 }

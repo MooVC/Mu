@@ -3,7 +3,7 @@ namespace Mu.Modelling.MutationalExtensionsTests;
 public sealed class WhenIsTransitionalIsCalled
 {
     [Test]
-    public void GivenMutationalThenReturnsUpdatedInstance()
+    public async Task GivenMutationalThenReturnsUpdatedInstance()
     {
         // Arrange
         Mutational original = ModellingTestData.CreateMutational();
@@ -12,8 +12,8 @@ public sealed class WhenIsTransitionalIsCalled
         Mutational result = original.IsTransitional();
 
         // Assert
-        result.ShouldNotBeSameAs(original);
-        result.Type.ShouldBe(Mutational.Kind.Transitional);
-        result.Fact.ShouldBe(original.Fact);
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
+        _ = await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Transitional);
+        _ = await Assert.That(result.Fact).IsEqualTo(original.Fact);
     }
 }

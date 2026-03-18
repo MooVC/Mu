@@ -3,7 +3,7 @@ namespace Mu.Modelling.FeatureTests;
 public sealed class WhenGetHashCodeIsCalled
 {
     [Test]
-    public void GivenSameValuesThenHashesMatch()
+    public async Task GivenSameValuesThenHashesMatch()
     {
         // Arrange
         Feature left = ModellingTestData.CreateFeature();
@@ -14,11 +14,11 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldBe(rightHash);
+        _ = await Assert.That(leftHash).IsEqualTo(rightHash);
     }
 
     [Test]
-    public void GivenDifferentValuesThenHashesDiffer()
+    public async Task GivenDifferentValuesThenHashesDiffer()
     {
         // Arrange
         Feature left = ModellingTestData.CreateFeature();
@@ -29,11 +29,11 @@ public sealed class WhenGetHashCodeIsCalled
         int rightHash = right.GetHashCode();
 
         // Assert
-        leftHash.ShouldNotBe(rightHash);
+        _ = await Assert.That(leftHash).IsNotEqualTo(rightHash);
     }
 
     [Test]
-    public void GivenSameInstanceThenHashIsStable()
+    public async Task GivenSameInstanceThenHashIsStable()
     {
         // Arrange
         Feature subject = ModellingTestData.CreateFeature();
@@ -43,6 +43,6 @@ public sealed class WhenGetHashCodeIsCalled
         int secondHash = subject.GetHashCode();
 
         // Assert
-        firstHash.ShouldBe(secondHash);
+        _ = await Assert.That(firstHash).IsEqualTo(secondHash);
     }
 }

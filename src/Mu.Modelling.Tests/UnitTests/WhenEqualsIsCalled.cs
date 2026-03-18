@@ -3,7 +3,7 @@ namespace Mu.Modelling.UnitTests;
 public sealed class WhenEqualsIsCalled
 {
     [Test]
-    public void GivenEqualValuesThenReturnsTrue()
+    public async Task GivenEqualValuesThenReturnsTrue()
     {
         // Arrange
         Unit left = ModellingTestData.CreateUnit();
@@ -13,11 +13,11 @@ public sealed class WhenEqualsIsCalled
         bool result = left.Equals(right);
 
         // Assert
-        result.ShouldBeTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
-    public void GivenNullThenReturnsFalse()
+    public async Task GivenNullThenReturnsFalse()
     {
         // Arrange
         Unit subject = ModellingTestData.CreateUnit();
@@ -26,6 +26,6 @@ public sealed class WhenEqualsIsCalled
         bool result = subject.Equals(null);
 
         // Assert
-        result.ShouldBeFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

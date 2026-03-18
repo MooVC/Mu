@@ -8,7 +8,7 @@ public sealed class WhenIsNonMutationalIsCalled
     private const string ViewNameValue = "View";
 
     [Test]
-    public void GivenBuilderThenFeatureIsNonMutational()
+    public async Task GivenBuilderThenFeatureIsNonMutational()
     {
         // Arrange
         Feature original = Feature.Undefined.Named(FeatureNameValue);
@@ -19,8 +19,8 @@ public sealed class WhenIsNonMutationalIsCalled
             .Using(view => view.Named(ViewNameValue)));
 
         // Assert
-        result.Type.ShouldBe(Feature.Kind.NonMutational);
-        result.NonMutational.View.Name.ShouldBe(new Name(ViewNameValue));
-        result.Mutational.ShouldBe(Mutational.Undefined);
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
+        _ = await Assert.That(result.NonMutational.View.Name).IsEqualTo(new Name(ViewNameValue));
+        _ = await Assert.That(result.Mutational).IsEqualTo(Mutational.Undefined);
     }
 }
