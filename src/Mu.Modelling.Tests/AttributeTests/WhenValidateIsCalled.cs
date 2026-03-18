@@ -38,7 +38,7 @@ public sealed class WhenValidateIsCalled
 
         // Assert
         _ = await Assert.That(valid).IsFalse();
-        _ = await Assert.That(results.Count == 1).IsTrue();
+        _ = await Assert.That(results).HasSingleItem();
         _ = await Assert.That(results[0].MemberNames).Contains(nameof(ModellingAttribute.Default));
     }
 }
