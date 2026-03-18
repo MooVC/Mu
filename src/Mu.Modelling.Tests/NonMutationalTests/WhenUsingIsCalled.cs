@@ -17,7 +17,7 @@ public sealed class WhenUsingIsCalled
         NonMutational result = original.Using(updated);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.View).IsEqualTo(updated);
         _ = await Assert.That(result.Source).IsEqualTo(original.Source);
     }

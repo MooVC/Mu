@@ -17,7 +17,7 @@ public sealed class WhenNamedIsCalled
         Feature result = original.Named(updated);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Name).IsEqualTo(updated);
         _ = await Assert.That(result.Parameters).IsEquivalentTo(original.Parameters);
         _ = await Assert.That(result.Results).IsEquivalentTo(original.Results);

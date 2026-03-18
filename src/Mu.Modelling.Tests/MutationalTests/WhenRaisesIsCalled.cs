@@ -17,7 +17,7 @@ public sealed class WhenRaisesIsCalled
         Mutational result = original.Raises(updated);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Fact).IsEqualTo(updated);
         _ = await Assert.That(result.Type).IsEqualTo(original.Type);
     }

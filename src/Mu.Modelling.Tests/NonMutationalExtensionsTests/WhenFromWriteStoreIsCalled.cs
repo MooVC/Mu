@@ -12,7 +12,7 @@ public sealed class WhenFromWriteStoreIsCalled
         NonMutational result = original.FromWriteStore();
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.WriteStore);
         _ = await Assert.That(result.View).IsEqualTo(original.View);
     }

@@ -18,7 +18,7 @@ public sealed class WhenAttributedWithIsCalled
         Unit result = original.AttributedWith(additional);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Attributes).IsEquivalentTo(original.Attributes.Concat([additional]));
         _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }

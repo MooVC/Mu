@@ -16,7 +16,7 @@ public sealed class WhenWithAreaIsCalled
         Model result = original.WithArea(additional);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Areas).IsEquivalentTo(original.Areas.Concat([additional]));
         _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }

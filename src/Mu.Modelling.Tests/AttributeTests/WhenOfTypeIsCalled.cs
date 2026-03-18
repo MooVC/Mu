@@ -16,7 +16,7 @@ public sealed class WhenOfTypeIsCalled
         ModellingAttribute result = original.OfType(updated);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Type).IsEqualTo(updated);
         _ = await Assert.That(result.Default).IsEqualTo(original.Default);
         _ = await Assert.That(result.Name).IsEqualTo(original.Name);

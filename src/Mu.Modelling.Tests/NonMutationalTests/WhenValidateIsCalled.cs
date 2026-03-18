@@ -18,7 +18,7 @@ public sealed class WhenValidateIsCalled
 
         // Assert
         _ = await Assert.That(valid).IsTrue();
-        _ = await Assert.That(results.Count == 0).IsTrue();
+        _ = await Assert.That(results).IsEmpty();
     }
 
     [Test]

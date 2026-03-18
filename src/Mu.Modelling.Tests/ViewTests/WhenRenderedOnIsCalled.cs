@@ -20,7 +20,7 @@ public sealed class WhenRenderedOnIsCalled
         View result = original.RenderedOn(additional);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Facts).IsEquivalentTo(original.Facts.Concat([additional]));
         _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }

@@ -16,7 +16,7 @@ public sealed class WhenResponsibleForIsCalled
         Area result = original.ResponsibleFor(additional);
 
         // Assert
-        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result).IsNotSameReferenceAs(original);
         _ = await Assert.That(result.Units).IsEquivalentTo(original.Units.Concat([additional]));
         _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
