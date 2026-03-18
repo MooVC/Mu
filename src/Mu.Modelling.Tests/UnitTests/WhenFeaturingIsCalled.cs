@@ -17,8 +17,8 @@ public sealed class WhenFeaturingIsCalled
         Unit result = original.Featuring(additional);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Features).IsEquivalentTo(original.Features.Concat([additional]));
-        await Assert.That(result.Name).IsEqualTo(original.Name);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Features).IsEquivalentTo(original.Features.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

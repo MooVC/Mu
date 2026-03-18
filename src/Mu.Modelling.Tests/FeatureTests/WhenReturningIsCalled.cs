@@ -16,8 +16,8 @@ public sealed class WhenReturningIsCalled
         Feature result = original.Returning(existing).Returning(additional);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Results).IsEquivalentTo(ImmutableArray.Create(existing, additional));
-        await Assert.That(result.Name).IsEqualTo(original.Name);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Results).IsEquivalentTo(ImmutableArray.Create(existing, additional));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

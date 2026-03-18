@@ -17,8 +17,8 @@ public sealed class WhenNamedIsCalled
         Area result = original.Named(updated);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Name).IsEqualTo(updated);
-        await Assert.That(result.Units).IsEquivalentTo(original.Units);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Name).IsEqualTo(updated);
+        _ = await Assert.That(result.Units).IsEquivalentTo(original.Units);
     }
 }

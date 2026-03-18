@@ -17,10 +17,10 @@ public sealed class WhenNamedIsCalled
         Unit result = original.Named(updated);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Name).IsEqualTo(updated);
-        await Assert.That(result.Attributes).IsEquivalentTo(original.Attributes);
-        await Assert.That(result.Features).IsEquivalentTo(original.Features);
-        await Assert.That(result.Views).IsEquivalentTo(original.Views);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Name).IsEqualTo(updated);
+        _ = await Assert.That(result.Attributes).IsEquivalentTo(original.Attributes);
+        _ = await Assert.That(result.Features).IsEquivalentTo(original.Features);
+        _ = await Assert.That(result.Views).IsEquivalentTo(original.Views);
     }
 }

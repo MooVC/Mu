@@ -12,7 +12,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result).IsEqualTo(nameof(NonMutational.Kind.ReadStore));
+        _ = await Assert.That(result).IsEqualTo(nameof(NonMutational.Kind.ReadStore));
     }
 
     [Test]
@@ -25,6 +25,6 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result).IsEqualTo(nameof(NonMutational.Kind.WriteStore));
+        _ = await Assert.That(result).IsEqualTo(nameof(NonMutational.Kind.WriteStore));
     }
 }

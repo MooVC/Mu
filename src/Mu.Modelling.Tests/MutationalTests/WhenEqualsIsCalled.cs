@@ -13,7 +13,7 @@ public sealed class WhenEqualsIsCalled
         bool result = left.Equals(right);
 
         // Assert
-        await Assert.That(result).IsTrue();
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
@@ -26,6 +26,6 @@ public sealed class WhenEqualsIsCalled
         bool result = subject.Equals(null);
 
         // Assert
-        await Assert.That(result).IsFalse();
+        _ = await Assert.That(result).IsFalse();
     }
 }

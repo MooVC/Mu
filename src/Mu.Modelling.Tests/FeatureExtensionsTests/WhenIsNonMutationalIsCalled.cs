@@ -19,8 +19,8 @@ public sealed class WhenIsNonMutationalIsCalled
             .Using(view => view.Named(ViewNameValue)));
 
         // Assert
-        await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
-        await Assert.That(result.NonMutational.View.Name).IsEqualTo(new Name(ViewNameValue));
-        await Assert.That(result.Mutational).IsEqualTo(Mutational.Undefined);
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
+        _ = await Assert.That(result.NonMutational.View.Name).IsEqualTo(new Name(ViewNameValue));
+        _ = await Assert.That(result.Mutational).IsEqualTo(Mutational.Undefined);
     }
 }

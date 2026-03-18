@@ -12,8 +12,8 @@ public sealed class WhenIsCreationalIsCalled
         Mutational result = original.IsCreational();
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Creational);
-        await Assert.That(result.Fact).IsEqualTo(original.Fact);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Creational);
+        _ = await Assert.That(result.Fact).IsEqualTo(original.Fact);
     }
 }

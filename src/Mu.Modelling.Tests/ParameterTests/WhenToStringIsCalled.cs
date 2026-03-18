@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result).Contains(nameof(Parameter));
-        await Assert.That(result).Contains(ParameterNameValue);
+        _ = await Assert.That(result).Contains(nameof(Parameter));
+        _ = await Assert.That(result).Contains(ParameterNameValue);
     }
 }

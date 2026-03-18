@@ -18,8 +18,8 @@ public sealed class WhenAttributedWithIsCalled
         View result = original.AttributedWith(additional);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Attributes).IsEquivalentTo(original.Attributes.Concat([additional]));
-        await Assert.That(result.Name).IsEqualTo(original.Name);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Attributes).IsEquivalentTo(original.Attributes.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

@@ -12,8 +12,8 @@ public sealed class WhenOfTypeIsCalled
         Feature result = original.OfType(Feature.Kind.NonMutational);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
-        await Assert.That(result.Name).IsEqualTo(original.Name);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

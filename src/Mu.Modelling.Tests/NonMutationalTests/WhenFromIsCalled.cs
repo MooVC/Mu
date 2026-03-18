@@ -12,8 +12,8 @@ public sealed class WhenFromIsCalled
         NonMutational result = original.From(NonMutational.Kind.WriteStore);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.WriteStore);
-        await Assert.That(result.View).IsEqualTo(original.View);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.WriteStore);
+        _ = await Assert.That(result.View).IsEqualTo(original.View);
     }
 }

@@ -12,7 +12,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result).IsEqualTo(nameof(Feature.Kind.Mutational));
+        _ = await Assert.That(result).IsEqualTo(nameof(Feature.Kind.Mutational));
     }
 
     [Test]
@@ -25,6 +25,6 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result).IsEqualTo(nameof(Feature.Kind.NonMutational));
+        _ = await Assert.That(result).IsEqualTo(nameof(Feature.Kind.NonMutational));
     }
 }

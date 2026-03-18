@@ -18,6 +18,6 @@ public sealed class WhenImplicitOperatorToSyntaxOptionsIsCalled
         SyntaxOptions result = subject;
 
         // Assert
-        await Assert.That(result).IsEqualTo(expected);
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 }

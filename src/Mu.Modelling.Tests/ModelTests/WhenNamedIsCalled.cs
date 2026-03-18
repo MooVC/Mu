@@ -17,9 +17,9 @@ public sealed class WhenNamedIsCalled
         Model result = original.Named(updated);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Name).IsEqualTo(updated);
-        await Assert.That(result.Company).IsEqualTo(original.Company);
-        await Assert.That(result.Areas).IsEquivalentTo(original.Areas);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Name).IsEqualTo(updated);
+        _ = await Assert.That(result.Company).IsEqualTo(original.Company);
+        _ = await Assert.That(result.Areas).IsEquivalentTo(original.Areas);
     }
 }

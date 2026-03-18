@@ -17,8 +17,8 @@ public sealed class WhenSeenAsIsCalled
         Unit result = original.SeenAs(additional);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Views).IsEquivalentTo(original.Views.Concat([additional]));
-        await Assert.That(result.Name).IsEqualTo(original.Name);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Views).IsEquivalentTo(original.Views.Concat([additional]));
+        _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

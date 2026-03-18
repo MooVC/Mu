@@ -17,6 +17,6 @@ public sealed class WhenAddModelNavigatorIsCalled
         INavigator<Model>? navigator = provider.GetService<INavigator<Model>>();
 
         // Assert
-        await Assert.That(navigator is not null).IsTrue();
+        _ = await Assert.That(navigator is not null).IsTrue();
     }
 }

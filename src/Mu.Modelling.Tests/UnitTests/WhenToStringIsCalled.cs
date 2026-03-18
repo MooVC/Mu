@@ -17,7 +17,7 @@ public sealed class WhenToStringIsCalled
         string result = subject.ToString();
 
         // Assert
-        await Assert.That(result).Contains(nameof(Unit));
-        await Assert.That(result).Contains(UnitNameValue);
+        _ = await Assert.That(result).Contains(nameof(Unit));
+        _ = await Assert.That(result).Contains(UnitNameValue);
     }
 }

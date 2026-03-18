@@ -22,7 +22,7 @@ public sealed class WhenContentsPathIsCalled
         string filePath = subject.ContentsPath(RelativePath);
 
         // Assert
-        await Assert.That(repositoryPath).IsEqualTo($"repos/{Owner}/{Repository}/contents?ref={Reference}");
-        await Assert.That(filePath).IsEqualTo($"repos/{Owner}/{Repository}/contents/{RelativePath}?ref={Reference}");
+        _ = await Assert.That(repositoryPath).IsEqualTo($"repos/{Owner}/{Repository}/contents?ref={Reference}");
+        _ = await Assert.That(filePath).IsEqualTo($"repos/{Owner}/{Repository}/contents/{RelativePath}?ref={Reference}");
     }
 }

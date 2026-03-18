@@ -12,8 +12,8 @@ public sealed class WhenOfTypeIsCalled
         Mutational result = original.OfType(Mutational.Kind.Transitional);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Transitional);
-        await Assert.That(result.Fact).IsEqualTo(original.Fact);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Transitional);
+        _ = await Assert.That(result.Fact).IsEqualTo(original.Fact);
     }
 }

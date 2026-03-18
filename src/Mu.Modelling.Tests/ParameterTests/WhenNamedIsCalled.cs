@@ -17,9 +17,9 @@ public sealed class WhenNamedIsCalled
         Parameter result = original.Named(updated);
 
         // Assert
-        await Assert.That(!ReferenceEquals(result, original)).IsTrue();
-        await Assert.That(result.Name).IsEqualTo(updated);
-        await Assert.That(result.Default).IsEqualTo(original.Default);
-        await Assert.That(result.Type).IsEqualTo(original.Type);
+        _ = await Assert.That(!ReferenceEquals(result, original)).IsTrue();
+        _ = await Assert.That(result.Name).IsEqualTo(updated);
+        _ = await Assert.That(result.Default).IsEqualTo(original.Default);
+        _ = await Assert.That(result.Type).IsEqualTo(original.Type);
     }
 }
