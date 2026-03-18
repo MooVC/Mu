@@ -17,8 +17,8 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        await Assert.That(valid).IsTrue();
-        await Assert.That(results.Count == 0).IsTrue();
+        _ = await Assert.That(valid).IsTrue();
+        _ = await Assert.That(results).IsEmpty();
     }
 
     [Test]
@@ -33,9 +33,9 @@ public sealed class WhenValidateIsCalled
         bool valid = Validator.TryValidateObject(subject, context, results, validateAllProperties: true);
 
         // Assert
-        await Assert.That(valid).IsFalse();
-        await Assert.That(results.Count).IsEqualTo(2);
-        await Assert.That(results[0].MemberNames).Contains(nameof(Area.Units));
-        await Assert.That(results[1].MemberNames).Contains(nameof(Unit.Name));
+        _ = await Assert.That(valid).IsFalse();
+        _ = await Assert.That(results.Count).IsEqualTo(2);
+        _ = await Assert.That(results[0].MemberNames).Contains(nameof(Area.Units));
+        _ = await Assert.That(results[1].MemberNames).Contains(nameof(Unit.Name));
     }
 }
