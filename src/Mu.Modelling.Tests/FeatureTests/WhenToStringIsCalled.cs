@@ -1,6 +1,6 @@
 namespace Mu.Modelling.FeatureTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public sealed class WhenToStringIsCalled
 {

@@ -3,7 +3,7 @@ namespace Mu.Modelling.AttributeTests;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 using ModellingAttribute = Mu.Modelling.Attribute;
 
 public sealed class WhenValidateIsCalled

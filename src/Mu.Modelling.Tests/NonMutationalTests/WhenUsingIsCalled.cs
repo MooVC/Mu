@@ -1,7 +1,5 @@
 namespace Mu.Modelling.NonMutationalTests;
 
-using MooVC.Syntax.Elements;
-
 public sealed class WhenUsingIsCalled
 {
     private const string UpdatedViewValue = "Updated";

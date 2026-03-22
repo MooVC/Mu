@@ -1,6 +1,6 @@
 namespace Mu.Modelling.ResultTests;
 
-using Symbol = MooVC.Syntax.CSharp.Elements.Symbol;
+using Symbol = MooVC.Syntax.CSharp.Symbol;
 
 public sealed class WhenOfTypeIsCalled
 {

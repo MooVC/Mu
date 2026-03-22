@@ -3,7 +3,7 @@
 using Ardalis.GuardClauses;
 using Fluentify;
 using Monify;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 using MooVC.Syntax.Validation;
 
 [AutoInitializeWith(nameof(Undescribed))]

@@ -32,11 +32,8 @@ public sealed class WhenExecuted
 
             Identity.IsExpectedIn(test.TestState);
 
-            // Act
-            Func<Task> act = () => test.RunAsync();
-
-            // Assert
-            await act();
+            // Act & Assert
+            await test.RunAsync();
         }
     }
 }

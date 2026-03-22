@@ -1,9 +1,10 @@
 ﻿namespace Mu.Modelling;
 
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using MooVC.Linq;
-using MooVC.Syntax.CSharp.Members;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
+using MooVC.Syntax.CSharp;
 using MooVC.Syntax.Formatting;
 
 public partial class Model
@@ -18,6 +19,7 @@ public partial class Model
                 {
                     public partial class Unit
                     {
+                        [SuppressMessage("Critical Code Smell", "S3218:Inner class members should not shadow outer class \"static\" or type members", Justification = "Class is auto-generated.")]
                         public partial class Components
                         {
                             public partial class Component

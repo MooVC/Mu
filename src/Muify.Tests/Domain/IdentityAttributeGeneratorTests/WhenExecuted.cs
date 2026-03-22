@@ -1,7 +1,6 @@
 ﻿namespace Muify.Domain.IdentityAttributeGeneratorTests;
 
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
 
 public sealed class WhenExecuted
 {
@@ -32,11 +31,8 @@ public sealed class WhenExecuted
 
             Identity.IsExpectedIn(test.TestState);
 
-            // Act
-            Func<Task> act = () => test.RunAsync();
-
-            // Assert
-            await act();
+            // Act & Assert
+            await test.RunAsync();
         }
     }
 }

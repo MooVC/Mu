@@ -2,7 +2,6 @@ namespace Mu.Modelling.FeatureTests;
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MooVC.Syntax.Elements;
 
 public sealed class WhenValidateIsCalled
 {

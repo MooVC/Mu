@@ -1,9 +1,7 @@
 ﻿namespace Mu.Modelling.Syntax.CSharp.Concepts;
 
 using MooVC;
-using MooVC.Syntax.CSharp.Concepts;
-using MooVC.Syntax.CSharp.Elements;
-using MooVC.Syntax.CSharp.Members;
+using MooVC.Syntax.CSharp;
 using Mu.Modelling.Syntax.CSharp.Members;
 using Attribute = Mu.Modelling.Attribute;
 

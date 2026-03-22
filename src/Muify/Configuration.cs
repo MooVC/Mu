@@ -1,10 +1,9 @@
 ﻿namespace Muify
 {
-    using MooVC.Syntax.CSharp.Concepts;
-    using MooVC.Syntax.CSharp.Elements;
-    using MooVC.Syntax.Elements;
-    using static MooVC.Syntax.CSharp.Elements.Symbol;
-    using Options = MooVC.Syntax.CSharp.Concepts.Options;
+    using MooVC.Syntax;
+    using MooVC.Syntax.CSharp;
+    using static MooVC.Syntax.CSharp.Symbol;
+    using Options = MooVC.Syntax.CSharp.Options;
 
     internal static class Configuration
     {

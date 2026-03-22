@@ -4,11 +4,10 @@ using System.Runtime.CompilerServices;
 using Graphify;
 using MooVC;
 using MooVC.Modelling;
-using MooVC.Syntax.Attributes.Project;
-using MooVC.Syntax.Concepts;
 using MooVC.Syntax.CSharp;
+using MooVC.Syntax.Project;
 using Builder = MooVC.Syntax.Builder;
-using Template = MooVC.Syntax.Concepts.Project;
+using Template = MooVC.Syntax.Project.Project;
 
 internal sealed class Project
     : IVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>

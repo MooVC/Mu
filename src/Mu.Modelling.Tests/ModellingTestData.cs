@@ -1,10 +1,11 @@
 namespace Mu.Modelling;
 
-using System;
 using System.Collections.Immutable;
-using MooVC.Syntax.CSharp.Elements;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
+using MooVC.Syntax.CSharp;
 using ModellingAttribute = Mu.Modelling.Attribute;
+using Name = MooVC.Syntax.Name;
+using Type = System.Type;
 
 internal static class ModellingTestData
 {

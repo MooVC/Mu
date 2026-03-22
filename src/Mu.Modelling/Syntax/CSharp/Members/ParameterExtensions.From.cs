@@ -2,8 +2,7 @@
 
 using System.ComponentModel;
 using MooVC;
-using MooVC.Syntax.CSharp.Elements;
-using MooVC.Syntax.CSharp.Members;
+using MooVC.Syntax.CSharp;
 using Attribute = Mu.Modelling.Attribute;
 using Modelling = Mu.Modelling.Parameter;
 using Result = Mu.Modelling.Result;

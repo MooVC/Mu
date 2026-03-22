@@ -1,6 +1,6 @@
 namespace Mu.Modelling.UnitTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public sealed class WhenNamedIsCalled
 {

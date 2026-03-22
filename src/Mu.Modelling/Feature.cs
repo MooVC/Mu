@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using Fluentify;
 using Graphify;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 using MooVC.Syntax.Validation;
 using Valuify;
 using Ignore = Valuify.IgnoreAttribute;

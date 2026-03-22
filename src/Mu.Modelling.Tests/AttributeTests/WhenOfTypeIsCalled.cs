@@ -1,6 +1,6 @@
 namespace Mu.Modelling.AttributeTests;
 
-using MooVC.Syntax.CSharp.Elements;
+using MooVC.Syntax.CSharp;
 using ModellingAttribute = Mu.Modelling.Attribute;
 
 public sealed class WhenOfTypeIsCalled

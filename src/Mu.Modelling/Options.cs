@@ -3,7 +3,7 @@ namespace Mu.Modelling;
 using Ardalis.GuardClauses;
 using MooVC.Syntax.Validation;
 using static Mu.Modelling.Options;
-using SyntaxOptions = MooVC.Syntax.CSharp.Concepts.Options;
+using SyntaxOptions = MooVC.Syntax.CSharp.Options;
 
 public sealed partial record Options(GithubOptions Github, SyntaxOptions Syntax)
 {

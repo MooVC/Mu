@@ -1,6 +1,6 @@
 namespace Mu.Modelling.MutationalTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public sealed class WhenRaisesIsCalled
 {

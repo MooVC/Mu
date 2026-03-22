@@ -2,8 +2,8 @@
 
 using System.Collections.Immutable;
 using MooVC.Linq;
-using MooVC.Syntax.CSharp.Members;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
+using MooVC.Syntax.CSharp;
 using MooVC.Syntax.Formatting;
 
 public partial class Model

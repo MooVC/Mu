@@ -1,6 +1,6 @@
 namespace Mu.Modelling.AttributeTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 using ModellingAttribute = Mu.Modelling.Attribute;
 
 public sealed class WhenDefaultedToIsCalled
@@ -12,7 +12,7 @@ public sealed class WhenDefaultedToIsCalled
     {
         // Arrange
         ModellingAttribute original = ModellingTestData.CreateAttribute();
-        Snippet updated = Snippet.From(UpdatedDefaultValue);
+        var updated = Snippet.From(UpdatedDefaultValue);
 
         // Act
         ModellingAttribute result = original.DefaultedTo(updated);

@@ -5,16 +5,13 @@ using System.ComponentModel;
 using Graphify;
 using MooVC;
 using MooVC.Modelling;
-using MooVC.Syntax.Attributes.Project;
+using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using MooVC.Syntax.CSharp.Concepts;
-using MooVC.Syntax.CSharp.Elements;
-using MooVC.Syntax.CSharp.Members;
-using MooVC.Syntax.Elements;
 using Mu.Modelling.Syntax.CSharp.Concepts;
 using Muify.Domain;
 using Attribute = Mu.Modelling.Attribute;
 using Builder = MooVC.Syntax.Builder;
+using Extensions = MooVC.Syntax.CSharp.Extensions;
 
 internal sealed class Entity
     : IVisitor<Model.Graph.Areas.Area.Components.Component, File>,

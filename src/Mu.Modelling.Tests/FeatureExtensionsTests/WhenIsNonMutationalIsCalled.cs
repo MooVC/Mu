@@ -1,6 +1,6 @@
 namespace Mu.Modelling.FeatureExtensionsTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public sealed class WhenIsNonMutationalIsCalled
 {

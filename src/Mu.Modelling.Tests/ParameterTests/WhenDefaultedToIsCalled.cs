@@ -1,6 +1,6 @@
 namespace Mu.Modelling.ParameterTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public sealed class WhenDefaultedToIsCalled
 {

@@ -1,6 +1,6 @@
 ﻿namespace Mu.Modelling.Syntax.CSharp.Members;
 
-using MooVC.Syntax.CSharp.Members;
+using MooVC.Syntax.CSharp;
 using Attribute = Mu.Modelling.Attribute;
 
 internal static partial class PropertyExtensions

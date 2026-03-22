@@ -2,7 +2,7 @@
 
 using System.Collections.Immutable;
 using MooVC.Collections.Generic;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public static partial class AttributeExtensions
 {

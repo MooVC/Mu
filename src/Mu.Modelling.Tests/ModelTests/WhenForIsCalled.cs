@@ -1,6 +1,6 @@
 namespace Mu.Modelling.ModelTests;
 
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
 
 public sealed class WhenForIsCalled
 {

@@ -1,9 +1,9 @@
 namespace Mu.Modelling.ModelTests.OptionsTests;
 
-using MooVC.Syntax.CSharp.Concepts;
-using MooVC.Syntax.Elements;
+using MooVC.Syntax;
+using MooVC.Syntax.CSharp;
 using ModelOptions = Mu.Modelling.Options;
-using SyntaxOptions = MooVC.Syntax.CSharp.Concepts.Options;
+using SyntaxOptions = MooVC.Syntax.CSharp.Options;
 
 public sealed class WhenImplicitOperatorToSyntaxOptionsIsCalled
 {

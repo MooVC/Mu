@@ -5,9 +5,7 @@ namespace Muify.Domain
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
     using MooVC.Syntax;
-    using MooVC.Syntax.CSharp.Concepts;
-    using MooVC.Syntax.CSharp.Elements;
-    using MooVC.Syntax.CSharp.Members;
+    using MooVC.Syntax.CSharp;
     using Attribute = System.Attribute;
 
     [Generator(LanguageNames.CSharp)]
