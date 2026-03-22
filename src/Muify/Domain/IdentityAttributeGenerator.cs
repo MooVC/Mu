@@ -40,6 +40,8 @@ namespace Muify.Domain
                             (Name: string.Empty, Value: "global::System.AttributeTargets.Property"),
                             (Name: nameof(AttributeUsageAttribute.AllowMultiple), Value: "false"),
                             (Name: nameof(AttributeUsageAttribute.Inherited), Value: "false")))
+                    .AttributedWith(attribute => attribute
+                        .Named((Name: "EmbeddedAttribute", Qualifier: "Microsoft.CodeAnalysis")))
                     .DerivesFrom(typeof(Attribute))
                     .Named($"{Name}Attribute")
                     .WithScope(Scope.Internal))
