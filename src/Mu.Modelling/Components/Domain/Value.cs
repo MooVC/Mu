@@ -7,7 +7,8 @@ using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp.Concepts;
+using Mu.Modelling.Syntax.CSharp;
+using static Mu.Modelling.Model.Graph.Areas.Area.Units;
 using Attribute = Mu.Modelling.Attribute;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
@@ -61,13 +62,7 @@ internal sealed class Value
             .New<Definition>()
             .From(@namespace)
             .For<Record>(record => record
-                .ForkOn(
-                    _ => description.IsUndescribed,
-                    @true: _ => _,
-                    @false: record => record
-                        .AttributedWith(description => description
-                            .Named(typeof(DescriptionAttribute))
-                            .WithArguments((Name: nameof(Description), Value: description))))
+                .DescribedAs(description)
                 .Named(name)
                 .WithParameters(properties))
             .Referencing([.. references])

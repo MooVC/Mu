@@ -1,8 +1,8 @@
-﻿namespace Mu.Modelling.Syntax.CSharp.Concepts;
+﻿namespace Mu.Modelling.Syntax.CSharp;
 
 using MooVC;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp.Members;
+using Mu.Modelling.Syntax.CSharp;
 using Attribute = Mu.Modelling.Attribute;
 using Parameter = Mu.Modelling.Parameter;
 using Result = Mu.Modelling.Result;

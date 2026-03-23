@@ -7,8 +7,9 @@ using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp.Concepts;
+using Mu.Modelling.Syntax.CSharp;
 using Muify.Domain;
+using static Mu.Modelling.Model.Graph.Areas.Area.Units;
 using Attribute = Mu.Modelling.Attribute;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
@@ -62,19 +63,13 @@ internal sealed class Entity
             .New<Definition>()
             .From(@namespace)
             .For<Class>(@class => @class
-                .ForkOn(
-                    _ => description.IsUndescribed,
-                    @true: _ => _,
-                    @false: record => record
-                        .AttributedWith(description => description
-                            .Named(typeof(DescriptionAttribute))
-                            .WithArguments((Name: nameof(Description), Value: description))))
+                .DescribedAs(description)
                 .Named(name)
                 .WithProperties(properties)
-                .WithProperties(identifier => identifier
-                    .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))
-                    .Named(identifier.Name)
-                    .OfType(identifier.Type)))
+            .WithProperties(identifier => identifier
+                .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))
+                .Named(identifier.Name)
+                .OfType(identifier.Type)))
             .Referencing([.. references])
             .ToSnippet(options);
 

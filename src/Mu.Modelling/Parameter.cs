@@ -25,6 +25,10 @@ public sealed partial class Parameter
     [Traverse(Scope = TraverseScope.Property)]
     public Snippet Default { get; internal init; } = Snippet.Empty;
 
+    [Descriptor("DescribedAs")]
+    [Traverse(Scope = TraverseScope.Property)]
+    public Description Description { get; internal init; } = Description.Undescribed;
+
     [Ignore]
     [Traverse(Scope = TraverseScope.None)]
     public bool IsUndefined => this == Undefined;

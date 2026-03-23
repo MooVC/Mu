@@ -1,4 +1,4 @@
-﻿namespace Mu.Modelling.Syntax.CSharp.Members;
+﻿namespace Mu.Modelling.Syntax.CSharp;
 
 using MooVC.Syntax.CSharp;
 using Attribute = Mu.Modelling.Attribute;

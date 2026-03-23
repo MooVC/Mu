@@ -19,10 +19,12 @@ public partial class Model
 
                 public ImmutableArray<Qualifier> Projects => Value.Components
                     .SelectMany(component => component.Attributes)
+                    .Select(attribute => attribute.Type)
                     .GetProjects(Root.Company, Root.Name, Value.Name);
 
                 public ImmutableArray<Directive> References => Value.Components
                     .SelectMany(component => component.Attributes)
+                    .Select(attribute => attribute.Type)
                     .GetReferences(Namespace);
             }
         }

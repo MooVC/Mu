@@ -2,13 +2,11 @@
 
 extern alias Framework;
 
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Graphify;
-using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp.Concepts;
+using Mu.Modelling.Syntax.CSharp;
 using Base = Framework::Mu.Modelling.State.Aggregate;
 using Builder = MooVC.Syntax.Builder;
 
@@ -21,13 +19,7 @@ internal sealed class Aggregate
             .New<Definition>()
             .From(unit.Namespace)
             .For<Record>(record => record
-                .ForkOn(
-                    _ => unit.Value.Description.IsUndescribed,
-                    @true: _ => _,
-                    @false: record => record
-                        .AttributedWith(description => description
-                            .Named(typeof(DescriptionAttribute))
-                            .WithArguments((Name: nameof(Description), Value: unit.Value.Description))))
+                .DescribedAs(unit.Value.Description)
                 .DerivesFrom(typeof(Base))
                 .Named(unit.Value.Name)
                 .WithParameters(unit.Value.Attributes))

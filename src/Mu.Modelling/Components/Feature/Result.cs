@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using Graphify;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp.Concepts;
+using Mu.Modelling.Syntax.CSharp;
 using Builder = MooVC.Syntax.Builder;
 
 internal sealed class Result
@@ -23,6 +23,7 @@ internal sealed class Result
             .For<Record>(record => record
                 .Containing(Type
                     .New<Record>()
+                    .DescribedAs(feature.Value.Description)
                     .Named(nameof(Result))
                     .WithParameters(feature.Value.Results))
                 .Named(feature.Value.Name))

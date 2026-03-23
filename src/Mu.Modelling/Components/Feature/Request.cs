@@ -9,7 +9,7 @@ using Graphify;
 using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp.Concepts;
+using Mu.Modelling.Syntax.CSharp;
 using Muify.Domain;
 using Builder = MooVC.Syntax.Builder;
 using Type = System.Type;
@@ -27,13 +27,7 @@ internal sealed class Request
             .New<Definition>()
             .From(feature.Namespace)
             .For<Record>(record => record
-                .ForkOn(
-                    _ => feature.Value.Description.IsUndescribed,
-                    @true: _ => _,
-                    @false: record => record
-                        .AttributedWith(description => description
-                            .Named(typeof(DescriptionAttribute))
-                            .WithArguments((Name: nameof(Description), Value: feature.Value.Description))))
+                .DescribedAs(feature.Value.Description)
                 .ForkOn(
                     _ => feature.Value.Type.IsMutational,
                     @true: record => record

@@ -22,7 +22,9 @@ public partial class Model
 
                         public string ProjectName => Separator.Combine(Root.Company, Root.Name, Area.Name);
 
-                        public ImmutableArray<Directive> References => Value.Attributes.GetReferences(Namespace);
+                        public ImmutableArray<Directive> References => Value.Attributes
+                            .Select(attribute => attribute.Type)
+                            .GetReferences(Namespace);
                     }
                 }
             }

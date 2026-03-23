@@ -3,13 +3,14 @@
 using System.Collections.Immutable;
 using MooVC.Collections.Generic;
 using MooVC.Syntax;
+using MooVC.Syntax.CSharp;
 
-public static partial class AttributeExtensions
+public static partial class SymbolExtensions
 {
-    internal static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Attribute> attributes, Name company, params Name[] names)
+    internal static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Symbol> symbols, Name company, params Name[] names)
     {
-        IEnumerable<Qualifier> unique = attributes
-            .Select(attribute => attribute.Type.Qualifier)
+        IEnumerable<Qualifier> unique = symbols
+            .Select(attribute => attribute.Qualifier)
             .Distinct();
 
         var projects = new HashSet<Qualifier>();

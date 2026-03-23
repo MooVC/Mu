@@ -2,10 +2,10 @@
 
 using System.Runtime.CompilerServices;
 using Graphify;
-using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using MooVC.Syntax.Project;
+using Mu.Modelling.Syntax.Project;
 using Builder = MooVC.Syntax.Builder;
 using Template = MooVC.Syntax.Project.Project;
 
@@ -18,11 +18,7 @@ internal sealed class Project
     {
         string content = Builder
             .New<Template>()
-            .ForkOn(
-                _ => feature.Value.Description.IsUndescribed,
-                @true: _ => _,
-                @false: project => project.WithPropertyGroups(group => group
-                    .WithProperty(nameof(feature.Value.Description), feature.Value.Description)))
+            .DescribedAs(feature.Value.Description)
             .WithItemGroups(group => group
                 .WithProject($"{Folders.Source}/{feature.DomainName}/{feature.DomainName}.{Extensions.Project}"))
             .ToString();
