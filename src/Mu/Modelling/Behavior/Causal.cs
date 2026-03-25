@@ -2,6 +2,9 @@
 
 using Mu.Modelling;
 
+/// <summary>
+/// Base abstraction for domain messages that capture cause and model context.
+/// </summary>
 public abstract record Causal
 {
     private protected Causal()
@@ -20,9 +23,18 @@ public abstract record Causal
     {
     }
 
+    /// <summary>
+    /// Gets the causal identity for the message.
+    /// </summary>
     public Guid Identity { get; }
 
+    /// <summary>
+    /// Gets the time at which the message was proposed.
+    /// </summary>
     public DateTimeOffset Proposed { get; }
 
+    /// <summary>
+    /// Gets the aggregate model associated with the message.
+    /// </summary>
     public abstract Model Model { get; }
 }

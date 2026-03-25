@@ -3,6 +3,10 @@
 using Mu.Modelling;
 using Mu.Modelling.State;
 
+/// <summary>
+/// Represents a creational use case bound to a specific aggregate model.
+/// </summary>
+/// <typeparam name="TAggregate">The aggregate type created by the use case.</typeparam>
 public abstract record Creational<TAggregate>
     : Creational
     where TAggregate : Aggregate
@@ -18,5 +22,8 @@ public abstract record Creational<TAggregate>
     {
     }
 
+    /// <summary>
+    /// Gets the model metadata associated with the creational use case.
+    /// </summary>
     public override Model Model => model;
 }

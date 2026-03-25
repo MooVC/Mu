@@ -3,6 +3,9 @@
 using System;
 using Mu.Modelling.State;
 
+/// <summary>
+/// Describes the aggregate model metadata used by causal messages.
+/// </summary>
 public sealed record Model
 {
     private static readonly Type _basis = typeof(Aggregate);
@@ -24,12 +27,24 @@ public sealed record Model
         Assembly = type.Assembly.GetName().Name!;
     }
 
+    /// <summary>
+    /// Gets the assembly name containing the aggregate type.
+    /// </summary>
     public string Assembly { get; }
 
+    /// <summary>
+    /// Gets the aggregate type name.
+    /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    /// Gets the namespace containing the aggregate type.
+    /// </summary>
     public string Namespace { get; }
 
+    /// <summary>
+    /// Converts an aggregate type to its <see cref="Model"/> representation.
+    /// </summary>
     public static implicit operator Model(Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
@@ -37,6 +52,9 @@ public sealed record Model
         return new Model(type);
     }
 
+    /// <summary>
+    /// Converts a <see cref="Model"/> representation back to the runtime <see cref="Type"/>.
+    /// </summary>
     public static implicit operator Type(Model model)
     {
         ArgumentNullException.ThrowIfNull(model);

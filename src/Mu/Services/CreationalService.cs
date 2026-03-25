@@ -6,6 +6,9 @@ using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
 using Mu.Persistence;
 
+/// <summary>
+/// Executes creational use cases by allocating an identity, applying the mutation, and persisting new facts.
+/// </summary>
 public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
     IAllocator<TIdentity> allocator,
     IRoot<TAggregate, TUseCase> root,
@@ -15,6 +18,9 @@ public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
     where TIdentity : struct
     where TUseCase : Creational
 {
+    /// <summary>
+    /// Executes the creational use case.
+    /// </summary>
     public async Task<Result<TIdentity>> Execute(TUseCase useCase, CancellationToken cancellationToken)
     {
         TIdentity identity = await allocator

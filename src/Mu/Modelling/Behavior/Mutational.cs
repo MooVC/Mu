@@ -1,5 +1,8 @@
 ﻿namespace Mu.Modelling.Behavior;
 
+/// <summary>
+/// Represents a use case that mutates aggregate state.
+/// </summary>
 public abstract record Mutational
     : UseCase
 {

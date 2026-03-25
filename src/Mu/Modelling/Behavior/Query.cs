@@ -1,5 +1,8 @@
 ﻿namespace Mu.Modelling.Behavior;
 
+/// <summary>
+/// Represents a non-mutational query use case.
+/// </summary>
 public abstract record Query
     : NonMutational
 {

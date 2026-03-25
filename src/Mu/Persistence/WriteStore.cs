@@ -6,11 +6,17 @@ using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
 using Mu.Services;
 
+/// <summary>
+/// Persists aggregate changes by writing proposed facts to an event stream.
+/// </summary>
 public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream, ITransform<TAggregate, Fact> transform)
     : IWriteStore<TAggregate, TIdentity>
     where TAggregate : Aggregate, new()
     where TIdentity : struct
 {
+    /// <summary>
+    /// Rehydrates an aggregate from persisted events up to the requested revision.
+    /// </summary>
     public async Task<TAggregate?> Get(TIdentity identity, ulong revision, CancellationToken cancellationToken)
     {
         ImmutableArray<Event> events = await stream
@@ -36,6 +42,9 @@ public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream,
         return aggregate;
     }
 
+    /// <summary>
+    /// Saves aggregate propositions as stream events.
+    /// </summary>
     public async Task Save(TAggregate aggregate, TIdentity identity, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(aggregate);

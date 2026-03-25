@@ -1,5 +1,8 @@
 ﻿namespace Mu.Modelling.Behavior;
 
+/// <summary>
+/// Represents a request to execute a domain behavior.
+/// </summary>
 public abstract record UseCase
     : Causal
 {
