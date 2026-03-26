@@ -7,9 +7,15 @@ using Mu.Communications.Messaging;
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
 
+/// <summary>
+/// Resolves and executes handlers for use cases through dependency injection.
+/// </summary>
 public sealed class Mediator(IServiceProvider provider)
     : IMediator
 {
+    /// <summary>
+    /// Executes a use case by resolving and invoking the matching handler.
+    /// </summary>
     public async Task<Result<TResult>> Execute<TUseCase, TResult>(TUseCase useCase, CancellationToken cancellationToken)
         where TUseCase : UseCase
         where TResult : notnull

@@ -5,8 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
 
+/// <summary>
+/// Provides helpers to enforce collections of invariants.
+/// </summary>
 public static partial class IInvariantExtensions
 {
+    /// <summary>
+    /// Enforces all provided invariants and returns the collected failures.
+    /// </summary>
     public static async Task<ImmutableArray<ValidationResult>> EnforceAll<TAggregate, TIntent>(
         this IEnumerable<IInvariant<TAggregate, TIntent>> invariants,
         TAggregate aggregate,

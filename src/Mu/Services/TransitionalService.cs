@@ -7,6 +7,9 @@ using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
 using Mu.Persistence;
 
+/// <summary>
+/// Executes transitional use cases by loading a target aggregate, applying the mutation, and persisting resulting facts.
+/// </summary>
 public sealed class TransitionalService<TAggregate, TIdentity, TUseCase>(
     IRoot<TAggregate, TUseCase> root,
     IWriteStore<TAggregate, TIdentity> store)
@@ -15,6 +18,9 @@ public sealed class TransitionalService<TAggregate, TIdentity, TUseCase>(
     where TIdentity : struct
     where TUseCase : Transitional<TAggregate, TIdentity>
 {
+    /// <summary>
+    /// Executes the transitional use case.
+    /// </summary>
     public async Task<Result<Revision>> Execute(TUseCase useCase, CancellationToken cancellationToken)
     {
         TAggregate? aggregate = await store

@@ -3,8 +3,14 @@
 using Mu.Modelling.Behavior;
 using Mu.Services;
 
+/// <summary>
+/// Provides helpers for proposing facts against aggregates.
+/// </summary>
 public static partial class AggregateExtensions
 {
+    /// <summary>
+    /// Registers a fact proposition and applies matching transforms to derive the next aggregate state.
+    /// </summary>
     public static TAggregate Propose<TAggregate, TFact>(
         this TAggregate aggregate,
         TFact fact,

@@ -3,6 +3,9 @@
 using System.Threading.Tasks;
 using Mu.Modelling.Behavior;
 
+/// <summary>
+/// Composes messaging envelopes for intents, outcomes, and events.
+/// </summary>
 public interface IComposer
 {
     ValueTask<Intent<TUseCase>> Express<TUseCase>(TUseCase useCase, CancellationToken cancellationToken)
