@@ -21,12 +21,12 @@ public sealed partial class Mutational
     }
 
     [Descriptor("Raises")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Name Fact { get; internal init; } = Name.Unnamed;
 
     [Descriptor("OfType")]
     [Hide]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Kind Type { get; internal init; } = Kind.Transitional;
 
     [Ignore]

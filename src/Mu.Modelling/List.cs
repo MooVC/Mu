@@ -11,18 +11,14 @@ using Ignore = Valuify.IgnoreAttribute;
 
 [Valuify]
 [Fluentify]
-public sealed partial class Component
+public sealed partial class List
     : IValidatableObject
 {
-    public static readonly Component Undefined = new();
+    public static readonly List Undefined = new();
 
-    internal Component()
+    internal List()
     {
     }
-
-    [Descriptor("AttributedWith")]
-    [Traverse(Scope = TraverseScope.None)]
-    public ImmutableArray<Attribute> Attributes { get; internal init; } = [];
 
     [Descriptor("DescribedAs")]
     [Traverse(Scope = TraverseScope.None)]
@@ -32,16 +28,13 @@ public sealed partial class Component
     [Traverse(Scope = TraverseScope.None)]
     public bool IsUndefined => this == Undefined;
 
-    [Descriptor("IdentifiedBy")]
-    [Traverse(Scope = TraverseScope.None)]
-    public Attribute Identifier { get; internal init; } = Attribute.Undefined;
-
     [Descriptor("Named")]
     [Traverse(Scope = TraverseScope.None)]
     public Name Name { get; internal init; } = Name.Unnamed;
 
-    [Descriptor("SeenAs")]
-    public ImmutableArray<View> Views { get; internal init; } = [];
+    [Descriptor("Containing")]
+    [Traverse(Scope = TraverseScope.None)]
+    public ImmutableArray<Name> Members { get; internal init; } = [];
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -51,10 +44,8 @@ public sealed partial class Component
         }
 
         return validationContext
-            .IncludeIf(!Attributes.IsDefaultOrEmpty, nameof(Attributes), attribute => !attribute.IsUndefined, Attributes)
-            .AndIf(!Identifier.IsUndefined, nameof(Identifier), Identifier)
-            .And(nameof(Name), name => !name.IsUnnamed, Name)
-            .AndIf(!Views.IsDefaultOrEmpty, nameof(Views), view => !view.IsUndefined, Views)
+            .Include(nameof(Name), name => !name.IsUnnamed, Name)
+            .AndIf(!Members.IsDefaultOrEmpty, nameof(Members), member => !member.IsUnnamed, Members)
             .Results;
     }
 }

@@ -21,11 +21,11 @@ public sealed partial class NonMutational
 
     [Descriptor("From")]
     [Hide]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Kind Source { get; internal init; } = Kind.ReadStore;
 
     [Descriptor("Using")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public View View { get; internal init; } = View.Undefined;
 
     [Ignore]

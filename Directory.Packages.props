@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0" />
     <PackageVersion Include="Fluentify" Version="2.0.0" />
-    <PackageVersion Include="Graphify" Version="1.0.0-rc.14" />
+    <PackageVersion Include="Graphify" Version="1.0.0-rc.15" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[5.0.0,5.1.0)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.3" />
@@ -18,15 +18,15 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.5" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Monify" Version="1.3.4" />
-    <PackageVersion Include="MooVC" Version="9.3.0-beta.6" />
-    <PackageVersion Include="MooVC.Modelling" Version="9.3.0-beta.6" />
-    <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.6" />
-    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.6" />
+    <PackageVersion Include="MooVC" Version="9.3.0-beta.7" />
+    <PackageVersion Include="MooVC.Modelling" Version="9.3.0-beta.7" />
+    <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.7" />
+    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.7" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.21.0.135717" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.22.0.136894" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="10.0.5" />
-    <PackageVersion Include="TUnit" Version="1.21.6" />
+    <PackageVersion Include="TUnit" Version="1.21.30" />
     <PackageVersion Include="Valuify" Version="1.7.4" />
   </ItemGroup>
 </Project>

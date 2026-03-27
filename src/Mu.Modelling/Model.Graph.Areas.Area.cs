@@ -3,7 +3,6 @@
 using System.Collections.Immutable;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using MooVC.Syntax.Formatting;
 
 public partial class Model
 {
@@ -15,7 +14,7 @@ public partial class Model
             {
                 public Qualifier Namespace => new([Root.Company, Root.Name, Value.Name]);
 
-                public string ProjectName => Separator.Combine(Root.Company, Root.Name, Value.Name);
+                public string ProjectName => Namespace;
 
                 public ImmutableArray<Qualifier> Projects => Value.Components
                     .SelectMany(component => component.Attributes)

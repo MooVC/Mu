@@ -21,15 +21,14 @@ public sealed partial class View
     }
 
     [Descriptor("AttributedWith")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public ImmutableArray<Attribute> Attributes { get; internal init; } = [];
 
     [Descriptor("DescribedAs")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Description Description { get; internal init; } = Description.Undescribed;
 
     [Descriptor("RenderedOn")]
-    [Traverse(Scope = TraverseScope.Property)]
     public ImmutableArray<Qualifier> Facts { get; internal init; } = [];
 
     [Ignore]
@@ -44,7 +43,7 @@ public sealed partial class View
     public bool IsUndefined => this == Undefined;
 
     [Descriptor("Named")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Name Name { get; internal init; } = Name.Unnamed;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

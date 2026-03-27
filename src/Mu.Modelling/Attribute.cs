@@ -22,11 +22,11 @@ public sealed partial class Attribute
     }
 
     [Descriptor("DefaultedTo")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Snippet Default { get; internal init; } = Snippet.Empty;
 
     [Descriptor("DescribedAs")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Description Description { get; internal init; } = Description.Undescribed;
 
     [Ignore]
@@ -34,11 +34,11 @@ public sealed partial class Attribute
     public bool IsUndefined => this == Undefined;
 
     [Descriptor("Named")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Name Name { get; internal init; } = Name.Unnamed;
 
     [Descriptor("OfType")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Symbol Type { get; internal init; } = Symbol.Undefined;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -35,6 +35,9 @@
     <Compile Update="Model.Graph.Areas.Area.Components.Component.cs">
       <DependentUpon>Model.Graph.Areas.Area.cs</DependentUpon>
     </Compile>
+    <Compile Update="Model.Graph.Areas.Area.Lists.List.cs">
+      <DependentUpon>Model.Graph.Areas.Area.cs</DependentUpon>
+    </Compile>
     <Compile Update="Model.Graph.Areas.Area.Units.Unit.cs">
       <DependentUpon>Model.Graph.Areas.Area.cs</DependentUpon>
     </Compile>
@@ -42,6 +45,9 @@
       <DependentUpon>Model.Graph.Areas.Area.Units.Unit.cs</DependentUpon>
     </Compile>
     <Compile Update="Model.Graph.Areas.Area.Units.Unit.Features.Feature.cs">
+      <DependentUpon>Model.Graph.Areas.Area.Units.Unit.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Model.Graph.Areas.Area.Units.Unit.Lists.List.cs">
       <DependentUpon>Model.Graph.Areas.Area.Units.Unit.cs</DependentUpon>
     </Compile>
   </ItemGroup>

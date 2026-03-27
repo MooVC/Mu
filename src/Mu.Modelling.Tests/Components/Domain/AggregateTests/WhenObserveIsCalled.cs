@@ -11,15 +11,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAUnitThenAggregateDefinitionIsReturned()
     {
         // Arrange
-        const int index = 0;
         var visitor = new Aggregate();
-
-        var graph = new Model.Graph.Areas.Area.Units.Unit(
-            index,
-            TestData.Single,
-            TestData.Single.Areas,
-            TestData.Single.Areas[0],
-            TestData.Single.Areas[0].Units[0]);
 
         const string content = """
             namespace MooVC.Testing.Mechanics.Car;
@@ -41,7 +33,7 @@ public sealed class WhenObserveIsCalled
         var expected = new File(content, "cs", "Car", "src/MooVC.Testing.Mechanics.Car/");
 
         // Act
-        IAsyncEnumerable<File> results = visitor.Observe(graph, CancellationToken.None);
+        IAsyncEnumerable<File> results = visitor.Observe(TestData.Single.Car, CancellationToken.None);
 
         // Assert
         _ = await Assert.That(results).HasCount(1);

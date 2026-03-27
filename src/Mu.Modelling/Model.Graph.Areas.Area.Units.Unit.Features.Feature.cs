@@ -1,10 +1,8 @@
 ﻿namespace Mu.Modelling;
 
 using System.Collections.Immutable;
-using MooVC.Linq;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using MooVC.Syntax.Formatting;
 
 public partial class Model
 {
@@ -22,11 +20,11 @@ public partial class Model
                         {
                             public partial class Feature
                             {
-                                public string DomainName => Separator.Combine(Root.Company, Root.Name, Area.Name, Unit.Name);
+                                public string DomainName => Features.Unit.ProjectName;
 
-                                public Qualifier Namespace => new([Root.Company, Root.Name, Area.Name, Unit.Name, Value.Name]);
+                                public Qualifier Namespace => Features.Unit.Namespace.Append(Value.Name);
 
-                                public string ProjectName => Separator.Combine(Root.Company, Root.Name, Area.Name, Unit.Name, Value.Name);
+                                public string ProjectName => Namespace;
 
                                 public ImmutableArray<Directive> References => Value.Parameters.GetReferences(Namespace);
                             }

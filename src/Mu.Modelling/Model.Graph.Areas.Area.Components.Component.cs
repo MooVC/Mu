@@ -1,10 +1,8 @@
 ﻿namespace Mu.Modelling;
 
 using System.Collections.Immutable;
-using MooVC.Linq;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using MooVC.Syntax.Formatting;
 
 public partial class Model
 {
@@ -18,9 +16,9 @@ public partial class Model
                 {
                     public partial class Component
                     {
-                        public Qualifier Namespace => new([Root.Company, Root.Name, Area.Name]);
+                        public Qualifier Namespace => Components.Area.Namespace;
 
-                        public string ProjectName => Separator.Combine(Root.Company, Root.Name, Area.Name);
+                        public string ProjectName => Components.Area.ProjectName;
 
                         public ImmutableArray<Directive> References => Value.Attributes
                             .Select(attribute => attribute.Type)

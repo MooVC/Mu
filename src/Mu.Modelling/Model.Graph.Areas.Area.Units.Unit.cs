@@ -7,6 +7,7 @@ using System.ComponentModel;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
 using MooVC.Syntax.Formatting;
+using static Mu.Modelling.Model.Graph.Areas.Area.Units;
 using Aggregate = Framework::Mu.Modelling.State.Aggregate;
 
 public partial class Model
@@ -21,11 +22,13 @@ public partial class Model
                 {
                     public sealed partial class Unit
                     {
-                        public string KernelName => Separator.Combine(Root.Company, Root.Name, Area.Name);
+                        public bool HasKernel => Units.Area.Value.Components.Length > 0;
 
-                        public Qualifier Namespace => new([Root.Company, Root.Name, Area.Name, Value.Name]);
+                        public string KernelName => Units.Area.Namespace;
 
-                        public string ProjectName => Separator.Combine(Root.Company, Root.Name, Area.Name, Value.Name);
+                        public Qualifier Namespace => Units.Area.Namespace.Append(Value.Name);
+
+                        public string ProjectName => Namespace;
 
                         public ImmutableArray<Qualifier> Projects => Value.Attributes
                             .Select(attribute => attribute.Type)
@@ -41,7 +44,7 @@ public partial class Model
                              .Union(Value.Views
                                 .SelectMany(view => view.Attributes)
                                 .Select(view => view.Type))
-                            .GetProjects(Root.Company, Root.Name, Area.Name, Value.Name);
+                            .GetProjects(Root.Company, Root.Name, Units.Area.Value.Name, Value.Name);
 
                         public ImmutableArray<Directive> References => Value.Attributes
                             .Select(attribute => attribute.Type)

@@ -2,10 +2,8 @@
 
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using MooVC.Linq;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using MooVC.Syntax.Formatting;
 
 public partial class Model
 {
@@ -24,9 +22,9 @@ public partial class Model
                         {
                             public partial class Component
                             {
-                                public Qualifier Namespace => new([Root.Company, Root.Name, Area.Name, Value.Name]);
+                                public Qualifier Namespace => Components.Unit.Namespace;
 
-                                public string ProjectName => Separator.Combine(Root.Company, Root.Name, Area.Name, Value.Name);
+                                public string ProjectName => Components.Unit.ProjectName;
 
                                 public ImmutableArray<Directive> References => Value.Attributes
                                     .Select(attribute => attribute.Type)

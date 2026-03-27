@@ -22,7 +22,7 @@ public sealed partial class Feature
     }
 
     [Descriptor("DescribedAs")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Description Description { get; internal init; } = Description.Undescribed;
 
     [Ignore]
@@ -30,27 +30,27 @@ public sealed partial class Feature
     public bool IsUndefined => this == Undefined;
 
     [Hide]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Mutational Mutational { get; internal init; } = Mutational.Undefined;
 
     [Descriptor("Named")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Name Name { get; internal init; } = Name.Unnamed;
 
     [Hide]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public NonMutational NonMutational { get; internal init; } = NonMutational.Undefined;
 
     [Descriptor("Using")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public ImmutableArray<Parameter> Parameters { get; internal init; } = [];
 
     [Descriptor("Returning")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public ImmutableArray<Result> Results { get; internal init; } = [];
 
     [Descriptor("OfType")]
-    [Traverse(Scope = TraverseScope.Property)]
+    [Traverse(Scope = TraverseScope.None)]
     public Kind Type { get; internal init; } = Kind.Mutational;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

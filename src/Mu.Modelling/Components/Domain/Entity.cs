@@ -1,15 +1,12 @@
 ﻿namespace Mu.Modelling.Components.Domain;
 
 using System.Collections.Immutable;
-using System.ComponentModel;
 using Graphify;
-using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Syntax.CSharp;
 using Muify.Domain;
-using static Mu.Modelling.Model.Graph.Areas.Area.Units;
 using Attribute = Mu.Modelling.Attribute;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;

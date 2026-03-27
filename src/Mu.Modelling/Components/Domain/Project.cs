@@ -24,7 +24,7 @@ internal sealed class Project
     {
         string kernel = string.Empty;
 
-        if (unit.Area.Components.Length > 0)
+        if (unit.HasKernel)
         {
             kernel = unit.KernelName;
         }
