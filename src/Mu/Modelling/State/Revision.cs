@@ -16,7 +16,7 @@ public readonly record struct Revision
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Revision"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Revision"/> record.
     /// </summary>
     [JsonConstructor]
     internal Revision(DateTimeOffset initiatedAt, ulong number)

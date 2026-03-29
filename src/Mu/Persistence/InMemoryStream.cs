@@ -33,7 +33,7 @@ internal sealed class InMemoryStream<TIdentity>
     }
 
     /// <summary>
-    /// Initiates a new in-memory stream with initial facts.
+    /// Initiates a <see langword="new"/> in-memory stream with initial facts.
     /// </summary>
     public Task<DateTimeOffset> Initiate(IEnumerable<Fact> facts, TIdentity identity, CancellationToken cancellationToken)
     {

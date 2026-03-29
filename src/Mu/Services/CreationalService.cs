@@ -7,7 +7,7 @@ using Mu.Modelling.State;
 using Mu.Persistence;
 
 /// <summary>
-/// Executes creational use cases by allocating an identity, applying the mutation, and persisting new facts.
+/// Executes creational use cases by allocating an identity, applying the mutation, and persisting <see langword="new"/> facts.
 /// </summary>
 public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
     IAllocator<TIdentity> allocator,

@@ -14,7 +14,7 @@ public sealed record Intent<TUseCase>
     where TUseCase : UseCase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Intent{TUseCase}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Intent{TUseCase}"/> record.
     /// </summary>
     internal Intent(Ledger ledger, TUseCase useCase)
         : this(ledger, DateTimeOffset.UtcNow, useCase)
@@ -22,7 +22,7 @@ public sealed record Intent<TUseCase>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Intent{TUseCase}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Intent{TUseCase}"/> record.
     /// </summary>
     [JsonConstructor]
     internal Intent(Ledger ledger, DateTimeOffset preparedAt, TUseCase useCase)

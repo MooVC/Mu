@@ -16,7 +16,7 @@ public sealed record Event<TFact, TIdentity>
     where TIdentity : struct
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Event{TFact, TIdentity}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Event{TFact, TIdentity}"/> record.
     /// </summary>
     [JsonConstructor]
     internal Event(DateTimeOffset committedAt, Ledger context, TFact fact, Reference<TIdentity> origin, DateTimeOffset preparedAt)
