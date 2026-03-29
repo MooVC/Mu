@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 public readonly record struct Ledger
 {
     /// <summary>
-    /// Initializes a new root ledger where causation and correlation are the same.
+    /// Initializes a <see langword="new"/> root ledger where causation and correlation are the same.
     /// </summary>
     internal Ledger(Guid causation)
         : this(causation, causation)
@@ -16,7 +16,7 @@ public readonly record struct Ledger
     }
 
     /// <summary>
-    /// Initializes a new ledger with explicit causation and correlation identifiers.
+    /// Initializes a <see langword="new"/> ledger with explicit causation and correlation identifiers.
     /// </summary>
     [JsonConstructor]
     internal Ledger(Guid causation, Guid correlation)
@@ -41,7 +41,7 @@ public readonly record struct Ledger
     public bool IsInitiator => Causation == Correlation;
 
     /// <summary>
-    /// Creates the next ledger in the chain with a new causation identifier.
+    /// Creates the next ledger in the chain with a <see langword="new"/> causation identifier.
     /// </summary>
     public Ledger Next(Guid causation)
     {

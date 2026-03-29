@@ -19,7 +19,7 @@ public interface IStream<TIdentity>
     Task<DateTimeOffset> Append(IEnumerable<Fact> facts, TIdentity identity, Revision revision, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Initiates a new aggregate stream with its initial facts.
+    /// Initiates a <see langword="new"/> aggregate stream with its initial facts.
     /// </summary>
     /// <returns>The time at which the facts are deemed to be committed to the stream.</returns>
     Task<DateTimeOffset> Initiate(IEnumerable<Fact> facts, TIdentity identity, CancellationToken cancellationToken);
