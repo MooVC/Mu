@@ -3,21 +3,6 @@ namespace Mu.Modelling.UnitTests;
 public sealed class WhenGetHashCodeIsCalled
 {
     [Test]
-    public async Task GivenSameValuesThenHashesMatch()
-    {
-        // Arrange
-        Unit left = ModellingTestData.CreateUnit();
-        Unit right = ModellingTestData.CreateUnit();
-
-        // Act
-        int leftHash = left.GetHashCode();
-        int rightHash = right.GetHashCode();
-
-        // Assert
-        _ = await Assert.That(leftHash).IsEqualTo(rightHash);
-    }
-
-    [Test]
     public async Task GivenDifferentValuesThenHashesDiffer()
     {
         // Arrange
@@ -44,5 +29,20 @@ public sealed class WhenGetHashCodeIsCalled
 
         // Assert
         _ = await Assert.That(firstHash).IsEqualTo(secondHash);
+    }
+
+    [Test]
+    public async Task GivenSameValuesThenHashesMatch()
+    {
+        // Arrange
+        Unit left = ModellingTestData.CreateUnit();
+        Unit right = ModellingTestData.CreateUnit();
+
+        // Act
+        int leftHash = left.GetHashCode();
+        int rightHash = right.GetHashCode();
+
+        // Assert
+        _ = await Assert.That(leftHash).IsEqualTo(rightHash);
     }
 }

@@ -34,6 +34,10 @@ internal static class ModellingTestData
     public static readonly Name DefaultUnitName = new(DefaultUnitNameValue);
     public static readonly Name DefaultViewName = new(DefaultViewNameValue);
     public static readonly Name AlternateName = new(AlternateNameValue);
+    public static Name CreateAlternateName()
+    {
+        return AlternateName;
+    }
 
     public static Area CreateArea(Name? name = default, params Unit[] units)
     {
@@ -179,10 +183,5 @@ internal static class ModellingTestData
             Facts = factArray,
             Name = name ?? DefaultViewName,
         };
-    }
-
-    public static Name CreateAlternateName()
-    {
-        return AlternateName;
     }
 }
