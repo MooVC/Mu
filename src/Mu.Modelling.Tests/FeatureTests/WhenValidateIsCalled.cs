@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 public sealed class WhenValidateIsCalled
 {
     private const string FeatureNameValue = "Feature";
+
     [Test]
     public async Task GivenUndefinedMutationalThenValidationErrorReturned()
     {

@@ -4,6 +4,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
 {
     private const string CreationalValue = "Creational";
     private const string TransitionalValue = "Transitional";
+
     [Test]
     public async Task GivenDifferentValueThenReturnsFalse()
     {

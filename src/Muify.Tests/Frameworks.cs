@@ -23,6 +23,7 @@ internal static class Frameworks
     {
         _languages = Enum.GetValues<LanguageVersion>();
     }
+
     public static IEnumerable<Theory> All(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, Theory?>? prepare = default)
     {
         return Filter(InScope, maximum => _languages.Where(language => language >= minimum && language <= maximum), prepare);
@@ -35,6 +36,13 @@ internal static class Frameworks
 #else
         return Supported(minimum);
 #endif
+    }
+
+    public static IEnumerable<Theory> Supported(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, Theory?>? prepare = default)
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        return Filter(InScope.Where(framework => framework.SupportTo >= today && framework.Maximum >= minimum), maximum => [maximum], prepare);
     }
 
     private static IEnumerable<Theory> Filter(
@@ -56,12 +64,5 @@ internal static class Frameworks
                 }
             }
         }
-    }
-
-    public static IEnumerable<Theory> Supported(LanguageVersion minimum, Func<ReferenceAssemblies, LanguageVersion, Theory?>? prepare = default)
-    {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
-
-        return Filter(InScope.Where(framework => framework.SupportTo >= today && framework.Maximum >= minimum), maximum => [maximum], prepare);
     }
 }

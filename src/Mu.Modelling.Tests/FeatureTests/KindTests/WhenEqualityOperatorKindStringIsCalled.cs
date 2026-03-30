@@ -4,6 +4,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
 {
     private const string MutationalValue = "Mutational";
     private const string NonMutationalValue = "NonMutational";
+
     [Test]
     public async Task GivenDifferentValueThenReturnsFalse()
     {

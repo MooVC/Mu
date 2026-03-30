@@ -4,6 +4,7 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
 {
     private const string ReadStoreValue = "ReadStore";
     private const string WriteStoreValue = "WriteStore";
+
     [Test]
     public async Task GivenDifferentValueThenReturnsFalse()
     {

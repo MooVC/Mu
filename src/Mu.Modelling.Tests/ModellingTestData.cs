@@ -34,6 +34,7 @@ internal static class ModellingTestData
     public static readonly Name DefaultUnitName = new(DefaultUnitNameValue);
     public static readonly Name DefaultViewName = new(DefaultViewNameValue);
     public static readonly Name AlternateName = new(AlternateNameValue);
+
     public static Name CreateAlternateName()
     {
         return AlternateName;
