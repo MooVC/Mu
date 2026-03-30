@@ -3,19 +3,6 @@ namespace Mu.Modelling.FeatureTests.KindTests;
 public sealed class WhenIsNonMutationalIsCalled
 {
     [Test]
-    public async Task GivenNonMutationalKindThenReturnsTrue()
-    {
-        // Arrange
-        Feature.Kind subject = Feature.Kind.NonMutational;
-
-        // Act
-        bool result = subject.IsNonMutational;
-
-        // Assert
-        _ = await Assert.That(result).IsTrue();
-    }
-
-    [Test]
     public async Task GivenMutationalKindThenReturnsFalse()
     {
         // Arrange
@@ -26,5 +13,18 @@ public sealed class WhenIsNonMutationalIsCalled
 
         // Assert
         _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenNonMutationalKindThenReturnsTrue()
+    {
+        // Arrange
+        Feature.Kind subject = Feature.Kind.NonMutational;
+
+        // Act
+        bool result = subject.IsNonMutational;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
     }
 }

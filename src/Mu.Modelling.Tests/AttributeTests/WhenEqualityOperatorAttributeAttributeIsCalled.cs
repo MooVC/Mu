@@ -5,22 +5,6 @@ using ModellingAttribute = Mu.Modelling.Attribute;
 public sealed class WhenEqualityOperatorAttributeAttributeIsCalled
 {
     [Test]
-    public async Task GivenEqualValuesThenReturnsTrue()
-    {
-        // Arrange
-        ModellingAttribute left = ModellingTestData.CreateAttribute();
-        ModellingAttribute right = ModellingTestData.CreateAttribute();
-
-        // Act
-        bool resultLeftRight = left == right;
-        bool resultRightLeft = right == left;
-
-        // Assert
-        _ = await Assert.That(resultLeftRight).IsTrue();
-        _ = await Assert.That(resultRightLeft).IsTrue();
-    }
-
-    [Test]
     public async Task GivenDifferentValuesThenReturnsFalse()
     {
         // Arrange
@@ -34,5 +18,21 @@ public sealed class WhenEqualityOperatorAttributeAttributeIsCalled
         // Assert
         _ = await Assert.That(resultLeftRight).IsFalse();
         _ = await Assert.That(resultRightLeft).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenEqualValuesThenReturnsTrue()
+    {
+        // Arrange
+        ModellingAttribute left = ModellingTestData.CreateAttribute();
+        ModellingAttribute right = ModellingTestData.CreateAttribute();
+
+        // Act
+        bool resultLeftRight = left == right;
+        bool resultRightLeft = right == left;
+
+        // Assert
+        _ = await Assert.That(resultLeftRight).IsTrue();
+        _ = await Assert.That(resultRightLeft).IsTrue();
     }
 }

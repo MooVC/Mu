@@ -6,20 +6,6 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
     private const string TransitionalValue = "Transitional";
 
     [Test]
-    public async Task GivenMatchingValueThenReturnsTrue()
-    {
-        // Arrange
-        Mutational.Kind subject = Mutational.Kind.Creational;
-        string value = CreationalValue;
-
-        // Act
-        bool result = subject == value;
-
-        // Assert
-        _ = await Assert.That(result).IsTrue();
-    }
-
-    [Test]
     public async Task GivenDifferentValueThenReturnsFalse()
     {
         // Arrange
@@ -31,5 +17,19 @@ public sealed class WhenEqualityOperatorKindStringIsCalled
 
         // Assert
         _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenMatchingValueThenReturnsTrue()
+    {
+        // Arrange
+        Mutational.Kind subject = Mutational.Kind.Creational;
+        string value = CreationalValue;
+
+        // Act
+        bool result = subject == value;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
     }
 }
