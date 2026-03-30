@@ -63,10 +63,9 @@ internal sealed class Entity
                 .DescribedAs(description)
                 .Named(name)
                 .WithProperties(properties)
-            .WithProperties(identifier => identifier
-                .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))
-                .Named(identifier.Name)
-                .OfType(identifier.Type)))
+            .WithProperties(property => property
+                .From(identifier)
+                .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))))
             .Referencing([.. references])
             .ToSnippet(options);
 

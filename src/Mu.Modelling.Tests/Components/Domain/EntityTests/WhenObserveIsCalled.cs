@@ -1,44 +1,46 @@
-﻿////#if NET10_0_OR_GREATER
-////namespace Mu.Modelling.Components.Domain.EntityTests;
+﻿#if NET10_0_OR_GREATER
+namespace Mu.Modelling.Components.Domain.EntityTests;
 
-////using System.Collections.Generic;
-////using System.Threading.Tasks;
-////using MooVC.Modelling;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MooVC.Modelling;
 
-////public sealed class WhenObserveIsCalled
-////{
-////    [Test]
-////    public async Task GivenAUnitWhenWithinAnAreaThenEntityDefinitionIsReturned()
-////    {
-////        // Arrange
-////        var visitor = new Entity();
+public sealed class WhenObserveIsCalled
+{
+    [Test]
+    public async Task GivenAUnitWhenWithinAnAreaThenEntityDefinitionIsReturned()
+    {
+        // Arrange
+        var visitor = new Entity();
 
-////        const string content = """
-////            namespace MooVC.Testing.Mechanics.Car;
+        const string content = """
+            namespace MooVC.Testing.Mechanics.Car;
 
-////            using System;
-////            using System.ComponentModel;
-////            using Mu.Modelling.State;
+            using System;
+            using System.ComponentModel;
+            using Muify.Domain;
 
-////            [Description("Represents a Vehicle that has utilizes the services of the Mechanics")]
-////            public sealed partial record Car(
-////                [Description("The Number of Passenger Doors")] byte Doors,
-////                [Description("The Manufacturer of the Car")] string Make,
-////                [Description("The Name Ascribed to the Car by the Manufacturer")] string Model)
-////                : Aggregate
-////            {
-////            }
-////            """;
+            [Description("Represents a Wheel Attached to the Car")]
+            public sealed partial class Wheel
+            {
+                [Description("The Location of the Wheel on the Car")]
+                [Identity]
+                public Location Location { get; init; }
 
-////        var expected = new File(content, "cs", "Car", "src/MooVC.Testing.Mechanics.Car/");
+                [Description("The Pressure of the Tyre on the Wheel")]
+                public byte Pressure { get; init; }
+            }
+            """;
 
-////        // Act
-////        IAsyncEnumerable<File> results = visitor.Observe(graph, CancellationToken.None);
+        var expected = new File(content, "cs", "Wheel", "src/MooVC.Testing.Mechanics.Car/");
 
-////        // Assert
-////        _ = await Assert.That(results).HasCount(1);
-////        File item = await results.FirstAsync();
-////        _ = await Assert.That(item).IsEqualTo(expected);
-////    }
-////}
-////#endif
+        // Act
+        IAsyncEnumerable<File> results = visitor.Observe(TestData.Single.Wheel, CancellationToken.None);
+
+        // Assert
+        _ = await Assert.That(results).HasCount(1);
+        File item = await results.FirstAsync();
+        _ = await Assert.That(item).IsEqualTo(expected);
+    }
+}
+#endif

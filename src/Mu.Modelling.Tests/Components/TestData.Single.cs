@@ -11,6 +11,8 @@ internal static partial class TestData
         public static readonly Model.Graph.Areas.Area Mechanics;
         public static readonly Model.Graph.Areas.Area.Units Units;
         public static readonly Model.Graph.Areas.Area.Units.Unit Car;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Components Components;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Wheel;
         public static readonly Model Model;
 
         [SuppressMessage("Minor Code Smell", "S3963:\"static\" fields should be initialized inline", Justification = "Order of initialization is required.")]
@@ -39,8 +41,14 @@ internal static partial class TestData
                                 [
                                     new()
                                     {
+                                        Attributes =
+                                        [
+                                            new() { Description = "The Pressure of the Tyre on the Wheel", Name = "Pressure", Type = typeof(byte) },
+                                        ],
+                                        Description = "Represents a Wheel Attached to the Car",
                                         Identifier = new()
                                         {
+                                            Description = "The Location of the Wheel on the Car",
                                             Name = "Location",
                                             Type = (Name: "Location", Qualifier: "MooVC.Testing.Mechanics.Car"),
                                         },
@@ -77,6 +85,8 @@ internal static partial class TestData
             Mechanics = new(Areas, 0, Model, Model.Areas[0]);
             Units = new(Mechanics, Model, Mechanics.Value.Units);
             Car = new(Units, 0, Model, Units.Value[0]);
+            Components = new(Car, Model, Car.Value.Components);
+            Wheel = new(Components, 0, Model, Components.Value[0]);
         }
     }
 }
