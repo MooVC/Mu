@@ -6,8 +6,7 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using MooVC.Syntax.Formatting;
-using static Mu.Modelling.Model.Graph.Areas.Area.Units;
+using Mu.Modelling.Syntax.CSharp;
 using Aggregate = Framework::Mu.Modelling.State.Aggregate;
 
 public partial class Model

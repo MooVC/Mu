@@ -50,5 +50,16 @@
     <Compile Update="Model.Graph.Areas.Area.Units.Unit.Lists.List.cs">
       <DependentUpon>Model.Graph.Areas.Area.Units.Unit.cs</DependentUpon>
     </Compile>
+    <Compile Update="Model.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model.Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Model.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Model.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

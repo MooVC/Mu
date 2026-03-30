@@ -4,9 +4,11 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using Fluentify;
 using Graphify;
+using MooVC;
 using MooVC.Syntax;
 using MooVC.Syntax.Validation;
 using Valuify;
+using static Mu.Modelling.Model_Resources;
 using Ignore = Valuify.IgnoreAttribute;
 
 [Fluentify]
@@ -46,8 +48,15 @@ public sealed partial class Model
             return [];
         }
 
+        IEnumerable<ValidationResult> results = Enumerable.Empty<ValidationResult>();
+
+        if (Areas.IsDefaultOrEmpty)
+        {
+            results = [new ValidationResult(ValidateAreasRequired.Format(nameof(Model), nameof(Area)), [nameof(Areas)])];
+        }
+
         return validationContext
-            .IncludeIf(!Areas.IsDefaultOrEmpty, nameof(Areas), area => !area.IsUndefined, Areas)
+            .IncludeIf(!Areas.IsDefaultOrEmpty, nameof(Areas), area => !area.IsUndefined, results, Areas)
             .AndIf(!Company.IsUnnamed, nameof(Company), Company)
             .And(nameof(Name), name => !name.IsUnnamed, Name)
             .Results;

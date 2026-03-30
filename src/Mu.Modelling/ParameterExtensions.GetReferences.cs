@@ -9,7 +9,7 @@ public static partial class ParameterExtensions
     internal static ImmutableArray<Directive> GetReferences(this IEnumerable<Parameter> parameters, Qualifier source)
     {
         return [.. parameters
-            .Select(attribute => attribute.Type.Qualifier)
+            .Select(parameter => parameter.Type.Qualifier)
             .Distinct()
             .Where(qualifier => qualifier != source)
             .OrderBy(qualifier => qualifier)

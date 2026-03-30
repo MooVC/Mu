@@ -1,13 +1,13 @@
-﻿namespace Mu.Modelling;
+﻿namespace Mu.Modelling.Syntax.CSharp;
 
 using System.Collections.Immutable;
 using MooVC.Collections.Generic;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
 
-public static partial class SymbolExtensions
+internal static partial class SymbolExtensions
 {
-    internal static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Symbol> symbols, Name company, params Name[] names)
+    public static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Symbol> symbols, Name company, params Name[] names)
     {
         IEnumerable<Qualifier> unique = symbols
             .Select(attribute => attribute.Qualifier)

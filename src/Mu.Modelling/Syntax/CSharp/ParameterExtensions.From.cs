@@ -37,6 +37,6 @@ internal static partial class ParameterExtensions
                         .Named(typeof(DescriptionAttribute))
                         .WithArguments((Name: string.Empty, Value: $"\"{description}\""))))
             .Named(name)
-            .OfType(type);
+            .OfType(type.AsPreferred());
     }
 }

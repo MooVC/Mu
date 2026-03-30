@@ -35,7 +35,7 @@ public sealed class WhenValidateIsCalled
         // Assert
         _ = await Assert.That(valid).IsFalse();
         _ = await Assert.That(results.Count).IsEqualTo(2);
-        _ = await Assert.That(results[0].MemberNames).Contains(nameof(Area.Units));
-        _ = await Assert.That(results[1].MemberNames).Contains(nameof(Unit.Name));
+        _ = await Assert.That(results[0].MemberNames).Contains(nameof(Unit.Name));
+        _ = await Assert.That(results[1].MemberNames).Contains(nameof(Area.Units));
     }
 }

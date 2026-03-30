@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
+using Mu.Modelling.Syntax.CSharp;
 
 public partial class Model
 {

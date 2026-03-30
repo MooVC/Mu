@@ -17,6 +17,7 @@ public sealed class WhenObserveIsCalled
             namespace MooVC.Testing.Mechanics.Car;
 
             using System;
+            using System.Collections.Immutable;
             using System.ComponentModel;
             using Mu.Modelling.State;
 
@@ -24,10 +25,9 @@ public sealed class WhenObserveIsCalled
             public sealed partial record Car(
                 [Description("The Number of Passenger Doors")] byte Doors,
                 [Description("The Manufacturer of the Car")] string Make,
-                [Description("The Name Ascribed to the Car by the Manufacturer")] string Model)
-                : Aggregate
-            {
-            }
+                [Description("The Name Ascribed to the Car by the Manufacturer")] string Model,
+                [Description("The Wheels Attached to the Car")] ImmutableArray<Wheel> Wheels)
+                : Aggregate;
             """;
 
         var expected = new File(content, "cs", "Car", "src/MooVC.Testing.Mechanics.Car/");
