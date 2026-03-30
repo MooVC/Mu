@@ -8,7 +8,7 @@ public readonly record struct Range<T>
     where T : IComparable<T>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Range{T}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Range{T}"/> record.
     /// </summary>
     /// <param name="from">The inclusive lower bound for the range.</param>
     /// <param name="to">The inclusive upper bound for the range.</param>

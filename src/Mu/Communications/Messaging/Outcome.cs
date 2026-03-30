@@ -12,7 +12,7 @@ public sealed record Outcome<TResult>
     where TResult : notnull
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Outcome{TResult}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Outcome{TResult}"/> record.
     /// </summary>
     internal Outcome(Ledger ledger, Result<TResult> result)
         : this(ledger, DateTimeOffset.UtcNow, result)
@@ -20,7 +20,7 @@ public sealed record Outcome<TResult>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Outcome{TResult}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Outcome{TResult}"/> record.
     /// </summary>
     [JsonConstructor]
     internal Outcome(Ledger ledger, DateTimeOffset preparedAt, Result<TResult> result)

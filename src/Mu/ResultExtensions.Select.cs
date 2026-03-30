@@ -6,7 +6,7 @@
 public static partial class ResultExtensions
 {
     /// <summary>
-    /// Projects a successful result to a new value.
+    /// Projects a successful result to a <see langword="new"/> value.
     /// </summary>
     public static async Task<Result<TResult>> Select<T, TResult>(this Task<Result<T>> result, Func<T, TResult> success)
         where T : notnull
@@ -18,7 +18,7 @@ public static partial class ResultExtensions
     }
 
     /// <summary>
-    /// Projects a successful result to a new value using an asynchronous selector.
+    /// Projects a successful result to a <see langword="new"/> value using an asynchronous selector.
     /// </summary>
     public static async Task<Result<TResult>> Select<T, TResult>(this Task<Result<T>> result, Func<T, Task<TResult>> success)
         where T : notnull

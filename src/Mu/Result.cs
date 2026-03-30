@@ -119,7 +119,7 @@ public sealed record Result<T>
     }
 
     /// <summary>
-    /// Projects a successful value to a new result type.
+    /// Projects a successful value to a <see langword="new"/> result type.
     /// </summary>
     public Result<TResult> Select<TResult>(Func<T, TResult> success)
         where TResult : notnull
@@ -135,7 +135,7 @@ public sealed record Result<T>
     }
 
     /// <summary>
-    /// Projects a successful value to a new result type asynchronously.
+    /// Projects a successful value to a <see langword="new"/> result type asynchronously.
     /// </summary>
     public async Task<Result<TResult>> Select<TResult>(Func<T, Task<TResult>> success)
         where TResult : notnull

@@ -8,7 +8,7 @@ public readonly record struct Reference<TIdentity>
     where TIdentity : struct
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Reference{TIdentity}"/> record.
+    /// Initializes a <see langword="new"/> instance of the <see cref="Reference{TIdentity}"/> record.
     /// </summary>
     internal Reference(TIdentity identity, ulong revision)
     {

@@ -12,7 +12,7 @@ public sealed class Scope
     private readonly Ledger? _previous;
 
     /// <summary>
-    /// Initializes a new tracing scope for a use case.
+    /// Initializes a <see langword="new"/> tracing scope for a use case.
     /// </summary>
     public Scope(UseCase useCase)
         : this(GetLedger(useCase))
@@ -20,7 +20,7 @@ public sealed class Scope
     }
 
     /// <summary>
-    /// Initializes a new tracing scope with an explicit ledger.
+    /// Initializes a <see langword="new"/> tracing scope with an explicit ledger.
     /// </summary>
     public Scope(Ledger ledger)
     {
