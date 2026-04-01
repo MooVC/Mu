@@ -12,6 +12,7 @@ internal static partial class TestData
         public static readonly Model.Graph.Areas.Area.Units Units;
         public static readonly Model.Graph.Areas.Area.Units.Unit Car;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Components Components;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Pressure;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Wheel;
         public static readonly Model Model;
 
@@ -34,8 +35,18 @@ internal static partial class TestData
                                 [
                                     new() { Description = "The Number of Passenger Doors", Name = "Doors", Type = typeof(byte) },
                                     new() { Description = "The Manufacturer of the Car", Name = "Make", Type = typeof(string) },
-                                    new() { Description = "The Name Ascribed to the Car by the Manufacturer", Name = "Model", Type = typeof(string) },
-                                    new() { Description = "The Wheels Attached to the Car", Name = "Wheels", Type = (Name: "Wheel", IsArray: true, Qualifier: "MooVC.Testing.Mechanics.Car") },
+                                    new()
+                                    {
+                                        Description = "The Name Ascribed to the Car by the Manufacturer",
+                                        Name = "Model",
+                                        Type = typeof(string),
+                                    },
+                                    new()
+                                    {
+                                        Description = "The Wheels Attached to the Car",
+                                        Name = "Wheels",
+                                        Type = (Name: "Wheel", IsArray: true, Qualifier: "MooVC.Testing.Mechanics.Car"),
+                                    },
                                 ],
                                 Components =
                                 [
@@ -43,7 +54,32 @@ internal static partial class TestData
                                     {
                                         Attributes =
                                         [
-                                            new() { Description = "The Pressure of the Tyre on the Wheel", Name = "Pressure", Type = typeof(byte) },
+                                            new()
+                                            {
+                                                Description = "The Unit of Measurement Associated with the Pressure",
+                                                Name = "Unit",
+                                                Type = (Name: "Unit", Qualifier: "MooVC.Testing.Mechanics.Car"),
+                                            },
+                                            new()
+                                            {
+                                                Description = "The Value Associated with the Pressure based on the Unit",
+                                                Name = "Value",
+                                                Type = typeof(decimal),
+                                            },
+                                        ],
+                                        Description = "Represents a Pressure Measurement Associated with a Wheel",
+                                        Name = "Pressure",
+                                    },
+                                    new()
+                                    {
+                                        Attributes =
+                                        [
+                                            new()
+                                            {
+                                                Description = "The Pressure of the Tyre on the Wheel",
+                                                Name = "Pressure",
+                                                Type = (Name: "Pressure", Qualifier: "MooVC.Testing.Mechanics.Car"),
+                                            },
                                         ],
                                         Description = "Represents a Wheel Attached to the Car",
                                         Identifier = new()
@@ -86,7 +122,8 @@ internal static partial class TestData
             Units = new(Mechanics, Model, Mechanics.Value.Units);
             Car = new(Units, 0, Model, Units.Value[0]);
             Components = new(Car, Model, Car.Value.Components);
-            Wheel = new(Components, 0, Model, Components.Value[0]);
+            Pressure = new(Components, 0, Model, Components.Value[0]);
+            Wheel = new(Components, 1, Model, Components.Value[1]);
         }
     }
 }

@@ -50,7 +50,7 @@ internal sealed class Value
         ImmutableArray<Directive> references,
         Options options)
     {
-        if (identifier.IsUndefined)
+        if (!identifier.IsUndefined)
         {
             yield break;
         }

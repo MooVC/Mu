@@ -16,7 +16,6 @@ public sealed class WhenObserveIsCalled
         const string content = """
             namespace MooVC.Testing.Mechanics.Car;
 
-            using System;
             using System.ComponentModel;
             using Muify.Domain;
 
@@ -28,7 +27,7 @@ public sealed class WhenObserveIsCalled
                 public Location Location { get; init; }
 
                 [Description("The Pressure of the Tyre on the Wheel")]
-                public byte Pressure { get; init; }
+                public Pressure Pressure { get; init; }
             }
             """;
 
