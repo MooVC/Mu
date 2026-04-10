@@ -19,7 +19,6 @@ internal sealed class Result
     {
         var content = Builder
             .New<Definition>()
-            .From(feature.Namespace)
             .For<Record>(record => record
                 .Containing(Type
                     .New<Record>()
@@ -27,6 +26,7 @@ internal sealed class Result
                     .Named(nameof(Result))
                     .WithParameters(feature.Value.Results))
                 .Named(feature.Value.Name))
+            .From(feature.Namespace)
             .Referencing([.. feature.References])
             .ToSnippet(feature.Root.Options);
 

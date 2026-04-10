@@ -2,6 +2,8 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
+using Ardalis.GuardClauses;
 using Fluentify;
 using Graphify;
 using MooVC.Syntax;
@@ -40,6 +42,15 @@ public sealed partial class Parameter
     [Descriptor("OfType")]
     [Traverse(Scope = TraverseScope.None)]
     public Symbol Type { get; internal init; } = Symbol.Undefined;
+
+    public static implicit operator Parameter((Name Name, Symbol Type) source)
+    {
+        Guard.Against.Conversion<(Name Name, Symbol Type), Parameter>(source);
+
+        return new Parameter()
+            .Named(source.Name)
+            .OfType(source.Type);
+    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

@@ -1,6 +1,8 @@
 ﻿namespace Muify.Domain.IdentityAttributeGeneratorTests;
 
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
 
 public sealed class WhenExecuted
 {
@@ -34,5 +36,18 @@ public sealed class WhenExecuted
             // Act & Assert
             await test.RunAsync();
         }
+    }
+
+    [Test]
+    public async Task Test()
+    {
+        var verifier = new CSharpSourceGeneratorTest<IdentityAttributeGenerator, DefaultVerifier>
+        {
+            TestCode = "// Some Code",
+        };
+
+        verifier.TestState.GeneratedSources.Add((sourceGeneratorType: typeof(IdentityAttributeGenerator), filename: IdentityAttributeGenerator.Hint, content: Content));
+
+        await verifier.RunAsync();
     }
 }

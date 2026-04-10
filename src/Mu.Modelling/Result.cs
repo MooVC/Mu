@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Ardalis.GuardClauses;
 using Fluentify;
 using Graphify;
 using MooVC.Syntax;
@@ -36,6 +37,15 @@ public sealed partial class Result
     [Descriptor("OfType")]
     [Traverse(Scope = TraverseScope.None)]
     public Symbol Type { get; internal init; } = Symbol.Undefined;
+
+    public static implicit operator Result((Name Name, Symbol Type) source)
+    {
+        Guard.Against.Conversion<(Name Name, Symbol Type), Attribute>(source);
+
+        return new Result()
+            .Named(source.Name)
+            .OfType(source.Type);
+    }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

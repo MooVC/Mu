@@ -8,7 +8,7 @@ using MooVC.Modelling;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenWithinAnAreaThenValueDefinitionIsReturned()
+    public async Task GivenAValueWhenWithinAnAreaThenValueDefinitionIsReturned()
     {
         // Arrange
         var visitor = new Value();

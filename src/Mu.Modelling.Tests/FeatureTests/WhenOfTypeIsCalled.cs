@@ -9,11 +9,11 @@ public sealed class WhenOfTypeIsCalled
         Feature original = ModellingTestData.CreateFeature();
 
         // Act
-        Feature result = original.OfType(Feature.Kind.NonMutational);
+        Feature result = original.OfType(Feature.Kinds.NonMutational);
 
         // Assert
         _ = await Assert.That(result).IsNotSameReferenceAs(original);
-        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.NonMutational);
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kinds.NonMutational);
         _ = await Assert.That(result.Name).IsEqualTo(original.Name);
     }
 }

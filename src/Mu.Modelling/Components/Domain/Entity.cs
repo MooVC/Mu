@@ -58,14 +58,14 @@ internal sealed class Entity
 
         var content = Builder
             .New<Definition>()
-            .From(@namespace)
             .For<Class>(@class => @class
                 .DescribedAs(description)
                 .Named(name)
                 .WithProperties(properties)
-            .WithProperties(property => property
-                .From(identifier)
-                .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))))
+                .WithProperties(property => property
+                    .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))
+                    .From(identifier)))
+            .From(@namespace)
             .Referencing([.. references])
             .ToSnippet(options);
 

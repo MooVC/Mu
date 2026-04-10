@@ -25,7 +25,7 @@ public sealed class WhenValidateIsCalled
     public async Task GivenUnnamedViewThenValidationErrorReturned()
     {
         // Arrange
-        NonMutational subject = NonMutational.Undefined.From(NonMutational.Kind.WriteStore);
+        NonMutational subject = NonMutational.Undefined.From(NonMutational.Kinds.WriteStore);
         var context = new ValidationContext(subject);
         var results = new List<ValidationResult>();
 

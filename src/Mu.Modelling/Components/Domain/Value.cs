@@ -57,11 +57,11 @@ internal sealed class Value
 
         var content = Builder
             .New<Definition>()
-            .From(@namespace)
             .For<Record>(record => record
                 .DescribedAs(description)
                 .Named(name)
                 .WithParameters(properties))
+            .From(@namespace)
             .Referencing([.. references])
             .ToSnippet(options);
 

@@ -37,11 +37,6 @@ internal sealed class Project
         string content = Builder
             .New<Template>()
             .DescribedAs(description)
-            .WithItemGroups(group => group
-                .WithPackage(nameof(Mu))
-                .WithPackage(nameof(Muify), muify => muify
-                    .WithMetadata("PrivateAssets", "all")
-                    .WithMetadata("IncludeAssets", "runtime; build; native; contentfiles; analyzers; buildtransitive")))
             .ForkOn(
                 _ => string.IsNullOrEmpty(kernel),
                 @true: _ => _,
@@ -53,6 +48,11 @@ internal sealed class Project
                 @false: project => project
                     .WithItemGroups(group => group
                         .Enumerate(project => group.WithProject($"{Folders.Source}/{project}/{project}.{Extensions.Project}"), projects)))
+            .WithItemGroups(group => group
+                .WithPackage(nameof(Mu))
+                .WithPackage(nameof(Muify), muify => muify
+                    .WithMetadata("PrivateAssets", "all")
+                    .WithMetadata("IncludeAssets", "runtime; build; native; contentfiles; analyzers; buildtransitive")))
             .ToString();
 
         yield return new File(content, Extensions.Project, project, $"{Folders.Source}/{project}/");

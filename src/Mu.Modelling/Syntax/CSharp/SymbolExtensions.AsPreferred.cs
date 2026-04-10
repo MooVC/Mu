@@ -15,7 +15,6 @@ internal static partial class SymbolExtensions
         Symbol wrapper = typeof(ImmutableArray<>);
 
         return wrapper.WithArguments(argument => argument
-            .From(symbol.Qualifier)
             .IsNullable(symbol.IsNullable)
             .Named(symbol.Name));
     }

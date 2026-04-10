@@ -1,7 +1,7 @@
 ﻿namespace Mu.Modelling.Components;
 
 using System.Diagnostics.CodeAnalysis;
-using Kind = Mu.Modelling.Feature.Kind;
+using MooVC.Syntax.CSharp;
 
 internal static partial class TestData
 {
@@ -14,108 +14,53 @@ internal static partial class TestData
         public static readonly Model.Graph.Areas.Area.Units.Unit.Components Components;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Pressure;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Wheel;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Lists Lists;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Lists.List Location;
         public static readonly Model Model;
 
         [SuppressMessage("Minor Code Smell", "S3963:\"static\" fields should be initialized inline", Justification = "Order of initialization is required.")]
         static Single()
         {
-            Model = new()
-            {
-                Areas =
-                [
-                    new()
-                    {
-                        Description = "Represents a Mechanics Shop",
-                        Name = "Mechanics",
-                        Units =
-                        [
-                            new Unit
-                            {
-                                Attributes =
-                                [
-                                    new() { Description = "The Number of Passenger Doors", Name = "Doors", Type = typeof(byte) },
-                                    new() { Description = "The Manufacturer of the Car", Name = "Make", Type = typeof(string) },
-                                    new()
-                                    {
-                                        Description = "The Name Ascribed to the Car by the Manufacturer",
-                                        Name = "Model",
-                                        Type = typeof(string),
-                                    },
-                                    new()
-                                    {
-                                        Description = "The Wheels Attached to the Car",
-                                        Name = "Wheels",
-                                        Type = (Name: "Wheel", IsArray: true, Qualifier: "MooVC.Testing.Mechanics.Car"),
-                                    },
-                                ],
-                                Components =
-                                [
-                                    new()
-                                    {
-                                        Attributes =
-                                        [
-                                            new()
-                                            {
-                                                Description = "The Unit of Measurement Associated with the Pressure",
-                                                Name = "Unit",
-                                                Type = (Name: "Unit", Qualifier: "MooVC.Testing.Mechanics.Car"),
-                                            },
-                                            new()
-                                            {
-                                                Description = "The Value Associated with the Pressure based on the Unit",
-                                                Name = "Value",
-                                                Type = typeof(decimal),
-                                            },
-                                        ],
-                                        Description = "Represents a Pressure Measurement Associated with a Wheel",
-                                        Name = "Pressure",
-                                    },
-                                    new()
-                                    {
-                                        Attributes =
-                                        [
-                                            new()
-                                            {
-                                                Description = "The Pressure of the Tyre on the Wheel",
-                                                Name = "Pressure",
-                                                Type = (Name: "Pressure", Qualifier: "MooVC.Testing.Mechanics.Car"),
-                                            },
-                                        ],
-                                        Description = "Represents a Wheel Attached to the Car",
-                                        Identifier = new()
-                                        {
-                                            Description = "The Location of the Wheel on the Car",
-                                            Name = "Location",
-                                            Type = (Name: "Location", Qualifier: "MooVC.Testing.Mechanics.Car"),
-                                        },
-                                        Name = "Wheel",
-                                    },
-                                ],
-                                Description = "Represents a Vehicle that has utilizes the services of the Mechanics",
-                                Features =
-                                [
-                                    new()
-                                    {
-                                        Name = "Register",
-                                        Parameters =
-                                        [
-                                            new() { Name = "Doors", Type = typeof(byte) },
-                                            new() { Name = "Make", Type = typeof(string) },
-                                            new() { Name = "Model", Type = typeof(string) },
-                                        ],
-                                        Mutational = new Mutational { Fact = "Registered", Type = Mutational.Kind.Creational },
-                                        Type = Kind.Mutational,
-                                    },
-                                ],
-                                Name = "Car",
-                            },
-                        ],
-                    },
-                ],
-                Company = "MooVC",
-                Description = "Test Model",
-                Name = "Testing",
-            };
+            Model = new Model()
+                .Defines(mechanics => mechanics
+                    .DescribedAs("Represents a Mechanics Shop")
+                    .Named("Mechanics")
+                    .ResponsibleFor(car => car
+                        .AttributedWith(doors => doors
+                            .DescribedAs("The Number of Passenger Doors")
+                            .Named("Doors")
+                            .OfType(typeof(byte)))
+                        .AttributedWith(make => make
+                            .DescribedAs("The Manufacturer of the Car")
+                            .Named("Make")
+                            .OfType(typeof(string)))
+                        .AttributedWith(model => model
+                            .DescribedAs("The Name Ascribed to the Car by the Manufacturer")
+                            .Named("Model")
+                            .OfType(typeof(string)))
+                        .AttributedWith(model => model
+                            .DescribedAs("The Wheels Attached to the Car")
+                            .Named("Wheels")
+                            .OfType(type => type
+                                .IsArray(true)
+                                .Named((Moniker: "Wheel", Qualifier: "MooVC.Testing.Mechanics.Car"))))
+                        .DescribedAs("Represents a Vehicle that has utilizes the services of the Mechanics")
+                        .Featuring(register => register
+                            .DescribedAs("Registers a Car within the Mechanics System")
+                            .IsMutational(register => register
+                                .OfType(Mutational.Kinds.Creational)
+                                .Raises("Registered"))
+                            .Named("Register")
+                            .Using((Name: "Doors", Type: typeof(byte)))
+                            .Using((Name: "Make", Type: typeof(string)))
+                            .Using((Name: "Model", Type: typeof(string))))
+                        .Named("Car")
+                        .Owns(DefinePressure())
+                        .Owns(DefineWheel())
+                        .Sets(DefineLocations())))
+                .DescribedAs("Test Model")
+                .For("MooVC")
+                .Named("Testing");
 
             Areas = new(Model, Model.Areas);
             Mechanics = new(Areas, 0, Model, Model.Areas[0]);
@@ -124,6 +69,51 @@ internal static partial class TestData
             Components = new(Car, Model, Car.Value.Components);
             Pressure = new(Components, 0, Model, Components.Value[0]);
             Wheel = new(Components, 1, Model, Components.Value[1]);
+            Lists = new(Car, Model, Car.Value.Lists);
+            Location = new(Lists, 0, Model, Lists.Value[0]);
+        }
+
+        private static Func<List, List> DefineLocations()
+        {
+            return locations => locations
+                .Containing((Description: "The Front Left Wheel", Name: "FrontLeft"))
+                .Containing((Description: "The Front Right Wheel", Name: "FrontRight"))
+                .Containing((Description: "The Rear Left Wheel", Name: "RearLeft"))
+                .Containing((Description: "The Rear Right Wheel", Name: "RearRight"))
+                .DescribedAs("Represents the Location of the Wheel on the Car")
+                .Named("Locations");
+        }
+
+        private static Func<Component, Component> DefinePressure()
+        {
+            return pressure => pressure
+                .AttributedWith(unit => unit
+                    .DescribedAs("The Unit of Measurement Associated with the Pressure")
+                    .Named("Unit")
+                    .OfType(type => type
+                        .IsArray(true)
+                        .Named((Moniker: "Unit", Qualifier: "MooVC.Testing.Mechanics.Car"))))
+                .AttributedWith(value => value
+                    .DescribedAs("The Value Associated with the Pressure based on the Unit")
+                    .Named("Value")
+                    .OfType(typeof(decimal)))
+                .DescribedAs("Represents a Pressure Measurement Associated with a Wheel")
+                .Named("Pressure");
+        }
+
+        private static Func<Component, Component> DefineWheel()
+        {
+            return wheel => wheel
+                .DescribedAs("Represents a Wheel Attached to the Car")
+                .AttributedWith(pressure => pressure
+                    .DescribedAs("The Pressure of the Tyre on the Wheel")
+                    .Named("Pressure")
+                    .OfType((Name: "Pressure", Qualifier: "MooVC.Testing.Mechanics.Car")))
+                .IdentifiedBy(location => location
+                    .DescribedAs("The Location of the Wheel on the Car")
+                    .Named("Location")
+                    .OfType((Name: "Location", Qualifier: "MooVC.Testing.Mechanics.Car")))
+                .Named("Wheel");
         }
     }
 }

@@ -25,7 +25,7 @@ public sealed class WhenValidateIsCalled
     public async Task GivenUnnamedFactThenValidationErrorReturned()
     {
         // Arrange
-        Mutational subject = Mutational.Undefined.OfType(Mutational.Kind.Creational);
+        Mutational subject = Mutational.Undefined.OfType(Mutational.Kinds.Creational);
         var context = new ValidationContext(subject);
         var results = new List<ValidationResult>();
 

@@ -10,7 +10,7 @@ internal static partial class SymbolExtensions
     public static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Symbol> symbols, Name company, params Name[] names)
     {
         IEnumerable<Qualifier> unique = symbols
-            .Select(attribute => attribute.Qualifier)
+            .SelectMany(symbol => symbol)
             .Distinct();
 
         var projects = new HashSet<Qualifier>();

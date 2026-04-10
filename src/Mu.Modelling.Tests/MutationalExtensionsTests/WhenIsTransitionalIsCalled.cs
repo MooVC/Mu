@@ -13,7 +13,7 @@ public sealed class WhenIsTransitionalIsCalled
 
         // Assert
         _ = await Assert.That(result).IsNotSameReferenceAs(original);
-        _ = await Assert.That(result.Type).IsEqualTo(Mutational.Kind.Transitional);
+        _ = await Assert.That(result.Type).IsEqualTo(Mutational.Kinds.Transitional);
         _ = await Assert.That(result.Fact).IsEqualTo(original.Fact);
     }
 }

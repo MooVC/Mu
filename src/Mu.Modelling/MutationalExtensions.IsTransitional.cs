@@ -4,6 +4,6 @@ public static partial class MutationalExtensions
 {
     public static Mutational IsTransitional(this Mutational mutational)
     {
-        return mutational.OfType(Mutational.Kind.Transitional);
+        return mutational.OfType(Mutational.Kinds.Transitional);
     }
 }

@@ -19,7 +19,7 @@ public sealed partial class Model
 {
     public static readonly Model Undefined = new();
 
-    [Descriptor("WithArea")]
+    [Descriptor("Defines")]
     public ImmutableArray<Area> Areas { get; internal init; } = [];
 
     [Descriptor("For")]

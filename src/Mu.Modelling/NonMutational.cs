@@ -22,7 +22,7 @@ public sealed partial class NonMutational
     [Descriptor("From")]
     [Hide]
     [Traverse(Scope = TraverseScope.None)]
-    public Kind Source { get; internal init; } = Kind.ReadStore;
+    public Kinds Source { get; internal init; } = Kinds.ReadStore;
 
     [Descriptor("Using")]
     [Traverse(Scope = TraverseScope.None)]

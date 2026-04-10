@@ -17,12 +17,12 @@ internal sealed class Aggregate
     {
         var content = Builder
             .New<Definition>()
-            .From(unit.Namespace)
             .For<Record>(record => record
-                .DescribedAs(unit.Value.Description)
                 .DerivesFrom(typeof(Base))
+                .DescribedAs(unit.Value.Description)
                 .Named(unit.Value.Name)
                 .WithParameters(unit.Value.Attributes))
+            .From(unit.Namespace)
             .Referencing([.. unit.References])
             .ToSnippet(unit.Root.Options);
 

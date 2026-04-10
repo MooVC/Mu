@@ -19,7 +19,7 @@ public sealed class WhenIsMutationalIsCalled
             .Raises(new Name(RegisteredFactValue)));
 
         // Assert
-        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kind.Mutational);
+        _ = await Assert.That(result.Type).IsEqualTo(Feature.Kinds.Mutational);
         _ = await Assert.That(result.Mutational.Fact).IsEqualTo(new Name(RegisteredFactValue));
         _ = await Assert.That(result.NonMutational).IsEqualTo(NonMutational.Undefined);
     }

@@ -41,7 +41,7 @@ internal sealed class List
         Description description,
         Name name,
         Qualifier @namespace,
-        ImmutableArray<Name> members,
+        ImmutableArray<Member> members,
         string project,
         Options options)
     {
@@ -52,32 +52,41 @@ internal sealed class List
 
         var content = Builder
             .New<Definition>()
-            .From(@namespace)
             .For<Record>(record => record
                 .AttributedWith(monify => monify.Named(attribute => attribute
-                    .From(typeof(MonifyAttribute))
-                    .Named(nameof(MonifyAttribute))
-                    .WithArguments(type => type.Named(typeof(byte)))))
+                    .Named(typeof(MonifyAttribute))
+                    .WithArguments(type => type.Named(typeof(string)))))
                 .DescribedAs(description)
-                .Named(name)
                 .Enumerate(
-                    member => record
+                    (member, record) => record
                         .WithFields(field => field
+                            .DescribedAs(member.Description)
                             .IsReadOnly(true)
                             .IsStatic(true)
-                            .Named(member)
-                            .OfType((Name: member, Qualifier: @namespace)))
+                            .Named(member.Name)
+                            .OfType((member.Name, Qualifier: @namespace))
+                            .WithDefault($"\"{member.Name}\"")
+                            .WithScope(Scopes.Public))
                         .WithProperties(property => property
                             .WithBehaviours(methods => methods
-                                .WithGet($"this == {member}")
-                                .WithSet(setter => setter.WithMode(Property.Mode.ReadOnly)))
+                                .WithGet($"this == {member.Name};")
+                                .WithSet(setter => setter.WithMode(Property.Methods.Setter.Modes.ReadOnly)))
                             .Named($"Is{name}")
                             .OfType(typeof(bool))),
                     members)
+                .Named(name)
                 .WithConstructors(constructor => constructor
-                    .WithBody("_value = value")
-                    .WithParameters((Name: "Value", Type: typeof(byte)))
-                    .WithScope(Scope.Private)))
+                    .WithBody("_value = value;")
+                    .WithParameters((Name: "Value", Type: typeof(string)))
+                    .WithScope(Scopes.Private))
+                .WithMethods(method => method
+                    .Named(nameof(ToString))
+                    .Returns(result => result
+                        .WithMode(Result.Modes.Synchronous)
+                        .OfType(typeof(string)))
+                    .WithBody("return _value;")
+                    .WithExtensibility(Modifiers.Override)))
+            .From(@namespace)
             .Referencing(directive => directive.From(typeof(MonifyAttribute)))
             .ToSnippet(options);
 

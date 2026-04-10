@@ -21,9 +21,9 @@ internal static partial class SymbolExtensions
 
     private static void GetReferences(this Symbol symbol, HashSet<Qualifier> qualifiers, Qualifier source)
     {
-        if (symbol.Qualifier != source)
+        foreach (Qualifier qualifier in symbol.Where(qualifier => qualifier != source))
         {
-            _ = qualifiers.Add(symbol.Qualifier);
+            _ = qualifiers.Add(qualifier);
         }
 
         if (symbol.IsArray)

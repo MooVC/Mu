@@ -51,7 +51,7 @@ public sealed partial class Feature
 
     [Descriptor("OfType")]
     [Traverse(Scope = TraverseScope.None)]
-    public Kind Type { get; internal init; } = Kind.Mutational;
+    public Kinds Type { get; internal init; } = Kinds.Mutational;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

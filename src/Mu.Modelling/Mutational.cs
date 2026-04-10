@@ -27,7 +27,7 @@ public sealed partial class Mutational
     [Descriptor("OfType")]
     [Hide]
     [Traverse(Scope = TraverseScope.None)]
-    public Kind Type { get; internal init; } = Kind.Transitional;
+    public Kinds Type { get; internal init; } = Kinds.Transitional;
 
     [Ignore]
     [Traverse(Scope = TraverseScope.None)]

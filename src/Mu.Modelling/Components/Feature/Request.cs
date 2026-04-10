@@ -24,19 +24,18 @@ internal sealed class Request
 
         var content = Builder
             .New<Definition>()
-            .From(feature.Namespace)
             .For<Record>(record => record
+                .DerivesFrom(@base)
                 .DescribedAs(feature.Value.Description)
                 .ForkOn(
                     _ => feature.Value.Type.IsMutational,
-                    @true: record => record
-                        .AttributedWith(description => description
-                            .Named(typeof(RaisesAttribute))
-                            .WithArguments((Name: nameof(Description), Value: feature.Value.Description))),
+                    @true: record => record.AttributedWith(description => description
+                        .Named(typeof(RaisesAttribute))
+                        .WithArguments((Name: nameof(Description), Value: feature.Value.Description))),
                     @false: _ => _)
-                .DerivesFrom(@base)
                 .Named(feature.Value.Name)
                 .WithParameters(feature.Value.Parameters))
+            .From(feature.Namespace)
             .Referencing([.. feature.References])
             .ToSnippet(feature.Root.Options);
 

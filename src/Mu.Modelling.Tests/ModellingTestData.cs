@@ -65,7 +65,7 @@ internal static class ModellingTestData
 
     public static Feature CreateFeature(
         Name? name = default,
-        Feature.Kind? kind = default,
+        Feature.Kinds? kind = default,
         Mutational? mutational = default,
         NonMutational? nonMutational = default,
         params Parameter[] parameters)
@@ -81,7 +81,7 @@ internal static class ModellingTestData
             NonMutational = nonMutational ?? CreateNonMutational(),
             Parameters = parameterArray,
             Results = [],
-            Type = kind ?? Feature.Kind.Mutational,
+            Type = kind ?? Feature.Kinds.Mutational,
         };
     }
 
@@ -104,20 +104,20 @@ internal static class ModellingTestData
         };
     }
 
-    public static Mutational CreateMutational(Name? fact = default, Mutational.Kind? kind = default)
+    public static Mutational CreateMutational(Name? fact = default, Mutational.Kinds? kind = default)
     {
         return new Mutational
         {
             Fact = fact ?? DefaultFactName,
-            Type = kind ?? Mutational.Kind.Creational,
+            Type = kind ?? Mutational.Kinds.Creational,
         };
     }
 
-    public static NonMutational CreateNonMutational(Name? view = default, NonMutational.Kind? kind = default)
+    public static NonMutational CreateNonMutational(Name? view = default, NonMutational.Kinds? kind = default)
     {
         return new NonMutational
         {
-            Source = kind ?? NonMutational.Kind.ReadStore,
+            Source = kind ?? NonMutational.Kinds.ReadStore,
             View = new View { Name = view ?? DefaultViewName },
         };
     }

@@ -22,13 +22,41 @@ namespace Muify.Domain
         /// </summary>
         internal const string Name = "Identity";
 
+        /////// <inheritdoc/>
+        ////public void Initialize(IncrementalGeneratorInitializationContext context)
+        ////{
+        ////    context.RegisterPostInitializationOutput(Generate);
+        ////}
+
+        ////private static void Generate(IncrementalGeneratorPostInitializationContext context)
+        ////{
+        ////    var content = Builder
+        ////        .New<Definition>()
+        ////        .From(typeof(IdentityAttributeGenerator))
+        ////        .For<Class>(@class => @class
+        ////            .AttributedWith(attribute => attribute
+        ////                .Named(typeof(AttributeUsageAttribute))
+        ////                .WithArguments(
+        ////                    (Name: string.Empty, Value: "global::System.AttributeTargets.Property"),
+        ////                    (Name: nameof(AttributeUsageAttribute.AllowMultiple), Value: "false"),
+        ////                    (Name: nameof(AttributeUsageAttribute.Inherited), Value: "false")))
+        ////            .AttributedWith(attribute => attribute
+        ////                .Named((Name: "EmbeddedAttribute", Qualifier: "Microsoft.CodeAnalysis")))
+        ////            .DerivesFrom(typeof(Attribute))
+        ////            .Named($"{Name}Attribute")
+        ////            .WithScope(Scopes.Internal))
+        ////        .ToSnippet(Configuration.Options);
+
+        ////    context.AddSource(Hint, SourceText.From(content, Encoding.UTF8));
+        ////}
+
         /// <inheritdoc/>
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            context.RegisterPostInitializationOutput(Generate);
+            context.RegisterSourceOutput(context.CompilationProvider, Generate);
         }
 
-        private static void Generate(IncrementalGeneratorPostInitializationContext context)
+        private static void Generate(SourceProductionContext context, Compilation compilation)
         {
             var content = Builder
                 .New<Definition>()
@@ -44,7 +72,7 @@ namespace Muify.Domain
                         .Named((Name: "EmbeddedAttribute", Qualifier: "Microsoft.CodeAnalysis")))
                     .DerivesFrom(typeof(Attribute))
                     .Named($"{Name}Attribute")
-                    .WithScope(Scope.Internal))
+                    .WithScope(Scopes.Internal))
                 .ToSnippet(Configuration.Options);
 
             context.AddSource(Hint, SourceText.From(content, Encoding.UTF8));

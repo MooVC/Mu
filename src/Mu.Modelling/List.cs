@@ -34,7 +34,7 @@ public sealed partial class List
 
     [Descriptor("Containing")]
     [Traverse(Scope = TraverseScope.None)]
-    public ImmutableArray<Name> Members { get; internal init; } = [];
+    public ImmutableArray<Member> Members { get; internal init; } = [];
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -45,7 +45,7 @@ public sealed partial class List
 
         return validationContext
             .Include(nameof(Name), name => !name.IsUnnamed, Name)
-            .AndIf(!Members.IsDefaultOrEmpty, nameof(Members), member => !member.IsUnnamed, Members)
+            .AndIf(!Members.IsDefaultOrEmpty, nameof(Members), member => !member.IsUndefined, Members)
             .Results;
     }
 }

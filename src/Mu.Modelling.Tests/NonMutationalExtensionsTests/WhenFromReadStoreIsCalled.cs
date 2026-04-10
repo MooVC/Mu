@@ -13,7 +13,7 @@ public sealed class WhenFromReadStoreIsCalled
 
         // Assert
         _ = await Assert.That(result).IsNotSameReferenceAs(original);
-        _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.ReadStore);
+        _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kinds.ReadStore);
         _ = await Assert.That(result.View).IsEqualTo(original.View);
     }
 }

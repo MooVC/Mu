@@ -9,11 +9,11 @@ public sealed class WhenFromIsCalled
         NonMutational original = ModellingTestData.CreateNonMutational();
 
         // Act
-        NonMutational result = original.From(NonMutational.Kind.WriteStore);
+        NonMutational result = original.From(NonMutational.Kinds.WriteStore);
 
         // Assert
         _ = await Assert.That(result).IsNotSameReferenceAs(original);
-        _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kind.WriteStore);
+        _ = await Assert.That(result.Source).IsEqualTo(NonMutational.Kinds.WriteStore);
         _ = await Assert.That(result.View).IsEqualTo(original.View);
     }
 }
