@@ -18,7 +18,6 @@ public sealed class WhenObserveIsCalled
 
             using System;
             using System.ComponentModel;
-            using Muify.Domain;
 
             [Description("Represents a Pressure Measurement Associated with a Wheel")]
             public sealed partial record Pressure(

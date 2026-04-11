@@ -64,14 +64,14 @@ internal sealed class List
                             .IsReadOnly(true)
                             .IsStatic(true)
                             .Named(member.Name)
-                            .OfType((member.Name, Qualifier: @namespace))
-                            .WithDefault($"\"{member.Name}\"")
+                            .OfType((Name: name, Qualifier: @namespace))
+                            .WithDefault($"nameof({member.Name})")
                             .WithScope(Scopes.Public))
                         .WithProperties(property => property
                             .WithBehaviours(methods => methods
                                 .WithGet($"this == {member.Name};")
                                 .WithSet(setter => setter.WithMode(Property.Methods.Setter.Modes.ReadOnly)))
-                            .Named($"Is{name}")
+                            .Named($"Is{member.Name}")
                             .OfType(typeof(bool))),
                     members)
                 .Named(name)
@@ -87,7 +87,7 @@ internal sealed class List
                     .WithBody("return _value;")
                     .WithExtensibility(Modifiers.Override)))
             .From(@namespace)
-            .Referencing(directive => directive.From(typeof(MonifyAttribute)))
+            .ImportReferences(@namespace)
             .ToSnippet(options);
 
         yield return new File(content, Extensions.Code, name, $"{Folders.Source}/{project}/");

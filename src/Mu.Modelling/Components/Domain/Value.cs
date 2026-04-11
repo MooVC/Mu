@@ -23,7 +23,6 @@ internal sealed class Value
             component.Namespace,
             component.ProjectName,
             component.Value.Attributes,
-            component.References,
             component.Root.Options);
     }
 
@@ -36,7 +35,6 @@ internal sealed class Value
             component.Namespace,
             component.ProjectName,
             component.Value.Attributes,
-            component.References,
             component.Root.Options);
     }
 
@@ -47,7 +45,6 @@ internal sealed class Value
         Qualifier @namespace,
         string project,
         ImmutableArray<Attribute> properties,
-        ImmutableArray<Directive> references,
         Options options)
     {
         if (!identifier.IsUndefined)
@@ -62,7 +59,7 @@ internal sealed class Value
                 .Named(name)
                 .WithParameters(properties))
             .From(@namespace)
-            .Referencing([.. references])
+            .ImportReferences(@namespace)
             .ToSnippet(options);
 
         yield return new File(content, Extensions.Code, name, $"{Folders.Source}/{project}/");

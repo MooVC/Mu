@@ -44,12 +44,6 @@ public partial class Model
                                 .SelectMany(view => view.Attributes)
                                 .Select(view => view.Type))
                             .GetProjects(Root.Company, Root.Name, Units.Area.Value.Name, Value.Name);
-
-                        public ImmutableArray<Directive> References => Value.Attributes
-                            .Select(attribute => attribute.Type)
-                            .Append(typeof(Aggregate))
-                            .Append(typeof(DescriptionAttribute))
-                            .GetReferences(Namespace);
                     }
                 }
             }

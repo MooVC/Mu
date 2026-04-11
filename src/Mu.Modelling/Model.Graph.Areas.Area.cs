@@ -21,11 +21,6 @@ public partial class Model
                     .SelectMany(component => component.Attributes)
                     .Select(attribute => attribute.Type)
                     .GetProjects(Root.Company, Root.Name, Value.Name);
-
-                public ImmutableArray<Directive> References => Value.Components
-                    .SelectMany(component => component.Attributes)
-                    .Select(attribute => attribute.Type)
-                    .GetReferences(Namespace);
             }
         }
     }

@@ -90,9 +90,7 @@ internal static partial class TestData
                 .AttributedWith(unit => unit
                     .DescribedAs("The Unit of Measurement Associated with the Pressure")
                     .Named("Unit")
-                    .OfType(type => type
-                        .IsArray(true)
-                        .Named((Moniker: "Unit", Qualifier: "MooVC.Testing.Mechanics.Car"))))
+                    .OfType((Name: "Unit", Qualifier: "MooVC.Testing.Mechanics.Car")))
                 .AttributedWith(value => value
                     .DescribedAs("The Value Associated with the Pressure based on the Unit")
                     .Named("Value")
@@ -112,7 +110,7 @@ internal static partial class TestData
                 .IdentifiedBy(location => location
                     .DescribedAs("The Location of the Wheel on the Car")
                     .Named("Location")
-                    .OfType((Name: "Location", Qualifier: "MooVC.Testing.Mechanics.Car")))
+                    .OfType((Name: "Locations", Qualifier: "MooVC.Testing.Mechanics.Car")))
                 .Named("Wheel");
         }
     }

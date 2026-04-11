@@ -24,7 +24,7 @@ public sealed class WhenObserveIsCalled
             {
                 [Description("The Location of the Wheel on the Car")]
                 [Identity]
-                public Location Location { get; init; }
+                public Locations Location { get; init; }
 
                 [Description("The Pressure of the Tyre on the Wheel")]
                 public Pressure Pressure { get; init; }

@@ -23,7 +23,7 @@ internal sealed class Aggregate
                 .Named(unit.Value.Name)
                 .WithParameters(unit.Value.Attributes))
             .From(unit.Namespace)
-            .Referencing([.. unit.References])
+            .ImportReferences(unit.Namespace)
             .ToSnippet(unit.Root.Options);
 
         yield return new File(content, Extensions.Code, unit.Value.Name, $"{Folders.Source}/{unit.ProjectName}/");

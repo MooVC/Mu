@@ -24,7 +24,6 @@ internal sealed class Entity
             component.Namespace,
             component.ProjectName,
             component.Value.Attributes,
-            component.References,
             component.Root.Options);
     }
 
@@ -37,7 +36,6 @@ internal sealed class Entity
             component.Namespace,
             component.ProjectName,
             component.Value.Attributes,
-            component.References,
             component.Root.Options);
     }
 
@@ -48,7 +46,6 @@ internal sealed class Entity
         Qualifier @namespace,
         string project,
         ImmutableArray<Attribute> properties,
-        ImmutableArray<Directive> references,
         Options options)
     {
         if (identifier.IsUndefined)
@@ -66,7 +63,7 @@ internal sealed class Entity
                     .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))
                     .From(identifier)))
             .From(@namespace)
-            .Referencing([.. references])
+            .ImportReferences(@namespace)
             .ToSnippet(options);
 
         yield return new File(content, Extensions.Code, name, $"{Folders.Source}/{project}/");

@@ -1,8 +1,6 @@
 ﻿namespace Mu.Modelling;
 
-using System.Collections.Immutable;
 using MooVC.Syntax;
-using MooVC.Syntax.CSharp;
 
 public partial class Model
 {
@@ -25,8 +23,6 @@ public partial class Model
                                 public Qualifier Namespace => Features.Unit.Namespace.Append(Value.Name);
 
                                 public string ProjectName => Namespace;
-
-                                public ImmutableArray<Directive> References => Value.Parameters.GetReferences(Namespace);
                             }
                         }
                     }

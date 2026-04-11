@@ -18,36 +18,36 @@ public sealed class WhenObserveIsCalled
 
             using System;
             using System.ComponentModel;
-            using Muify.Domain;
+            using Monify;
 
             [Description("Represents the Location of the Wheel on the Car")]
             [Monify<string>]
-            public sealed partial record Location
+            public sealed partial record Locations
             {
                 [Description("The Front Left Wheel")]
-                public static readonly Location FrontLeft = "FrontLeft";
+                public static readonly Locations FrontLeft = nameof(FrontLeft);
 
                 [Description("The Front Right Wheel")]
-                public static readonly Location FrontRight = "FrontRight";
+                public static readonly Locations FrontRight = nameof(FrontRight);
 
                 [Description("The Rear Left Wheel")]
-                public static readonly Location RearLeft = "RearLeft";
+                public static readonly Locations RearLeft = nameof(RearLeft);
 
                 [Description("The Rear Right Wheel")]
-                public static readonly Location RearRight = "RearRight";
+                public static readonly Locations RearRight = nameof(RearRight);
 
-                private Location(string value)
+                private Locations(string value)
                 {
                     _value = value;
                 }
 
                 public bool IsFrontLeft => this == FrontLeft;
  
-                public bool IsFrontRight => this == IsFrontRight;
+                public bool IsFrontRight => this == FrontRight;
 
-                public bool IsRearLeft => this == IsRearLeft;
+                public bool IsRearLeft => this == RearLeft;
 
-                public bool IsRearRight => this == IsRearRight;
+                public bool IsRearRight => this == RearRight;
 
                 public override string ToString()
                 {
@@ -56,7 +56,7 @@ public sealed class WhenObserveIsCalled
             }
             """;
 
-        var expected = new File(content, "cs", "Location", "src/MooVC.Testing.Mechanics.Car/");
+        var expected = new File(content, "cs", "Locations", "src/MooVC.Testing.Mechanics.Car/");
 
         // Act
         IAsyncEnumerable<File> results = visitor.Observe(TestData.Single.Location, CancellationToken.None);

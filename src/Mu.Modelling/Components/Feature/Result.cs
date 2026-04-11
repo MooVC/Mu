@@ -27,7 +27,7 @@ internal sealed class Result
                     .WithParameters(feature.Value.Results))
                 .Named(feature.Value.Name))
             .From(feature.Namespace)
-            .Referencing([.. feature.References])
+            .ImportReferences(feature.Namespace)
             .ToSnippet(feature.Root.Options);
 
         yield return new File(content, Extensions.Code, $"{feature.Value.Name}.{nameof(Result)}", $"{Folders.Source}/{feature.ProjectName}/");

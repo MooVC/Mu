@@ -29,12 +29,6 @@ public partial class Model
                                 public Qualifier Namespace => Components.Unit.Namespace;
 
                                 public string ProjectName => Components.Unit.ProjectName;
-
-                                public ImmutableArray<Directive> References => Value.Attributes
-                                    .Select(attribute => attribute.Type)
-                                    .Append(typeof(DescriptionAttribute))
-                                    .Append(typeof(IdentityAttribute))
-                                    .GetReferences(Namespace);
                             }
                         }
                     }
