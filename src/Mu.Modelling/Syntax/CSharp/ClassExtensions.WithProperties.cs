@@ -11,6 +11,6 @@ internal static partial class ClassExtensions
     {
         return @class.Enumerate(
             (attribute, @class) => @class.WithProperties(property => property.From(attribute)),
-            attributes);
+            attributes.OrderBy(attribute => attribute.Name));
     }
 }

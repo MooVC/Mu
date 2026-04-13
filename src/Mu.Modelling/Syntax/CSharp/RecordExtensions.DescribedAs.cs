@@ -11,9 +11,8 @@ internal static partial class RecordExtensions
         return record.ForkOn(
             _ => description.IsUndescribed,
             @true: _ => _,
-            @false: record => record
-                .AttributedWith(attribute => attribute
-                    .Named(typeof(DescriptionAttribute))
-                    .WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
+            @false: record => record.AttributedWith(
+                typeof(DescriptionAttribute),
+                attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
     }
 }

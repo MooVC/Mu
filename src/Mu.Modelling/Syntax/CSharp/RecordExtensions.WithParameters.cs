@@ -13,20 +13,20 @@ internal static partial class RecordExtensions
     {
         return record.Enumerate(
             (current, record) => record.WithParameters(parameter => parameter.From(current)),
-            attributes);
+            attributes.OrderBy(attribute => attribute.Name));
     }
 
     public static Record WithParameters(this Record record, IEnumerable<Parameter> parameters)
     {
         return record.Enumerate(
             (current, record) => record.WithParameters(parameter => parameter.From(current)),
-            parameters);
+            parameters.OrderBy(parameter => parameter.Name));
     }
 
     public static Record WithParameters(this Record record, IEnumerable<Result> results)
     {
         return record.Enumerate(
             (current, record) => record.WithParameters(parameter => parameter.From(current)),
-            results);
+            results.OrderBy(result => result.Name));
     }
 }

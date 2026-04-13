@@ -9,6 +9,7 @@ using Type = System.Type;
 
 internal static class ModellingTestData
 {
+    public const string AlternateNameValue = "Alternate";
     public const string DefaultAreaNameValue = "Area";
     public const string DefaultAttributeNameValue = "Attribute";
     public const string DefaultCompanyValue = "Company";
@@ -21,8 +22,8 @@ internal static class ModellingTestData
     public const string DefaultSnippetValue = "Value";
     public const string DefaultUnitNameValue = "Unit";
     public const string DefaultViewNameValue = "View";
-    public const string AlternateNameValue = "Alternate";
 
+    public static readonly Name AlternateName = new(AlternateNameValue);
     public static readonly Name DefaultAreaName = new(DefaultAreaNameValue);
     public static readonly Name DefaultAttributeName = new(DefaultAttributeNameValue);
     public static readonly Name DefaultCompanyName = new(DefaultCompanyValue);
@@ -33,7 +34,6 @@ internal static class ModellingTestData
     public static readonly Name DefaultResultName = new(DefaultResultNameValue);
     public static readonly Name DefaultUnitName = new(DefaultUnitNameValue);
     public static readonly Name DefaultViewName = new(DefaultViewNameValue);
-    public static readonly Name AlternateName = new(AlternateNameValue);
 
     public static Name CreateAlternateName()
     {

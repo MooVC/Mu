@@ -1,7 +1,9 @@
 ﻿namespace Mu.Modelling.Components;
 
 using System.Diagnostics.CodeAnalysis;
+using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
+using UseCase = Mu.Modelling.Feature;
 
 internal static partial class TestData
 {
@@ -16,6 +18,9 @@ internal static partial class TestData
         public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Wheel;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Lists Lists;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Lists.List Location;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Features Features;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Features.Feature Register;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Features.Feature Unregister;
         public static readonly Model Model;
 
         [SuppressMessage("Minor Code Smell", "S3963:\"static\" fields should be initialized inline", Justification = "Order of initialization is required.")]
@@ -26,18 +31,9 @@ internal static partial class TestData
                     .DescribedAs("Represents a Mechanics Shop")
                     .Named("Mechanics")
                     .ResponsibleFor(car => car
-                        .AttributedWith(doors => doors
-                            .DescribedAs("The Number of Passenger Doors")
-                            .Named("Doors")
-                            .OfType(typeof(byte)))
-                        .AttributedWith(make => make
-                            .DescribedAs("The Manufacturer of the Car")
-                            .Named("Make")
-                            .OfType(typeof(string)))
-                        .AttributedWith(model => model
-                            .DescribedAs("The Name Ascribed to the Car by the Manufacturer")
-                            .Named("Model")
-                            .OfType(typeof(string)))
+                        .AttributedWith((Name: "Doors", Type: typeof(byte)), doors => doors.DescribedAs("The Number of Passenger Doors"))
+                        .AttributedWith((Name: "Make", Type: typeof(string)), make => make.DescribedAs("The Manufacturer of the Car"))
+                        .AttributedWith((Name: "Model", Type: typeof(string)), model => model.DescribedAs("The Manufacturer Ascribed Name"))
                         .AttributedWith(model => model
                             .DescribedAs("The Wheels Attached to the Car")
                             .Named("Wheels")
@@ -45,19 +41,13 @@ internal static partial class TestData
                                 .IsArray(true)
                                 .Named((Moniker: "Wheel", Qualifier: "MooVC.Testing.Mechanics.Car"))))
                         .DescribedAs("Represents a Vehicle that has utilizes the services of the Mechanics")
-                        .Featuring(register => register
-                            .DescribedAs("Registers a Car within the Mechanics System")
-                            .IsMutational(register => register
-                                .OfType(Mutational.Kinds.Creational)
-                                .Raises("Registered"))
-                            .Named("Register")
-                            .Using((Name: "Doors", Type: typeof(byte)))
-                            .Using((Name: "Make", Type: typeof(string)))
-                            .Using((Name: "Model", Type: typeof(string))))
+                        .Featuring(DefineFindCarsBy)
+                        .Featuring(DefineRegister)
+                        .Featuring(DefineUnregister)
                         .Named("Car")
-                        .Owns(DefinePressure())
-                        .Owns(DefineWheel())
-                        .Sets(DefineLocations())))
+                        .Owns(DefinePressure)
+                        .Owns(DefineWheel)
+                        .Sets(DefineLocations)))
                 .DescribedAs("Test Model")
                 .For("MooVC")
                 .Named("Testing");
@@ -71,11 +61,33 @@ internal static partial class TestData
             Wheel = new(Components, 1, Model, Components.Value[1]);
             Lists = new(Car, Model, Car.Value.Lists);
             Location = new(Lists, 0, Model, Lists.Value[0]);
+            Features = new(Car, Model, Car.Value.Features);
+            Register = new(Features, 1, Model, Features.Value[1]);
+            Unregister = new(Features, 2, Model, Features.Value[2]);
         }
 
-        private static Func<List, List> DefineLocations()
+        private static UseCase DefineFindCarsBy(UseCase findCarsBy)
         {
-            return locations => locations
+            return findCarsBy
+                .DescribedAs("Finds Cars By Make and/or Model")
+                .IsNonMutational()
+                .Named("FindCarsBy")
+                .Returning(cars => cars
+                    .Named("Cars")
+                    .OfType((Name: "Car", Qualifier: "MooVC.Testing.Mechanics.Car"), type => type.IsArray(true)))
+                .Using(make => make
+                    .DefaultedTo("default")
+                    .Named("Make")
+                    .OfType(typeof(string), type => type.IsNullable(true)))
+                .Using(model => model
+                    .DefaultedTo("default")
+                    .Named("Model")
+                    .OfType(typeof(string), type => type.IsNullable(true)));
+        }
+
+        private static List DefineLocations(List locations)
+        {
+            return locations
                 .Containing((Description: "The Front Left Wheel", Name: "FrontLeft"))
                 .Containing((Description: "The Front Right Wheel", Name: "FrontRight"))
                 .Containing((Description: "The Rear Left Wheel", Name: "RearLeft"))
@@ -84,9 +96,9 @@ internal static partial class TestData
                 .Named("Locations");
         }
 
-        private static Func<Component, Component> DefinePressure()
+        private static Component DefinePressure(Component pressure)
         {
-            return pressure => pressure
+            return pressure
                 .AttributedWith(unit => unit
                     .DescribedAs("The Unit of Measurement Associated with the Pressure")
                     .Named("Unit")
@@ -99,9 +111,32 @@ internal static partial class TestData
                 .Named("Pressure");
         }
 
-        private static Func<Component, Component> DefineWheel()
+        private static UseCase DefineRegister(UseCase register)
         {
-            return wheel => wheel
+            return register
+                .DescribedAs("Registers a Car within the Mechanics System")
+                .IsMutational(register => register
+                    .OfType(Mutational.Kinds.Creational)
+                    .Raises("Registered"))
+                .Named("Register")
+                .Using((Name: "Doors", Type: typeof(byte)))
+                .Using((Name: "Make", Type: typeof(string)))
+                .Using((Name: "Model", Type: typeof(string)));
+        }
+
+        private static UseCase DefineUnregister(UseCase unregister)
+        {
+            return unregister
+                .DescribedAs("Removes a Car from the Mechanics System")
+                .IsMutational(unregister => unregister
+                    .OfType(Mutational.Kinds.Transitional)
+                    .Raises("Unregistered"))
+                .Named("Unregister");
+        }
+
+        private static Component DefineWheel(Component wheel)
+        {
+            return wheel
                 .DescribedAs("Represents a Wheel Attached to the Car")
                 .AttributedWith(pressure => pressure
                     .DescribedAs("The Pressure of the Tyre on the Wheel")

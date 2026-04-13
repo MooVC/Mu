@@ -11,9 +11,8 @@ internal static partial class ClassExtensions
         return @class.ForkOn(
             _ => description.IsUndescribed,
             @true: _ => _,
-            @false: @class => @class
-                .AttributedWith(attribute => attribute
-                    .Named(typeof(DescriptionAttribute))
-                    .WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
+            @false: @class => @class.AttributedWith(
+                typeof(DescriptionAttribute),
+                attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
     }
 }

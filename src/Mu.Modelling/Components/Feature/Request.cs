@@ -1,17 +1,16 @@
 ﻿namespace Mu.Modelling.Components.Feature;
 
-extern alias Framework;
-
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using Graphify;
 using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Syntax.CSharp;
-using Muify.Domain;
+using Muify.Service;
 using Builder = MooVC.Syntax.Builder;
-using Type = System.Type;
+using Parameter = Mu.Modelling.Parameter;
 
 internal sealed class Request
     : IVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
@@ -20,21 +19,23 @@ internal sealed class Request
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Type @base = GetBaseType(feature);
+        ImmutableArray<Parameter> parameters = GetParameters(feature);
 
         var content = Builder
             .New<Definition>()
             .For<Record>(record => record
-                .DerivesFrom(@base)
                 .DescribedAs(feature.Value.Description)
                 .ForkOn(
                     _ => feature.Value.Type.IsMutational,
-                    @true: record => record.AttributedWith(description => description
-                        .Named(typeof(RaisesAttribute))
-                        .WithArguments((Name: nameof(Description), Value: feature.Value.Description))),
-                    @false: _ => _)
+                    @true: record => record.AttributedWith(type => type
+                        .ForkOn(
+                            _ => feature.Value.Mutational.Type.IsCreational,
+                            @true: type => type.Named(typeof(CreationalAttribute)),
+                            @false: type => type.Named(typeof(TransitionalAttribute)))
+                        .WithArguments((Name: nameof(feature.Value.Mutational.Fact), Value: $"\"{feature.Value.Mutational.Fact}\""))),
+                    @false: record => record.AttributedWith(typeof(NonMutationalAttribute)))
                 .Named(feature.Value.Name)
-                .WithParameters(feature.Value.Parameters))
+                .WithParameters(parameters))
             .From(feature.Namespace)
             .ImportReferences(feature.Namespace)
             .ToSnippet(feature.Root.Options);
@@ -42,17 +43,21 @@ internal sealed class Request
         yield return new File(content, Extensions.Code, feature.Value.Name, $"{Folders.Source}/{feature.ProjectName}/");
     }
 
-    private static Type GetBaseType(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
+    private static ImmutableArray<Parameter> GetParameters(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
     {
-        return feature.Value.Type.IsMutational
-            ? GetMutationalBaseType(feature)
-            : typeof(Framework::Mu.Modelling.Behavior.Query);
-    }
+        ImmutableArray<Parameter> parameters = feature.Value.Parameters;
 
-    private static Type GetMutationalBaseType(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
-    {
-        return feature.Value.Mutational.Type.IsCreational
-            ? typeof(Framework::Mu.Modelling.Behavior.Creational)
-            : typeof(Framework::Mu.Modelling.Behavior.Transitional);
+        if (feature.Value.Type.IsMutational && feature.Value.Mutational.Type.IsTransitional)
+        {
+            var identity = new Parameter
+            {
+                Name = nameof(feature.Features.Unit.Value.Identity),
+                Type = feature.Features.Unit.Value.Identity,
+            };
+
+            parameters = [.. parameters, identity];
+        }
+
+        return parameters;
     }
 }

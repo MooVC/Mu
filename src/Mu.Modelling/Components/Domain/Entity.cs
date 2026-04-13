@@ -60,7 +60,7 @@ internal sealed class Entity
                 .Named(name)
                 .WithProperties(properties)
                 .WithProperties(property => property
-                    .AttributedWith(attribute => attribute.Named(typeof(IdentityAttribute)))
+                    .AttributedWith(typeof(IdentityAttribute))
                     .From(identifier)))
             .From(@namespace)
             .ImportReferences(@namespace)

@@ -11,9 +11,8 @@ internal static partial class FieldExtensions
         return field.ForkOn(
             _ => description.IsUndescribed,
             @true: _ => _,
-            @false: field => field
-                .AttributedWith(attribute => attribute
-                    .Named(typeof(DescriptionAttribute))
-                    .WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
+            @false: field => field.AttributedWith(
+                typeof(DescriptionAttribute),
+                attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
     }
 }

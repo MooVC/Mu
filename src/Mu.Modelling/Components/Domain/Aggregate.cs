@@ -1,13 +1,11 @@
 ﻿namespace Mu.Modelling.Components.Domain;
 
-extern alias Framework;
-
 using System.Runtime.CompilerServices;
 using Graphify;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Syntax.CSharp;
-using Base = Framework::Mu.Modelling.State.Aggregate;
+using Muify.Domain;
 using Builder = MooVC.Syntax.Builder;
 
 internal sealed class Aggregate
@@ -18,7 +16,10 @@ internal sealed class Aggregate
         var content = Builder
             .New<Definition>()
             .For<Record>(record => record
-                .DerivesFrom(typeof(Base))
+                .AttributedWith(aggregate => aggregate
+                    .Named(name => name
+                        .Named(typeof(AggregateAttribute<>))
+                        .WithArguments(identity => identity.Named(unit.Value.Identity))))
                 .DescribedAs(unit.Value.Description)
                 .Named(unit.Value.Name)
                 .WithParameters(unit.Value.Attributes))

@@ -2,10 +2,15 @@
 
 public static partial class FeatureExtensions
 {
+    public static Feature IsNonMutational(this Feature feature)
+    {
+        return feature.OfType(Feature.Kinds.NonMutational);
+    }
+
     public static Feature IsNonMutational(this Feature feature, Func<NonMutational, NonMutational> builder)
     {
         return feature
-            .OfType(Feature.Kinds.NonMutational)
+            .IsNonMutational()
             .WithNonMutational(builder);
     }
 }

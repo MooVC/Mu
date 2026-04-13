@@ -19,15 +19,15 @@ public sealed class WhenObserveIsCalled
             using System;
             using System.Collections.Immutable;
             using System.ComponentModel;
-            using Mu.Modelling.State;
+            using Muify.Domain;
 
+            [Aggregate<Guid>]
             [Description("Represents a Vehicle that has utilizes the services of the Mechanics")]
             public sealed partial record Car(
                 [Description("The Number of Passenger Doors")] byte Doors,
                 [Description("The Manufacturer of the Car")] string Make,
-                [Description("The Name Ascribed to the Car by the Manufacturer")] string Model,
-                [Description("The Wheels Attached to the Car")] ImmutableArray<Wheel> Wheels)
-                : Aggregate;
+                [Description("The Manufacturer Ascribed Name")] string Model,
+                [Description("The Wheels Attached to the Car")] ImmutableArray<Wheel> Wheels);
             """;
 
         var expected = new File(content, "cs", "Car", "src/MooVC.Testing.Mechanics.Car/");
