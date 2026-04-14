@@ -37,6 +37,35 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
+    public async Task GivenAFeatureWhenNonMutationalThenNonMutationalDefinitionIsReturned()
+    {
+        // Arrange
+        var visitor = new Request();
+
+        const string content = """
+            namespace MooVC.Testing.Mechanics.Car.FindCarsBy;
+
+            using System;
+            using System.ComponentModel;
+            using Muify.Service;
+
+            [Description("Finds Cars By Make and/or Model")]
+            [NonMutational]
+            public sealed partial record FindCarsBy(string? Make = default, string? Model = default);
+            """;
+
+        var expected = new File(content, "cs", "FindCarsBy", "src/MooVC.Testing.Mechanics.Car.FindCarsBy/");
+
+        // Act
+        IAsyncEnumerable<File> results = visitor.Observe(TestData.Single.FindCarsBy, CancellationToken.None);
+
+        // Assert
+        _ = await Assert.That(results).HasCount(1);
+        File item = await results.FirstAsync();
+        _ = await Assert.That(item).IsEqualTo(expected);
+    }
+
+    [Test]
     public async Task GivenAFeatureWhenTransitionalThenTransitionalDefinitionIsReturned()
     {
         // Arrange

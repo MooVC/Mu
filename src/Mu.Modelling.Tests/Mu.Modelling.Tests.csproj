@@ -6,4 +6,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <ProjectReference Include="..\Mu\Mu.csproj" Aliases="Framework" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\Feature\ResultTests\" />
+  </ItemGroup>
 </Project>

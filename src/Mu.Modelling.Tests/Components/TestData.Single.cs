@@ -19,6 +19,7 @@ internal static partial class TestData
         public static readonly Model.Graph.Areas.Area.Units.Unit.Lists Lists;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Lists.List Location;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Features Features;
+        public static readonly Model.Graph.Areas.Area.Units.Unit.Features.Feature FindCarsBy;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Features.Feature Register;
         public static readonly Model.Graph.Areas.Area.Units.Unit.Features.Feature Unregister;
         public static readonly Model Model;
@@ -62,6 +63,7 @@ internal static partial class TestData
             Lists = new(Car, Model, Car.Value.Lists);
             Location = new(Lists, 0, Model, Lists.Value[0]);
             Features = new(Car, Model, Car.Value.Features);
+            FindCarsBy = new(Features, 0, Model, Features.Value[0]);
             Register = new(Features, 1, Model, Features.Value[1]);
             Unregister = new(Features, 2, Model, Features.Value[2]);
         }
