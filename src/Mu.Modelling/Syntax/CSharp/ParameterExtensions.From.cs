@@ -32,10 +32,9 @@ internal static partial class ParameterExtensions
             .ForkOn(
                 _ => description.IsUndescribed,
                 @true: _ => _,
-                @false: parameter => parameter
-                    .AttributedWith(attribute => attribute
-                        .Named(typeof(DescriptionAttribute))
-                        .WithArguments((Name: string.Empty, Value: $"\"{description}\""))))
+                @false: parameter => parameter.AttributedWith(
+                    typeof(DescriptionAttribute),
+                    attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))))
             .WithDefault(@default)
             .Named(name)
             .OfType(type.AsPreferred());

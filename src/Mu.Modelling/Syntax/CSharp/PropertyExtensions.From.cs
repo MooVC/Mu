@@ -13,10 +13,9 @@ internal static partial class PropertyExtensions
             .ForkOn(
                 _ => attribute.Description.IsUndescribed,
                 @true: _ => _,
-                @false: property => property
-                    .AttributedWith(description => description
-                        .Named(typeof(DescriptionAttribute))
-                        .WithArguments((Name: string.Empty, Value: $"\"{attribute.Description}\""))))
+                @false: property => property.AttributedWith(
+                    typeof(DescriptionAttribute),
+                    description => description.WithArguments((Name: string.Empty, Value: $"\"{attribute.Description}\""))))
             .Named(attribute.Name)
             .OfType(attribute.Type.AsPreferred())
             .WithDefault(attribute.Default);
