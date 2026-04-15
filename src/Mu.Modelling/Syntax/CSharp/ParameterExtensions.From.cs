@@ -29,13 +29,13 @@ internal static partial class ParameterExtensions
     private static Parameter From(this Parameter parameter, Snippet @default, Description description, Name name, Symbol type)
     {
         return parameter
+            .DefaultedTo(@default)
             .ForkOn(
                 _ => description.IsUndescribed,
                 @true: _ => _,
                 @false: parameter => parameter.AttributedWith(
                     typeof(DescriptionAttribute),
                     attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))))
-            .WithDefault(@default)
             .Named(name)
             .OfType(type.AsPreferred());
     }
