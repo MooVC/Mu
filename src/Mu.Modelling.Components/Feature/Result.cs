@@ -1,7 +1,5 @@
 ﻿namespace Mu.Modelling.Components.Feature;
 
-extern alias Framework;
-
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
