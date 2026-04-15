@@ -17,8 +17,8 @@ public sealed class WhenExecuted
 
     public static readonly Generated Identity = new(
         Content,
-        typeof(IdentityAttributeGenerator),
-        IdentityAttributeGenerator.Hint);
+        typeof(IdentityAttributeStrategy),
+        IdentityAttributeStrategy.Hint);
 
     [Test]
     [Skip("There appears to be an issue that prevents the generator from completing before the result is returned.")]
@@ -27,7 +27,7 @@ public sealed class WhenExecuted
         foreach (Theory theory in Frameworks.Enumerate(LanguageVersion.CSharp8))
         {
             // Arrange
-            var test = new GeneratorTest<IdentityAttributeGenerator>(theory.Assemblies, theory.Language);
+            var test = new GeneratorTest<IdentityAttributeStrategy>(theory.Assemblies, theory.Language);
 
             Identity.IsExpectedIn(test.TestState);
 

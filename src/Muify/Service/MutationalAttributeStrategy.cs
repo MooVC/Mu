@@ -3,15 +3,16 @@ namespace Muify.Service
     using System;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
+    using Muify.Syntax;
     using Attribute = System.Attribute;
 
-    public abstract class MutationalAttributeGenerator
-        : AttributeGenerator
+    internal abstract class MutationalAttributeStrategy
+        : AttributeStrategy
     {
         private readonly string _name;
 
-        private protected MutationalAttributeGenerator(string hint, string name)
-            : base(hint, $"Muify.Service.{name}Attribute")
+        private protected MutationalAttributeStrategy(string hint, string name)
+            : base(hint)
         {
             _name = name;
         }
@@ -20,8 +21,9 @@ namespace Muify.Service
         {
             return Builder
                 .New<Definition>()
-                .From(typeof(CreationalAttributeGenerator))
+                .From(typeof(CreationalAttributeStrategy))
                 .For<Class>(@class => @class
+                    .AddEmbeddedAttribute()
                     .AttributedWith(usage => usage
                         .Named(typeof(AttributeUsageAttribute))
                         .WithArguments(
