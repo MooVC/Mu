@@ -1,13 +1,7 @@
 ﻿namespace Mu.Modelling;
 
-using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml.Linq;
 using MooVC.Syntax;
-using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
-using Muify.Domain;
 
 public partial class Model
 {
