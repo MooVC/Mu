@@ -15,7 +15,9 @@ public sealed class WhenObserveIsCalled
 
         const string content = """
             <Project Sdk="Microsoft.NET.Sdk">
-              <!-- Registers a Car within the Mechanics System -->
+              <PropertyGroup>
+                <Description>Registers a Car within the Mechanics System</Description>
+              </PropertyGroup>
               <ItemGroup>
                 <ProjectReference Include="src/MooVC.Testing.Mechanics.Car/MooVC.Testing.Mechanics.Car.csproj" />
               </ItemGroup>
