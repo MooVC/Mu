@@ -62,4 +62,12 @@
       <LastGenOutput>Model.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Mu.Modelling.Components</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Mu.Modelling.Components.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>
