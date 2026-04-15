@@ -1,13 +1,8 @@
 ﻿namespace Mu.Modelling;
 
-extern alias Framework;
-
 using System.Collections.Immutable;
-using System.ComponentModel;
 using MooVC.Syntax;
-using MooVC.Syntax.CSharp;
 using Mu.Modelling.Syntax.CSharp;
-using Aggregate = Framework::Mu.Modelling.State.Aggregate;
 
 public partial class Model
 {

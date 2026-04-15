@@ -34,8 +34,10 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Framework/">
+    <Project Path="src/Mu.Modelling.Components/Mu.Modelling.Components.csproj">
+      <Build Solution="Debug|*" Project="false" />
+    </Project>
     <Project Path="src/Mu.Modelling/Mu.Modelling.csproj" />
-    <Project Path="src/Mu.Modelling.Components/Mu.Modelling.Components.csproj" />
     <Project Path="src/Mu.Sample/Mu.Sample.csproj" />
     <Project Path="src/Mu/Mu.csproj" />
     <Project Path="src/Muify/Muify.csproj" />
@@ -46,8 +48,10 @@
     <File Path=".github/pull_request_template.md" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="src/Mu.Modelling.Components.Tests/Mu.Modelling.Components.Tests.csproj">
+      <Build Solution="Debug|*" Project="false" />
+    </Project>
     <Project Path="src/Mu.Modelling.Tests/Mu.Modelling.Tests.csproj" />
-    <Project Path="src/Mu.Modelling.Components.Tests/Mu.Modelling.Components.Tests.csproj" />
     <Project Path="src/Muify.Tests/Muify.Tests.csproj" />
   </Folder>
 </Solution>
