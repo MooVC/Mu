@@ -3,7 +3,7 @@ namespace Muify.Service
     using System;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
-    using Muify.Syntax;
+    using Muify.Syntax.CSharp;
     using Attribute = System.Attribute;
 
     internal sealed class NonMutationalStrategy
