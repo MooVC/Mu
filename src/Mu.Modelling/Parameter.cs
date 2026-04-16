@@ -1,68 +1,68 @@
-﻿namespace Mu.Modelling;
-
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
-using Ardalis.GuardClauses;
-using Fluentify;
-using Graphify;
-using MooVC.Syntax;
-using MooVC.Syntax.CSharp;
-using MooVC.Syntax.Validation;
-using Valuify;
-using Ignore = Valuify.IgnoreAttribute;
-
-[Fluentify]
-[Valuify]
-public sealed partial class Parameter
-    : IValidatableObject
+﻿namespace Mu.Modelling
 {
-    public static readonly Parameter Undefined = new();
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using Ardalis.GuardClauses;
+    using Fluentify;
+    using Graphify;
+    using MooVC.Syntax;
+    using MooVC.Syntax.CSharp;
+    using MooVC.Syntax.Validation;
+    using Valuify;
+    using Ignore = Valuify.IgnoreAttribute;
 
-    internal Parameter()
+    [Fluentify]
+    [Valuify]
+    public sealed partial class Parameter
+        : IValidatableObject
     {
-    }
+        public static readonly Parameter Undefined = new Parameter();
 
-    [Descriptor("DefaultedTo")]
-    [Traverse(Scope = TraverseScope.None)]
-    public Snippet Default { get; internal init; } = Snippet.Empty;
-
-    [Descriptor("DescribedAs")]
-    [Traverse(Scope = TraverseScope.None)]
-    public Description Description { get; internal init; } = Description.Undescribed;
-
-    [Ignore]
-    [Traverse(Scope = TraverseScope.None)]
-    public bool IsUndefined => this == Undefined;
-
-    [Descriptor("Named")]
-    [Traverse(Scope = TraverseScope.None)]
-    public Name Name { get; internal init; } = Name.Unnamed;
-
-    [Descriptor("OfType")]
-    [Traverse(Scope = TraverseScope.None)]
-    public Symbol Type { get; internal init; } = Symbol.Undefined;
-
-    public static implicit operator Parameter((Name Name, Symbol Type) source)
-    {
-        Guard.Against.Conversion<(Name Name, Symbol Type), Parameter>(source);
-
-        return new Parameter()
-            .Named(source.Name)
-            .OfType(source.Type);
-    }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (IsUndefined)
+        internal Parameter()
         {
-            return [];
         }
 
-        return validationContext
-            .IncludeIf(!Default.IsEmpty, nameof(Default), _ => Default.IsSingleLine, Default)
-            .And(nameof(Name), _ => !Name.IsUnnamed, Name)
-            .And(nameof(Type), _ => !Type.IsUndefined, Type)
-            .Results;
+        [Descriptor("DefaultedTo")]
+        [Traverse(Scope = TraverseScope.None)]
+        public Snippet Default { get; internal set; } = Snippet.Empty;
+
+        [Descriptor("DescribedAs")]
+        [Traverse(Scope = TraverseScope.None)]
+        public Description Description { get; internal set; } = Description.Undescribed;
+
+        [Ignore]
+        [Traverse(Scope = TraverseScope.None)]
+        public bool IsUndefined => this == Undefined;
+
+        [Descriptor("Named")]
+        [Traverse(Scope = TraverseScope.None)]
+        public Name Name { get; internal set; } = Name.Unnamed;
+
+        [Descriptor("OfType")]
+        [Traverse(Scope = TraverseScope.None)]
+        public Symbol Type { get; internal set; } = Symbol.Undefined;
+
+        public static implicit operator Parameter((Name Name, Symbol Type) source)
+        {
+            Guard.Against.Conversion<(Name Name, Symbol Type), Parameter>(source);
+
+            return new Parameter()
+                .Named(source.Name)
+                .OfType(source.Type);
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (IsUndefined)
+            {
+                return new ValidationResult[0];
+            }
+
+            return validationContext
+                .IncludeIf(!Default.IsEmpty, nameof(Default), _ => Default.IsSingleLine, Default)
+                .And(nameof(Name), _ => !Name.IsUnnamed, Name)
+                .And(nameof(Type), _ => !Type.IsUndefined, Type)
+                .Results;
+        }
     }
 }

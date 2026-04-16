@@ -1,11 +1,14 @@
-﻿namespace Mu.Modelling;
-
-public static partial class FeatureExtensions
+﻿namespace Mu.Modelling
 {
-    public static Feature IsMutational(this Feature feature, Func<Mutational, Mutational> builder)
+    using System;
+
+    public static partial class FeatureExtensions
     {
-        return feature
-            .OfType(Feature.Kinds.Mutational)
-            .WithMutational(builder);
+        public static Feature IsMutational(this Feature feature, Func<Mutational, Mutational> builder)
+        {
+            return feature
+                .OfType(Feature.Kinds.Mutational)
+                .WithMutational(builder);
+        }
     }
 }

@@ -1,33 +1,34 @@
-﻿namespace Mu.Modelling;
-
-using Ardalis.GuardClauses;
-using Fluentify;
-using Monify;
-using MooVC.Syntax;
-using MooVC.Syntax.Validation;
-
-[AutoInitializeWith(nameof(Undescribed))]
-[Monify<string>]
-public sealed partial class Description
+﻿namespace Mu.Modelling
 {
-    public static readonly Description Undescribed = new(string.Empty);
+    using Ardalis.GuardClauses;
+    using Fluentify;
+    using Monify;
+    using MooVC.Syntax;
+    using MooVC.Syntax.Validation;
 
-    public Description(string value)
+    [AutoInitializeWith(nameof(Undescribed))]
+    [Monify(Type = typeof(string))]
+    public sealed partial class Description
     {
-        _value = value ?? string.Empty;
-    }
+        public static readonly Description Undescribed = new Description(string.Empty);
 
-    public bool IsUndescribed => this == Undescribed;
+        public Description(string value)
+        {
+            _value = value ?? string.Empty;
+        }
 
-    public static implicit operator Snippet(Description description)
-    {
-        Guard.Against.Conversion<Description, Snippet>(description);
+        public bool IsUndescribed => this == Undescribed;
 
-        return description._value;
-    }
+        public static implicit operator Snippet(Description description)
+        {
+            Guard.Against.Conversion<Description, Snippet>(description);
 
-    public override string ToString()
-    {
-        return _value;
+            return description._value;
+        }
+
+        public override string ToString()
+        {
+            return _value;
+        }
     }
 }

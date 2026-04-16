@@ -1,9 +1,10 @@
-﻿namespace Mu.Modelling;
-
-public static partial class MutationalExtensions
+﻿namespace Mu.Modelling
 {
-    public static NonMutational FromWriteStore(this NonMutational nonMutational)
+    public static partial class MutationalExtensions
     {
-        return nonMutational.From(NonMutational.Kinds.WriteStore);
+        public static NonMutational FromWriteStore(this NonMutational nonMutational)
+        {
+            return nonMutational.From(NonMutational.Kinds.WriteStore);
+        }
     }
 }

@@ -1,27 +1,28 @@
-﻿namespace Mu.Modelling;
-
-using Monify;
-
-public partial class NonMutational
+﻿namespace Mu.Modelling
 {
-    [Monify(Type = typeof(string))]
-    public sealed partial class Kinds
+    using Monify;
+
+    public partial class NonMutational
     {
-        public static readonly Kinds ReadStore = "ReadStore";
-        public static readonly Kinds WriteStore = "WriteStore";
-
-        private Kinds(string value)
+        [Monify(Type = typeof(string))]
+        public sealed partial class Kinds
         {
-            _value = value;
-        }
+            public static readonly Kinds ReadStore = "ReadStore";
+            public static readonly Kinds WriteStore = "WriteStore";
 
-        public bool IsReadStore => this == ReadStore;
+            private Kinds(string value)
+            {
+                _value = value;
+            }
 
-        public bool IsWriteStore => this == WriteStore;
+            public bool IsReadStore => this == ReadStore;
 
-        public override string ToString()
-        {
-            return _value;
+            public bool IsWriteStore => this == WriteStore;
+
+            public override string ToString()
+            {
+                return _value;
+            }
         }
     }
 }
