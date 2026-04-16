@@ -1,17 +1,17 @@
-﻿namespace Mu.Modelling.Syntax.CSharp;
+﻿namespace Mu.Modelling.Components.Syntax.CSharp;
 
 using System.ComponentModel;
 using MooVC;
 using MooVC.Syntax.CSharp;
 
-internal static partial class FieldExtensions
+internal static partial class ClassExtensions
 {
-    public static Field DescribedAs(this Field field, Description description)
+    public static Class DescribedAs(this Class @class, Description description)
     {
-        return field.ForkOn(
+        return @class.ForkOn(
             _ => description.IsUndescribed,
             @true: _ => _,
-            @false: field => field.AttributedWith(
+            @false: @class => @class.AttributedWith(
                 typeof(DescriptionAttribute),
                 attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
     }

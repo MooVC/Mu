@@ -1,8 +1,8 @@
-﻿namespace Mu.Modelling.Syntax.CSharp;
+﻿namespace Mu.Modelling.Components.Syntax.CSharp;
 
 using MooVC;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
+using Mu.Modelling.Components.Syntax.CSharp;
 using Attribute = Mu.Modelling.Attribute;
 
 internal static partial class ClassExtensions

@@ -24,6 +24,9 @@
     <None Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <None Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" />
+  </ItemGroup>
   <Target Name="GetDependencyTargetPaths">
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="$(PkgArdalis_GuardClauses)\lib\netstandard2.0\Ardalis.GuardClauses.dll" IncludeRuntimeDependency="false" />

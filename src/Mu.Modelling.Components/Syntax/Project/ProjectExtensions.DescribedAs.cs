@@ -1,4 +1,4 @@
-﻿namespace Mu.Modelling.Syntax.Project;
+﻿namespace Mu.Modelling.Components.Syntax.Project;
 
 using MooVC;
 using MooVC.Syntax.Project;

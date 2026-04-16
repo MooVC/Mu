@@ -1,4 +1,4 @@
-namespace Mu.Modelling;
+namespace Mu.Modelling.Components;
 
 using Ardalis.GuardClauses;
 using MooVC.Syntax.Validation;

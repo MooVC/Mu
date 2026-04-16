@@ -1,17 +1,17 @@
-﻿namespace Mu.Modelling.Syntax.CSharp;
+﻿namespace Mu.Modelling.Components.Syntax.CSharp;
 
 using System.ComponentModel;
 using MooVC;
 using MooVC.Syntax.CSharp;
 
-internal static partial class ClassExtensions
+internal static partial class RecordExtensions
 {
-    public static Class DescribedAs(this Class @class, Description description)
+    public static Record DescribedAs(this Record record, Description description)
     {
-        return @class.ForkOn(
+        return record.ForkOn(
             _ => description.IsUndescribed,
             @true: _ => _,
-            @false: @class => @class.AttributedWith(
+            @false: record => record.AttributedWith(
                 typeof(DescriptionAttribute),
                 attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\""))));
     }

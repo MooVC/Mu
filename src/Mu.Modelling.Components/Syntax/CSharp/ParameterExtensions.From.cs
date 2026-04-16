@@ -1,4 +1,4 @@
-﻿namespace Mu.Modelling.Syntax.CSharp;
+﻿namespace Mu.Modelling.Components.Syntax.CSharp;
 
 using System.ComponentModel;
 using MooVC;

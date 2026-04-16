@@ -1,4 +1,4 @@
-﻿namespace Muify.Syntax
+﻿namespace Muify.Syntax.CSharp
 {
     using MooVC.Syntax.CSharp;
 
