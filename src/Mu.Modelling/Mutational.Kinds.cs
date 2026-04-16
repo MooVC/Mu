@@ -1,27 +1,28 @@
-﻿namespace Mu.Modelling;
-
-using Monify;
-
-public partial class Mutational
+﻿namespace Mu.Modelling
 {
-    [Monify(Type = typeof(string))]
-    public sealed partial class Kinds
+    using Monify;
+
+    public partial class Mutational
     {
-        public static readonly Kinds Creational = "Creational";
-        public static readonly Kinds Transitional = "Transitional";
-
-        private Kinds(string value)
+        [Monify(Type = typeof(string))]
+        public sealed partial class Kinds
         {
-            _value = value;
-        }
+            public static readonly Kinds Creational = "Creational";
+            public static readonly Kinds Transitional = "Transitional";
 
-        public bool IsCreational => this == Creational;
+            private Kinds(string value)
+            {
+                _value = value;
+            }
 
-        public bool IsTransitional => this == Transitional;
+            public bool IsCreational => this == Creational;
 
-        public override string ToString()
-        {
-            return _value;
+            public bool IsTransitional => this == Transitional;
+
+            public override string ToString()
+            {
+                return _value;
+            }
         }
     }
 }

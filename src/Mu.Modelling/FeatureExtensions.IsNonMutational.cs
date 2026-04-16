@@ -1,16 +1,19 @@
-﻿namespace Mu.Modelling;
-
-public static partial class FeatureExtensions
+﻿namespace Mu.Modelling
 {
-    public static Feature IsNonMutational(this Feature feature)
-    {
-        return feature.OfType(Feature.Kinds.NonMutational);
-    }
+    using System;
 
-    public static Feature IsNonMutational(this Feature feature, Func<NonMutational, NonMutational> builder)
+    public static partial class FeatureExtensions
     {
-        return feature
-            .IsNonMutational()
-            .WithNonMutational(builder);
+        public static Feature IsNonMutational(this Feature feature)
+        {
+            return feature.OfType(Feature.Kinds.NonMutational);
+        }
+
+        public static Feature IsNonMutational(this Feature feature, Func<NonMutational, NonMutational> builder)
+        {
+            return feature
+                .IsNonMutational()
+                .WithNonMutational(builder);
+        }
     }
 }

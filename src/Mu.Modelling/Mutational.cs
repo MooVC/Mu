@@ -1,47 +1,48 @@
-﻿namespace Mu.Modelling;
-
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Fluentify;
-using Graphify;
-using MooVC.Syntax;
-using MooVC.Syntax.Validation;
-using Valuify;
-using Ignore = Valuify.IgnoreAttribute;
-
-[Fluentify]
-[Valuify]
-public sealed partial class Mutational
-    : IValidatableObject
+﻿namespace Mu.Modelling
 {
-    public static readonly Mutational Undefined = new();
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using Fluentify;
+    using Graphify;
+    using MooVC.Syntax;
+    using MooVC.Syntax.Validation;
+    using Valuify;
+    using Ignore = Valuify.IgnoreAttribute;
 
-    internal Mutational()
+    [Fluentify]
+    [Valuify]
+    public sealed partial class Mutational
+        : IValidatableObject
     {
-    }
+        public static readonly Mutational Undefined = new Mutational();
 
-    [Descriptor("Raises")]
-    [Traverse(Scope = TraverseScope.None)]
-    public Name Fact { get; internal init; } = Name.Unnamed;
-
-    [Descriptor("OfType")]
-    [Hide]
-    [Traverse(Scope = TraverseScope.None)]
-    public Kinds Type { get; internal init; } = Kinds.Transitional;
-
-    [Ignore]
-    [Traverse(Scope = TraverseScope.None)]
-    public bool IsUndefined => this == Undefined;
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (IsUndefined)
+        internal Mutational()
         {
-            return [];
         }
 
-        return validationContext
-            .Include(nameof(Fact), _ => !Fact.IsUnnamed, Fact)
-            .Results;
+        [Descriptor("Raises")]
+        [Traverse(Scope = TraverseScope.None)]
+        public Name Fact { get; internal set; } = Name.Unnamed;
+
+        [Descriptor("OfType")]
+        [Hide]
+        [Traverse(Scope = TraverseScope.None)]
+        public Kinds Type { get; internal set; } = Kinds.Transitional;
+
+        [Ignore]
+        [Traverse(Scope = TraverseScope.None)]
+        public bool IsUndefined => this == Undefined;
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (IsUndefined)
+            {
+                return new ValidationResult[0];
+            }
+
+            return validationContext
+                .Include(nameof(Fact), _ => !Fact.IsUnnamed, Fact)
+                .Results;
+        }
     }
 }

@@ -1,44 +1,46 @@
-﻿namespace Mu.Modelling;
-
-using System.Collections.Immutable;
-using MooVC.Syntax;
-using Mu.Modelling.Syntax.CSharp;
-
-public partial class Model
+﻿namespace Mu.Modelling
 {
-    public static partial class Graph
+    using System.Collections.Immutable;
+    using System.Linq;
+    using MooVC.Syntax;
+    using Mu.Modelling.Syntax.CSharp;
+
+    public partial class Model
     {
-        public partial class Areas
+        public static partial class Graph
         {
-            public partial class Area
+            public partial class Areas
             {
-                public partial class Units
+                public partial class Area
                 {
-                    public sealed partial class Unit
+                    public partial class Units
                     {
-                        public bool HasKernel => Units.Area.Value.Components.Length > 0;
+                        public sealed partial class Unit
+                        {
+                            public bool HasKernel => Units.Area.Value.Components.Length > 0;
 
-                        public string KernelName => Units.Area.Namespace;
+                            public string KernelName => Units.Area.Namespace;
 
-                        public Qualifier Namespace => Units.Area.Namespace.Append(Value.Name);
+                            public Qualifier Namespace => Units.Area.Namespace.Append(Value.Name);
 
-                        public string ProjectName => Namespace;
+                            public string ProjectName => Namespace;
 
-                        public ImmutableArray<Qualifier> Projects => Value.Attributes
-                            .Select(attribute => attribute.Type)
-                            .Union(Value.Components
-                                .SelectMany(component => component.Attributes)
-                                .Select(attribute => attribute.Type))
-                            .Union(Value.Features
-                                .SelectMany(feature => feature.Parameters)
-                                .Select(parameter => parameter.Type))
-                            .Union(Value.Features
-                                .SelectMany(feature => feature.Results)
-                                .Select(result => result.Type))
-                             .Union(Value.Views
-                                .SelectMany(view => view.Attributes)
-                                .Select(view => view.Type))
-                            .GetProjects(Root.Company, Root.Name, Units.Area.Value.Name, Value.Name);
+                            public ImmutableArray<Qualifier> Projects => Value.Attributes
+                                .Select(attribute => attribute.Type)
+                                .Union(Value.Components
+                                    .SelectMany(component => component.Attributes)
+                                    .Select(attribute => attribute.Type))
+                                .Union(Value.Features
+                                    .SelectMany(feature => feature.Parameters)
+                                    .Select(parameter => parameter.Type))
+                                .Union(Value.Features
+                                    .SelectMany(feature => feature.Results)
+                                    .Select(result => result.Type))
+                                 .Union(Value.Views
+                                    .SelectMany(view => view.Attributes)
+                                    .Select(view => view.Type))
+                                .GetProjects(Root.Company, Root.Name, Units.Area.Value.Name, Value.Name);
+                        }
                     }
                 }
             }

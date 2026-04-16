@@ -1,9 +1,10 @@
-﻿namespace Mu.Modelling;
-
-public static partial class MutationalExtensions
+﻿namespace Mu.Modelling
 {
-    public static Mutational IsCreational(this Mutational mutational)
+    public static partial class MutationalExtensions
     {
-        return mutational.OfType(Mutational.Kinds.Creational);
+        public static Mutational IsCreational(this Mutational mutational)
+        {
+            return mutational.OfType(Mutational.Kinds.Creational);
+        }
     }
 }

@@ -1,27 +1,28 @@
-﻿namespace Mu.Modelling;
-
-using Monify;
-
-public partial class Feature
+﻿namespace Mu.Modelling
 {
-    [Monify(Type = typeof(string))]
-    public sealed partial class Kinds
+    using Monify;
+
+    public partial class Feature
     {
-        public static readonly Kinds Mutational = "Mutational";
-        public static readonly Kinds NonMutational = "NonMutational";
-
-        private Kinds(string value)
+        [Monify(Type = typeof(string))]
+        public sealed partial class Kinds
         {
-            _value = value;
-        }
+            public static readonly Kinds Mutational = "Mutational";
+            public static readonly Kinds NonMutational = "NonMutational";
 
-        public bool IsMutational => this == Mutational;
+            private Kinds(string value)
+            {
+                _value = value;
+            }
 
-        public bool IsNonMutational => this == NonMutational;
+            public bool IsMutational => this == Mutational;
 
-        public override string ToString()
-        {
-            return _value;
+            public bool IsNonMutational => this == NonMutational;
+
+            public override string ToString()
+            {
+                return _value;
+            }
         }
     }
 }

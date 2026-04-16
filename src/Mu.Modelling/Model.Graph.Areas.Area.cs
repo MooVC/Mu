@@ -1,26 +1,28 @@
-﻿namespace Mu.Modelling;
-
-using System.Collections.Immutable;
-using MooVC.Syntax;
-using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
-
-public partial class Model
+﻿namespace Mu.Modelling
 {
-    public static partial class Graph
+    using System.Collections.Immutable;
+    using System.Linq;
+    using MooVC.Syntax;
+    using MooVC.Syntax.CSharp;
+    using Mu.Modelling.Syntax.CSharp;
+
+    public partial class Model
     {
-        public partial class Areas
+        public static partial class Graph
         {
-            public partial class Area
+            public partial class Areas
             {
-                public Qualifier Namespace => new([Root.Company, Root.Name, Value.Name]);
+                public partial class Area
+                {
+                    public Qualifier Namespace => new Qualifier(ImmutableArray.Create(Root.Company, Root.Name, Value.Name));
 
-                public string ProjectName => Namespace;
+                    public string ProjectName => Namespace;
 
-                public ImmutableArray<Qualifier> Projects => Value.Components
-                    .SelectMany(component => component.Attributes)
-                    .Select(attribute => attribute.Type)
-                    .GetProjects(Root.Company, Root.Name, Value.Name);
+                    public ImmutableArray<Qualifier> Projects => Value.Components
+                        .SelectMany(component => component.Attributes)
+                        .Select(attribute => attribute.Type)
+                        .GetProjects(Root.Company, Root.Name, Value.Name);
+                }
             }
         }
     }

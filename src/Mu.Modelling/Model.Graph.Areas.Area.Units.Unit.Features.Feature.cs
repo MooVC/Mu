@@ -1,28 +1,29 @@
-﻿namespace Mu.Modelling;
-
-using MooVC.Syntax;
-
-public partial class Model
+﻿namespace Mu.Modelling
 {
-    public static partial class Graph
+    using MooVC.Syntax;
+
+    public partial class Model
     {
-        public partial class Areas
+        public static partial class Graph
         {
-            public partial class Area
+            public partial class Areas
             {
-                public partial class Units
+                public partial class Area
                 {
-                    public partial class Unit
+                    public partial class Units
                     {
-                        public partial class Features
+                        public partial class Unit
                         {
-                            public partial class Feature
+                            public partial class Features
                             {
-                                public string DomainName => Features.Unit.ProjectName;
+                                public partial class Feature
+                                {
+                                    public string DomainName => Features.Unit.ProjectName;
 
-                                public Qualifier Namespace => Features.Unit.Namespace.Append(Value.Name);
+                                    public Qualifier Namespace => Features.Unit.Namespace.Append(Value.Name);
 
-                                public string ProjectName => Namespace;
+                                    public string ProjectName => Namespace;
+                                }
                             }
                         }
                     }
