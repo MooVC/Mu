@@ -6,7 +6,7 @@ using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.Project;
-using Mu.Modelling.Syntax.Project;
+using Mu.Modelling.Components.Syntax.Project;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
 using Template = MooVC.Syntax.Project.Project;

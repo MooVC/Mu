@@ -2,12 +2,11 @@
 
 using System.Collections.Immutable;
 using Graphify;
-using Monify;
 using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
+using Mu.Modelling.Components.Syntax.CSharp;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
 
@@ -54,7 +53,7 @@ internal sealed class List
             .New<Definition>()
             .For<Record>(record => record
                 .AttributedWith(monify => monify.Named(attribute => attribute
-                    .Named(typeof(MonifyAttribute))
+                    .Named($"{nameof(Monify)}Attribute")
                     .WithArguments(type => type.Named(typeof(string)))))
                 .DescribedAs(description)
                 .Enumerate(

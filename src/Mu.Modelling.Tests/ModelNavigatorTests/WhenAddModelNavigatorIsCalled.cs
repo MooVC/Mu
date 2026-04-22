@@ -1,6 +1,5 @@
 namespace Mu.Modelling.ModelNavigatorTests;
 
-using Graphify;
 using Microsoft.Extensions.DependencyInjection;
 
 public sealed class WhenAddModelNavigatorIsCalled
@@ -14,7 +13,7 @@ public sealed class WhenAddModelNavigatorIsCalled
         // Act
         _ = services.AddModelNavigator();
         using ServiceProvider provider = services.BuildServiceProvider();
-        INavigator<Model>? navigator = provider.GetService<INavigator<Model>>();
+        IModelNavigator? navigator = provider.GetService<IModelNavigator>();
 
         // Assert
         _ = await Assert.That(navigator).IsNotNull();

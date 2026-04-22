@@ -10,11 +10,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Graphify">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Monify">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MooVC.Modelling" />
     <PackageReference Include="MooVC.Syntax.CSharp" />
     <PackageReference Include="System.Text.Json" />
     <PackageReference Include="Valuify">
@@ -55,13 +58,5 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Model.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>Mu.Modelling.Components</_Parameter1>
-    </AssemblyAttribute>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>Mu.Modelling.Components.Tests</_Parameter1>
-    </AssemblyAttribute>
   </ItemGroup>
 </Project>

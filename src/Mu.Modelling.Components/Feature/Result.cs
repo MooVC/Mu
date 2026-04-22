@@ -2,11 +2,13 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Graphify;
+using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
+using Mu.Modelling.Components.Syntax.CSharp;
 using Builder = MooVC.Syntax.Builder;
 using ResultModel = Mu.Modelling.Result;
 
@@ -18,20 +20,9 @@ internal sealed class Result
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         ImmutableArray<ResultModel> results = feature.Value.Results;
+        bool isCreational = feature.Value.Type.IsMutational && feature.Value.Mutational.Type.IsCreational;
 
-        if (feature.Value.Type.IsMutational && feature.Value.Mutational.Type.IsCreational)
-        {
-            var identity = new ResultModel
-            {
-                Description = $"The {nameof(feature.Features.Unit.Value.Identity)} of the Newly Created {feature.Features.Unit.Value.Name}",
-                Name = nameof(feature.Features.Unit.Value.Identity),
-                Type = feature.Features.Unit.Value.Identity,
-            };
-
-            results = [.. results, identity];
-        }
-
-        if (results.Length == 0)
+        if (results.Length == 0 && !isCreational)
         {
             yield break;
         }
@@ -42,6 +33,7 @@ internal sealed class Result
                 .Containing(Type
                     .New<Record>()
                     .Named(nameof(Result))
+                    .ForkOn(_ => isCreational, @true: result => CreateIdentity(feature, result), @false: _ => _)
                     .WithParameters(results))
                 .Named(feature.Value.Name))
             .From(feature.Namespace)
@@ -49,5 +41,17 @@ internal sealed class Result
             .ToSnippet(feature.Root.Options);
 
         yield return new File(content, Extensions.Code, $"{feature.Value.Name}.{nameof(Result)}", $"{Folders.Source}/{feature.ProjectName}/");
+    }
+
+    private static Record CreateIdentity(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, Record record)
+    {
+        string description = $"The {nameof(feature.Features.Unit.Value.Identity)} of the Newly Created {feature.Features.Unit.Value.Name}";
+
+        return record.WithParameters(identity => identity
+            .AttributedWith(
+                typeof(DescriptionAttribute),
+                attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\"")))
+            .Named(nameof(feature.Features.Unit.Value.Identity))
+            .OfType(feature.Features.Unit.Value.Identity));
     }
 }

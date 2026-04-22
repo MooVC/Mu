@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <NoPackageAnalysis>true</NoPackageAnalysis>
+    <NoWarn>$(NoWarn);NU1608</NoWarn>
     <IsRoslynProject>true</IsRoslynProject>
-    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" GeneratePathProperty="true" PrivateAssets="all" />
@@ -17,23 +18,20 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <None Include="$(PkgArdalis_GuardClauses)\lib\netstandard2.0\ardalis.guardclauses.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <None Include="$(PkgMooVC)\lib\netstandard2.0\MooVC.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <None Include="$(PkgMooVC_Syntax)\lib\netstandard2.0\MooVC.Syntax.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <None Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <None Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-  </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" />
+    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" PrivateAssets="all" />
   </ItemGroup>
   <Target Name="GetDependencyTargetPaths">
+    <MSBuild Projects="@(ProjectReference)" Targets="GetTargetPath" Properties="Configuration=$(Configuration);TargetFramework=$(TargetFramework)">
+      <Output TaskParameter="TargetOutputs" ItemName="_ProjectReferenceTargetPaths" />
+    </MSBuild>
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="$(PkgArdalis_GuardClauses)\lib\netstandard2.0\Ardalis.GuardClauses.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC)\lib\netstandard2.0\MooVC.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax)\lib\netstandard2.0\MooVC.Syntax.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="@(_ProjectReferenceTargetPaths)" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
 </Project>

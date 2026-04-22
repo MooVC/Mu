@@ -14,7 +14,7 @@
     using Ignore = Valuify.IgnoreAttribute;
 
     [Fluentify]
-    [Graphify]
+    [Graphify(Mode = Modes.Synchronous)]
     [Valuify]
     public sealed partial class Model
         : IValidatableObject

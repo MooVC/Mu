@@ -5,7 +5,7 @@ using Graphify;
 using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
+using Mu.Modelling.Components.Syntax.CSharp;
 using Muify.Domain;
 using Attribute = Mu.Modelling.Attribute;
 using Builder = MooVC.Syntax.Builder;

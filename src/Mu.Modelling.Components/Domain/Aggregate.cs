@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using Graphify;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Syntax.CSharp;
+using Mu.Modelling.Components.Syntax.CSharp;
 using Muify.Domain;
 using Builder = MooVC.Syntax.Builder;
 
