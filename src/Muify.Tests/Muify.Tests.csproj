@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Testing.Platform" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" />
+    <ProjectReference Include="..\Muify\Muify.csproj" />
+  </ItemGroup>
 </Project>
