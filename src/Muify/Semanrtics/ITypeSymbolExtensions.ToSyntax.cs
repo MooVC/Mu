@@ -7,27 +7,29 @@
     {
         public static Symbol ToSyntax(this ITypeSymbol type)
         {
+            Symbol symbol;
+
             if (type is IArrayTypeSymbol array)
             {
-                return array.ElementType
+                symbol = array.ElementType
                     .ToSyntax()
-                    .IsArray(true)
-                    .IsNullable(type.NullableAnnotation == NullableAnnotation.Annotated);
+                    .IsArray(true);
             }
-
-            if (type is INamedTypeSymbol named)
+            else if (type is INamedTypeSymbol named)
             {
-                return ToSyntax(named)
-                    .IsNullable(type.NullableAnnotation == NullableAnnotation.Annotated);
+                symbol = named.ToSyntax();
+            }
+            else
+            {
+                symbol = type.ToSymbol();
             }
 
-            return ToSymbol(type)
-                .IsNullable(type.NullableAnnotation == NullableAnnotation.Annotated);
+            return symbol.IsNullable(type.NullableAnnotation == NullableAnnotation.Annotated);
         }
 
-        private static Symbol ToSyntax(INamedTypeSymbol type)
+        private static Symbol ToSyntax(this INamedTypeSymbol type)
         {
-            Symbol symbol = ToSymbol(type);
+            var symbol = type.ToSymbol();
 
             foreach (ITypeSymbol argument in type.TypeArguments)
             {
@@ -37,7 +39,7 @@
             return symbol;
         }
 
-        private static Symbol ToSymbol(ITypeSymbol type)
+        private static Symbol ToSymbol(this ITypeSymbol type)
         {
             if (type.ContainingNamespace is null || type.ContainingNamespace.IsGlobalNamespace)
             {
