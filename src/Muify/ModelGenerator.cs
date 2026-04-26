@@ -2,14 +2,18 @@ namespace Muify
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Linq;
     using System.Text;
     using System.Threading;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
+    using MooVC;
     using MooVC.Syntax;
     using Mu.Modelling;
+    using Muify.Domain;
+    using Muify.Modelling;
+    using Muify.Syntax.CSharp;
+    using Attribute = Mu.Modelling.Attribute;
 
     [Generator(LanguageNames.CSharp)]
     public sealed partial class ModelGenerator
@@ -42,144 +46,188 @@ namespace Muify
             string assemblyName = compilation.AssemblyName ?? string.Empty;
             string[] segments = assemblyName.Split('.');
 
-            if (segments.Length < 4)
+            const int MinimumSegments = 4;
+
+            if (segments.Length < MinimumSegments)
             {
                 return Model.Undefined;
             }
 
+            Name company = segments[0];
+            Name name = segments[1];
+
             Model model = Model.Undefined
-                .For(segments[0])
-                .Named(segments[1]);
+                .For(company)
+                .Named(name);
 
-            if (segments.Length == 5)
+            const int DomainSegments = 4;
+
+            if (segments.Length < DomainSegments)
             {
-                return GetFeatureModel(compilation, cancellationToken, segments, model);
+                return model;
             }
 
-            if (segments.Length == 4)
+            Feature feature = Feature.Undefined;
+
+            const int FeatureSegments = 5;
+
+            if (segments.Length == FeatureSegments)
             {
-                return GetDomainModel(compilation, cancellationToken, segments, model);
+                feature = GetFeatureModel(compilation, (Area: segments[2], Feature: segments[4], Unit: segments[3]));
             }
 
-            return model;
+            return GetDomainModel(compilation, feature, (Area: segments[2], Unit: segments[3]), cancellationToken);
         }
 
-        private static Model GetFeatureModel(Compilation compilation, CancellationToken cancellationToken, IReadOnlyList<string> segments, Model model)
+        private static Model GetDomainModel(Compilation compilation, Feature feature, (Name Area, Name Unit) names, CancellationToken cancellationToken)
         {
-            INamedTypeSymbol request = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{segments[4]}");
+            INamedTypeSymbol definition = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{names.Unit}");
+
+            if (definition is null || !definition.IsRecord)
+            {
+                return Model.Undefined;
+            }
+
+            IdentifyMembers(definition, out Component[] components, out List[] lists, cancellationToken);
+
+            return Model.Undefined
+                .Defines(area => area
+                    .Named(names.Area)
+                    .ResponsibleFor(unit => unit
+                        .Named(names.Unit)
+                        .Featuring(feature)
+                        .Owns(components)
+                        .Sets(lists)));
+        }
+
+        private static Feature GetFeatureModel(Compilation compilation, (Name Area, Name Feature, Name Unit) names)
+        {
+            INamedTypeSymbol request = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{names.Feature}");
 
             if (request is null)
             {
-                return model;
+                return Feature.Undefined;
             }
 
-            var feature = Feature.Undefined
-                .Named(segments[4]);
+            IPropertySymbol[] results = GetResults(request);
 
-            foreach (INamedTypeSymbol member in request.GetTypeMembers().Where(type => type.IsRecord))
-            {
-                feature = feature.Returning(result => result
-                    .Named(member.Name)
-                    .OfType((Name: member.Name, Qualifier: member.ContainingNamespace.ToDisplayString())));
-            }
-
-            var unit = Unit.Undefined
-                .Named(segments[3])
-                .Featuring(feature);
-
-            var area = Area.Undefined
-                .Named(segments[2])
-                .ResponsibleFor(unit);
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            return model.Defines(area);
+            return Feature.Undefined
+                .Named(names.Feature)
+                .Enumerate(CreateResult, results);
         }
 
-        private static Model GetDomainModel(Compilation compilation, CancellationToken cancellationToken, IReadOnlyList<string> segments, Model model)
+        private static Feature CreateResult(IPropertySymbol result, Feature feature)
         {
-            INamedTypeSymbol aggregate = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{segments[3]}");
+            return feature.Returning(member => member
+                .Named(result.Name)
+                .OfType(result.Type));
+        }
 
-            if (aggregate is null || !aggregate.IsRecord)
+        private static IPropertySymbol[] GetResults(INamedTypeSymbol request)
+        {
+            INamedTypeSymbol result = request
+                .GetTypeMembers()
+                .FirstOrDefault(type => type.IsRecord && type.Name == nameof(Result));
+
+            if (result is null)
             {
-                return model;
+                return Array.Empty<IPropertySymbol>();
             }
 
-            var components = new List<Component>();
+            return result
+                .GetMembers()
+                .OfType<IPropertySymbol>()
+                .ToArray();
+        }
 
-            foreach (ITypeSymbol type in GetReferencedTypes(aggregate))
+        private static void IdentifyMembers(INamedTypeSymbol definition, out Component[] components, out List[] lists, CancellationToken cancellationToken)
+        {
+            var entities = new List<Component>();
+            var enumerations = new List<List>();
+            var values = new List<Component>();
+
+            foreach (ITypeSymbol type in GetReferencedTypes(definition))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                INamedTypeSymbol namedType = type as INamedTypeSymbol;
-
-                if (namedType is null || namedType.SpecialType != SpecialType.None)
+                if (!(type is INamedTypeSymbol named && named.SpecialType == SpecialType.None))
                 {
                     continue;
                 }
 
-                if (namedType.IsRecord)
+                if (named.IsRecord)
                 {
-                    components.Add(Component.Undefined.Named(namedType.Name));
+                    values.Add(CatalogValue(named));
+
                     continue;
                 }
 
-                if (namedType.TypeKind != TypeKind.Class)
+                if (!(named.TypeKind == TypeKind.Class || named.TypeKind == TypeKind.Struct))
                 {
                     continue;
                 }
 
-                Mu.Modelling.Attribute identifier = GetIdentity(namedType);
-                Component component = Component.Undefined.Named(namedType.Name);
-
-                if (!identifier.IsUndefined)
-                {
-                    component = component.IdentifiedBy(attribute => attribute
-                        .Named(identifier.Name)
-                        .OfType(identifier.Type));
-                }
-
-                components.Add(component);
+                entities.Add(CatalogEntity(named));
             }
 
-            var unit = Unit.Undefined
-                .Named(segments[3]);
+            components = entities
+                .Concat(values)
+                .ToArray();
 
-            var area = Area.Undefined
-                .Named(segments[2])
-                .ResponsibleFor(unit);
-
-            foreach (Component component in components)
-            {
-                area = area.Owns(_ => component);
-            }
-
-            return model.Defines(area);
+            lists = enumerations.ToArray();
         }
 
-        private static Mu.Modelling.Attribute GetIdentity(INamedTypeSymbol symbol)
+        private static Component CatalogEntity(INamedTypeSymbol entity)
         {
-            IPropertySymbol identity = symbol
-                .GetMembers()
-                .OfType<IPropertySymbol>()
-                .FirstOrDefault(property => property.GetAttributes().Any(attribute => IsIdentityAttribute(attribute.AttributeClass)));
+            IPropertySymbol[] properties = GetProperties(entity);
+            Attribute identity = GetIdentity(properties, out IPropertySymbol match);
+
+            return Component.Undefined
+                .AttributedWith(properties.Except(new[] { match }))
+                .IdentifiedBy(identity)
+                .Named(entity.Name);
+        }
+
+        private static Component CatalogValue(INamedTypeSymbol value)
+        {
+            IPropertySymbol[] properties = GetProperties(value);
+
+            return Component.Undefined
+                .AttributedWith(properties)
+                .Named(value.Name);
+        }
+
+        private static Attribute GetIdentity(IPropertySymbol[] properties, out IPropertySymbol identity)
+        {
+            identity = properties.FirstOrDefault(property => property
+                .GetAttributes()
+                .Any(attribute => IsIdentityAttribute(attribute.AttributeClass)));
 
             if (identity is null)
             {
-                return Mu.Modelling.Attribute.Undefined;
+                return Attribute.Undefined;
             }
 
-            return Mu.Modelling.Attribute.Undefined
-                .Named(identity.Name)
-                .OfType((Name: identity.Type.Name, Qualifier: identity.Type.ContainingNamespace.ToDisplayString()));
+            return Attribute.Undefined.From(identity);
         }
 
-        private static IEnumerable<ITypeSymbol> GetReferencedTypes(INamedTypeSymbol aggregate)
+        private static IPropertySymbol[] GetProperties(INamedTypeSymbol symbol)
         {
-            return aggregate
+            return GetProperties(symbol, property => property.SetMethod is object);
+        }
+
+        private static IPropertySymbol[] GetProperties(INamedTypeSymbol symbol, Func<IPropertySymbol, bool> predicate)
+        {
+            return symbol
                 .GetMembers()
                 .OfType<IPropertySymbol>()
-                .Where(property => !property.IsImplicitlyDeclared)
+                .Where(predicate)
+                .ToArray();
+        }
+
+        private static IEnumerable<ITypeSymbol> GetReferencedTypes(INamedTypeSymbol unit)
+        {
+            return GetProperties(unit)
                 .Select(property => property.Type)
                 .GroupBy(property => property.ToDisplayString())
                 .Select(group => group.First());
@@ -187,7 +235,9 @@ namespace Muify
 
         private static bool IsIdentityAttribute(INamedTypeSymbol symbol)
         {
-            return symbol?.Name == "IdentityAttribute" || symbol?.ToDisplayString() == "Muify.Domain.IdentityAttribute";
+            return symbol is object
+                && (symbol.Name == $"{IdentityAttributeStrategy.Name}Attribute"
+                 || symbol.ToDisplayString() == $"Muify.Domain.{IdentityAttributeStrategy.Name}Attribute");
         }
     }
 }

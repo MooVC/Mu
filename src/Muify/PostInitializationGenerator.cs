@@ -12,7 +12,7 @@ namespace Muify
     {
         private static readonly IPostInitializationStrategy[] _strategies =
         {
-            new AggregateAttributeStrategy(),
+            new UnitAttributeStrategy(),
             new CreationalAttributeStrategy(),
             new IdentityAttributeStrategy(),
             new NonMutationalStrategy(),

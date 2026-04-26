@@ -12,6 +12,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" />
-    <ProjectReference Include="..\Muify\Muify.csproj" />
   </ItemGroup>
 </Project>
