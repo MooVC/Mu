@@ -37,7 +37,7 @@ namespace Muify
             {
                 var source = SourceText.From(result.Content, Encoding.UTF8);
 
-                context.AddSource(result.Hint, source);
+                context.AddSource($"{result.Hint}.g.cs", source);
             }
         }
 

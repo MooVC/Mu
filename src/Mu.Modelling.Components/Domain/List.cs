@@ -51,13 +51,13 @@ internal sealed class List
 
         var content = Builder
             .New<Definition>()
-            .For<Record>(record => record
+            .For<Struct>(@struct => @struct
                 .AttributedWith(monify => monify.Named(attribute => attribute
                     .Named($"{nameof(Monify)}Attribute")
                     .WithArguments(type => type.Named(typeof(string)))))
                 .DescribedAs(description)
                 .Enumerate(
-                    (member, record) => record
+                    (member, @struct) => @struct
                         .WithFields(field => field
                             .DescribedAs(member.Description)
                             .IsReadOnly(true)
@@ -74,6 +74,7 @@ internal sealed class List
                             .OfType(typeof(bool))),
                     members)
                 .Named(name)
+                .WithBehavior(Struct.Kinds.ReadOnly)
                 .WithConstructors(constructor => constructor
                     .WithBody("_value = value;")
                     .WithParameters((Name: "Value", Type: typeof(string)))
