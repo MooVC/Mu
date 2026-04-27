@@ -11,7 +11,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\" />
-  </ItemGroup>
 </Project>
