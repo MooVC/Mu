@@ -11,7 +11,7 @@
         {
             public static readonly Semantics OutOfScope = new Semantics();
 
-            public bool HasBase { get; set; }
+            public bool HasBase { get; set; } = true;
 
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
