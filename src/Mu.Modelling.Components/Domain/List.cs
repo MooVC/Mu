@@ -65,21 +65,11 @@ internal sealed class List
                             .IsStatic(true)
                             .Named(member.Name)
                             .OfType((Name: name, Qualifier: @namespace))
-                            .WithDefault($"\"{{nameof({member.Name})}}\"")
-                            .WithScope(Scopes.Public))
-                        .WithProperties(property => property
-                            .WithBehaviours(methods => methods
-                                .WithGet($"this == {member.Name};")
-                                .WithSet(setter => setter.WithMode(Property.Methods.Setter.Modes.ReadOnly)))
-                            .Named($"Is{member.Name}")
-                            .OfType(typeof(bool))),
+                            .WithDefault($"$\"{{nameof({member.Name})}}\"")
+                            .WithScope(Scopes.Public)),
                     members)
                 .Named(name)
-                .WithBehavior(Struct.Kinds.ReadOnly + Struct.Kinds.Record)
-                .WithConstructors(constructor => constructor
-                    .WithBody("_value = value;")
-                    .WithParameters((Name: "Value", Type: typeof(string)))
-                    .WithScope(Scopes.Private)))
+                .WithBehavior(Struct.Kinds.ReadOnly + Struct.Kinds.Record))
             .From(@namespace)
             .ImportReferences(@namespace)
             .ToSnippet(options);

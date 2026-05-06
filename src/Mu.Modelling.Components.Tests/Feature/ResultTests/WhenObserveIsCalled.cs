@@ -1,4 +1,3 @@
-﻿#if NET10_0_OR_GREATER
 namespace Mu.Modelling.Components.Feature.ResultTests;
 
 using System.Collections.Generic;
@@ -79,4 +78,3 @@ public sealed class WhenObserveIsCalled
         _ = await Assert.That(results).IsEmpty();
     }
 }
-#endif

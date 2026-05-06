@@ -1,4 +1,3 @@
-﻿#if NET10_0_OR_GREATER
 namespace Mu.Modelling.Components.Domain.EntityTests;
 
 using System.Collections.Generic;
@@ -42,4 +41,3 @@ public sealed class WhenObserveIsCalled
         _ = await Assert.That(item).IsEqualTo(expected);
     }
 }
-#endif

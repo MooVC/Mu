@@ -10,7 +10,7 @@
     <NoWarn>CA1859;CA1861</NoWarn>
     <RootNamespace>$(MSBuildProjectName.Replace('.Tests', ''))</RootNamespace>
     <TargetFramework>net10.0</TargetFramework>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <TestingPlatformDotnetTestSupport>false</TestingPlatformDotnetTestSupport>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NSubstitute" />
