@@ -21,8 +21,8 @@ public sealed class WhenObserveIsCalled
             using System.ComponentModel;
             using Muify.Domain;
 
-            [Aggregate<Guid>]
             [Description("Represents a Vehicle that has utilizes the services of the Mechanics")]
+            [Unit<Guid>]
             public sealed partial record Car(
                 [Description("The Number of Passenger Doors")] byte Doors,
                 [Description("The Manufacturer of the Car")] string Make,

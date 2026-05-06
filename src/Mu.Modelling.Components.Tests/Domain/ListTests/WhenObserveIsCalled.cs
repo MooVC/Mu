@@ -4,6 +4,7 @@ namespace Mu.Modelling.Components.Domain.ListTests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MooVC.Modelling;
+using List = Mu.Modelling.Components.Domain.List;
 
 public sealed class WhenObserveIsCalled
 {
@@ -22,37 +23,19 @@ public sealed class WhenObserveIsCalled
 
             [Description("Represents the Location of the Wheel on the Car")]
             [Monify<string>]
-            public sealed partial record Locations
+            public readonly partial record struct Locations
             {
                 [Description("The Front Left Wheel")]
-                public static readonly Locations FrontLeft = nameof(FrontLeft);
+                public static readonly Locations FrontLeft = $"{nameof(FrontLeft)}";
 
                 [Description("The Front Right Wheel")]
-                public static readonly Locations FrontRight = nameof(FrontRight);
+                public static readonly Locations FrontRight = $"{nameof(FrontRight)}";
 
                 [Description("The Rear Left Wheel")]
-                public static readonly Locations RearLeft = nameof(RearLeft);
+                public static readonly Locations RearLeft = $"{nameof(RearLeft)}";
 
                 [Description("The Rear Right Wheel")]
-                public static readonly Locations RearRight = nameof(RearRight);
-
-                private Locations(string value)
-                {
-                    _value = value;
-                }
-
-                public bool IsFrontLeft => this == FrontLeft;
- 
-                public bool IsFrontRight => this == FrontRight;
-
-                public bool IsRearLeft => this == RearLeft;
-
-                public bool IsRearRight => this == RearRight;
-
-                public override string ToString()
-                {
-                    return _value;
-                }
+                public static readonly Locations RearRight = $"{nameof(RearRight)}";
             }
             """;
 

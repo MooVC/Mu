@@ -33,6 +33,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         _ = await Assert.That(results).HasCount(1);
         File item = await results.FirstAsync();
+        _ = expected.ToString();
         _ = await Assert.That(item).IsEqualTo(expected);
     }
 

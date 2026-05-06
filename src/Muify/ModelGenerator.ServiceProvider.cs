@@ -13,7 +13,7 @@
         {
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
-                { typeof(IInspector<Model.Graph.Areas.Area.Units.Unit, File>), new UnitInspector() },
+                { typeof(IInspector<Model.Graph.Areas.Area.Units.Unit, File>), new UnitBaseInspector() },
             };
 
             public object GetService(Type serviceType)

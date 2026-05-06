@@ -1,27 +1,18 @@
 ﻿namespace Mu.Modelling
 {
     using Ardalis.GuardClauses;
+    using Fluentify;
     using MooVC.Syntax.Validation;
     using SyntaxOptions = MooVC.Syntax.CSharp.Options;
 
+    [Fluentify]
     public sealed partial class Options
     {
         public static readonly Options Default = new Options();
 
-        public Options()
-            : this(GithubOptions.Default, SyntaxOptions.Default)
-        {
-        }
+        public GithubOptions Github { get; internal set; } = GithubOptions.Default;
 
-        public Options(GithubOptions github, SyntaxOptions syntax)
-        {
-            Github = github;
-            Syntax = syntax;
-        }
-
-        public GithubOptions Github { get; }
-
-        public SyntaxOptions Syntax { get; }
+        public SyntaxOptions Syntax { get; internal set; } = SyntaxOptions.Default;
 
         public static implicit operator GithubOptions(Options options)
         {

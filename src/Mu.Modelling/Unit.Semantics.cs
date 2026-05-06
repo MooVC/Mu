@@ -6,6 +6,7 @@
 
     public partial class Unit
     {
+        [Fluentify]
         [Valuify]
         internal sealed partial class Semantics
         {

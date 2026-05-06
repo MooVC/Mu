@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Testing.Platform" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" />
+    <ProjectReference Include="..\Mu.Modelling.Tests\Mu.Modelling.Tests.csproj" />
+    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" Aliases="Modelling" />
   </ItemGroup>
 </Project>

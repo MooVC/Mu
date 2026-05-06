@@ -18,7 +18,7 @@ internal sealed class Aggregate
             .For<Record>(record => record
                 .AttributedWith(aggregate => aggregate
                     .Named(name => name
-                        .Named(typeof(AggregateAttribute<>))
+                        .Named(typeof(UnitAttribute<>))
                         .WithArguments(identity => identity.Named(unit.Value.Identity))))
                 .DescribedAs(unit.Value.Description)
                 .Named(unit.Value.Name)

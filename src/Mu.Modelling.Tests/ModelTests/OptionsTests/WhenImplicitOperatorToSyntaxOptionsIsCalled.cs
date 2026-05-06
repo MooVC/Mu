@@ -12,7 +12,7 @@ public sealed class WhenImplicitOperatorToSyntaxOptionsIsCalled
     {
         // Arrange
         SyntaxOptions expected = SyntaxOptions.Default.WithNamespace(Qualifier.Options.Block);
-        ModelOptions subject = new(ModelOptions.GithubOptions.Default, expected);
+        ModelOptions subject = ModelOptions.Default.WithSyntax(expected);
 
         // Act
         SyntaxOptions result = subject;

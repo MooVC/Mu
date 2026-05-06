@@ -1,12 +1,11 @@
-﻿namespace Mu.Modelling.Components;
+﻿namespace Mu.Modelling;
 
 using System.Diagnostics.CodeAnalysis;
-using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
-using UseCase = Mu.Modelling.Feature;
 
-internal static partial class TestData
+public static partial class TestData
 {
+    [SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "The name is appropriate in this context.")]
     public static partial class Single
     {
         public static readonly Model.Graph.Areas Areas;
@@ -68,7 +67,7 @@ internal static partial class TestData
             Unregister = new(Features, 2, Model, Features.Value[2]);
         }
 
-        private static UseCase DefineFindCarsBy(UseCase findCarsBy)
+        private static Feature DefineFindCarsBy(Feature findCarsBy)
         {
             return findCarsBy
                 .DescribedAs("Finds Cars By Make and/or Model")
@@ -113,7 +112,7 @@ internal static partial class TestData
                 .Named("Pressure");
         }
 
-        private static UseCase DefineRegister(UseCase register)
+        private static Feature DefineRegister(Feature register)
         {
             return register
                 .DescribedAs("Registers a Car within the Mechanics System")
@@ -126,7 +125,7 @@ internal static partial class TestData
                 .Using((Name: "Model", Type: typeof(string)));
         }
 
-        private static UseCase DefineUnregister(UseCase unregister)
+        private static Feature DefineUnregister(Feature unregister)
         {
             return unregister
                 .DescribedAs("Removes a Car from the Mechanics System")

@@ -2,6 +2,7 @@
 
 using System.Collections.Immutable;
 using Graphify;
+using Monify;
 using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax;
@@ -52,9 +53,9 @@ internal sealed class List
         var content = Builder
             .New<Definition>()
             .For<Struct>(@struct => @struct
-                .AttributedWith(monify => monify.Named(attribute => attribute
-                    .Named($"{nameof(Monify)}Attribute")
-                    .WithArguments(type => type.Named(typeof(string)))))
+                .AttributedWith(monify => monify.Named(
+                    typeof(MonifyAttribute),
+                    monify => monify.WithArguments(typeof(string))))
                 .DescribedAs(description)
                 .Enumerate(
                     (member, @struct) => @struct
@@ -64,7 +65,7 @@ internal sealed class List
                             .IsStatic(true)
                             .Named(member.Name)
                             .OfType((Name: name, Qualifier: @namespace))
-                            .WithDefault($"nameof({member.Name})")
+                            .WithDefault($"\"{{nameof({member.Name})}}\"")
                             .WithScope(Scopes.Public))
                         .WithProperties(property => property
                             .WithBehaviours(methods => methods
@@ -74,18 +75,11 @@ internal sealed class List
                             .OfType(typeof(bool))),
                     members)
                 .Named(name)
-                .WithBehavior(Struct.Kinds.ReadOnly)
+                .WithBehavior(Struct.Kinds.ReadOnly + Struct.Kinds.Record)
                 .WithConstructors(constructor => constructor
                     .WithBody("_value = value;")
                     .WithParameters((Name: "Value", Type: typeof(string)))
-                    .WithScope(Scopes.Private))
-                .WithMethods(method => method
-                    .Named(nameof(ToString))
-                    .Returns(result => result
-                        .WithMode(Result.Modes.Synchronous)
-                        .OfType(typeof(string)))
-                    .WithBody("return _value;")
-                    .WithExtensibility(Modifiers.Override)))
+                    .WithScope(Scopes.Private)))
             .From(@namespace)
             .ImportReferences(@namespace)
             .ToSnippet(options);
