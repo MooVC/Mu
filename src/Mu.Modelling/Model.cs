@@ -1,5 +1,6 @@
 ﻿namespace Mu.Modelling
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.ComponentModel.DataAnnotations;
@@ -14,7 +15,11 @@
     using Ignore = Valuify.IgnoreAttribute;
 
     [Fluentify]
+#if NET5_0_OR_GREATER
+    [Graphify]
+#else
     [Graphify(Mode = Modes.Synchronous)]
+#endif
     [Valuify]
     public sealed partial class Model
         : IValidatableObject
@@ -40,14 +45,14 @@
         [Traverse(Scope = TraverseScope.None)]
         public Name Name { get; internal set; } = Name.Unnamed;
 
-        [Traverse(Scope = TraverseScope.None)]
+        [Traverse(Scope = TraverseScope.Property)]
         public Options Options { get; internal set; } = Options.Default;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (IsUndefined)
             {
-                return new ValidationResult[0];
+                return Array.Empty<ValidationResult>();
             }
 
             IEnumerable<ValidationResult> results = Enumerable.Empty<ValidationResult>();

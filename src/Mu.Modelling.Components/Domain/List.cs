@@ -1,7 +1,6 @@
 ﻿namespace Mu.Modelling.Components.Domain;
 
 using System.Collections.Immutable;
-using Graphify;
 using Monify;
 using MooVC;
 using MooVC.Modelling;
@@ -12,8 +11,8 @@ using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
 
 internal sealed class List
-    : IVisitor<Model.Graph.Areas.Area.Lists.List, File>,
-      IVisitor<Model.Graph.Areas.Area.Units.Unit.Lists.List, File>
+    : IModelVisitor<Model.Graph.Areas.Area.Lists.List, File>,
+      IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Lists.List, File>
 {
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Lists.List list, CancellationToken cancellationToken)
     {

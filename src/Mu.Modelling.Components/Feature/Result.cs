@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Graphify;
 using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
@@ -13,7 +12,7 @@ using Builder = MooVC.Syntax.Builder;
 using ResultModel = Mu.Modelling.Result;
 
 internal sealed class Result
-    : IVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
+    : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
 {
     public async IAsyncEnumerable<File> Observe(
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature,

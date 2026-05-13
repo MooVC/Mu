@@ -60,7 +60,7 @@
         {
             if (IsUndefined)
             {
-                return new ValidationResult[0];
+                return Array.Empty<ValidationResult>();
             }
 
             return validationContext

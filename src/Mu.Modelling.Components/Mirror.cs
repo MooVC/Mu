@@ -5,32 +5,29 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
-using Graphify;
 using MooVC.Modelling;
 using static Mu.Modelling.Options;
 
 internal sealed class Mirror(IHttpClientFactory factory)
-    : IVisitor<Model, File>
+    : IModelVisitor<Model.Graph.Options, File>
 {
     private const string Directory = "dir";
     private const string File = "file";
 
-    public async IAsyncEnumerable<File> Observe(Model model, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<File> Observe(Model.Graph.Options options, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        GithubOptions options = model.Options.Github;
-
-        if (!options.IsConfigured)
+        if (!options.Value.Github.IsConfigured)
         {
             yield break;
         }
 
         HttpClient httpClient = factory.CreateClient(nameof(Mirror));
-        ImmutableArray<string> paths = await GetPaths(httpClient, options, cancellationToken)
+        ImmutableArray<string> paths = await GetPaths(httpClient, options.Value.Github, cancellationToken)
             .ConfigureAwait(false);
 
         foreach (string relativePath in paths)
         {
-            string content = await GetFileContent(httpClient, options, relativePath, cancellationToken)
+            string content = await GetFileContent(httpClient, options.Value.Github, relativePath, cancellationToken)
                 .ConfigureAwait(false);
 
             string extension = GetExtension(relativePath);

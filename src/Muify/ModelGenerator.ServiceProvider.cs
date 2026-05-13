@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Graphify;
     using Mu.Modelling;
     using Muify.Domain;
 
@@ -13,7 +12,7 @@
         {
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
-                { typeof(IInspector<Model.Graph.Areas.Area.Units.Unit, File>), new UnitBaseInspector() },
+                { typeof(IModelVisitor<Model.Graph.Areas.Area.Units.Unit, File>), new UnitBaseVisitor() },
             };
 
             public object GetService(Type serviceType)

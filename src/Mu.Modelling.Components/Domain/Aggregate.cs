@@ -1,7 +1,6 @@
 ﻿namespace Mu.Modelling.Components.Domain;
 
 using System.Runtime.CompilerServices;
-using Graphify;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Components.Syntax.CSharp;
@@ -9,7 +8,7 @@ using Muify.Domain;
 using Builder = MooVC.Syntax.Builder;
 
 internal sealed class Aggregate
-    : IVisitor<Model.Graph.Areas.Area.Units.Unit, File>
+    : IModelVisitor<Model.Graph.Areas.Area.Units.Unit, File>
 {
     public async IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit, [EnumeratorCancellation] CancellationToken cancellationToken)
     {

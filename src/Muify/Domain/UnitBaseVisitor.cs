@@ -1,13 +1,12 @@
 ﻿namespace Muify.Domain
 {
     using System.Collections.Generic;
-    using Graphify;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
 
-    internal sealed class UnitBaseInspector
-        : IInspector<Model.Graph.Areas.Area.Units.Unit, File>
+    internal sealed class UnitBaseVisitor
+        : IModelVisitor<Model.Graph.Areas.Area.Units.Unit, File>
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {

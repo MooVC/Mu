@@ -1,5 +1,6 @@
 ﻿namespace Mu.Modelling
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Ardalis.GuardClauses;
@@ -55,7 +56,7 @@
         {
             if (IsUndefined)
             {
-                return new ValidationResult[0];
+                return Array.Empty<ValidationResult>();
             }
 
             return validationContext

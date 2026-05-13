@@ -1,7 +1,6 @@
 ﻿namespace Mu.Modelling.Components.Feature;
 
 using System.Runtime.CompilerServices;
-using Graphify;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using MooVC.Syntax.Project;
@@ -10,7 +9,7 @@ using Builder = MooVC.Syntax.Builder;
 using Template = MooVC.Syntax.Project.Project;
 
 internal sealed class Project
-    : IVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
+    : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
 {
     public async IAsyncEnumerable<File> Observe(
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature,

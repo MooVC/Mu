@@ -21,12 +21,12 @@ public sealed class WhenObserveIsCalled
             }
             """;
 
-        var inspector = new UnitBaseInspector();
+        var visitor = new UnitBaseVisitor();
         Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasBase(false));
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
 
         // Act
-        IEnumerable<File> result = inspector.Observe(unit);
+        IEnumerable<File> result = visitor.Observe(unit);
 
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
@@ -38,12 +38,12 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAUnitWhenHasBaseThenNothingIsGenerated()
     {
         // Arrange
-        var inspector = new UnitBaseInspector();
+        var visitor = new UnitBaseVisitor();
         Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasBase(true));
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
 
         // Act
-        IEnumerable<File> result = inspector.Observe(unit);
+        IEnumerable<File> result = visitor.Observe(unit);
 
         // Assert
         _ = await Assert.That(result).IsEmpty();
@@ -53,11 +53,11 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAUnitWhenOutOfScopeThenNothingIsGenerated()
     {
         // Arrange
-        var inspector = new UnitBaseInspector();
+        var visitor = new UnitBaseVisitor();
         Model.Graph.Areas.Area.Units.Unit unit = TestData.Single.Car;
 
         // Act
-        IEnumerable<File> result = inspector.Observe(unit);
+        IEnumerable<File> result = visitor.Observe(unit);
 
         // Assert
         _ = await Assert.That(result).IsEmpty();
