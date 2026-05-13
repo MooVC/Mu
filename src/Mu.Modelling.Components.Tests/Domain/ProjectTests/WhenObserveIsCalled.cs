@@ -3,6 +3,7 @@ namespace Mu.Modelling.Components.Domain.ProjectTests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MooVC.Modelling;
+using Mu.Modelling.Testing;
 
 public sealed class WhenObserveIsCalled
 {

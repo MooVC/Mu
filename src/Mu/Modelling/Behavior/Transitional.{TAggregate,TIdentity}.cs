@@ -13,7 +13,7 @@ public abstract record Transitional<TAggregate, TIdentity>
     where TAggregate : Aggregate
     where TIdentity : struct
 {
-    private static readonly Model _model = typeof(TAggregate);
+    private static readonly Representation _model = typeof(TAggregate);
 
     protected Transitional(Reference<TIdentity> target)
     {
@@ -34,5 +34,5 @@ public abstract record Transitional<TAggregate, TIdentity>
     /// <summary>
     /// Gets the model metadata associated with the transitional use case.
     /// </summary>
-    public override Model Model => _model;
+    public override Representation Model => _model;
 }

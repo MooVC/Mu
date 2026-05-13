@@ -3,6 +3,7 @@ namespace Mu.Modelling.Components.Domain.ListTests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MooVC.Modelling;
+using Mu.Modelling.Testing;
 using List = Mu.Modelling.Components.Domain.List;
 
 public sealed class WhenObserveIsCalled

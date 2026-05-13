@@ -36,5 +36,5 @@ public abstract record Causal
     /// <summary>
     /// Gets the aggregate model associated with the message.
     /// </summary>
-    public abstract Model Model { get; }
+    public abstract Representation Model { get; }
 }

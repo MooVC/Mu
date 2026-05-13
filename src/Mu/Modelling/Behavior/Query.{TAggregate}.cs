@@ -11,7 +11,7 @@ public abstract record Query<TAggregate>
     : Query
     where TAggregate : Aggregate
 {
-    private static readonly Model model = typeof(TAggregate);
+    private static readonly Representation model = typeof(TAggregate);
 
     protected Query()
     {
@@ -25,5 +25,5 @@ public abstract record Query<TAggregate>
     /// <summary>
     /// Gets the model metadata associated with the query.
     /// </summary>
-    public override Model Model => model;
+    public override Representation Model => model;
 }

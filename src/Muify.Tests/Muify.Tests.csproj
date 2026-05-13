@@ -8,7 +8,6 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mu.Modelling.Tests\Mu.Modelling.Tests.csproj" />
-    <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" Aliases="Modelling" />
+    <ProjectReference Include="..\Mu.Modelling.Testing\Mu.Modelling.Testing.csproj" />
   </ItemGroup>
 </Project>

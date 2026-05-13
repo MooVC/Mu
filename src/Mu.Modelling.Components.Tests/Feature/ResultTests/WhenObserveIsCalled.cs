@@ -3,6 +3,7 @@ namespace Mu.Modelling.Components.Feature.ResultTests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MooVC.Modelling;
+using Mu.Modelling.Testing;
 
 public sealed class WhenObserveIsCalled
 {

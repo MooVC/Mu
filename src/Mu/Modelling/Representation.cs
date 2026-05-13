@@ -6,11 +6,11 @@ using Mu.Modelling.State;
 /// <summary>
 /// Describes the aggregate model metadata used by causal messages.
 /// </summary>
-public sealed record Model
+public sealed record Representation
 {
     private static readonly Type _basis = typeof(Aggregate);
 
-    private Model(Type type)
+    private Representation(Type type)
     {
         if (!_basis.IsAssignableFrom(type))
         {
@@ -43,19 +43,19 @@ public sealed record Model
     public string Namespace { get; }
 
     /// <summary>
-    /// Converts an aggregate type to its <see cref="Model"/> representation.
+    /// Converts an aggregate type to its <see cref="Representation"/> representation.
     /// </summary>
-    public static implicit operator Model(Type type)
+    public static implicit operator Representation(Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        return new Model(type);
+        return new Representation(type);
     }
 
     /// <summary>
-    /// Converts a <see cref="Model"/> representation back to the runtime <see cref="Type"/>.
+    /// Converts a <see cref="Representation"/> representation back to the runtime <see cref="Type"/>.
     /// </summary>
-    public static implicit operator Type(Model model)
+    public static implicit operator Type(Representation model)
     {
         ArgumentNullException.ThrowIfNull(model);
 

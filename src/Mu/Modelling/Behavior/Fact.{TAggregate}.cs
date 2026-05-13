@@ -12,7 +12,7 @@ public abstract record Fact<TAggregate>
     : Fact
     where TAggregate : Aggregate
 {
-    private static readonly Model model = typeof(TAggregate);
+    private static readonly Representation model = typeof(TAggregate);
 
     protected Fact()
     {
@@ -26,5 +26,5 @@ public abstract record Fact<TAggregate>
     /// <summary>
     /// Gets the model metadata associated with the fact.
     /// </summary>
-    public override Model Model => model;
+    public override Representation Model => model;
 }

@@ -1,11 +1,8 @@
-﻿namespace Muify.Domain.UnitBaseInspectorTests;
+﻿namespace Muify.Domain.UnitBaseVisitorTests;
 
-extern alias Modelling;
-
-using Modelling::Mu.Modelling;
 using Mu.Modelling;
+using Mu.Modelling.Testing;
 using Muify;
-using Model = Modelling::Mu.Modelling.Model;
 
 public sealed class WhenObserveIsCalled
 {
