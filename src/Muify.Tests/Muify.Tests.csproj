@@ -7,10 +7,18 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" PrivateAssets="all" />
-    <PackageReference Include="MooVC" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
-    <PackageReference Include="MooVC.Modelling" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
-    <PackageReference Include="MooVC.Syntax" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
-    <PackageReference Include="MooVC.Syntax.CSharp" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
+    <PackageReference Include="MooVC" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive">
+      <IncludeAssets>runtime; compile; native; contentfiles</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MooVC.Modelling" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive">
+      <IncludeAssets>runtime; compile; native; contentfiles</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MooVC.Syntax" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive">
+      <IncludeAssets>runtime; compile; native; contentfiles</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MooVC.Syntax.CSharp" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive">
+      <IncludeAssets>runtime; compile; native; contentfiles</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mu.Modelling">

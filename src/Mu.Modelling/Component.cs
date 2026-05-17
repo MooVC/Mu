@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-
     using System.Collections.Immutable;
     using System.ComponentModel.DataAnnotations;
     using Fluentify;
@@ -45,6 +44,8 @@
 
         [Descriptor("SeenAs")]
         public ImmutableArray<View> Views { get; internal set; } = ImmutableArray<View>.Empty;
+
+        internal Semantics Metadata { get; set; } = Semantics.OutOfScope;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

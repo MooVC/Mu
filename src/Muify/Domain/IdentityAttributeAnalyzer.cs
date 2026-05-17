@@ -3,11 +3,11 @@ namespace Muify.Domain
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using System.Resources;
     using System.Threading;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
     using Muify.Semantics;
+    using static Muify.Domain.IdentityAttributeAnalyzer_Resources;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class IdentityAttributeAnalyzer
@@ -18,32 +18,21 @@ namespace Muify.Domain
 
         internal static readonly DiagnosticDescriptor DuplicateIdentityAttributeRule = new DiagnosticDescriptor(
             DuplicateIdentityAttributeId,
-            GetLocalizableResourceString(DuplicateIdentityAttributeTitleResourceName),
-            GetLocalizableResourceString(DuplicateIdentityAttributeMessageResourceName),
-            GetResourceString(DiagnosticCategoryResourceName),
+            GetResourceString(nameof(DuplicateIdentityAttributeTitle)),
+            GetResourceString(nameof(DuplicateIdentityAttributeMessage)),
+            GetResourceString(nameof(DiagnosticCategory)),
             DiagnosticSeverity.Warning,
             true,
-            GetLocalizableResourceString(DuplicateIdentityAttributeDescriptionResourceName));
+            GetResourceString(nameof(DuplicateIdentityAttributeDescription)));
 
         internal static readonly DiagnosticDescriptor TypeNotSupportedRule = new DiagnosticDescriptor(
             TypeNotSupportedId,
-            GetLocalizableResourceString(TypeNotSupportedTitleResourceName),
-            GetLocalizableResourceString(TypeNotSupportedMessageResourceName),
-            GetResourceString(DiagnosticCategoryResourceName),
+            GetResourceString(nameof(TypeNotSupportedTitle)),
+            GetResourceString(nameof(TypeNotSupportedMessage)),
+            GetResourceString(nameof(DiagnosticCategory)),
             DiagnosticSeverity.Warning,
             true,
-            GetLocalizableResourceString(TypeNotSupportedDescriptionResourceName));
-
-        private const string DiagnosticCategoryResourceName = "DiagnosticCategory";
-        private const string DuplicateIdentityAttributeDescriptionResourceName = "DuplicateIdentityAttributeDescription";
-        private const string DuplicateIdentityAttributeMessageResourceName = "DuplicateIdentityAttributeMessage";
-        private const string DuplicateIdentityAttributeTitleResourceName = "DuplicateIdentityAttributeTitle";
-        private const string ResourceName = "Muify.Domain.IdentityAttributeAnalyzer.Resources";
-        private const string TypeNotSupportedDescriptionResourceName = "TypeNotSupportedDescription";
-        private const string TypeNotSupportedMessageResourceName = "TypeNotSupportedMessage";
-        private const string TypeNotSupportedTitleResourceName = "TypeNotSupportedTitle";
-
-        private static readonly ResourceManager _resourceManager = new ResourceManager(ResourceName, typeof(IdentityAttributeAnalyzer).Assembly);
+            GetResourceString(nameof(TypeNotSupportedDescription)));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(TypeNotSupportedRule, DuplicateIdentityAttributeRule);
@@ -128,14 +117,9 @@ namespace Muify.Domain
             return reference.GetSyntax(cancellationToken).GetLocation();
         }
 
-        private static LocalizableString GetLocalizableResourceString(string name)
-        {
-            return new LocalizableResourceString(name, _resourceManager, typeof(IdentityAttributeAnalyzer));
-        }
-
         private static string GetResourceString(string name)
         {
-            return _resourceManager.GetString(name) ?? name;
+            return IdentityAttributeAnalyzer_Resources.ResourceManager.GetString(name) ?? name;
         }
 
         private static bool IsSupportedType(INamedTypeSymbol type)
