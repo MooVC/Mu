@@ -10,8 +10,8 @@ namespace Muify
     using MooVC;
     using MooVC.Syntax;
     using Mu.Modelling;
-    using Muify.Domain;
     using Muify.Modelling;
+    using Muify.Semantics;
     using Muify.Syntax.CSharp;
     using Attribute = Mu.Modelling.Attribute;
 
@@ -201,7 +201,7 @@ namespace Muify
         {
             identity = properties.FirstOrDefault(property => property
                 .GetAttributes()
-                .Any(attribute => IsIdentityAttribute(attribute.AttributeClass)));
+                .Any(attribute => attribute.AttributeClass.IsIdentityAttribute()));
 
             if (identity is null)
             {
@@ -231,13 +231,6 @@ namespace Muify
                 .Select(property => property.Type)
                 .GroupBy(property => property.ToDisplayString())
                 .Select(group => group.First());
-        }
-
-        private static bool IsIdentityAttribute(INamedTypeSymbol symbol)
-        {
-            return symbol is object
-                && (symbol.Name == $"{IdentityAttributeStrategy.Name}Attribute"
-                 || symbol.ToDisplayString() == $"Muify.Domain.{IdentityAttributeStrategy.Name}Attribute");
         }
     }
 }

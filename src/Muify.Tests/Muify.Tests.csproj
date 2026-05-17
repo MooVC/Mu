@@ -11,7 +11,6 @@
     <PackageReference Include="MooVC.Modelling" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
     <PackageReference Include="MooVC.Syntax" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
     <PackageReference Include="MooVC.Syntax.CSharp" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
-    <PackageReference Include="System.Collections.Immutable" PrivateAssets="all" ExcludeAssets="analyzers;build;buildTransitive" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mu.Modelling">

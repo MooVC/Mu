@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DiagnosticCategory" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+  <data name="DuplicateIdentityAttributeDescription" xml:space="preserve">
+    <value>Identity can only be placed on one property for a given type.</value>
+  </data>
+  <data name="DuplicateIdentityAttributeMessage" xml:space="preserve">
+    <value>Type `{0}` has multiple identity properties</value>
+  </data>
+  <data name="DuplicateIdentityAttributeTitle" xml:space="preserve">
+    <value>Duplicate Identity Attribute</value>
+  </data>
+  <data name="TypeNotSupportedDescription" xml:space="preserve">
+    <value>Identity is only intended to be placed on properties of a class, not a record or struct.</value>
+  </data>
+  <data name="TypeNotSupportedMessage" xml:space="preserve">
+    <value>Identity can only be used on properties declared by a class</value>
+  </data>
+  <data name="TypeNotSupportedTitle" xml:space="preserve">
+    <value>Type Not Supported</value>
+  </data>
+</root>
