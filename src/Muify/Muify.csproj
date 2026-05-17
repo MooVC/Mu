@@ -6,6 +6,7 @@
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <NoWarn>$(NoWarn);NU1608</NoWarn>
     <IsRoslynProject>true</IsRoslynProject>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackAnalyzerDependencies</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" GeneratePathProperty="true" PrivateAssets="all" />
@@ -30,6 +31,12 @@
       <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="@(_ProjectReferenceTargetPaths)" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+  <Target Name="PackAnalyzerDependencies" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <_AnalyzerDependency Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll' AND '%(ReferenceCopyLocalPaths.Filename)' != '$(AssemblyName)' AND !$([System.String]::Copy('%(ReferenceCopyLocalPaths.Filename)').StartsWith('Microsoft.CodeAnalysis'))" />
+      <TfmSpecificPackageFile Include="@(_AnalyzerDependency)" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>
 </Project>
