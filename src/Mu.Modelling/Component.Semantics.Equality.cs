@@ -20,7 +20,7 @@
 
                 public bool HasEqualsOperator { get; set; } = true;
 
-                public bool HasEqualsOverride { get; set; } = true;
+                public bool HasNotEqualsOperator { get; set; } = true;
 
                 public bool IsEquatable { get; set; } = true;
 

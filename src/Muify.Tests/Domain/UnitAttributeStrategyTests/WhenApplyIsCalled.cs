@@ -9,15 +9,14 @@ public sealed class WhenApplyIsCalled
     {
         // Arrange
         const string expected = """
-            namespace Muify.Domain
+            namespace Muify.Domain;
+
+            [global::System.AttributeUsageAttribute(global::System.AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+            [global::Microsoft.CodeAnalysis.EmbeddedAttribute]
+            public sealed partial class UnitAttribute<TIdentity>
+                : global::System.Attribute
+                where TIdentity : struct
             {
-                [global::System.AttributeUsageAttribute(global::System.AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-                [global::Microsoft.CodeAnalysis.EmbeddedAttribute]
-                public sealed partial class UnitAttribute<TIdentity>
-                    : global::System.Attribute
-                    where TIdentity : struct
-                {
-                }
             }
             """;
 

@@ -1,11 +1,13 @@
 ﻿namespace Muify.Domain
 {
     using System.Collections.Generic;
+    using System.Linq;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Result = MooVC.Syntax.CSharp.Result;
 
-    internal sealed class ComponentIdentifierIsEquatableVisitor
+    internal sealed class ComponentIdentifierHasEquatableVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Components.Component, File>,
           IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Components.Component, File>
     {
@@ -21,24 +23,28 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Identifier.IsEquatable)
+            if (component.Identifier.IsUndefined || component.Metadata.Identifier.HasEquatable)
             {
                 yield break;
             }
 
-            var identifer = component.Identifier.Type.ToSnippet(Configuration.Options.Types);
-
             var content = Builder
                 .New<Definition>()
                 .For<Class>(@class => @class
-                    .DerivesFrom((Name: $"IEquatable<{identifer}>", Qualifier: "System"))
                     .Named(component.Name)
                     .WithExtensibility(Modifiers.Implicit)
+                    .WithMethods(equals => equals
+                        .Accepts(parameter => parameter
+                            .Named("Other")
+                            .OfType(component.Identifier.Type, type => type.IsNullable(true)))
+                        .Named("Equals")
+                        .Returns(typeof(bool), result => result.WithMode(Result.Modes.Synchronous))
+                        .WithBody($"return other is not null && other == {component.Identifier.Name};"))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Identifier.IEquatable");
+            yield return new File(content, $"{component.Name}.Identifier.IEquatable.Equals");
         }
     }
 }

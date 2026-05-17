@@ -16,10 +16,10 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.8" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Monify" Version="1.4.1" />
-    <PackageVersion Include="MooVC" Version="9.3.0-beta.26" />
-    <PackageVersion Include="MooVC.Modelling" Version="9.3.0-beta.26" />
-    <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.26" />
-    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.26" />
+    <PackageVersion Include="MooVC" Version="9.3.0-beta.27" />
+    <PackageVersion Include="MooVC.Modelling" Version="9.3.0-beta.27" />
+    <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.27" />
+    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.27" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.25.0.139117" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />

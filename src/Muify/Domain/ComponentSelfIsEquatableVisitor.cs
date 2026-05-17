@@ -30,11 +30,13 @@
                 .New<Definition>()
                 .For<Class>(@class => @class
                     .DerivesFrom((Name: $"IEquatable<{component.Name}>", Qualifier: "System"))
-                    .Named(component.Name))
+                    .Named(component.Name)
+                    .WithExtensibility(Modifiers.Implicit)
+                    .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, component.Name);
+            yield return new File(content, $"{component.Name}.Self.IEquatable");
         }
     }
 }

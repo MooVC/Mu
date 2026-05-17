@@ -9,14 +9,13 @@ public sealed class WhenApplyIsCalled
     {
         // Arrange
         const string expected = """
-            namespace Muify.Service
+            namespace Muify.Service;
+
+            [global::System.AttributeUsageAttribute(global::System.AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+            [global::Microsoft.CodeAnalysis.EmbeddedAttribute]
+            public sealed partial class NonMutationalAttribute
+                : global::System.Attribute
             {
-                [global::System.AttributeUsageAttribute(global::System.AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-                [global::Microsoft.CodeAnalysis.EmbeddedAttribute]
-                public sealed partial class NonMutationalAttribute
-                    : global::System.Attribute
-                {
-                }
             }
             """;
 

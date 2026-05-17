@@ -11,11 +11,10 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         const string expected = """
-            namespace MooVC.Testing.Mechanics.Car
-            {
-                public sealed partial record Car
-                    : global::Mu.Modelling.State.Aggregate;
-            }
+            namespace MooVC.Testing.Mechanics.Car;
+
+            public sealed partial record Car
+                : global::Mu.Modelling.State.Aggregate;
             """;
 
         var visitor = new UnitBaseVisitor();

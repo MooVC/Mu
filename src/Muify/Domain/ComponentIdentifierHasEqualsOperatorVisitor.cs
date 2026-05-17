@@ -5,7 +5,7 @@
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
 
-    internal sealed class ComponentIdentifierIsEquatableVisitor
+    internal sealed class ComponentIdentifierHasEqualsOperatorVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Components.Component, File>,
           IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Components.Component, File>
     {
@@ -21,24 +21,26 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Identifier.IsEquatable)
+            if (component.Identifier.IsUndefined || component.Metadata.Identifier.HasEqualsOperator)
             {
                 yield break;
             }
 
-            var identifer = component.Identifier.Type.ToSnippet(Configuration.Options.Types);
-
             var content = Builder
                 .New<Definition>()
                 .For<Class>(@class => @class
-                    .DerivesFrom((Name: $"IEquatable<{identifer}>", Qualifier: "System"))
                     .Named(component.Name)
                     .WithExtensibility(Modifiers.Implicit)
+                    .WithOperators(operators => operators
+                        .WithComparisons(equals => equals
+                            .To(component.Identifier.Type)
+                            .WithBody("return left is not null && left.Equals(right);")
+                            .WithOperator(Comparison.Types.Equality)))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Identifier.IEquatable");
+            yield return new File(content, $"{component.Name}.Identifier.Comparison.Equals");
         }
     }
 }

@@ -7,16 +7,15 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenSelfHasEquatableIsFalseThenEquatableToSelfDefinitionIsGenerated()
+    public async Task GivenAUnitWhenSelfIsEquatableIsFalseThenEquatableToSelfDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
-            namespace MooVC.Testing.Mechanics.Car
+            namespace MooVC.Testing.Mechanics.Car;
+
+            partial class Wheel
+                : global::System.IEquatable<Wheel>
             {
-                public sealed partial class Wheel
-                    : global::System.IEquatable<Wheel>
-                {
-                }
             }
             """;
 
@@ -30,11 +29,11 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(wheel.Name);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{wheel.Name}.Self.IEquatable");
     }
 
     [Test]
-    public async Task GivenAUnitWhenSelfHasEquatableThenNothingIsGenerated()
+    public async Task GivenAUnitWhenSelfIsEquatableThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new ComponentSelfIsEquatableVisitor();
