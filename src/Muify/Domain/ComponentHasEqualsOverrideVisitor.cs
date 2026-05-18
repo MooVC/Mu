@@ -1,9 +1,10 @@
 ﻿namespace Muify.Domain
 {
-    using System;
     using System.Collections.Generic;
     using MooVC.Syntax;
+    using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Result = MooVC.Syntax.CSharp.Result;
 
     internal sealed class ComponentHasEqualsOverrideVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Components.Component, File>,
@@ -19,9 +20,31 @@
             return Generate(component.Value, component.Namespace);
         }
 
-        private static IEnumerable<File> Generate(Component value, Qualifier @namespace)
+        private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            throw new NotImplementedException();
+            if (component.Identifier.IsUndefined || component.Metadata.HasEqualsOverride)
+            {
+                yield break;
+            }
+
+            var content = Builder
+                .New<Definition>()
+                .For<Class>(@class => @class
+                    .Named(component.Name)
+                    .WithExtensibility(Modifiers.Implicit)
+                    .WithMethods(equals => equals
+                        .Accepts(parameter => parameter
+                            .Named("Obj")
+                            .OfType(typeof(object)))
+                        .Named("Equals")
+                        .Returns(typeof(bool), result => result.WithMode(Result.Modes.Synchronous))
+                        .WithBody($"return obj is {component.Name} other && Equals(other);")
+                        .WithExtensibility(Modifiers.Override))
+                    .WithScope(Scopes.Unspecified))
+                .From(@namespace)
+                .ToSnippet(Configuration.Options);
+
+            yield return new File(content, $"{component.Name}.Equals");
         }
     }
 }
