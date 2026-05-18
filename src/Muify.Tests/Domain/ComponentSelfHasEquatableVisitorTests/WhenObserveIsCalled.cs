@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenSelfHasEquatableIsFalseThenEquatableToSelfDefinitionIsGenerated()
+    public async Task GivenAComponentWhenSelfHasEquatableIsFalseThenEquatableToSelfDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -36,7 +36,7 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenSelfHasEquatableThenNothingIsGenerated()
+    public async Task GivenAComponentWhenSelfHasEquatableThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new ComponentSelfHasEquatableVisitor();

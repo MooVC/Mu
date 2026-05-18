@@ -25,5 +25,9 @@
       <HintPath>..\Mu.Modelling\bin\$(Configuration)\netstandard2.0\Mu.Modelling.dll</HintPath>
       <Private>true</Private>
     </Reference>
+    <Reference Include="Mu.Modelling.Testing">
+      <HintPath>..\Mu.Modelling.Testing\bin\$(Configuration)\netstandard2.0\Mu.Modelling.Testing.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 </Project>

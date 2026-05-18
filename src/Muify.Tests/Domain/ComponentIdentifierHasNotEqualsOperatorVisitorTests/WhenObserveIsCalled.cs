@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenIdentifierHasNotEqualsOperatorIsFalseThenEquatableToIdentifierDefinitionIsGenerated()
+    public async Task GivenAComponentWhenIdentifierHasNotEqualsOperatorIsFalseThenEquatableToIdentifierDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -36,7 +36,7 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenIdentifierHasNotEqualsOperatorThenNothingIsGenerated()
+    public async Task GivenAComponentWhenIdentifierHasNotEqualsOperatorThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new ComponentIdentifierHasNotEqualsOperatorVisitor();
