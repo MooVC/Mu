@@ -3,7 +3,7 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using Muify.Domain;
 
-    internal static class INamedTypeSymbolExtensions
+    internal static partial class INamedTypeSymbolExtensions
     {
         internal static bool IsIdentityAttribute(this INamedTypeSymbol symbol)
         {

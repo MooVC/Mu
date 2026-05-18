@@ -3,7 +3,6 @@
     using System.Collections.Immutable;
     using System.Linq;
     using MooVC.Syntax;
-    using MooVC.Syntax.CSharp;
     using Mu.Modelling.Syntax.CSharp;
 
     public partial class Model

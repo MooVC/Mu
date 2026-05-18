@@ -133,13 +133,12 @@ public sealed class WhenInitializeIsCalled
 
     private static async Task<ImmutableArray<Diagnostic>> GetDiagnostics(string source)
     {
-        CSharpCompilation compilation = CSharpCompilation.Create(
+        var compilation = CSharpCompilation.Create(
             "Testing",
-            new[]
-            {
+            [
                 CSharpSyntaxTree.ParseText(AttributeSource),
                 CSharpSyntaxTree.ParseText(source),
-            },
+            ],
             _references,
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
