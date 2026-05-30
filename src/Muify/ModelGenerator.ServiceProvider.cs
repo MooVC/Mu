@@ -17,6 +17,8 @@
             {
                 typeof(ComponentHasEqualsOverrideVisitor),
                 typeof(ComponentHasGetHashCodeOverrideVisitor),
+                typeof(ComponentIdentifierComparabilityHasCompareToVisitor),
+                typeof(ComponentIdentifierComparabilityIsComparableVisitor),
                 typeof(ComponentIdentifierEqualityHasEqualsOperatorVisitor),
                 typeof(ComponentIdentifierEqualityHasEquatableVisitor),
                 typeof(ComponentIdentifierEqualityHasNotEqualsOperatorVisitor),
