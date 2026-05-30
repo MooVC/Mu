@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.ComponentIdentifierIsEquatableVisitorTests;
+﻿namespace Muify.Domain.ComponentIdentifierEqualityIsEquatableVisitorTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -19,8 +19,13 @@ public sealed class WhenObserveIsCalled
             }
             """;
 
-        var visitor = new ComponentIdentifierIsEquatableVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithIdentifier(identifier => identifier.IsEquatable(false)));
+        var visitor = new ComponentIdentifierEqualityIsEquatableVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithIdentifier(identifier => identifier
+                    .WithEquality(equality => equality.IsEquatable(false))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -36,8 +41,13 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAComponentWhenSelfIsEquatableThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentIdentifierIsEquatableVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithIdentifier(identifier => identifier.IsEquatable(true)));
+        var visitor = new ComponentIdentifierEqualityIsEquatableVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithIdentifier(identifier => identifier
+                    .WithEquality(equality => equality.IsEquatable(true))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -51,7 +61,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAComponentWhenOutOfScopeThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentIdentifierIsEquatableVisitor();
+        var visitor = new ComponentIdentifierEqualityIsEquatableVisitor();
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = TestData.Single.Wheel;
 
         // Act

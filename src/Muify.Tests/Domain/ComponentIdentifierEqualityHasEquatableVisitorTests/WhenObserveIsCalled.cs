@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.ComponentIdentifierHasNotEqualsOperatorVisitorTests;
+﻿namespace Muify.Domain.ComponentIdentifierEqualityHasEquatableVisitorTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAComponentWhenIdentifierHasNotEqualsOperatorIsFalseThenEquatableToIdentifierDefinitionIsGenerated()
+    public async Task GivenAComponentWhenIdentifierHasEquatableIsFalseThenEquatableToIdentifierDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -15,15 +15,20 @@ public sealed class WhenObserveIsCalled
 
             partial class Wheel
             {
-                public static bool operator !=(Wheel left, global::MooVC.Testing.Mechanics.Car.Locations right)
+                public bool Equals(global::MooVC.Testing.Mechanics.Car.Locations? other)
                 {
-                    return left is null || !left.Equals(right);
+                    return other is not null && other == Location;
                 }
             }
             """;
 
-        var visitor = new ComponentIdentifierHasNotEqualsOperatorVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithIdentifier(identifier => identifier.HasNotEqualsOperator(false)));
+        var visitor = new ComponentIdentifierEqualityHasEquatableVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithIdentifier(identifier => identifier
+                    .WithEquality(equality => equality.HasEquatable(false))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -32,15 +37,20 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo($"{wheel.Name}.Identifier.Comparison.NotEquals");
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{wheel.Name}.Identifier.IEquatable.Equals");
     }
 
     [Test]
-    public async Task GivenAComponentWhenIdentifierHasNotEqualsOperatorThenNothingIsGenerated()
+    public async Task GivenAComponentWhenIdentifierHasEquatableThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentIdentifierHasNotEqualsOperatorVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithIdentifier(identifier => identifier.HasNotEqualsOperator(true)));
+        var visitor = new ComponentIdentifierEqualityHasEquatableVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithIdentifier(identifier => identifier
+                    .WithEquality(equality => equality.HasEquatable(true))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -54,7 +64,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAComponentWhenOutOfScopeThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentIdentifierHasNotEqualsOperatorVisitor();
+        var visitor = new ComponentIdentifierEqualityHasEquatableVisitor();
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = TestData.Single.Wheel;
 
         // Act

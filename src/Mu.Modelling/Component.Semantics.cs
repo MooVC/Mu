@@ -16,7 +16,7 @@
 
             public bool HasGetHashCodeOverride { get; set; } = true;
 
-            public Equality Identifier { get; set; } = Equality.OutOfScope;
+            public Identity Identifier { get; set; } = new Identity();
 
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
