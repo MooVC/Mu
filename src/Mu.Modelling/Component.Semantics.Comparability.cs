@@ -18,6 +18,14 @@
 
                 public bool HasCompareTo { get; set; }
 
+                public bool HasGreaterThanOperator { get; set; }
+
+                public bool HasGreaterThanOrEqualOperator { get; set; }
+
+                public bool HasLessThanOperator { get; set; }
+
+                public bool HasLessThanOrEqualOperator { get; set; }
+
                 [Descriptor("IsComparable")]
                 public Presence IsComparable { get; set; } = Presence.NotApplicable;
 
