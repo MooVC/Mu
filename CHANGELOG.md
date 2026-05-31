@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial Release
 - Added Muify identity attribute analyzer diagnostics MUIFY01 and MUIFY02.
+- Added Muify unit attribute analyzer diagnostics MUIFY03 and MUIFY04.
 - Added Muify semantic detection for identifier comparability generation.
 - Added Muify identifier implicit conversion generation.
 - Added Muify identifier comparability generation for IComparable and CompareTo.

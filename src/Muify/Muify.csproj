@@ -30,6 +30,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>IdentityAttributeAnalyzer.Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Domain\UnitAttributeAnalyzer.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UnitAttributeAnalyzer.Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Domain\ComponentIdentifierHasImplicitConversionVisitor.Resources.resx">
@@ -39,6 +44,10 @@
     <EmbeddedResource Update="Domain\IdentityAttributeAnalyzer.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityAttributeAnalyzer.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Domain\UnitAttributeAnalyzer.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnitAttributeAnalyzer.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Target Name="GetDependencyTargetPaths">

@@ -22,8 +22,8 @@ namespace Muify.Domain
             GetResourceString(nameof(DuplicateIdentityAttributeMessage)),
             GetResourceString(nameof(DiagnosticCategory)),
             DiagnosticSeverity.Warning,
-            true,
-            GetResourceString(nameof(DuplicateIdentityAttributeDescription)));
+            isEnabledByDefault: true,
+            description: GetResourceString(nameof(DuplicateIdentityAttributeDescription)));
 
         internal static readonly DiagnosticDescriptor TypeNotSupportedRule = new DiagnosticDescriptor(
             TypeNotSupportedId,
@@ -31,8 +31,8 @@ namespace Muify.Domain
             GetResourceString(nameof(TypeNotSupportedMessage)),
             GetResourceString(nameof(DiagnosticCategory)),
             DiagnosticSeverity.Warning,
-            true,
-            GetResourceString(nameof(TypeNotSupportedDescription)));
+            isEnabledByDefault: true,
+            description: GetResourceString(nameof(TypeNotSupportedDescription)));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(TypeNotSupportedRule, DuplicateIdentityAttributeRule);
