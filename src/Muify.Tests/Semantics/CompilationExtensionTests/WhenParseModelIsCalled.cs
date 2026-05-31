@@ -14,6 +14,12 @@ public sealed class WhenParseModelIsCalled
 
         using System;
 
+        [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+        public sealed class IdentityAttribute
+            : Attribute
+        {
+        }
+
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
         public sealed class UnitAttribute<TIdentity>
             : Attribute
@@ -47,6 +53,258 @@ public sealed class WhenParseModelIsCalled
         _ = await Assert.That(result.Areas[0].Units[0].Identity).IsEqualTo(expected.Identity);
     }
 
+    [Test]
+    public async Task GivenAnIdentityThatIsNotSelfComparableThenIdentifierComparabilityIsNotApplicable()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+            {
+                [Identity]
+                public Location Location { get; set; }
+            }
+
+            public readonly struct Location
+            {
+            }
+            """;
+
+        // Act
+        Component.Semantics.Comparability result = GetComponent(source).Metadata.Identifier.Comparability;
+
+        // Assert
+        _ = await Assert.That(result.IsComparable).IsEqualTo(Presence.NotApplicable);
+    }
+
+    [Test]
+    public async Task GivenAnIdentityThatIsNotSelfComparableWhenComparabilityMembersExistThenMembersAreIgnored()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+            {
+                [Identity]
+                public Location Location { get; set; }
+
+                public int CompareTo(Location other)
+                {
+                    return 0;
+                }
+
+                public static bool operator >(Wheel left, Location right)
+                {
+                    return true;
+                }
+
+                public static bool operator >=(Wheel left, Location right)
+                {
+                    return true;
+                }
+
+                public static bool operator <(Wheel left, Location right)
+                {
+                    return true;
+                }
+
+                public static bool operator <=(Wheel left, Location right)
+                {
+                    return true;
+                }
+            }
+
+            public readonly struct Location
+            {
+            }
+            """;
+
+        // Act
+        Component.Semantics.Comparability result = GetComponent(source).Metadata.Identifier.Comparability;
+
+        // Assert
+        _ = await Assert.That(result.IsComparable).IsEqualTo(Presence.NotApplicable);
+        _ = await Assert.That(result.HasCompareTo).IsFalse();
+        _ = await Assert.That(result.HasGreaterThanOperator).IsFalse();
+        _ = await Assert.That(result.HasGreaterThanOrEqualOperator).IsFalse();
+        _ = await Assert.That(result.HasLessThanOperator).IsFalse();
+        _ = await Assert.That(result.HasLessThanOrEqualOperator).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenAnIdentityThatIsSelfComparableWhenComponentIsNotComparableThenIdentifierComparabilityIsMissing()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+            {
+                [Identity]
+                public Location Location { get; set; }
+            }
+
+            public readonly struct Location
+                : System.IComparable<Location>
+            {
+                public int CompareTo(Location other)
+                {
+                    return 0;
+                }
+            }
+            """;
+
+        // Act
+        Component.Semantics.Comparability result = GetComponent(source).Metadata.Identifier.Comparability;
+
+        // Assert
+        _ = await Assert.That(result.IsComparable).IsEqualTo(Presence.Missing);
+        _ = await Assert.That(result.HasCompareTo).IsFalse();
+        _ = await Assert.That(result.HasGreaterThanOperator).IsFalse();
+        _ = await Assert.That(result.HasGreaterThanOrEqualOperator).IsFalse();
+        _ = await Assert.That(result.HasLessThanOperator).IsFalse();
+        _ = await Assert.That(result.HasLessThanOrEqualOperator).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenAnIdentityThatIsSelfComparableWhenComponentIsComparableThenIdentifierComparabilityIsPresent()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+                : System.IComparable<Location>
+            {
+                [Identity]
+                public Location Location { get; set; }
+
+                public int CompareTo(Location other)
+                {
+                    return Location.CompareTo(other);
+                }
+            }
+
+            public readonly struct Location
+                : System.IComparable<Location>
+            {
+                public int CompareTo(Location other)
+                {
+                    return 0;
+                }
+            }
+            """;
+
+        // Act
+        Component.Semantics.Comparability result = GetComponent(source).Metadata.Identifier.Comparability;
+
+        // Assert
+        _ = await Assert.That(result.IsComparable).IsEqualTo(Presence.Present);
+    }
+
+    [Test]
+    public async Task GivenAComparableComponentWhenComparabilityMembersExistThenIdentifierComparabilityMembersArePresent()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+                : System.IComparable<Location>
+            {
+                [Identity]
+                public Location Location { get; set; }
+
+                public int CompareTo(Location other)
+                {
+                    return Location.CompareTo(other);
+                }
+
+                public static bool operator >(Wheel left, Location right)
+                {
+                    return true;
+                }
+
+                public static bool operator >=(Wheel left, Location right)
+                {
+                    return true;
+                }
+
+                public static bool operator <(Wheel left, Location right)
+                {
+                    return true;
+                }
+
+                public static bool operator <=(Wheel left, Location right)
+                {
+                    return true;
+                }
+            }
+
+            public readonly struct Location
+                : System.IComparable<Location>
+            {
+                public int CompareTo(Location other)
+                {
+                    return 0;
+                }
+            }
+            """;
+
+        // Act
+        Component.Semantics.Comparability result = GetComponent(source).Metadata.Identifier.Comparability;
+
+        // Assert
+        _ = await Assert.That(result.IsComparable).IsEqualTo(Presence.Present);
+        _ = await Assert.That(result.HasCompareTo).IsTrue();
+        _ = await Assert.That(result.HasGreaterThanOperator).IsTrue();
+        _ = await Assert.That(result.HasGreaterThanOrEqualOperator).IsTrue();
+        _ = await Assert.That(result.HasLessThanOperator).IsTrue();
+        _ = await Assert.That(result.HasLessThanOrEqualOperator).IsTrue();
+    }
+
     private static Model GetModel(string source)
     {
         var compilation = CSharpCompilation.Create(
@@ -59,6 +317,11 @@ public sealed class WhenParseModelIsCalled
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         return compilation.ParseModel(CancellationToken.None);
+    }
+
+    private static Component GetComponent(string source)
+    {
+        return GetModel(source).Areas[0].Units[0].Components[0];
     }
 
     private static MetadataReference[] GetReferences()

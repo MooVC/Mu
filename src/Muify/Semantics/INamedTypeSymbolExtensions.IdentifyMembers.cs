@@ -53,10 +53,19 @@
             IPropertySymbol[] properties = entity.GetProperties();
             Attribute identity = properties.GetIdentity(out IPropertySymbol match);
 
-            return Component.Undefined
+            Component component = Component.Undefined
                 .AttributedWith(properties.Except(new[] { match }))
                 .IdentifiedBy(identity)
                 .Named(entity.Name);
+
+            if (match is null)
+            {
+                return component;
+            }
+
+            return component.WithMetadata(metadata => metadata
+                .WithIdentifier(identifier => identifier
+                    .WithComparability(entity.GetIdentifierComparability(match))));
         }
 
         private static Component CatalogValue(this INamedTypeSymbol value)
