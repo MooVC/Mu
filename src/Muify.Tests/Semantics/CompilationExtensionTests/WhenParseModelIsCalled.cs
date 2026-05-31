@@ -71,10 +71,10 @@ public sealed class WhenParseModelIsCalled
             public sealed partial class Wheel
             {
                 [Identity]
-                public Location Location { get; set; }
+                public Locations Location { get; set; }
             }
 
-            public readonly struct Location
+            public readonly struct Locations
             {
             }
             """;
@@ -104,7 +104,7 @@ public sealed class WhenParseModelIsCalled
             public sealed partial class Wheel
             {
                 [Identity]
-                public Location Location { get; set; }
+                public Locations Location { get; set; }
 
                 public int CompareTo(Location other)
                 {
@@ -132,7 +132,7 @@ public sealed class WhenParseModelIsCalled
                 }
             }
 
-            public readonly struct Location
+            public readonly struct Locations
             {
             }
             """;
@@ -167,13 +167,13 @@ public sealed class WhenParseModelIsCalled
             public sealed partial class Wheel
             {
                 [Identity]
-                public Location Location { get; set; }
+                public Locations Location { get; set; }
             }
 
-            public readonly struct Location
-                : System.IComparable<Location>
+            public readonly struct Locations
+                : System.IComparable<Locations>
             {
-                public int CompareTo(Location other)
+                public int CompareTo(Locations other)
                 {
                     return 0;
                 }
@@ -208,21 +208,21 @@ public sealed class WhenParseModelIsCalled
             }
 
             public sealed partial class Wheel
-                : System.IComparable<Location>
+                : System.IComparable<Locations>
             {
                 [Identity]
-                public Location Location { get; set; }
+                public Locations Location { get; set; }
 
-                public int CompareTo(Location other)
+                public int CompareTo(Locations other)
                 {
                     return Location.CompareTo(other);
                 }
             }
 
-            public readonly struct Location
-                : System.IComparable<Location>
+            public readonly struct Locations
+                : System.IComparable<Locations>
             {
-                public int CompareTo(Location other)
+                public int CompareTo(Locations other)
                 {
                     return 0;
                 }
@@ -252,41 +252,41 @@ public sealed class WhenParseModelIsCalled
             }
 
             public sealed partial class Wheel
-                : System.IComparable<Location>
+                : System.IComparable<Locations>
             {
                 [Identity]
-                public Location Location { get; set; }
+                public Locations Location { get; set; }
 
-                public int CompareTo(Location other)
+                public int CompareTo(Locations other)
                 {
                     return Location.CompareTo(other);
                 }
 
-                public static bool operator >(Wheel left, Location right)
+                public static bool operator >(Wheel left, Locations right)
                 {
                     return true;
                 }
 
-                public static bool operator >=(Wheel left, Location right)
+                public static bool operator >=(Wheel left, Locations right)
                 {
                     return true;
                 }
 
-                public static bool operator <(Wheel left, Location right)
+                public static bool operator <(Wheel left, Locations right)
                 {
                     return true;
                 }
 
-                public static bool operator <=(Wheel left, Location right)
+                public static bool operator <=(Wheel left, Locations right)
                 {
                     return true;
                 }
             }
 
-            public readonly struct Location
-                : System.IComparable<Location>
+            public readonly struct Locations
+                : System.IComparable<Locations>
             {
-                public int CompareTo(Location other)
+                public int CompareTo(Locations other)
                 {
                     return 0;
                 }
