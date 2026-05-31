@@ -65,6 +65,7 @@
 
             return component.WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
+                    .HasImplicitConversion(entity.HasImplicitConversionTo(match.Type))
                     .WithComparability(entity.GetIdentifierComparability(match))));
         }
 

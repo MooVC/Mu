@@ -305,6 +305,77 @@ public sealed class WhenParseModelIsCalled
         _ = await Assert.That(result.HasLessThanOrEqualOperator).IsTrue();
     }
 
+    [Test]
+    public async Task GivenAComponentWhenIdentifierImplicitConversionIsMissingThenIdentifierImplicitConversionIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+            {
+                [Identity]
+                public Locations Location { get; set; }
+            }
+
+            public readonly struct Locations
+            {
+            }
+            """;
+
+        // Act
+        bool result = GetComponent(source).Metadata.Identifier.HasImplicitConversion;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenAComponentWhenIdentifierImplicitConversionExistsThenIdentifierImplicitConversionIsTrue()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+            {
+                public Wheel Wheel { get; set; }
+            }
+
+            public sealed partial class Wheel
+            {
+                [Identity]
+                public Locations Location { get; set; }
+
+                public static implicit operator Locations(Wheel subject)
+                {
+                    return subject.Location;
+                }
+            }
+
+            public readonly struct Locations
+            {
+            }
+            """;
+
+        // Act
+        bool result = GetComponent(source).Metadata.Identifier.HasImplicitConversion;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
+    }
+
     private static Model GetModel(string source)
     {
         var compilation = CSharpCompilation.Create(

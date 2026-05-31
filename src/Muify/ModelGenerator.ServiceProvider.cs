@@ -27,6 +27,7 @@
                 typeof(ComponentIdentifierEqualityHasEquatableVisitor),
                 typeof(ComponentIdentifierEqualityHasNotEqualsOperatorVisitor),
                 typeof(ComponentIdentifierEqualityIsEquatableVisitor),
+                typeof(ComponentIdentifierHasImplicitConversionVisitor),
                 typeof(ComponentSelfHasEqualsOperatorVisitor),
                 typeof(ComponentSelfHasEquatableVisitor),
                 typeof(ComponentSelfHasNotEqualsOperatorVisitor),

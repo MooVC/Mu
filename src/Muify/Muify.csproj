@@ -20,6 +20,11 @@
     <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Domain\ComponentIdentifierHasImplicitConversionVisitor.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComponentIdentifierHasImplicitConversionVisitor.Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Domain\IdentityAttributeAnalyzer.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -27,6 +32,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Domain\ComponentIdentifierHasImplicitConversionVisitor.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComponentIdentifierHasImplicitConversionVisitor.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Domain\IdentityAttributeAnalyzer.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IdentityAttributeAnalyzer.Resources.Designer.cs</LastGenOutput>
