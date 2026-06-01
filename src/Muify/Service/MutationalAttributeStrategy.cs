@@ -31,12 +31,13 @@ namespace Muify.Service
                             (Name: nameof(AttributeUsageAttribute.AllowMultiple), Value: "false"),
                             (Name: nameof(AttributeUsageAttribute.Inherited), Value: "false")))
                     .DerivesFrom(typeof(Attribute))
-                    .Named($"{_name}Attribute")
-                    .WithProperties(name => name
-                        .Named("Fact")
-                        .OfType(typeof(string))
-                        .WithBehaviours(behaviors => behaviors
-                            .WithSet(set => set.WithMode(Property.Methods.Setter.Modes.Set)))))
+                    .Named(
+                        $"{_name}Attribute",
+                        attribute => attribute
+                            .WithArguments(fact => fact
+                                .Named("TFact")
+                                .WithConstraints(constraint => constraint
+                                    .WithBase((Name: "Fact", Qualifier: "Mu.Modelling.Behavior"))))))
                 .ToSnippet(Configuration.Options);
         }
     }

@@ -3,6 +3,7 @@
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
+using static Mu.Modelling.Component.Semantics;
 
 public sealed class WhenObserveIsCalled
 {
@@ -22,8 +23,13 @@ public sealed class WhenObserveIsCalled
             }
             """;
 
-        var visitor = new ComponentSelfHasEqualsOperatorVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithSelf(self => self.HasEqualsOperator(false)));
+        var visitor = new ComponentSelfEqualityHasEqualsOperatorVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithSelf(self => self
+                    .WithEquality(equality => equality.HasEqualsOperator(false))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -39,8 +45,13 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAComponentWhenSelfHasEqualsOperatorThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentSelfHasEqualsOperatorVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithSelf(self => self.HasEqualsOperator(true)));
+        var visitor = new ComponentSelfEqualityHasEqualsOperatorVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithSelf(self => self
+                    .WithEquality(equality => equality.HasEqualsOperator(true))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -54,7 +65,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAComponentWhenOutOfScopeThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentSelfHasEqualsOperatorVisitor();
+        var visitor = new ComponentSelfEqualityHasEqualsOperatorVisitor();
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = TestData.Single.Wheel;
 
         // Act

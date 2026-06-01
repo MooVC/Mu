@@ -13,10 +13,10 @@ public sealed class WhenApplyIsCalled
 
             [global::System.AttributeUsageAttribute(global::System.AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
             [global::Microsoft.CodeAnalysis.EmbeddedAttribute]
-            public sealed partial class TransitionalAttribute
+            public sealed partial class TransitionalAttribute<TFact>
                 : global::System.Attribute
+                where TFact : global::Mu.Modelling.Behavior.Fact
             {
-                public string Fact { get; set; }
             }
             """;
 

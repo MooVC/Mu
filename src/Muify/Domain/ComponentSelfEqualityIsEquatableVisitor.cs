@@ -5,7 +5,7 @@
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
 
-    internal sealed class ComponentSelfIsEquatableVisitor
+    internal sealed class ComponentSelfEqualityIsEquatableVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Components.Component, File>,
           IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Components.Component, File>
     {
@@ -21,7 +21,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Self.IsEquatable)
+            if (component.Identifier.IsUndefined || component.Metadata.Self.Equality.IsEquatable)
             {
                 yield break;
             }

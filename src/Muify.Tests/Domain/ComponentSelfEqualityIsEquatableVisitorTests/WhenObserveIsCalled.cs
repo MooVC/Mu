@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.ComponentSelfHasNotEqualsOperatorVisitorTests;
+﻿namespace Muify.Domain.ComponentSelfIsEquatableVisitorTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -7,23 +7,25 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAComponentWhenSelfHasNotEqualsOperatorIsFalseThenEquatableToSelfDefinitionIsGenerated()
+    public async Task GivenAComponentWhenSelfIsEquatableIsFalseThenEquatableToSelfDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car;
 
             partial class Wheel
+                : global::System.IEquatable<Wheel>
             {
-                public static bool operator !=(Wheel left, Wheel right)
-                {
-                    return left is null || !left.Equals(right);
-                }
             }
             """;
 
-        var visitor = new ComponentSelfHasNotEqualsOperatorVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithSelf(self => self.HasNotEqualsOperator(false)));
+        var visitor = new ComponentSelfEqualityIsEquatableVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithSelf(self => self
+                    .WithEquality(equality => equality.IsEquatable(false))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -32,15 +34,20 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo($"{wheel.Name}.Self.Comparison.NotEquals");
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{wheel.Name}.Self.IEquatable");
     }
 
     [Test]
-    public async Task GivenAComponentWhenSelfHasNotEqualsOperatorThenNothingIsGenerated()
+    public async Task GivenAComponentWhenSelfIsEquatableThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentSelfHasNotEqualsOperatorVisitor();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.WithSelf(self => self.HasNotEqualsOperator(true)));
+        var visitor = new ComponentSelfEqualityIsEquatableVisitor();
+
+        Component wheel = TestData.Single.Units.Value[0].Components[1]
+            .WithMetadata(metadata => metadata
+                .WithSelf(self => self
+                    .WithEquality(equality => equality.HasNotEqualsOperator(true))));
+
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -54,7 +61,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAComponentWhenOutOfScopeThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new ComponentSelfHasNotEqualsOperatorVisitor();
+        var visitor = new ComponentSelfEqualityIsEquatableVisitor();
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = TestData.Single.Wheel;
 
         // Act

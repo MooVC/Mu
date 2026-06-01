@@ -11,10 +11,10 @@
         {
             [Fluentify]
             [Valuify]
-            internal sealed partial class Identity
+            internal sealed partial class Capabilities
             {
                 [SuppressMessage("Critical Code Smell", "S3218:Inner class members should not shadow outer class \"static\" or type members", Justification = "API Standard")]
-                public static readonly Identity OutOfScope = new Identity();
+                public static readonly Capabilities OutOfScope = new Capabilities();
 
                 public Comparability Comparability { get; set; } = Comparability.OutOfScope;
 

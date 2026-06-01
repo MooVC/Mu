@@ -5,7 +5,7 @@
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
 
-    internal sealed class ComponentSelfHasEqualsOperatorVisitor
+    internal sealed class ComponentSelfEqualityHasNotEqualsOperatorVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Components.Component, File>,
           IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Components.Component, File>
     {
@@ -21,7 +21,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Self.HasEqualsOperator)
+            if (component.Identifier.IsUndefined || component.Metadata.Self.Equality.HasNotEqualsOperator)
             {
                 yield break;
             }
@@ -33,13 +33,13 @@
                     .WithExtensibility(Modifiers.Implicit)
                     .WithOperators(operators => operators
                         .WithComparisons(equals => equals
-                            .WithBody("return left is not null && left.Equals(right);")
-                            .WithOperator(Comparison.Types.Equality)))
+                            .WithBody("return left is null || !left.Equals(right);")
+                            .WithOperator(Comparison.Types.Inequality)))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Self.Comparison.Equals");
+            yield return new File(content, $"{component.Name}.Self.Comparison.NotEquals");
         }
     }
 }

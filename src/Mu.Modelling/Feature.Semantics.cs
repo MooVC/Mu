@@ -4,7 +4,7 @@
     using Valuify;
     using Ignore = Valuify.IgnoreAttribute;
 
-    public partial class Component
+    public partial class Feature
     {
         [Fluentify]
         [Valuify]
@@ -12,16 +12,10 @@
         {
             public static readonly Semantics OutOfScope = new Semantics();
 
-            public bool HasEqualsOverride { get; set; } = true;
-
-            public bool HasGetHashCodeOverride { get; set; } = true;
-
-            public Capabilities Identifier { get; set; } = new Capabilities();
+            public bool HasBase { get; set; } = true;
 
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
-
-            public Capabilities Self { get; set; } = Capabilities.OutOfScope;
         }
     }
 }

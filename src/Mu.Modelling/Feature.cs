@@ -54,6 +54,8 @@
         [Traverse(Scope = TraverseScope.None)]
         public Kinds Type { get; internal set; } = Kinds.Mutational;
 
+        internal Semantics Metadata { get; set; } = Semantics.OutOfScope;
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (IsUndefined)

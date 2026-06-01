@@ -1,13 +1,11 @@
 ﻿namespace Muify.Domain
 {
     using System.Collections.Generic;
-    using System.Linq;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
-    using Result = MooVC.Syntax.CSharp.Result;
 
-    internal sealed class ComponentSelfHasEquatableVisitor
+    internal sealed class ComponentSelfEqualityHasEqualsOperatorVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Components.Component, File>,
           IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Components.Component, File>
     {
@@ -23,7 +21,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Self.HasEquatable)
+            if (component.Identifier.IsUndefined || component.Metadata.Self.Equality.HasEqualsOperator)
             {
                 yield break;
             }
@@ -33,18 +31,15 @@
                 .For<Class>(@class => @class
                     .Named(component.Name)
                     .WithExtensibility(Modifiers.Implicit)
-                    .WithMethods(equals => equals
-                        .Accepts(parameter => parameter
-                            .Named("Other")
-                            .OfType((component.Name, Qualifier: @namespace), type => type.IsNullable(true)))
-                        .Named("Equals")
-                        .Returns(typeof(bool), result => result.WithMode(Result.Modes.Synchronous))
-                        .WithBody($"return Equals(other.{component.Identifier.Name});"))
+                    .WithOperators(operators => operators
+                        .WithComparisons(equals => equals
+                            .WithBody("return left is not null && left.Equals(right);")
+                            .WithOperator(Comparison.Types.Equality)))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Self.IEquatable.Equals");
+            yield return new File(content, $"{component.Name}.Self.Comparison.Equals");
         }
     }
 }

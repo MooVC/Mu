@@ -14,25 +14,23 @@
         private const string LessThanOrEqualOperatorMetadataName = "op_LessThanOrEqual";
         private const string SystemNamespaceName = "System";
 
-        public static Component.Semantics.Comparability GetIdentifierComparability(this INamedTypeSymbol symbol, IPropertySymbol identity)
+        public static Component.Semantics.Comparability GetComparability(this INamedTypeSymbol symbol, ITypeSymbol type)
         {
-            var comparability = new Component.Semantics.Comparability();
-
-            if (!identity.Type.ImplementsComparableTo(identity.Type))
+            if (!type.ImplementsComparableTo(type))
             {
-                return comparability.IsComparable(Presence.NotApplicable);
+                return Component.Semantics.Comparability.OutOfScope;
             }
 
-            Presence isComparable = symbol.ImplementsComparableTo(identity.Type)
+            Presence isComparable = symbol.ImplementsComparableTo(type)
                 ? Presence.Present
                 : Presence.Missing;
 
-            return comparability
-                .HasCompareTo(symbol.HasCompareTo(identity.Type))
-                .HasGreaterThanOperator(symbol.HasOperator(GreaterThanOperatorMetadataName, identity.Type))
-                .HasGreaterThanOrEqualOperator(symbol.HasOperator(GreaterThanOrEqualOperatorMetadataName, identity.Type))
-                .HasLessThanOperator(symbol.HasOperator(LessThanOperatorMetadataName, identity.Type))
-                .HasLessThanOrEqualOperator(symbol.HasOperator(LessThanOrEqualOperatorMetadataName, identity.Type))
+            return Component.Semantics.Comparability.OutOfScope
+                .HasCompareTo(symbol.HasCompareTo(type))
+                .HasGreaterThanOperator(symbol.HasOperator(GreaterThanOperatorMetadataName, type))
+                .HasGreaterThanOrEqualOperator(symbol.HasOperator(GreaterThanOrEqualOperatorMetadataName, type))
+                .HasLessThanOperator(symbol.HasOperator(LessThanOperatorMetadataName, type))
+                .HasLessThanOrEqualOperator(symbol.HasOperator(LessThanOrEqualOperatorMetadataName, type))
                 .IsComparable(isComparable);
         }
 

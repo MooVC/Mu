@@ -28,10 +28,10 @@
                 typeof(ComponentIdentifierEqualityHasNotEqualsOperatorVisitor),
                 typeof(ComponentIdentifierEqualityIsEquatableVisitor),
                 typeof(ComponentIdentifierHasImplicitConversionVisitor),
-                typeof(ComponentSelfHasEqualsOperatorVisitor),
-                typeof(ComponentSelfHasEquatableVisitor),
-                typeof(ComponentSelfHasNotEqualsOperatorVisitor),
-                typeof(ComponentSelfIsEquatableVisitor),
+                typeof(ComponentSelfEqualityHasEqualsOperatorVisitor),
+                typeof(ComponentSelfEqualityHasEquatableVisitor),
+                typeof(ComponentSelfEqualityHasNotEqualsOperatorVisitor),
+                typeof(ComponentSelfEqualityIsEquatableVisitor),
             };
 
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>

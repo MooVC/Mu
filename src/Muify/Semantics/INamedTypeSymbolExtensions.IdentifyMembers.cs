@@ -5,6 +5,7 @@
     using System.Text;
     using System.Threading;
     using Microsoft.CodeAnalysis;
+    using MooVC;
     using Mu.Modelling;
     using Muify.Modelling;
     using Muify.Syntax.CSharp;
@@ -66,7 +67,9 @@
             return component.WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .HasImplicitConversion(entity.HasImplicitConversionTo(match.Type))
-                    .WithComparability(entity.GetIdentifierComparability(match))));
+                    .WithComparability(entity.GetComparability(match.Type)))
+                .WithSelf(self => self
+                    .WithComparability(entity.GetComparability(entity))));
         }
 
         private static Component CatalogValue(this INamedTypeSymbol value)
