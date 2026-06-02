@@ -1,4 +1,4 @@
-﻿namespace Muify
+namespace Muify
 {
     using System;
     using System.Collections.Generic;
@@ -28,6 +28,12 @@
                 typeof(ComponentIdentifierEqualityHasNotEqualsOperatorVisitor),
                 typeof(ComponentIdentifierEqualityIsEquatableVisitor),
                 typeof(ComponentIdentifierHasImplicitConversionVisitor),
+                typeof(ComponentSelfComparabilityHasCompareToVisitor),
+                typeof(ComponentSelfComparabilityHasGreaterThanOperatorVisitor),
+                typeof(ComponentSelfComparabilityHasGreaterThanOrEqualOperatorVisitor),
+                typeof(ComponentSelfComparabilityHasLessThanOperatorVisitor),
+                typeof(ComponentSelfComparabilityHasLessThanOrEqualOperatorVisitor),
+                typeof(ComponentSelfComparabilityIsComparableVisitor),
                 typeof(ComponentSelfEqualityHasEqualsOperatorVisitor),
                 typeof(ComponentSelfEqualityHasEquatableVisitor),
                 typeof(ComponentSelfEqualityHasNotEqualsOperatorVisitor),
