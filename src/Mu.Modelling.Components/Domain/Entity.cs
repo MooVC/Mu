@@ -5,7 +5,6 @@ using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Components.Syntax.CSharp;
-using Muify.Domain;
 using Attribute = Mu.Modelling.Attribute;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
@@ -59,7 +58,7 @@ internal sealed class Entity
                 .Named(name)
                 .WithProperties(properties)
                 .WithProperties(property => property
-                    .AttributedWith(typeof(IdentityAttribute))
+                    .AttributedWith(attribute => attribute.Named((Name: "IdentityAttribute", Qualifier: "Muify.Domain")))
                     .From(identifier)))
             .From(@namespace)
             .ImportReferences(@namespace)

@@ -15,7 +15,7 @@ public sealed class WhenObserveIsCalled
 
             partial class Wheel
             {
-                public int CompareTo(Wheel? other)
+                public int CompareTo(global::MooVC.Testing.Mechanics.Car.Wheel? other)
                 {
                     return other is null ? 1 : other.CompareTo(Location);
                 }

@@ -49,7 +49,7 @@ internal sealed class Project
                         .Enumerate(project => group.WithProject($"{Folders.Source}/{project}/{project}.{Extensions.Project}"), projects)))
             .WithItemGroups(group => group
                 .WithPackage(nameof(Mu))
-                .WithPackage(nameof(Muify), muify => muify
+                .WithPackage("Muify", muify => muify
                     .WithMetadata("PrivateAssets", "all")
                     .WithMetadata("IncludeAssets", "runtime; build; native; contentfiles; analyzers; buildtransitive")))
             .ToString();

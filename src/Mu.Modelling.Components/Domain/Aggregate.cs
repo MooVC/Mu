@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Components.Syntax.CSharp;
-using Muify.Domain;
 using Builder = MooVC.Syntax.Builder;
 
 internal sealed class Aggregate
@@ -17,7 +16,7 @@ internal sealed class Aggregate
             .For<Record>(record => record
                 .AttributedWith(aggregate => aggregate
                     .Named(name => name
-                        .Named(typeof(UnitAttribute<>))
+                        .Named((Moniker: "UnitAttribute", Qualifier: "Muify.Domain"))
                         .WithArguments(identity => identity.Named(unit.Value.Identity))))
                 .DescribedAs(unit.Value.Description)
                 .Named(unit.Value.Name)

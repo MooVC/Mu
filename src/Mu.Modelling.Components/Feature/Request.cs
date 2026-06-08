@@ -6,7 +6,6 @@ using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Components.Syntax.CSharp;
-using Muify.Service;
 using Builder = MooVC.Syntax.Builder;
 
 internal sealed class Request
@@ -25,10 +24,12 @@ internal sealed class Request
                     @true: record => record.AttributedWith(type => type
                         .ForkOn(
                             _ => feature.Value.Mutational.Type.IsCreational,
-                            @true: type => type.Named(typeof(CreationalAttribute)),
-                            @false: type => type.Named(typeof(TransitionalAttribute)))
+                            @true: type => type.Named((Name: "CreationalAttribute", Qualifier: "Muify.Service")),
+                            @false: type => type.Named((Name: "TransitionalAttribute", Qualifier: "Muify.Service")))
                         .WithArguments((Name: nameof(feature.Value.Mutational.Fact), Value: $"\"{feature.Value.Mutational.Fact}\""))),
-                    @false: record => record.AttributedWith(typeof(NonMutationalAttribute)))
+                    @false: record => record
+                        .AttributedWith(attribute => attribute
+                            .Named((Name: "NonMutationalAttribute", Qualifier: "Muify.Service"))))
                 .Named(feature.Value.Name))
             .From(feature.Namespace)
             .ImportReferences(feature.Namespace)
