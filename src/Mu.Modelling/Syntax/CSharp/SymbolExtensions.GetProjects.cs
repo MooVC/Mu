@@ -3,14 +3,19 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using Ardalis.GuardClauses;
     using MooVC.Collections.Generic;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
 
-    internal static partial class SymbolExtensions
+    public static partial class SymbolExtensions
     {
         public static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Symbol> symbols, Name company, params Name[] names)
         {
+            _ = Guard.Against.Null(symbols, message: GetProjectsSymbolsRequired);
+            _ = Guard.Against.Null(company, message: GetProjectsCompanyRequired);
+            _ = Guard.Against.Null(names, message: GetProjectsNamesRequired);
+
             IEnumerable<Qualifier> unique = symbols
                 .SelectMany(symbol => symbol)
                 .Distinct();

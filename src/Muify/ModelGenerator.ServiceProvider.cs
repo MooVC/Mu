@@ -4,7 +4,9 @@ namespace Muify
     using System.Collections.Generic;
     using Mu.Modelling;
     using Muify.Domain;
+    using Muify.Service;
     using AreaComponent = Mu.Modelling.Model.Graph.Areas.Area.Components.Component;
+    using Feature = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Features.Feature;
     using Unit = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit;
     using UnitComponent = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Components.Component;
 
@@ -43,6 +45,7 @@ namespace Muify
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
                 { typeof(IModelVisitor<AreaComponent, File>), new CollectionVisitor<AreaComponent>(_componentVisitors) },
+                { typeof(IModelVisitor<Feature, File>), new FeatureFactVisitor() },
                 { typeof(IModelVisitor<Unit, File>), new UnitBaseVisitor() },
                 { typeof(IModelVisitor<UnitComponent, File>), new CollectionVisitor<UnitComponent>(_componentVisitors) },
             };

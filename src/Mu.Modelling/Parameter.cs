@@ -37,15 +37,15 @@
 
         [Descriptor("Named")]
         [Traverse(Scope = TraverseScope.None)]
-        public Name Name { get; internal set; } = Name.Unnamed;
+        public Variable Name { get; internal set; } = Variable.Unnamed;
 
         [Descriptor("OfType")]
         [Traverse(Scope = TraverseScope.None)]
         public Symbol Type { get; internal set; } = Symbol.Undefined;
 
-        public static implicit operator Parameter((Name Name, Symbol Type) source)
+        public static implicit operator Parameter((Variable Name, Symbol Type) source)
         {
-            Guard.Against.Conversion<(Name Name, Symbol Type), Parameter>(source);
+            Guard.Against.Conversion<(Variable Name, Symbol Type), Parameter>(source);
 
             return new Parameter()
                 .Named(source.Name)
