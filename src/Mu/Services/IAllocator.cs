@@ -17,6 +17,6 @@ public interface IAllocator<TIdentity>
     /// <param name="useCase">The use case that triggers identity allocation.</param>
     /// <param name="cancellationToken">A cancellation token for the operation.</param>
     /// <returns>The allocated identity.</returns>
-    Task<TIdentity> Allocate<TUseCase>(TUseCase useCase, CancellationToken cancellationToken)
+    ValueTask<TIdentity> Allocate<TUseCase>(TUseCase useCase, CancellationToken cancellationToken)
         where TUseCase : UseCase;
 }

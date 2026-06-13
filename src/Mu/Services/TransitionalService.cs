@@ -10,9 +10,7 @@ using Mu.Persistence;
 /// <summary>
 /// Executes transitional use cases by loading a target aggregate, applying the mutation, and persisting resulting facts.
 /// </summary>
-public sealed class TransitionalService<TAggregate, TIdentity, TUseCase>(
-    IRoot<TAggregate, TUseCase> root,
-    IWriteStore<TAggregate, TIdentity> store)
+public sealed class TransitionalService<TAggregate, TIdentity, TUseCase>(IRoot<TAggregate, TUseCase> root, IWriteStore<TAggregate, TIdentity> store)
     : IService<TUseCase, Revision>
     where TAggregate : Aggregate, new()
     where TIdentity : struct
@@ -29,7 +27,7 @@ public sealed class TransitionalService<TAggregate, TIdentity, TUseCase>(
 
         if (aggregate is null)
         {
-            return new ValidationResult($"`{typeof(TAggregate)}` `{useCase.Target}` does not exit.");
+            return new ValidationResult($"`{typeof(TAggregate)}` `{useCase.Target}` does not exist.");
         }
 
         return await root
