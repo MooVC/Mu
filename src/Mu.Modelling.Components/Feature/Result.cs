@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using MooVC;
 using MooVC.Modelling;
 using MooVC.Syntax.CSharp;
-using Mu.Modelling.Components.Syntax.CSharp;
+using Mu.Modelling.Syntax.CSharp;
 using Builder = MooVC.Syntax.Builder;
 using ResultModel = Mu.Modelling.Result;
 

@@ -3,6 +3,7 @@
     using Ardalis.GuardClauses;
     using MooVC;
     using MooVC.Syntax.Project;
+    using static Mu.Modelling.Syntax.Project.ProjectExtensions_Resources;
 
     public static partial class ProjectExtensions
     {

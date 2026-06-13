@@ -20,7 +20,7 @@ namespace Muify.Service
                 yield break;
             }
 
-            string arguments = string.Join(", ", feature.Value.Parameters.Select(parameter => $"subject.{parameter.Name}"));
+            string arguments = string.Join(", ", feature.Value.Parameters.Select(parameter => $"subject.{parameter.Name.ToSnippet(Identifier.Options.Pascal)}"));
             Snippet assignments = feature.Value.Parameters.ToAssignments(Configuration.Options);
             Name fact = feature.Value.Mutational.Fact;
             Symbol request = (feature.Value.Name, Qualifier: feature.Namespace);
@@ -30,20 +30,18 @@ namespace Muify.Service
                 .New<Definition>()
                 .For<Record>(record => record
                     .DerivesFrom(@base => @base
-                        .Named((Moniker: "Fact", Qualifier: "Mu.Modelling.Behavior"))
-                        .WithArguments(unit))
+                        .Named((Name: "Fact", Qualifier: "Mu.Modelling.Behavior"))
+                        .WithGenerics(unit))
                     .Named(fact)
-                    .WithConstructors(@default => @default
-                        .Enumerate((current, subject) => subject.WithParameters(parameter => parameter.From(current)), feature.Value.Parameters)
-                        .WithBody(assignments))
                     .WithConstructors(serialization => serialization
                         .AttributedWith(attribute => attribute
                             .Named((Name: "JsonConstructorAttribute", Qualifier: "System.Text.Json.Serialization")))
                         .Enumerate((current, subject) => subject.WithParameters(parameter => parameter.From(current)), feature.Value.Parameters)
+                        .WithArguments("identity", "proposed")
                         .WithBody(assignments)
                         .WithParameters((Name: "Identity", Type: typeof(Guid)))
                         .WithParameters((Name: "Proposed", Type: typeof(DateTimeOffset))))
-                    .WithProperties(feature.Value.Parameters)
+                    .WithParameters(feature.Value.Parameters)
                     .WithOperators(operators => operators
                         .WithConversions(conversion => conversion
                             .ForType(request)

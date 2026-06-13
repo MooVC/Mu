@@ -6,6 +6,7 @@
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using MooVC.Syntax.Resource;
+    using static Mu.Modelling.Syntax.CSharp.ParameterExtensions_Resources;
     using Attribute = Mu.Modelling.Attribute;
     using Modelling = Mu.Modelling.Parameter;
     using Result = Mu.Modelling.Result;

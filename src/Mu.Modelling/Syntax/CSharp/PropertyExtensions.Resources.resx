@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DescribedAsDescriptionRequired" xml:space="preserve">
+    <value>The Description to apply must be provided.</value>
+  </data>
+  <data name="DescribedAsPropertyRequired" xml:space="preserve">
+    <value>The Property to describe must be provided.</value>
+  </data>
+  <data name="FromAttributeRequired" xml:space="preserve">
+    <value>The Attribute from which the Property is configured must be provided.</value>
+  </data>
+  <data name="FromParameterRequired" xml:space="preserve">
+    <value>The Parameter from which the Property is configured must be provided.</value>
+  </data>
+  <data name="FromPropertyRequired" xml:space="preserve">
+    <value>The Property to configure must be provided.</value>
+  </data>
+</root>

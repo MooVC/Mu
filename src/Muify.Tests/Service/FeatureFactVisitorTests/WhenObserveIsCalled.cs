@@ -3,6 +3,7 @@ namespace Muify.Service.FeatureFactVisitorTests;
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
+using Muify.Domain;
 
 public sealed class WhenObserveIsCalled
 {
@@ -13,31 +14,18 @@ public sealed class WhenObserveIsCalled
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            public sealed partial record Registered
+            public sealed partial record Registered(byte Doors, string Make, string Model)
                 : global::Mu.Modelling.Behavior.Fact<global::MooVC.Testing.Mechanics.Car.Car>
             {
-                public Registered(byte doors, string make, string model)
-                {
-                    Doors = doors;
-                    Make = make;
-                    Model = model;
-                }
-
                 [global::System.Text.Json.Serialization.JsonConstructorAttribute]
-                public Registered(Guid identity, DateTimeOffset proposed, byte doors, string make, string model)
+                public Registered(byte doors, Guid identity, string make, string model, DateTimeOffset proposed)
                     : base(identity, proposed)
                 {
                     Doors = doors;
                     Make = make;
                     Model = model;
                 }
-
-                public byte Doors { get; init; }
-
-                public string Make { get; init; }
-
-                public string Model { get; init; }
-
+            
                 public static implicit operator Registered(Register subject)
                 {
                     return new Registered(subject.Doors, subject.Make, subject.Model);
@@ -65,6 +53,20 @@ public sealed class WhenObserveIsCalled
         var visitor = new FeatureFactVisitor();
         Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasFact(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(feature);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    public async Task GivenACFeatureWhenOutOfScopeThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new FeatureFactVisitor();
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = TestData.Single.Register;
 
         // Act
         IEnumerable<File> result = visitor.Observe(feature);

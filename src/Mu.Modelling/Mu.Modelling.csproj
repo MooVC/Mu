@@ -62,11 +62,83 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Model.Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Syntax\CSharp\ClassExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ClassExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\CSharp\FieldExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FieldExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\CSharp\ParameterExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ParameterExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\CSharp\PropertyExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\CSharp\RecordExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RecordExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\CSharp\StructExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StructExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\CSharp\SymbolExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SymbolExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Syntax\Project\ProjectExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProjectExtensions.Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Model.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Model.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\ClassExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ClassExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\FieldExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FieldExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\ParameterExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ParameterExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\PropertyExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PropertyExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\RecordExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RecordExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\StructExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StructExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\CSharp\SymbolExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SymbolExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Syntax\Project\ProjectExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProjectExtensions.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

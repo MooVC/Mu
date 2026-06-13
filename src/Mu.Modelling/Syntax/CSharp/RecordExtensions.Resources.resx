@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DescribedAsDescriptionRequired" xml:space="preserve">
+    <value>The Description to apply must be provided.</value>
+  </data>
+  <data name="DescribedAsRecordRequired" xml:space="preserve">
+    <value>The Record to describe must be provided.</value>
+  </data>
+  <data name="WithParametersAttributesRequired" xml:space="preserve">
+    <value>The Attributes from which the Parameters are created must be provided.</value>
+  </data>
+  <data name="WithParametersParametersRequired" xml:space="preserve">
+    <value>The Parameters to apply must be provided.</value>
+  </data>
+  <data name="WithParametersRecordRequired" xml:space="preserve">
+    <value>The Record to which the Parameters are applied must be provided.</value>
+  </data>
+  <data name="WithParametersResultsRequired" xml:space="preserve">
+    <value>The Results from which the Parameters are created must be provided.</value>
+  </data>
+  <data name="WithPropertiesParametersRequired" xml:space="preserve">
+    <value>The Parameters from which the Properties are created must be provided.</value>
+  </data>
+  <data name="WithPropertiesRecordRequired" xml:space="preserve">
+    <value>The Record to which the Properties are applied must be provided.</value>
+  </data>
+</root>

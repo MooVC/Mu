@@ -7,6 +7,7 @@
     using MooVC.Collections.Generic;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
+    using static Mu.Modelling.Syntax.CSharp.SymbolExtensions_Resources;
 
     public static partial class SymbolExtensions
     {

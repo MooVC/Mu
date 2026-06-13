@@ -16,16 +16,16 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.8" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Monify" Version="1.5.0-rc.7" />
-    <PackageVersion Include="MooVC" Version="9.3.0-beta.28" />
-    <PackageVersion Include="MooVC.Modelling" Version="9.3.0-beta.28" />
-    <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.28" />
-    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.28" />
+    <PackageVersion Include="MooVC" Version="9.3.0-beta.29" />
+    <PackageVersion Include="MooVC.Modelling" Version="9.3.0-beta.29" />
+    <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.29" />
+    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.29" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.27.0.140913" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="10.0.8" />
     <PackageVersion Include="System.Text.Json" Version="10.0.8" />
-    <PackageVersion Include="TUnit" Version="1.51.0" />
+    <PackageVersion Include="TUnit" Version="1.54.0" />
     <PackageVersion Include="Valuify" Version="1.9.0" />
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@ using MooVC.Modelling;
 using MooVC.Syntax;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling.Components.Syntax.CSharp;
+using Mu.Modelling.Syntax.CSharp;
 using Builder = MooVC.Syntax.Builder;
 using Extensions = MooVC.Syntax.CSharp.Extensions;
 

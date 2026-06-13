@@ -5,6 +5,7 @@
     using Ardalis.GuardClauses;
     using MooVC;
     using MooVC.Syntax.CSharp;
+    using static Mu.Modelling.Syntax.CSharp.RecordExtensions_Resources;
     using Parameter = Mu.Modelling.Parameter;
 
     public static partial class RecordExtensions

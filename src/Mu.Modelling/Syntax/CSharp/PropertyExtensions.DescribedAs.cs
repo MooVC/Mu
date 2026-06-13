@@ -4,6 +4,7 @@
     using Ardalis.GuardClauses;
     using MooVC;
     using MooVC.Syntax.CSharp;
+    using static Mu.Modelling.Syntax.CSharp.PropertyExtensions_Resources;
 
     public static partial class PropertyExtensions
     {

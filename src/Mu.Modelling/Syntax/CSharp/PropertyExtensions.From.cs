@@ -5,6 +5,7 @@
     using Ardalis.GuardClauses;
     using MooVC;
     using MooVC.Syntax.CSharp;
+    using static Mu.Modelling.Syntax.CSharp.PropertyExtensions_Resources;
     using Attribute = Mu.Modelling.Attribute;
     using Parameter = Mu.Modelling.Parameter;
 
