@@ -3,7 +3,6 @@ namespace Muify.Service.FeatureFactVisitorTests;
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
-using Muify.Domain;
 
 public sealed class WhenObserveIsCalled
 {
@@ -15,7 +14,8 @@ public sealed class WhenObserveIsCalled
             namespace MooVC.Testing.Mechanics.Car.Register;
 
             public sealed partial record Registered(byte Doors, string Make, string Model)
-                : global::Mu.Modelling.Behavior.Fact<global::MooVC.Testing.Mechanics.Car.Car>
+                : global::Mu.Modelling.Behavior.Fact<global::MooVC.Testing.Mechanics.Car.Car>,
+                  global::Mu.Modelling.Behavior.IConvertFrom<global::MooVC.Testing.Mechanics.Car.Register.Registered, global::MooVC.Testing.Mechanics.Car.Register.Register>
             {
                 [global::System.Text.Json.Serialization.JsonConstructorAttribute]
                 public Registered(byte doors, Guid identity, string make, string model, DateTimeOffset proposed)

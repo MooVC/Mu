@@ -11,7 +11,7 @@ public abstract record Creational<TAggregate>
     : Creational
     where TAggregate : Aggregate
 {
-    private static readonly Representation model = typeof(TAggregate);
+    private static readonly Representation _model = typeof(TAggregate);
 
     protected Creational()
     {
@@ -25,5 +25,5 @@ public abstract record Creational<TAggregate>
     /// <summary>
     /// Gets the model metadata associated with the creational use case.
     /// </summary>
-    public override Representation Model => model;
+    public override Representation Model => _model;
 }

@@ -42,10 +42,16 @@ namespace Muify
                 typeof(ComponentSelfEqualityIsEquatableVisitor),
             };
 
+            private static readonly Type[] _featureVisitors = new Type[]
+            {
+                typeof(FeatureFactVisitor),
+                typeof(FeatureTransformVisitor),
+            };
+
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
                 { typeof(IModelVisitor<AreaComponent, File>), new CollectionVisitor<AreaComponent>(_componentVisitors) },
-                { typeof(IModelVisitor<Feature, File>), new FeatureFactVisitor() },
+                { typeof(IModelVisitor<Feature, File>), new CollectionVisitor<Feature>(_featureVisitors) },
                 { typeof(IModelVisitor<Unit, File>), new UnitBaseVisitor() },
                 { typeof(IModelVisitor<UnitComponent, File>), new CollectionVisitor<UnitComponent>(_componentVisitors) },
             };

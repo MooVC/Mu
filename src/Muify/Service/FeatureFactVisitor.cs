@@ -32,6 +32,11 @@ namespace Muify.Service
                     .DerivesFrom(@base => @base
                         .Named((Name: "Fact", Qualifier: "Mu.Modelling.Behavior"))
                         .WithGenerics(unit))
+                    .Implements(
+                        (Name: "IConvertFrom", Qualifier: "Mu.Modelling.Behavior"),
+                        conversion => conversion.WithArguments(
+                            (Name: "Registered", Qualifier: feature.Namespace),
+                            (Name: "Register", Qualifier: feature.Namespace)))
                     .Named(fact)
                     .WithConstructors(serialization => serialization
                         .AttributedWith(attribute => attribute
