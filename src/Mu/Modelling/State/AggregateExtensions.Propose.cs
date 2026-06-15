@@ -1,7 +1,7 @@
 ﻿namespace Mu.Modelling.State;
 
 using Mu.Modelling.Behavior;
-using Mu.Services;
+using Mu.Modelling.Services;
 
 /// <summary>
 /// Provides helpers for proposing facts against aggregates.

@@ -38,7 +38,7 @@ namespace Muify.Service
                 .New<Definition>()
                 .For<Class>(@class => @class
                     .DerivesFrom(@base => @base
-                        .Named((Name: "ITransform", Qualifier: "Mu.Services"))
+                        .Named((Name: "ITransform", Qualifier: "Mu.Modelling.Services"))
                         .WithGenerics(aggregate, fact))
                     .IsPartial(false)
                     .Named("Transform")

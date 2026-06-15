@@ -1,10 +1,8 @@
 namespace Muify.Service.FeatureTransformVisitorTests;
 
-using MooVC.Syntax.CSharp;
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
-using Muify.Domain;
 
 public sealed class WhenObserveIsCalled
 {
@@ -18,7 +16,7 @@ public sealed class WhenObserveIsCalled
             using MooVC.Testing.Mechanics.Car;
 
             internal sealed class Transform
-                : global::Mu.Services.ITransform<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered>
+                : global::Mu.Modelling.Services.ITransform<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered>
             {
                 public Car Apply(global::MooVC.Testing.Mechanics.Car.Car aggregate, global::MooVC.Testing.Mechanics.Car.Register.Registered fact)
                 {

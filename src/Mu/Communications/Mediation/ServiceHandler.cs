@@ -2,7 +2,7 @@
 
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
-using Mu.Services;
+using Mu.Modelling.Services;
 
 /// <summary>
 /// Adapts an <see cref="IService{TUseCase, TResult}"/> to the mediation handler contract.

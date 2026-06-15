@@ -30,4 +30,14 @@ public readonly record struct Reference<TIdentity>
     /// Gets the aggregate revision.
     /// </summary>
     public ulong Revision { get; }
+
+    /// <summary>
+    /// Defines an implicit conversion from a <see cref="Reference{TIdentity}"/> to its underlying identity type.
+    /// </summary>
+    /// <param name="reference">The reference to convert.</param>
+    /// <returns>The underlying identity.</returns>
+    public static implicit operator TIdentity(Reference<TIdentity> reference)
+    {
+        return reference.Identity;
+    }
 }

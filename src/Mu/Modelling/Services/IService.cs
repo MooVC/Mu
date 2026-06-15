@@ -1,4 +1,4 @@
-﻿namespace Mu.Services;
+﻿namespace Mu.Modelling.Services;
 
 /// <summary>
 /// Fine grain orchestrator of a usecase.

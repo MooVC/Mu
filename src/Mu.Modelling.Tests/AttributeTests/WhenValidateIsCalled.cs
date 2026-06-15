@@ -12,7 +12,7 @@ public sealed class WhenValidateIsCalled
     public async Task GivenMultiLineDefaultThenValidationErrorReturned()
     {
         // Arrange
-        Snippet defaultValue = Snippet.From($"Alpha{Environment.NewLine}Beta");
+        var defaultValue = Snippet.From($"Alpha{Environment.NewLine}Beta");
         ModellingAttribute subject = ModellingTestData.CreateAttribute(defaultValue: defaultValue);
         var context = new ValidationContext(subject);
         var results = new List<ValidationResult>();

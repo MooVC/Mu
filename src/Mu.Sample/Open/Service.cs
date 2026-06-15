@@ -1,9 +1,9 @@
 ﻿namespace Mu.Sample.Open;
 
 using System.Threading;
+using Mu.Modelling.Services;
 using Mu.Persistence;
 using Mu.Sample.Account;
-using Mu.Services;
 
 public sealed class Service(IRoot<Account, Open> root, IWriteStore<Account, Guid> store)
     : IService<Open, Guid>

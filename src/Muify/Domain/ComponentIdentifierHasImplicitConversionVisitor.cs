@@ -1,7 +1,6 @@
 ﻿namespace Muify.Domain
 {
     using System.Collections.Generic;
-    using Microsoft.CodeAnalysis.CSharp;
     using MooVC;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;

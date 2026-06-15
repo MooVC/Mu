@@ -11,7 +11,7 @@ public sealed class WhenDefaultedToIsCalled
     {
         // Arrange
         Parameter original = ModellingTestData.CreateParameter();
-        Snippet updated = Snippet.From(UpdatedDefaultValue);
+        var updated = Snippet.From(UpdatedDefaultValue);
 
         // Act
         Parameter result = original.DefaultedTo(updated);

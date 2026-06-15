@@ -4,9 +4,9 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Mu.Modelling.Integrity;
+using Mu.Modelling.Services;
 using Mu.Modelling.State;
 using Mu.Sample.Account;
-using Mu.Services;
 
 public sealed class Root(IEnumerable<IInvariant<Account, Open>> invariants, IEnumerable<ITransform<Account, Opened>> transforms)
     : IRoot<Account, Open>

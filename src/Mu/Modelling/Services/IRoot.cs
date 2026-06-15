@@ -1,4 +1,4 @@
-﻿namespace Mu.Services;
+﻿namespace Mu.Modelling.Services;
 
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;

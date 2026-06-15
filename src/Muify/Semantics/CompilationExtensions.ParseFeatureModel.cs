@@ -15,7 +15,7 @@
     internal static partial class CompilationExtensions
     {
         private const string BehaviorNamespace = "Mu.Modelling.Behavior";
-        private const string ServicesNamespace = "Mu.Services";
+        private const string ServicesNamespace = "Mu.Modelling.Services";
         private const string UseCaseName = "UseCase";
 
         public static Feature ParseFeatureModel(this Compilation compilation, (Name Area, Name Feature, Name Unit) names)

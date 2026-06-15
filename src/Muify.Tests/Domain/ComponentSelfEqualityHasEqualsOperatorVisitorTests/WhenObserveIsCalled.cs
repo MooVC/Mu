@@ -3,7 +3,6 @@
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
-using static Mu.Modelling.Component.Semantics;
 
 public sealed class WhenObserveIsCalled
 {

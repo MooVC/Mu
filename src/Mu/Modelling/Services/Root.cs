@@ -1,4 +1,4 @@
-﻿namespace Mu.Services;
+﻿namespace Mu.Modelling.Services;
 
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;

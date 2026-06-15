@@ -21,7 +21,7 @@ public sealed class WhenParseFeatureModelIsCalled
                 : UseCase;
         }
 
-        namespace Mu.Services
+        namespace Mu.Modelling.Services
         {
             public interface ITransform<TAggregate, TFact>
             {
@@ -94,7 +94,7 @@ public sealed class WhenParseFeatureModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            using Muify.Service;
+            using Muify.Modelling.Services;
 
             [Creational<MissingFact>]
             public sealed record Register;
@@ -138,7 +138,7 @@ public sealed class WhenParseFeatureModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car.Register
             {
-                using Mu.Services;
+                using Mu.Modelling.Services;
 
                 public sealed record Car;
 
@@ -163,7 +163,7 @@ public sealed class WhenParseFeatureModelIsCalled
 
             namespace MooVC.Testing.Mechanics.Car.Other
             {
-                using Mu.Services;
+                using Mu.Modelling.Services;
 
                 public sealed class OtherTransform
                     : ITransform<object, object>

@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading;
     using Microsoft.CodeAnalysis;
-    using MooVC;
     using Mu.Modelling;
     using Muify.Modelling;
     using Muify.Syntax.CSharp;

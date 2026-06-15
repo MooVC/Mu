@@ -3,8 +3,8 @@
 using System.Collections.Immutable;
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
+using Mu.Modelling.Services;
 using Mu.Modelling.State;
-using Mu.Services;
 
 /// <summary>
 /// Persists aggregate changes by writing proposed facts to an event stream.

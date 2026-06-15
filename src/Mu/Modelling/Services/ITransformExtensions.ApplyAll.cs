@@ -1,4 +1,4 @@
-﻿namespace Mu.Services;
+﻿namespace Mu.Modelling.Services;
 
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
@@ -11,10 +11,7 @@ public static partial class ITransformExtensions
     /// <summary>
     /// Applies one transform over a sequence of facts.
     /// </summary>
-    public static TAggregate ApplyAll<TAggregate, TFact>(
-        this ITransform<TAggregate, TFact> transform,
-        TAggregate aggregate,
-        params IEnumerable<TFact> facts)
+    public static TAggregate ApplyAll<TAggregate, TFact>(this ITransform<TAggregate, TFact> transform, TAggregate aggregate, params IEnumerable<TFact> facts)
         where TAggregate : Aggregate
         where TFact : Fact
     {
@@ -26,10 +23,7 @@ public static partial class ITransformExtensions
     /// <summary>
     /// Applies multiple transforms over a sequence of facts.
     /// </summary>
-    public static TAggregate ApplyAll<TAggregate, TFact>(
-        this IEnumerable<ITransform<TAggregate, TFact>> transforms,
-        TAggregate aggregate,
-        params IEnumerable<TFact> facts)
+    public static TAggregate ApplyAll<TAggregate, TFact>(this IEnumerable<ITransform<TAggregate, TFact>> transforms, TAggregate aggregate, params IEnumerable<TFact> facts)
         where TAggregate : Aggregate
         where TFact : Fact
     {
