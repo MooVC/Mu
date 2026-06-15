@@ -55,6 +55,7 @@
     <Project Path="src/Mu.Modelling.Components.Tests/Mu.Modelling.Components.Tests.csproj" />
     <Project Path="src/Mu.Modelling.Testing/Mu.Modelling.Testing.csproj" Id="d9cb584e-349c-4832-80cd-0cca7beae52b" />
     <Project Path="src/Mu.Modelling.Tests/Mu.Modelling.Tests.csproj" />
+    <Project Path="src/Mu.Tests/Mu.Tests.csproj" />
     <Project Path="src/Muify.Tests/Muify.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,6 +1,7 @@
 ﻿namespace Mu.Communications.Tracing;
 
 using Mu.Modelling.Behavior;
+using Serilog.Context;
 
 /// <summary>
 /// Manages ambient trace ledger scope for nested use case execution.
@@ -9,6 +10,7 @@ public sealed class Scope
     : IDisposable
 {
     private static readonly AsyncLocal<Ledger?> _current = new();
+    private readonly IDisposable _logContext;
     private readonly Ledger? _previous;
 
     /// <summary>
@@ -26,6 +28,7 @@ public sealed class Scope
     {
         _previous = _current.Value;
         _current.Value = Ledger = ledger;
+        _logContext = LogContext.PushProperty(nameof(Ledger), Ledger, destructureObjects: true);
     }
 
     /// <summary>
@@ -38,6 +41,7 @@ public sealed class Scope
     /// </summary>
     public void Dispose()
     {
+        _logContext.Dispose();
         _current.Value = _previous;
     }
 

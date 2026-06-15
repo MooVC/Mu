@@ -11,7 +11,7 @@ using Mu.Modelling.Behavior;
 /// <summary>
 /// Resolves and executes handlers for use cases through dependency injection.
 /// </summary>
-public sealed class Mediator(ILogger<Mediator> logger, IServiceProvider provider)
+public sealed partial class Mediator(ILogger<Mediator> logger, IServiceProvider provider)
     : IMediator
 {
     /// <summary>
@@ -23,12 +23,38 @@ public sealed class Mediator(ILogger<Mediator> logger, IServiceProvider provider
     {
         using var scope = new Scope(useCase);
 
-        IHandler<TUseCase, TResult> handler = provider.GetRequiredService<IHandler<TUseCase, TResult>>();
+        Type useCaseType = typeof(TUseCase);
 
-        var intent = new Intent<TUseCase>(scope.Ledger, useCase);
+        LogExecutionRequested(logger, useCaseType, useCase.Identity);
 
-        return await handler
-            .Handle(intent, cancellationToken)
-            .ConfigureAwait(false);
+        try
+        {
+            IHandler<TUseCase, TResult> handler = provider.GetRequiredService<IHandler<TUseCase, TResult>>();
+
+            var intent = new Intent<TUseCase>(scope.Ledger, useCase);
+
+            Outcome<TResult> outcome = await handler
+                .Handle(intent, cancellationToken)
+                .ConfigureAwait(false);
+
+            LogExecutionSucceeded(logger, useCaseType, useCase.Identity);
+
+            return outcome;
+        }
+        catch (Exception exception)
+        {
+            LogExecutionFailed(logger, useCaseType, useCase.Identity, exception);
+
+            throw;
+        }
     }
+
+    [LoggerMessage(EventId = 3, Level = LogLevel.Error, Message = "Failed to execute `{UseCaseType}`: `{UseCaseId}`")]
+    private static partial void LogExecutionFailed(ILogger logger, Type useCaseType, Guid useCaseId, Exception exception);
+
+    [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = "Executing `{UseCaseType}`: `{UseCaseId}`")]
+    private static partial void LogExecutionRequested(ILogger logger, Type useCaseType, Guid useCaseId);
+
+    [LoggerMessage(EventId = 2, Level = LogLevel.Information, Message = "Successfully executed `{UseCaseType}`: `{UseCaseId}`")]
+    private static partial void LogExecutionSucceeded(ILogger logger, Type useCaseType, Guid useCaseId);
 }

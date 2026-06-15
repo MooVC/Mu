@@ -21,6 +21,7 @@
     <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.30" />
     <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.30" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.27.0.140913" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="10.0.8" />

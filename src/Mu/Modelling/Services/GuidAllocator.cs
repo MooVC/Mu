@@ -18,14 +18,12 @@ public sealed class GuidAllocator
         return ValueTask.FromResult(identifier);
     }
 
-    public ValueTask Confirm<TUseCase>(Guid identity, CancellationToken cancellationToken)
-        where TUseCase : UseCase
+    public ValueTask Confirm(Guid identity, CancellationToken cancellationToken)
     {
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask Surrender<TUseCase>(Guid identity, CancellationToken cancellationToken)
-        where TUseCase : UseCase
+    public ValueTask Surrender(Guid identity, CancellationToken cancellationToken)
     {
         return ValueTask.CompletedTask;
     }
