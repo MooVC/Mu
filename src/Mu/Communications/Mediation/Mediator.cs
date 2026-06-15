@@ -3,6 +3,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Mu.Communications.Messaging;
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
@@ -10,7 +11,7 @@ using Mu.Modelling.Behavior;
 /// <summary>
 /// Resolves and executes handlers for use cases through dependency injection.
 /// </summary>
-public sealed class Mediator(IServiceProvider provider)
+public sealed class Mediator(ILogger<Mediator> logger, IServiceProvider provider)
     : IMediator
 {
     /// <summary>
