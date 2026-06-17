@@ -21,6 +21,8 @@
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
 
+            public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;
+
             public ImmutableArray<Qualification> Transforms { get; set; } = ImmutableArray<Qualification>.Empty;
         }
     }

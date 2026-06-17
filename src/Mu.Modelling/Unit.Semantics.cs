@@ -1,6 +1,8 @@
 ﻿namespace Mu.Modelling
 {
+    using System.Collections.Immutable;
     using Fluentify;
+    using MooVC.Syntax.CSharp;
     using Valuify;
     using Ignore = Valuify.IgnoreAttribute;
 
@@ -16,6 +18,8 @@
 
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
+
+            public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;
         }
     }
 }

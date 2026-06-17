@@ -28,6 +28,31 @@ public sealed class WhenParseFeatureModelIsCalled
             }
         }
 
+        namespace Microsoft.Extensions.Configuration
+        {
+            public interface IConfiguration
+            {
+            }
+        }
+
+        namespace SimpleInjector
+        {
+            public sealed class Container
+            {
+            }
+        }
+
+        namespace Mu.Composition
+        {
+            using Microsoft.Extensions.Configuration;
+            using SimpleInjector;
+
+            public interface IRegistrar
+            {
+                static abstract Container Register(IConfiguration configuration, Container container);
+            }
+        }
+
         namespace Muify.Service
         {
             using System;
@@ -129,6 +154,72 @@ public sealed class WhenParseFeatureModelIsCalled
 
         // Assert
         _ = await Assert.That(result).IsTrue();
+    }
+
+    [Test]
+    public async Task GivenClassesInTheRequestNamespaceThenRegistrarsContainsOnlyRegistrarClasses()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car.Register
+            {
+                using Microsoft.Extensions.Configuration;
+                using Mu.Composition;
+                using SimpleInjector;
+
+                public sealed record Register;
+
+                public sealed class FirstRegistrar
+                    : IRegistrar
+                {
+                    public static Container Register(IConfiguration configuration, Container container)
+                    {
+                        return container;
+                    }
+                }
+
+                public sealed class NotARegistrar
+                {
+                }
+
+                public sealed class SecondRegistrar
+                    : IRegistrar
+                {
+                    public static Container Register(IConfiguration configuration, Container container)
+                    {
+                        return container;
+                    }
+                }
+            }
+
+            namespace MooVC.Testing.Mechanics.Car.Other
+            {
+                using Microsoft.Extensions.Configuration;
+                using Mu.Composition;
+                using SimpleInjector;
+
+                public sealed class OtherRegistrar
+                    : IRegistrar
+                {
+                    public static Container Register(IConfiguration configuration, Container container)
+                    {
+                        return container;
+                    }
+                }
+            }
+            """;
+
+        Qualification[] expected =
+        [
+            (Name: "FirstRegistrar", Qualifier: "MooVC.Testing.Mechanics.Car.Register"),
+            (Name: "SecondRegistrar", Qualifier: "MooVC.Testing.Mechanics.Car.Register"),
+        ];
+
+        // Act
+        IEnumerable<Qualification> result = GetFeature(source).Metadata.Registrars;
+
+        // Assert
+        _ = await Assert.That(result).IsEquivalentTo(expected);
     }
 
     [Test]

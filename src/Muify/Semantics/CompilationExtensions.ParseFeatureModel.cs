@@ -35,6 +35,9 @@
                 .WithMetadata(metadata => metadata
                     .HasBase(request.HasUseCaseBase())
                     .HasFact(request.HasFact())
+                    .Enumerate(
+                        (registrar, subject) => subject.WithRegistrars(registrar),
+                        request.ContainingNamespace.GetRegistrars())
                     .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms()));
         }
 

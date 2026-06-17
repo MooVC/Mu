@@ -3,6 +3,7 @@
     using System.Linq;
     using System.Threading;
     using Microsoft.CodeAnalysis;
+    using MooVC;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
@@ -26,6 +27,10 @@
                     .ResponsibleFor(unit => unit
                         .IdentifiedBy(definition.GetUnitIdentity())
                         .Named(names.Unit)
+                        .WithMetadata(metadata => metadata
+                            .Enumerate(
+                                (registrar, subject) => subject.WithRegistrars(registrar),
+                                definition.ContainingNamespace.GetRegistrars()))
                         .Featuring(feature)
                         .Owns(components)
                         .Sets(lists)));
@@ -54,7 +59,7 @@
                 return type.Name;
             }
 
-            return (Moniker: type.Name, Qualifier: type.ContainingNamespace.ToDisplayString());
+            return (Name: type.Name, Qualifier: type.ContainingNamespace.ToDisplayString());
         }
     }
 }

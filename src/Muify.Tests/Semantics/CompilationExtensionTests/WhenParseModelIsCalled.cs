@@ -3,6 +3,7 @@ namespace Muify.Semantics.CompilationExtensionTests;
 using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using MooVC.Syntax.CSharp;
 using Mu.Modelling;
 
 public sealed class WhenParseModelIsCalled
@@ -25,6 +26,33 @@ public sealed class WhenParseModelIsCalled
             : Attribute
             where TIdentity : struct
         {
+        }
+        """;
+
+    private const string CompositionSource = """
+        namespace Microsoft.Extensions.Configuration
+        {
+            public interface IConfiguration
+            {
+            }
+        }
+
+        namespace SimpleInjector
+        {
+            public sealed class Container
+            {
+            }
+        }
+
+        namespace Mu.Composition
+        {
+            using Microsoft.Extensions.Configuration;
+            using SimpleInjector;
+
+            public interface IRegistrar
+            {
+                static abstract Container Register(IConfiguration configuration, Container container);
+            }
         }
         """;
 
@@ -51,6 +79,74 @@ public sealed class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Areas[0].Units[0].Identity).IsEqualTo(expected.Identity);
+    }
+
+    [Test]
+    public async Task GivenClassesInTheUnitNamespaceThenRegistrarsContainsOnlyRegistrarClasses()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car
+            {
+                using Microsoft.Extensions.Configuration;
+                using Mu.Composition;
+                using Muify.Domain;
+                using SimpleInjector;
+
+                [Unit<int>]
+                public sealed partial record Car;
+
+                public sealed class FirstRegistrar
+                    : IRegistrar
+                {
+                    public static Container Register(IConfiguration configuration, Container container)
+                    {
+                        return container;
+                    }
+                }
+
+                public sealed class NotARegistrar
+                {
+                }
+
+                public sealed class SecondRegistrar
+                    : IRegistrar
+                {
+                    public static Container Register(IConfiguration configuration, Container container)
+                    {
+                        return container;
+                    }
+                }
+            }
+
+            namespace MooVC.Testing.Mechanics.Car.Register
+            {
+                using Microsoft.Extensions.Configuration;
+                using Mu.Composition;
+                using SimpleInjector;
+
+                public sealed class OtherRegistrar
+                    : IRegistrar
+                {
+                    public static Container Register(IConfiguration configuration, Container container)
+                    {
+                        return container;
+                    }
+                }
+            }
+            """;
+
+        Qualification[] expected =
+        [
+            (Name: "FirstRegistrar", Qualifier: "MooVC.Testing.Mechanics.Car"),
+            (Name: "SecondRegistrar", Qualifier: "MooVC.Testing.Mechanics.Car"),
+        ];
+
+        // Act
+        IEnumerable<Qualification> result = GetModel(source).Areas[0].Units[0].Metadata.Registrars;
+
+        // Assert
+        _ = await Assert.That(result).IsEquivalentTo(expected);
     }
 
     [Test]
@@ -382,6 +478,7 @@ public sealed class WhenParseModelIsCalled
             AssemblyName,
             [
                 CSharpSyntaxTree.ParseText(AttributeSource),
+                CSharpSyntaxTree.ParseText(CompositionSource),
                 CSharpSyntaxTree.ParseText(source),
             ],
             _references,
