@@ -18,6 +18,8 @@
 
             public bool HasFact { get; set; } = true;
 
+            public bool HasRegistrar { get; set; } = true;
+
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
 

@@ -12,7 +12,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car;
-            
+
             partial class Wheel
             {
                 public override int GetHashCode()

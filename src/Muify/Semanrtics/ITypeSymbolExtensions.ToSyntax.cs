@@ -26,27 +26,5 @@
 
             return symbol.IsNullable(type.NullableAnnotation == NullableAnnotation.Annotated);
         }
-
-        private static Symbol ToSyntax(this INamedTypeSymbol type)
-        {
-            var symbol = type.ToSymbol();
-
-            foreach (ITypeSymbol argument in type.TypeArguments)
-            {
-                symbol = symbol.WithArguments(argument.ToSyntax());
-            }
-
-            return symbol;
-        }
-
-        private static Symbol ToSymbol(this ITypeSymbol type)
-        {
-            if (type.ContainingNamespace is null || type.ContainingNamespace.IsGlobalNamespace)
-            {
-                return Symbol.Undefined.Named(type.Name);
-            }
-
-            return Symbol.Undefined.Named((Moniker: type.Name, Qualifier: type.ContainingNamespace.ToDisplayString()));
-        }
     }
 }

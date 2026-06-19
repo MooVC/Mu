@@ -1,11 +1,9 @@
-﻿namespace Muify.Semantics
+namespace Muify.Semantics
 {
-    using System.Linq;
     using System.Threading;
     using Microsoft.CodeAnalysis;
     using MooVC;
     using MooVC.Syntax;
-    using MooVC.Syntax.CSharp;
     using Mu.Modelling;
 
     internal static partial class CompilationExtensions
@@ -34,32 +32,6 @@
                         .Featuring(feature)
                         .Owns(components)
                         .Sets(lists)));
-        }
-
-        private static Qualification GetUnitIdentity(this INamedTypeSymbol definition)
-        {
-            AttributeData match = definition
-                .GetAttributes()
-                .FirstOrDefault(attribute => attribute.AttributeClass.IsUnitAttribute());
-
-            INamedTypeSymbol unitType = match?.AttributeClass;
-
-            if (unitType is null || unitType.TypeArguments.Length == 0)
-            {
-                return Qualification.Unnamed;
-            }
-
-            return unitType.TypeArguments[0].ToQualification();
-        }
-
-        private static Qualification ToQualification(this ITypeSymbol type)
-        {
-            if (type.ContainingNamespace is null || type.ContainingNamespace.IsGlobalNamespace)
-            {
-                return type.Name;
-            }
-
-            return (Name: type.Name, Qualifier: type.ContainingNamespace.ToDisplayString());
         }
     }
 }

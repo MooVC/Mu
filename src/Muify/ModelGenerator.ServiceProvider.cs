@@ -45,6 +45,7 @@ namespace Muify
             private static readonly Type[] _featureVisitors = new Type[]
             {
                 typeof(FeatureFactVisitor),
+                typeof(FeatureRegistrarVisitor),
                 typeof(FeatureTransformVisitor),
             };
 

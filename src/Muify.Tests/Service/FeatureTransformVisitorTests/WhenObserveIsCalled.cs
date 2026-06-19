@@ -18,7 +18,9 @@ public sealed class WhenObserveIsCalled
             internal sealed class Transform
                 : global::Mu.Modelling.Services.ITransform<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered>
             {
-                public Car Apply(global::MooVC.Testing.Mechanics.Car.Car aggregate, global::MooVC.Testing.Mechanics.Car.Register.Registered fact)
+                public global::MooVC.Testing.Mechanics.Car.Car Apply(
+                    global::MooVC.Testing.Mechanics.Car.Car aggregate,
+                    global::MooVC.Testing.Mechanics.Car.Register.Registered fact)
                 {
                     return aggregate with
                     {

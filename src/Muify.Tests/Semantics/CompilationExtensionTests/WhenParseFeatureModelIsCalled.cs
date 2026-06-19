@@ -157,6 +157,51 @@ public sealed class WhenParseFeatureModelIsCalled
     }
 
     [Test]
+    public async Task GivenARequestWithoutARegistrarThenHasRegistrarIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            public sealed record Register;
+            """;
+
+        // Act
+        bool result = GetFeature(source).Metadata.HasRegistrar;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenARequestWithARegistrarThenHasRegistrarIsTrue()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            using Microsoft.Extensions.Configuration;
+            using Mu.Composition;
+            using SimpleInjector;
+
+            public sealed record Register
+                : IRegistrar
+            {
+                public static Container Register(IConfiguration configuration, Container container)
+                {
+                    return container;
+                }
+            }
+            """;
+
+        // Act
+        bool result = GetFeature(source).Metadata.HasRegistrar;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
+    }
+
+    [Test]
     public async Task GivenClassesInTheRequestNamespaceThenRegistrarsContainsOnlyRegistrarClasses()
     {
         // Arrange
