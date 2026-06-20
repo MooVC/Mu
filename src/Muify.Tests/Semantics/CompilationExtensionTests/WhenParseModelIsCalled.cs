@@ -314,6 +314,56 @@ public sealed class WhenParseModelIsCalled
     }
 
     [Test]
+    public async Task GivenAUnitWithoutARegistrarThenHasRegistrarIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car;
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasRegistrar;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenAUnitWithARegistrarThenHasRegistrarIsTrue()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Microsoft.Extensions.Configuration;
+            using Mu.Composition;
+            using Muify.Domain;
+            using SimpleInjector;
+
+            [Unit<int>]
+            public sealed partial record Car
+                : IRegistrar
+            {
+                public static Container Register(IConfiguration configuration, Container container)
+                {
+                    return container;
+                }
+            }
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasRegistrar;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
+    }
+
+    [Test]
     public async Task GivenClassesInTheUnitNamespaceThenRegistrarsContainsOnlyRegistrarClasses()
     {
         // Arrange

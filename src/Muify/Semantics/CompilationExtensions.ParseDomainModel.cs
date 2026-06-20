@@ -28,6 +28,7 @@ namespace Muify.Semantics
                         .WithMetadata(metadata => metadata
                             .WithAllocator(definition.Allocator())
                             .HasBase(definition.HasAggregateBase())
+                            .HasRegistrar(definition.HasRegistrar())
                             .Enumerate(
                                 (registrar, subject) => subject.WithRegistrars(registrar),
                                 definition.ContainingNamespace.GetRegistrars()))

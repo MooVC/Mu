@@ -49,11 +49,17 @@ namespace Muify
                 typeof(FeatureTransformVisitor),
             };
 
+            private static readonly Type[] _unitVisitors = new Type[]
+            {
+                typeof(UnitBaseVisitor),
+                typeof(UnitRegistrarVisitor),
+            };
+
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
                 { typeof(IModelVisitor<AreaComponent, File>), new CollectionVisitor<AreaComponent>(_componentVisitors) },
                 { typeof(IModelVisitor<Feature, File>), new CollectionVisitor<Feature>(_featureVisitors) },
-                { typeof(IModelVisitor<Unit, File>), new UnitBaseVisitor() },
+                { typeof(IModelVisitor<Unit, File>), new CollectionVisitor<Unit>(_unitVisitors) },
                 { typeof(IModelVisitor<UnitComponent, File>), new CollectionVisitor<UnitComponent>(_componentVisitors) },
             };
 
