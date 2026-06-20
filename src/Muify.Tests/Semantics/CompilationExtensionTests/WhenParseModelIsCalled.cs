@@ -56,6 +56,13 @@ public sealed class WhenParseModelIsCalled
         }
         """;
 
+    private const string StateSource = """
+        namespace Mu.Modelling.State
+        {
+            public abstract record Aggregate;
+        }
+        """;
+
     private static readonly MetadataReference[] _references = GetReferences();
 
     [Test]
@@ -79,6 +86,48 @@ public sealed class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Areas[0].Units[0].Identity).IsEqualTo(expected.Identity);
+    }
+
+    [Test]
+    public async Task GivenAUnitWithoutAnAggregateBaseThenHasBaseIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car;
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasBase;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenAUnitWithAnAggregateBaseThenHasBaseIsTrue()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Mu.Modelling.State;
+            using Muify.Domain;
+
+            [Unit<int>]
+            public sealed partial record Car
+                : Aggregate;
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasBase;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
     }
 
     [Test]
@@ -479,6 +528,7 @@ public sealed class WhenParseModelIsCalled
             [
                 CSharpSyntaxTree.ParseText(AttributeSource),
                 CSharpSyntaxTree.ParseText(CompositionSource),
+                CSharpSyntaxTree.ParseText(StateSource),
                 CSharpSyntaxTree.ParseText(source),
             ],
             _references,

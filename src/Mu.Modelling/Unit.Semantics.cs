@@ -14,6 +14,8 @@
         {
             public static readonly Semantics OutOfScope = new Semantics();
 
+            public bool HasAllocator { get; set; } = true;
+
             public bool HasBase { get; set; } = true;
 
             [Ignore]
