@@ -56,6 +56,16 @@ public sealed class WhenParseModelIsCalled
         }
         """;
 
+    private const string ServicesSource = """
+        namespace Mu.Modelling.Services
+        {
+            public interface IAllocator<TIdentity>
+                where TIdentity : struct
+            {
+            }
+        }
+        """;
+
     private const string StateSource = """
         namespace Mu.Modelling.State
         {
@@ -86,6 +96,145 @@ public sealed class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Areas[0].Units[0].Identity).IsEqualTo(expected.Identity);
+    }
+
+    [Test]
+    public async Task GivenADefaultUnitIdentityWithoutAnAllocatorThenHasAllocatorIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using System;
+            using Muify.Domain;
+
+            [Unit<Guid>]
+            public sealed partial record Car;
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenADefaultUnitIdentityWithAMatchingAllocatorThenHasAllocatorIsTrue()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car
+            {
+                using System;
+                using Muify.Domain;
+
+                [Unit<Guid>]
+                public sealed partial record Car;
+            }
+
+            namespace MooVC.Testing.Mechanics.Car.Allocation
+            {
+                using System;
+                using Mu.Modelling.Services;
+
+                public sealed class GuidAllocator
+                    : IAllocator<Guid>
+                {
+                }
+            }
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
+    }
+
+    [Test]
+    public async Task GivenAnUnnamedUnitIdentityWithAMatchingAllocatorThenHasAllocatorIsTrue()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car
+            {
+                public sealed partial record Car;
+            }
+
+            namespace MooVC.Testing.Mechanics.Car.Allocation
+            {
+                using System;
+                using Mu.Modelling.Services;
+
+                public sealed class GuidAllocator
+                    : IAllocator<Guid>
+                {
+                }
+            }
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+
+        // Assert
+        _ = await Assert.That(result).IsTrue();
+    }
+
+    [Test]
+    public async Task GivenADefaultUnitIdentityWithAMismatchedAllocatorThenHasAllocatorIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using System;
+            using Muify.Domain;
+
+            [Unit<Guid>]
+            public sealed partial record Car;
+
+            public sealed class NumberAllocator
+                : Mu.Modelling.Services.IAllocator<int>
+            {
+            }
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenANonDefaultUnitIdentityWithAMatchingAllocatorThenHasAllocatorIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Mu.Modelling.Services;
+            using Muify.Domain;
+
+            [Unit<CarIdentity>]
+            public sealed partial record Car;
+
+            public readonly struct CarIdentity
+            {
+            }
+
+            public sealed class CarIdentityAllocator
+                : IAllocator<CarIdentity>
+            {
+            }
+            """;
+
+        // Act
+        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+
+        // Assert
+        _ = await Assert.That(result).IsFalse();
     }
 
     [Test]
@@ -528,6 +677,7 @@ public sealed class WhenParseModelIsCalled
             [
                 CSharpSyntaxTree.ParseText(AttributeSource),
                 CSharpSyntaxTree.ParseText(CompositionSource),
+                CSharpSyntaxTree.ParseText(ServicesSource),
                 CSharpSyntaxTree.ParseText(StateSource),
                 CSharpSyntaxTree.ParseText(source),
             ],
