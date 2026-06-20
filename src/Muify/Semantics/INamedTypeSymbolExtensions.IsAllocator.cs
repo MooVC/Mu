@@ -1,14 +1,13 @@
 namespace Muify.Semantics
 {
     using Microsoft.CodeAnalysis;
-    using MooVC.Syntax.CSharp;
     using Mu.Modelling;
 
     internal static partial class INamedTypeSymbolExtensions
     {
         private const string AllocatorMetadataName = "IAllocator`1";
 
-        private static bool IsAllocator(this INamedTypeSymbol type, Qualification identity, ITypeSymbol identityType)
+        private static bool IsAllocator(this INamedTypeSymbol type, ITypeSymbol identityType)
         {
             INamedTypeSymbol definition = type.OriginalDefinition;
 
@@ -19,7 +18,7 @@ namespace Muify.Semantics
                 return false;
             }
 
-            return identity.IsUnnamed
+            return identityType is null
                 ? Unit.Undefined.Identity.Equals(type.TypeArguments[0].ToQualification())
                 : SymbolEqualityComparer.Default.Equals(type.TypeArguments[0], identityType);
         }

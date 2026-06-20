@@ -26,7 +26,7 @@ namespace Muify.Semantics
                         .IdentifiedBy(definition.GetUnitIdentity())
                         .Named(names.Unit)
                         .WithMetadata(metadata => metadata
-                            .HasAllocator(definition.HasAllocator())
+                            .WithAllocator(definition.Allocator())
                             .HasBase(definition.HasAggregateBase())
                             .Enumerate(
                                 (registrar, subject) => subject.WithRegistrars(registrar),

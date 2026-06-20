@@ -99,7 +99,7 @@ public sealed class WhenParseModelIsCalled
     }
 
     [Test]
-    public async Task GivenADefaultUnitIdentityWithoutAnAllocatorThenHasAllocatorIsFalse()
+    public async Task GivenADefaultUnitIdentityWithoutAnAllocatorThenAllocatorIsGuidAllocator()
     {
         // Arrange
         const string source = """
@@ -112,15 +112,17 @@ public sealed class WhenParseModelIsCalled
             public sealed partial record Car;
             """;
 
+        Qualification expected = (Name: "GuidAllocator", Qualifier: "Mu.Modelling.Services");
+
         // Act
-        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
-        _ = await Assert.That(result).IsFalse();
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 
     [Test]
-    public async Task GivenADefaultUnitIdentityWithAMatchingAllocatorThenHasAllocatorIsTrue()
+    public async Task GivenADefaultUnitIdentityWithAMatchingAllocatorThenAllocatorIsMatchingAllocator()
     {
         // Arrange
         const string source = """
@@ -145,15 +147,17 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
+        Qualification expected = (Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation");
+
         // Act
-        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
-        _ = await Assert.That(result).IsTrue();
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 
     [Test]
-    public async Task GivenAnUnnamedUnitIdentityWithAMatchingAllocatorThenHasAllocatorIsTrue()
+    public async Task GivenAnUnnamedUnitIdentityWithAMatchingAllocatorThenAllocatorIsMatchingAllocator()
     {
         // Arrange
         const string source = """
@@ -174,15 +178,17 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
+        Qualification expected = (Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation");
+
         // Act
-        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
-        _ = await Assert.That(result).IsTrue();
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 
     [Test]
-    public async Task GivenADefaultUnitIdentityWithAMismatchedAllocatorThenHasAllocatorIsFalse()
+    public async Task GivenADefaultUnitIdentityWithAMismatchedAllocatorThenAllocatorIsGuidAllocator()
     {
         // Arrange
         const string source = """
@@ -200,15 +206,17 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
+        Qualification expected = (Name: "GuidAllocator", Qualifier: "Mu.Modelling.Services");
+
         // Act
-        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
-        _ = await Assert.That(result).IsFalse();
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 
     [Test]
-    public async Task GivenANonDefaultUnitIdentityWithAMatchingAllocatorThenHasAllocatorIsFalse()
+    public async Task GivenANonDefaultUnitIdentityWithAMatchingAllocatorThenAllocatorIsMatchingAllocator()
     {
         // Arrange
         const string source = """
@@ -230,11 +238,37 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
+        Qualification expected = (Name: "CarIdentityAllocator", Qualifier: "MooVC.Testing.Mechanics.Car");
+
         // Act
-        bool result = GetModel(source).Areas[0].Units[0].Metadata.HasAllocator;
+        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
-        _ = await Assert.That(result).IsFalse();
+        _ = await Assert.That(result).IsEqualTo(expected);
+    }
+
+    [Test]
+    public async Task GivenANonDefaultUnitIdentityWithoutAnAllocatorThenAllocatorIsUnnamed()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using Muify.Domain;
+
+            [Unit<CarIdentity>]
+            public sealed partial record Car;
+
+            public readonly struct CarIdentity
+            {
+            }
+            """;
+
+        // Act
+        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
+
+        // Assert
+        _ = await Assert.That(result.IsUnnamed).IsTrue();
     }
 
     [Test]
