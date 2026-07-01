@@ -17,7 +17,7 @@ internal sealed class Aggregate
             .For<Record>(record => record
                 .AttributedWith(aggregate => aggregate
                     .Named(name => name
-                        .Named((Moniker: "UnitAttribute", Qualifier: "Muify.Domain"))
+                        .Named((Name: "UnitAttribute", Qualifier: "Muify.Domain"))
                         .WithArguments(identity => identity.Named(unit.Value.Identity))))
                 .DescribedAs(unit.Value.Description)
                 .Named(unit.Value.Name)

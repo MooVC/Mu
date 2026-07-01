@@ -13,13 +13,18 @@ public sealed class WhenObserveIsCalled
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
+            using SimpleInjector;
+
             public sealed partial record Register
-                : global::Mu.Composition.IRegistrar
+                : global::Mu.Composition.IRegistrar<global::SimpleInjector.Container>
             {
                 public static global::SimpleInjector.Container Register(
                     global::Microsoft.Extensions.Configuration.IConfiguration configuration,
                     global::SimpleInjector.Container container)
                 {
+                    container.Register<global::Mu.Communications.Mediation.IHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::System.Guid>, global::Mu.Communications.Mediation.ServiceHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::System.Guid>>(global::SimpleInjector.Lifestyle.Scoped);
+                    container.Register<global::Mu.Modelling.Services.IService<global::MooVC.Testing.Mechanics.Car.Register.Register, global::System.Guid>, global::Mu.Modelling.Services.CreationalService<global::MooVC.Testing.Mechanics.Car.Car, global::System.Guid, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
+
                     return container;
                 }
             }

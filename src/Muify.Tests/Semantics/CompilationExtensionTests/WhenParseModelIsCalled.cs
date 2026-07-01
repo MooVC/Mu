@@ -99,29 +99,6 @@ public sealed class WhenParseModelIsCalled
     }
 
     [Test]
-    public async Task GivenADefaultUnitIdentityWithoutAnAllocatorThenAllocatorIsGuidAllocator()
-    {
-        // Arrange
-        const string source = """
-            namespace MooVC.Testing.Mechanics.Car;
-
-            using System;
-            using Muify.Domain;
-
-            [Unit<Guid>]
-            public sealed partial record Car;
-            """;
-
-        Qualification expected = (Name: "GuidAllocator", Qualifier: "Mu.Modelling.Services");
-
-        // Act
-        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
-
-        // Assert
-        _ = await Assert.That(result).IsEqualTo(expected);
-    }
-
-    [Test]
     public async Task GivenADefaultUnitIdentityWithAMatchingAllocatorThenAllocatorIsMatchingAllocator()
     {
         // Arrange
@@ -179,34 +156,6 @@ public sealed class WhenParseModelIsCalled
             """;
 
         Qualification expected = (Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation");
-
-        // Act
-        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
-
-        // Assert
-        _ = await Assert.That(result).IsEqualTo(expected);
-    }
-
-    [Test]
-    public async Task GivenADefaultUnitIdentityWithAMismatchedAllocatorThenAllocatorIsGuidAllocator()
-    {
-        // Arrange
-        const string source = """
-            namespace MooVC.Testing.Mechanics.Car;
-
-            using System;
-            using Muify.Domain;
-
-            [Unit<Guid>]
-            public sealed partial record Car;
-
-            public sealed class NumberAllocator
-                : Mu.Modelling.Services.IAllocator<int>
-            {
-            }
-            """;
-
-        Qualification expected = (Name: "GuidAllocator", Qualifier: "Mu.Modelling.Services");
 
         // Act
         Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;

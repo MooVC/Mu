@@ -34,6 +34,7 @@ namespace Muify.Domain
                         .WithExtensibility(Modifiers.Static)
                         .WithBody("return container;")))
                 .From(unit.Namespace)
+                .Referencing(container.Name.Qualifier)
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, "Registrar");

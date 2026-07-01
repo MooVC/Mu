@@ -8,9 +8,9 @@ namespace Muify.Semantics
 
     internal static partial class INamespaceSymbolExtensions
     {
-        internal static ImmutableArray<Qualification> GetRegistrars(this INamespaceSymbol namespaceSymbol)
+        internal static ImmutableArray<Qualification> GetRegistrars(this INamespaceSymbol @namespace)
         {
-            return namespaceSymbol
+            return @namespace
                 .GetTypeMembers()
                 .Where(type => type.TypeKind == TypeKind.Class
                     && type.AllInterfaces.Any(@interface => @interface.IsRegistrar()))

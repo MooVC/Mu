@@ -11,5 +11,17 @@
             .WithTypes(types => types
                 .WithQualifications(qualifications => qualifications
                     .WithFormat(Qualification.Options.Formats.Global)));
+
+        public static string Render(Symbol symbol)
+        {
+            return symbol.ToSnippet(Options.Types);
+        }
+
+        public static partial class LifeStyles
+        {
+            public static readonly Symbol Scoped = (Name: "Lifestyle.Scoped", Qualifier: "SimpleInjector");
+            public static readonly Symbol Singleton = (Name: "Lifestyle.Singleton", Qualifier: "SimpleInjector");
+            public static readonly Symbol Transient = (Name: "Lifestyle.Transient", Qualifier: "SimpleInjector");
+        }
     }
 }

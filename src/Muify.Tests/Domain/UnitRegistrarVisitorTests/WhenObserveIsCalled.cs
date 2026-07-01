@@ -13,6 +13,8 @@ public sealed class WhenObserveIsCalled
         string expected = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            using SimpleInjector;
+
             public sealed partial record Car
                 : global::Mu.Composition.IRegistrar
             {
