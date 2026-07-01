@@ -10,6 +10,11 @@ using Mu.Modelling.Behavior;
 public abstract record Aggregate
 {
     /// <summary>
+    /// Gets the <see cref="Representation"/> for the aggregate type.
+    /// </summary>
+    public static readonly Representation Representation = typeof(Aggregate);
+
+    /// <summary>
     /// Gets a value indicating whether the aggregate has pending propositions.
     /// </summary>
     [JsonIgnore]

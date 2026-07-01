@@ -9,5 +9,7 @@ using Mu.Communications.Messaging;
 public interface ISubscriber
     : IHostedService
 {
-    event EventHandler<Event> Received;
+    public delegate Task EventReceivedHandler(ISubscriber sender, Event @event, CancellationToken cancellationToken);
+
+    event EventReceivedHandler Received;
 }

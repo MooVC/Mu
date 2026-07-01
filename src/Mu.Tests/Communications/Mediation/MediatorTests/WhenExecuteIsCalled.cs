@@ -27,7 +27,7 @@ public sealed class WhenExecuteIsCalled
             .Handle(Arg.Any<Intent<TestUseCase>>(), Arg.Any<CancellationToken>())
             .Returns(callInfo => Task.FromResult(((Intent<TestUseCase>)callInfo[0]).Yields(expected)));
 
-        var subject = new Mediator(logger, provider);
+        var subject = new InMemoryMediator(logger, provider);
 
         // Act
         Result<string> result = await subject.Execute<TestUseCase, string>(useCase, CancellationToken.None);
@@ -58,7 +58,7 @@ public sealed class WhenExecuteIsCalled
             .Handle(Arg.Any<Intent<TestUseCase>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromException<Outcome<string>>(exception));
 
-        var subject = new Mediator(logger, provider);
+        var subject = new InMemoryMediator(logger, provider);
 
         // Act
         Exception? thrown = null;
@@ -98,7 +98,7 @@ public sealed class WhenExecuteIsCalled
     private sealed record LogEntry(EventId EventId, Exception? Exception, LogLevel Level, IReadOnlyDictionary<string, object?> Properties);
 
     private sealed class TestLogger
-        : ILogger<Mediator>
+        : ILogger<InMemoryMediator>
     {
         private readonly List<LogEntry> _entries = [];
 

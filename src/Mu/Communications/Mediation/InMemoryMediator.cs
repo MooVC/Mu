@@ -11,7 +11,7 @@ using Mu.Modelling.Behavior;
 /// <summary>
 /// Resolves and executes handlers for use cases through dependency injection.
 /// </summary>
-public sealed partial class Mediator(ILogger<Mediator> logger, IServiceProvider provider)
+public sealed partial class InMemoryMediator(ILogger<InMemoryMediator> logger, IServiceProvider provider)
     : IMediator
 {
     /// <summary>

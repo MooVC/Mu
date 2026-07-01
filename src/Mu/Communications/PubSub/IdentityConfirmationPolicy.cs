@@ -11,10 +11,10 @@ public sealed class IdentityConfirmationPolicy<TAggregate, TFact, TIdentity>(IAl
     where TFact : Fact<TAggregate>
     where TIdentity : struct
 {
-    public async Task Handle(Event<TFact, TIdentity> @event, CancellationToken cancellationToken)
+    public Task Apply(Event<TFact, TIdentity> @event, CancellationToken cancellationToken)
     {
-        await allocator
+        return allocator
             .Confirm(@event.Origin, cancellationToken)
-            .ConfigureAwait(false);
+            .AsTask();
     }
 }
