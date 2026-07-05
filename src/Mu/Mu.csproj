@@ -2,5 +2,6 @@
   <ItemGroup>
     <PackageReference Include="MooVC" />
     <PackageReference Include="Serilog" />
+    <PackageReference Include="SimpleInjector" />
   </ItemGroup>
 </Project>

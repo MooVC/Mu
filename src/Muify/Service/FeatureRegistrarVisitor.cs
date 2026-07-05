@@ -24,15 +24,13 @@ namespace Muify.Service
             string content = Builder
                 .New<Definition>()
                 .For<Record>(record => record
-                    .Implements((Name: "IRegistrar", Qualifier: "Mu.Composition"), registrar => registrar.WithArguments(container))
+                    .Implements((Name: "IRegistrar", Qualifier: "Mu.Composition"))
                     .Named(feature.Value.Name)
                     .WithMethods(register => register
                         .Accepts((Name: "Configuration", Type: configuration))
                         .Accepts((Name: "Container", Type: container))
                         .Named("Register")
-                        .Returns(result => result
-                            .OfType(container)
-                            .WithMode(Result.Modes.Synchronous))
+                        .Returns(Result.Void)
                         .WithExtensibility(Modifiers.Static)
                         .WithBody(GetRegistrations(feature))))
                 .From(feature.Namespace)
@@ -56,12 +54,8 @@ namespace Muify.Service
                     {
                         registrations.Add(GetMutationalServiceRegistration(feature));
                     }
-
-                    registrations.Add(string.Empty);
                 }
             }
-
-            registrations.Add("return container;");
 
             return Snippet.From(Configuration.Options, registrations.ToArray());
         }
