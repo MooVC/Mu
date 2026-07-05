@@ -29,7 +29,7 @@ namespace Muify.Semantics
 
             if (unitType is null || unitType.TypeArguments.Length == 0)
             {
-                return null;
+                return default;
             }
 
             return unitType.TypeArguments[0];

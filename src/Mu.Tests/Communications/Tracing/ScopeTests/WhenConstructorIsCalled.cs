@@ -25,7 +25,7 @@ public sealed class WhenConstructorIsCalled
         logger.Information("Outside scope.");
 
         // Assert
-        StructureValue value = (StructureValue)sink.Events[0].Properties[nameof(Ledger)];
+        var value = (StructureValue)sink.Events[0].Properties[nameof(Ledger)];
         _ = await Assert.That(sink.Events.Length).IsEqualTo(2);
         _ = await Assert.That(GetProperty<Guid>(value, nameof(Ledger.Causation))).IsEqualTo(ledger.Causation);
         _ = await Assert.That(GetProperty<Guid>(value, nameof(Ledger.Correlation))).IsEqualTo(ledger.Correlation);

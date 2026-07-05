@@ -61,7 +61,7 @@ public sealed class WhenExecuteIsCalled
         var subject = new InMemoryMediator(logger, provider);
 
         // Act
-        Exception? thrown = null;
+        Exception? thrown = default;
 
         try
         {
@@ -107,7 +107,7 @@ public sealed class WhenExecuteIsCalled
         public IDisposable? BeginScope<TState>(TState state)
             where TState : notnull
         {
-            return null;
+            return default;
         }
 
         public bool IsEnabled(LogLevel logLevel)

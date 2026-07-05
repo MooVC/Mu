@@ -17,12 +17,12 @@ public sealed record Representation
             throw new ArgumentException($"Type `{type}` must derive from `{_basis}`.", nameof(type));
         }
 
-        if (type.IsAbstract || !type.IsSealed)
+        if (type != _basis && (type.IsAbstract || !type.IsSealed))
         {
             throw new ArgumentException($"Type `{type}` must be a sealed, concrete derivation of `{_basis}`.", nameof(type));
         }
 
-        Name = type.Name;
+        Name = type.FullName![(type.Namespace!.Length + 1)..];
         Namespace = type.Namespace!;
         Assembly = type.Assembly.GetName().Name!;
     }

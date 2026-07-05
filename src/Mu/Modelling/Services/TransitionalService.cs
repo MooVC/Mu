@@ -1,7 +1,6 @@
 ﻿namespace Mu.Modelling.Services;
 
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
@@ -30,10 +29,19 @@ public sealed class TransitionalService<TAggregate, TIdentity, TUseCase>(IRoot<T
             return new ValidationResult($"`{typeof(TAggregate)}` `{useCase.Target}` does not exist.");
         }
 
-        return await root
+        Result<TAggregate> updated = await root
             .Apply(aggregate, useCase, cancellationToken)
-            .Then(opened => store.Save(aggregate, useCase.Target.Identity, cancellationToken))
-            .Select(_ => aggregate.Revision)
             .ConfigureAwait(false);
+
+        if (!updated.IsSuccessful)
+        {
+            return updated.Failures;
+        }
+
+        await store
+            .Save(updated.Value, useCase.Target.Identity, cancellationToken)
+            .ConfigureAwait(false);
+
+        return updated.Value.Revision;
     }
 }

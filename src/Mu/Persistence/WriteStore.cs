@@ -54,8 +54,10 @@ public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream,
             return;
         }
 
-        _ = await stream
-            .Append(aggregate.Propositions, identity, aggregate.Revision, cancellationToken)
-            .ConfigureAwait(false);
+        Task<DateTimeOffset> write = aggregate.Revision.Number == 0
+            ? stream.Initiate(aggregate.Propositions, identity, cancellationToken)
+            : stream.Append(aggregate.Propositions, identity, aggregate.Revision, cancellationToken);
+
+        _ = await write.ConfigureAwait(false);
     }
 }

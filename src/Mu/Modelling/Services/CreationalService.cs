@@ -1,6 +1,5 @@
 ﻿namespace Mu.Modelling.Services;
 
-using System.Linq;
 using System.Threading.Tasks;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
@@ -27,15 +26,24 @@ public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
             .Allocate(useCase, cancellationToken)
             .ConfigureAwait(false);
 
+        Result<TAggregate> opened;
+
         try
         {
             var aggregate = new TAggregate();
 
-            return await root
+            opened = await root
                 .Apply(aggregate, useCase, cancellationToken)
-                .Then(opened => store.Save(aggregate, identity, cancellationToken))
-                .Select(_ => identity)
                 .ConfigureAwait(false);
+
+            if (opened.IsSuccessful)
+            {
+                await store
+                    .Save(opened.Value, identity, cancellationToken)
+                    .ConfigureAwait(false);
+
+                return identity;
+            }
         }
         catch
         {
@@ -45,5 +53,11 @@ public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
 
             throw;
         }
+
+        await allocator
+            .Surrender(identity, cancellationToken)
+            .ConfigureAwait(false);
+
+        return opened.Failures;
     }
 }

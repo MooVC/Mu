@@ -78,7 +78,7 @@ public sealed record Result<T>
     /// <param name="failures">The validation failures.</param>
     public static implicit operator Result<T>(ImmutableArray<ValidationResult> failures)
     {
-        return new(failures, false, default);
+        return new((IEnumerable<ValidationResult>)failures);
     }
 
     /// <summary>

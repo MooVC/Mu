@@ -25,7 +25,7 @@ public abstract record Aggregate
     /// </summary>
     [JsonPropertyName("$propositions")]
     [JsonInclude]
-    internal ImmutableArray<Fact> Propositions { get; init; }
+    internal ImmutableArray<Fact> Propositions { get; init; } = [];
 
     /// <summary>
     /// Gets the current revision for the aggregate.
