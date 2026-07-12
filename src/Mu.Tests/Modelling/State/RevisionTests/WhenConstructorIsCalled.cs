@@ -19,10 +19,10 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenValuesThenPropertiesAreAssigned()
     {
         // Act
-        Revision result = MuTestData.CreateRevision();
+        Revision result = TestData.CreateRevision();
 
         // Assert
-        _ = await Assert.That(result.InitiatedAt).IsEqualTo(MuTestData.PreparedAt);
+        _ = await Assert.That(result.InitiatedAt).IsEqualTo(TestData.PreparedAt);
         _ = await Assert.That(result.Number).IsEqualTo(3ul);
     }
 }

@@ -12,10 +12,10 @@ public sealed class WhenSaveIsCalled
         // Arrange
         using var source = new CancellationTokenSource();
         IStream<Guid> stream = Substitute.For<IStream<Guid>>();
-        var subject = new WriteStore<MuTestData.TestAggregate, Guid>(stream, new MuTestData.TestTransform());
+        var subject = new WriteStore<TestData.TestAggregate, Guid>(stream, new TestData.TestTransform());
 
         // Act
-        await subject.Save(MuTestData.CreateAggregate(), MuTestData.Identity, source.Token);
+        await subject.Save(TestData.CreateAggregate(), TestData.Identity, source.Token);
 
         // Assert
         await stream.DidNotReceive().Append(Arg.Any<IEnumerable<Fact>>(), Arg.Any<Guid>(), Arg.Any<Revision>(), Arg.Any<CancellationToken>());
@@ -28,20 +28,20 @@ public sealed class WhenSaveIsCalled
         // Arrange
         using var source = new CancellationTokenSource();
         IStream<Guid> stream = Substitute.For<IStream<Guid>>();
-        var fact = new MuTestData.TestFact();
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregateWithChanges(new Revision(), fact);
+        var fact = new TestData.TestFact();
+        TestData.TestAggregate aggregate = TestData.CreateAggregateWithChanges(new Revision(), fact);
 
         _ = stream
-            .Initiate(Arg.Any<IEnumerable<Fact>>(), MuTestData.Identity, source.Token)
-            .Returns(Task.FromResult(MuTestData.CommittedAt));
+            .Initiate(Arg.Any<IEnumerable<Fact>>(), TestData.Identity, source.Token)
+            .Returns(Task.FromResult(TestData.CommittedAt));
 
-        var subject = new WriteStore<MuTestData.TestAggregate, Guid>(stream, new MuTestData.TestTransform());
+        var subject = new WriteStore<TestData.TestAggregate, Guid>(stream, new TestData.TestTransform());
 
         // Act
-        await subject.Save(aggregate, MuTestData.Identity, source.Token);
+        await subject.Save(aggregate, TestData.Identity, source.Token);
 
         // Assert
-        await stream.Received(1).Initiate(Arg.Is<IEnumerable<Fact>>(facts => facts.SequenceEqual(new[] { fact })), MuTestData.Identity, source.Token);
+        await stream.Received(1).Initiate(Arg.Is<IEnumerable<Fact>>(facts => facts.SequenceEqual(new[] { fact })), TestData.Identity, source.Token);
         await stream.DidNotReceive().Append(Arg.Any<IEnumerable<Fact>>(), Arg.Any<Guid>(), Arg.Any<Revision>(), Arg.Any<CancellationToken>());
     }
 
@@ -51,21 +51,21 @@ public sealed class WhenSaveIsCalled
         // Arrange
         using var source = new CancellationTokenSource();
         IStream<Guid> stream = Substitute.For<IStream<Guid>>();
-        Revision revision = MuTestData.CreateRevision();
-        var fact = new MuTestData.TestFact();
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregateWithChanges(revision, fact);
+        Revision revision = TestData.CreateRevision();
+        var fact = new TestData.TestFact();
+        TestData.TestAggregate aggregate = TestData.CreateAggregateWithChanges(revision, fact);
 
         _ = stream
-            .Append(Arg.Any<IEnumerable<Fact>>(), MuTestData.Identity, revision, source.Token)
-            .Returns(Task.FromResult(MuTestData.CommittedAt));
+            .Append(Arg.Any<IEnumerable<Fact>>(), TestData.Identity, revision, source.Token)
+            .Returns(Task.FromResult(TestData.CommittedAt));
 
-        var subject = new WriteStore<MuTestData.TestAggregate, Guid>(stream, new MuTestData.TestTransform());
+        var subject = new WriteStore<TestData.TestAggregate, Guid>(stream, new TestData.TestTransform());
 
         // Act
-        await subject.Save(aggregate, MuTestData.Identity, source.Token);
+        await subject.Save(aggregate, TestData.Identity, source.Token);
 
         // Assert
-        await stream.Received(1).Append(Arg.Is<IEnumerable<Fact>>(facts => facts.SequenceEqual(new[] { fact })), MuTestData.Identity, revision, source.Token);
+        await stream.Received(1).Append(Arg.Is<IEnumerable<Fact>>(facts => facts.SequenceEqual(new[] { fact })), TestData.Identity, revision, source.Token);
         await stream.DidNotReceive().Initiate(Arg.Any<IEnumerable<Fact>>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
     }
 
@@ -74,11 +74,11 @@ public sealed class WhenSaveIsCalled
     {
         // Arrange
         IStream<Guid> stream = Substitute.For<IStream<Guid>>();
-        var subject = new WriteStore<MuTestData.TestAggregate, Guid>(stream, new MuTestData.TestTransform());
-        MuTestData.TestAggregate aggregate = null!;
+        var subject = new WriteStore<TestData.TestAggregate, Guid>(stream, new TestData.TestTransform());
+        TestData.TestAggregate aggregate = null!;
 
         // Act
-        Exception? exception = await Capture(() => subject.Save(aggregate, MuTestData.Identity, CancellationToken.None));
+        Exception? exception = await Capture(() => subject.Save(aggregate, TestData.Identity, CancellationToken.None));
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();

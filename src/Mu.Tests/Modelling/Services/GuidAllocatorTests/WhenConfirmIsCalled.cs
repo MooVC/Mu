@@ -11,7 +11,7 @@ public sealed class WhenConfirmIsCalled
         var subject = new GuidAllocator();
 
         // Act
-        ValueTask result = subject.Confirm(MuTestData.Identity, CancellationToken.None);
+        ValueTask result = subject.Confirm(TestData.Identity, CancellationToken.None);
 
         // Assert
         _ = await Assert.That(result.IsCompletedSuccessfully).IsTrue();

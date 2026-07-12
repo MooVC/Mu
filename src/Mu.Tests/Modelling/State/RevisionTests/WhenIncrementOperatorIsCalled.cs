@@ -8,7 +8,7 @@ public sealed class WhenIncrementOperatorIsCalled
     public async Task GivenRevisionThenNumberIsIncrementedAndInitiatedAtIsUpdated()
     {
         // Arrange
-        Revision subject = MuTestData.CreateRevision();
+        Revision subject = TestData.CreateRevision();
 
         // Act
         Revision result = subject;

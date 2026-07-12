@@ -8,7 +8,7 @@ public sealed class WhenAllocateIsCalled
     public async Task GivenUseCaseThenReturnsVersionSevenGuidForProposedTime()
     {
         // Arrange
-        var useCase = new MuTestData.TestMutation(MuTestData.Identity, MuTestData.ProposedAt);
+        var useCase = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
         var subject = new GuidAllocator();
 
         // Act

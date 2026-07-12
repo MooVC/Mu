@@ -8,7 +8,7 @@ public sealed class WhenImplicitOperatorFromValueIsCalled
     public async Task GivenValueThenReturnsSuccessfulResult()
     {
         // Arrange
-        string value = MuTestData.ResultValue;
+        string value = TestData.ResultValue;
 
         // Act
         Result<string> result = value;

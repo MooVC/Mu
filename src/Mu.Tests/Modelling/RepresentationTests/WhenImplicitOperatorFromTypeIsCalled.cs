@@ -9,7 +9,7 @@ public sealed class WhenImplicitOperatorFromTypeIsCalled
     public async Task GivenAggregateTypeThenReturnsRepresentation()
     {
         // Arrange
-        Type type = typeof(MuTestData.TestAggregate);
+        Type type = typeof(TestData.TestAggregate);
 
         // Act
         Representation result = type;

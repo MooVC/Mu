@@ -12,7 +12,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenSuccessfulResultThenProjectsValue()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         Result<int> result = subject.Select(value => value.Length);
@@ -25,7 +25,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenSuccessfulResultWhenAsyncThenProjectsValue()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         Result<int> result = await subject.Select(value => Task.FromResult(value.Length));
@@ -38,7 +38,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenSuccessfulResultWithBothSelectorsThenReturnsSuccessProjection()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         int result = subject.Select(_ => 0, value => value.Length);
@@ -51,7 +51,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenSuccessfulResultWithBothAsyncSelectorsThenReturnsSuccessProjection()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         int result = await subject.Select(_ => Task.FromResult(0), value => Task.FromResult(value.Length));
@@ -64,7 +64,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenUnsuccessfulResultThenPreservesFailures()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
+        ValidationResult failure = TestData.CreateFailure();
         Result<string> subject = failure;
 
         // Act
@@ -79,7 +79,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenUnsuccessfulResultWhenAsyncThenPreservesFailures()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
+        ValidationResult failure = TestData.CreateFailure();
         Result<string> subject = failure;
 
         // Act
@@ -94,7 +94,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenUnsuccessfulResultWithBothSelectorsThenReturnsFailureProjection()
     {
         // Arrange
-        Result<string> subject = MuTestData.CreateFailure();
+        Result<string> subject = TestData.CreateFailure();
 
         // Act
         int result = subject.Select(failures => failures.Length, value => value.Length);
@@ -107,7 +107,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenUnsuccessfulResultWithBothAsyncSelectorsThenReturnsFailureProjection()
     {
         // Arrange
-        Result<string> subject = MuTestData.CreateFailure();
+        Result<string> subject = TestData.CreateFailure();
 
         // Act
         int result = await subject.Select(failures => Task.FromResult(failures.Length), value => Task.FromResult(value.Length));
@@ -120,7 +120,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenNullFailureSelectorThenThrowsArgumentNullException()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         Exception? exception = Capture(() => _ = subject.Select(default(Func<ImmutableArray<ValidationResult>, int>)!, value => value.Length));
@@ -133,7 +133,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenNullSuccessSelectorThenThrowsArgumentNullException()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         Exception? exception = Capture(() => _ = subject.Select(default(Func<string, int>)!));

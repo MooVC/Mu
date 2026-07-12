@@ -13,7 +13,7 @@ public sealed class WhenStartAsyncIsCalled
         // Arrange
         using var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
         var channel = Channel.CreateUnbounded<Event>();
-        Event @event = MuTestData.CreateEvent();
+        Event @event = TestData.CreateEvent();
         var observed = new TaskCompletionSource<Event>(TaskCreationOptions.RunContinuationsAsynchronously);
         var subject = new InMemorySubscriber(channel.Reader, NullLogger<InMemorySubscriber>.Instance);
 

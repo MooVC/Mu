@@ -9,7 +9,7 @@ public sealed class WhenImplicitOperatorFromValidationResultIsCalled
     public async Task GivenFailureThenReturnsUnsuccessfulResult()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
+        ValidationResult failure = TestData.CreateFailure();
 
         // Act
         Result<string> result = failure;

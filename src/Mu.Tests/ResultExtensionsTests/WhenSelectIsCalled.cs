@@ -10,7 +10,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenSuccessfulResultTaskThenProjectsValue()
     {
         // Arrange
-        Task<Result<string>> subject = Task.FromResult<Result<string>>(MuTestData.ResultValue);
+        Task<Result<string>> subject = Task.FromResult<Result<string>>(TestData.ResultValue);
 
         // Act
         Result<int> result = await subject.Select(value => value.Length);
@@ -23,7 +23,7 @@ public sealed class WhenSelectIsCalled
     public async Task GivenSuccessfulResultTaskWhenAsyncThenProjectsValue()
     {
         // Arrange
-        Task<Result<string>> subject = Task.FromResult<Result<string>>(MuTestData.ResultValue);
+        Task<Result<string>> subject = Task.FromResult<Result<string>>(TestData.ResultValue);
 
         // Act
         Result<int> result = await subject.Select(value => Task.FromResult(value.Length));

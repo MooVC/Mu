@@ -10,8 +10,8 @@ public sealed class WhenImplicitOperatorFromFailuresIsCalled
     public async Task GivenFailuresThenReturnsUnsuccessfulResult()
     {
         // Arrange
-        ValidationResult first = MuTestData.CreateFailure();
-        ValidationResult second = MuTestData.CreateFailure(MuTestData.AlternateFailureMessage);
+        ValidationResult first = TestData.CreateFailure();
+        ValidationResult second = TestData.CreateFailure(TestData.AlternateFailureMessage);
         ImmutableArray<ValidationResult> failures = [first, second];
 
         // Act

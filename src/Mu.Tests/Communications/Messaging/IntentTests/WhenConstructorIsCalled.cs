@@ -9,15 +9,15 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenValuesThenPropertiesAreAssigned()
     {
         // Arrange
-        Ledger ledger = MuTestData.CreateLedger();
-        var useCase = new MuTestData.TestMutation();
+        Ledger ledger = TestData.CreateLedger();
+        var useCase = new TestData.TestMutation();
 
         // Act
-        var result = new Intent<MuTestData.TestMutation>(ledger, MuTestData.PreparedAt, useCase);
+        var result = new Intent<TestData.TestMutation>(ledger, TestData.PreparedAt, useCase);
 
         // Assert
         _ = await Assert.That(result.Ledger).IsEqualTo(ledger);
-        _ = await Assert.That(result.PreparedAt).IsEqualTo(MuTestData.PreparedAt);
+        _ = await Assert.That(result.PreparedAt).IsEqualTo(TestData.PreparedAt);
         _ = await Assert.That(result.UseCase).IsSameReferenceAs(useCase);
     }
 
@@ -25,10 +25,10 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenNullUseCaseThenThrowsArgumentNullException()
     {
         // Arrange
-        MuTestData.TestMutation useCase = null!;
+        TestData.TestMutation useCase = null!;
 
         // Act
-        Exception? exception = Capture(() => _ = new Intent<MuTestData.TestMutation>(MuTestData.CreateLedger(), MuTestData.PreparedAt, useCase));
+        Exception? exception = Capture(() => _ = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, useCase));
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();

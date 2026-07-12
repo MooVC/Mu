@@ -9,15 +9,15 @@ public sealed class WhenApplyIsCalled
     public async Task GivenPassingInvariantsThenProposesFactAndAppliesTransforms()
     {
         // Arrange
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        var mutation = new MuTestData.TestMutation();
-        var transform = new MuTestData.TestTransform();
-        var subject = new Root<MuTestData.TestAggregate, MuTestData.TestFact, MuTestData.TestMutation>(
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        var mutation = new TestData.TestMutation();
+        var transform = new TestData.TestTransform();
+        var subject = new Root<TestData.TestAggregate, TestData.TestFact, TestData.TestMutation>(
             [],
             [transform]);
 
         // Act
-        Result<MuTestData.TestAggregate> result = await subject.Apply(aggregate, mutation, CancellationToken.None);
+        Result<TestData.TestAggregate> result = await subject.Apply(aggregate, mutation, CancellationToken.None);
 
         // Assert
         _ = await Assert.That(result.Value!.Value).IsEqualTo(aggregate.Value + mutation.Value);
@@ -29,14 +29,14 @@ public sealed class WhenApplyIsCalled
     public async Task GivenFailingInvariantThenReturnsFailures()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
-        var invariant = new MuTestData.TestInvariant<MuTestData.TestMutation>(failure);
-        var subject = new Root<MuTestData.TestAggregate, MuTestData.TestFact, MuTestData.TestMutation>(
+        ValidationResult failure = TestData.CreateFailure();
+        var invariant = new TestData.TestInvariant<TestData.TestMutation>(failure);
+        var subject = new Root<TestData.TestAggregate, TestData.TestFact, TestData.TestMutation>(
             [invariant],
-            [new MuTestData.TestTransform()]);
+            [new TestData.TestTransform()]);
 
         // Act
-        Result<MuTestData.TestAggregate> result = await subject.Apply(MuTestData.CreateAggregate(), new MuTestData.TestMutation(), CancellationToken.None);
+        Result<TestData.TestAggregate> result = await subject.Apply(TestData.CreateAggregate(), new TestData.TestMutation(), CancellationToken.None);
 
         // Assert
         ValidationResult actual = await Assert.That(result.Failures).HasSingleItem();

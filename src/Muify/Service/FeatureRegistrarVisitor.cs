@@ -5,6 +5,7 @@ namespace Muify.Service
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Muify.Syntax.CSharp;
     using static Muify.Configuration;
     using Result = MooVC.Syntax.CSharp.Result;
 
@@ -18,44 +19,43 @@ namespace Muify.Service
                 yield break;
             }
 
-            Symbol configuration = (Name: "IConfiguration", Qualifier: "Microsoft.Extensions.Configuration");
-            Symbol container = (Name: "Container", Qualifier: "SimpleInjector");
+            Snippet registrations = GetRegistrations(feature);
 
             string content = Builder
                 .New<Definition>()
-                .For<Record>(record => record
-                    .Implements((Name: "IRegistrar", Qualifier: "Mu.Composition"))
-                    .Named(feature.Value.Name)
-                    .WithMethods(register => register
-                        .Accepts((Name: "Configuration", Type: configuration))
-                        .Accepts((Name: "Container", Type: container))
-                        .Named("Register")
-                        .Returns(Result.Void)
-                        .WithExtensibility(Modifiers.Static)
-                        .WithBody(GetRegistrations(feature))))
+                .For<Record>(record => record.WithRegistrar(registrations, feature.Value.Name))
                 .From(feature.Namespace)
-                .Referencing(container.Name.Qualifier)
+                .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, "Registrar");
+        }
+
+        private static void ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, List<string> registrations)
+        {
+            foreach (Qualification registrar in feature.Value.Metadata.Registrars)
+            {
+                registrations.Add($"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);");
+            }
         }
 
         private static Snippet GetRegistrations(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
             var registrations = new List<string>();
 
-            if (feature.Value.Metadata.Handler.IsUnnamed && !feature.Features.Unit.Value.Identity.IsUnnamed)
+            if (feature.Value.Metadata.Handler.IsUnnamed
+            && !feature.Features.Unit.Value.Identity.IsUnnamed
+            && (feature.Value.Type.IsMutational || feature.Value.Results.Length > 0))
             {
-                if (feature.Value.Type.IsMutational || feature.Value.Results.Length > 0)
-                {
-                    registrations.Add(GetMutationalHandlerRegistration(feature));
+                registrations.Add(GetMutationalHandlerRegistration(feature));
 
-                    if (feature.Value.Type.IsMutational && feature.Value.Metadata.Serivce.IsUnnamed)
-                    {
-                        registrations.Add(GetMutationalServiceRegistration(feature));
-                    }
+                if (feature.Value.Type.IsMutational && feature.Value.Metadata.Serivce.IsUnnamed)
+                {
+                    registrations.Add(GetMutationalServiceRegistration(feature));
                 }
             }
+
+            ApplyRegistrars(feature, registrations);
 
             return Snippet.From(Configuration.Options, registrations.ToArray());
         }

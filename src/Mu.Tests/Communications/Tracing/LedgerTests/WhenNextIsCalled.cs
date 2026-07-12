@@ -8,13 +8,13 @@ public sealed class WhenNextIsCalled
     public async Task GivenCausationThenReturnsLedgerWithSameCorrelation()
     {
         // Arrange
-        Ledger subject = MuTestData.CreateLedger();
+        Ledger subject = TestData.CreateLedger();
 
         // Act
-        Ledger result = subject.Next(MuTestData.AlternateIdentity);
+        Ledger result = subject.Next(TestData.AlternateIdentity);
 
         // Assert
-        _ = await Assert.That(result.Causation).IsEqualTo(MuTestData.AlternateIdentity);
+        _ = await Assert.That(result.Causation).IsEqualTo(TestData.AlternateIdentity);
         _ = await Assert.That(result.Correlation).IsEqualTo(subject.Correlation);
     }
 }

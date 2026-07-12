@@ -9,10 +9,10 @@ public sealed class WhenApplyIsCalled
     public async Task GivenTypedEventThenAppliesAllPolicies()
     {
         // Arrange
-        var first = new MuTestData.TestPolicy();
-        var second = new MuTestData.TestPolicy();
-        Event<MuTestData.TestFact, Guid> @event = MuTestData.CreateEvent();
-        var subject = new Policy<MuTestData.TestFact, Guid>([first, second]);
+        var first = new TestData.TestPolicy();
+        var second = new TestData.TestPolicy();
+        Event<TestData.TestFact, Guid> @event = TestData.CreateEvent();
+        var subject = new Policy<TestData.TestFact, Guid>([first, second]);
 
         // Act
         await subject.Apply(@event, CancellationToken.None);
@@ -26,13 +26,13 @@ public sealed class WhenApplyIsCalled
     public async Task GivenWrongEventTypeThenThrowsInvalidCastException()
     {
         // Arrange
-        Event @event = new Event<MuTestData.AlternateFact, Guid>(
-            MuTestData.CommittedAt,
-            MuTestData.CreateLedger(),
-            new MuTestData.AlternateFact(),
-            MuTestData.CreateReference(),
-            MuTestData.PreparedAt);
-        var subject = new Policy<MuTestData.TestFact, Guid>([]);
+        Event @event = new Event<TestData.AlternateFact, Guid>(
+            TestData.CommittedAt,
+            TestData.CreateLedger(),
+            new TestData.AlternateFact(),
+            TestData.CreateReference(),
+            TestData.PreparedAt);
+        var subject = new Policy<TestData.TestFact, Guid>([]);
 
         // Act
         Exception? exception = await Capture(() => subject.Apply(@event, CancellationToken.None));

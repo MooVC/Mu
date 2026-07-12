@@ -8,8 +8,8 @@ public sealed class WhenImplicitOperatorToResultIsCalled
     public async Task GivenOutcomeThenReturnsResult()
     {
         // Arrange
-        Result<string> value = MuTestData.ResultValue;
-        var subject = new Outcome<string>(MuTestData.CreateLedger(), MuTestData.PreparedAt, value);
+        Result<string> value = TestData.ResultValue;
+        var subject = new Outcome<string>(TestData.CreateLedger(), TestData.PreparedAt, value);
 
         // Act
         Result<string> result = subject;

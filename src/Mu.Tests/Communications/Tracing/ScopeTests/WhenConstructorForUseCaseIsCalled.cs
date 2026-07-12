@@ -8,7 +8,7 @@ public sealed class WhenConstructorForUseCaseIsCalled
     public async Task GivenUseCaseWithoutAmbientScopeThenCreatesInitiatorLedger()
     {
         // Arrange
-        var useCase = new MuTestData.TestMutation(MuTestData.Identity, MuTestData.ProposedAt);
+        var useCase = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
 
         // Act
         using var scope = new Scope(useCase);
@@ -22,8 +22,8 @@ public sealed class WhenConstructorForUseCaseIsCalled
     public async Task GivenUseCaseWithAmbientScopeThenCreatesContinuationLedger()
     {
         // Arrange
-        using var outer = new Scope(MuTestData.CreateLedger());
-        var useCase = new MuTestData.TestMutation(MuTestData.AlternateIdentity, MuTestData.ProposedAt);
+        using var outer = new Scope(TestData.CreateLedger());
+        var useCase = new TestData.TestMutation(TestData.AlternateIdentity, TestData.ProposedAt);
 
         // Act
         using var scope = new Scope(useCase);
@@ -37,7 +37,7 @@ public sealed class WhenConstructorForUseCaseIsCalled
     public async Task GivenNullUseCaseThenThrowsArgumentNullException()
     {
         // Arrange
-        MuTestData.TestMutation useCase = null!;
+        TestData.TestMutation useCase = null!;
 
         // Act
         Exception? exception = Capture(() => _ = new Scope(useCase));

@@ -8,12 +8,12 @@ public sealed class WhenProposeIsCalled
     public async Task GivenFactThenAppendsPropositionAndAppliesTransforms()
     {
         // Arrange
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        var fact = new MuTestData.TestFact();
-        var transform = new MuTestData.TestTransform();
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        var fact = new TestData.TestFact();
+        var transform = new TestData.TestTransform();
 
         // Act
-        MuTestData.TestAggregate result = aggregate.Propose(fact, transform);
+        TestData.TestAggregate result = aggregate.Propose(fact, transform);
 
         // Assert
         _ = await Assert.That(result.Propositions).IsEquivalentTo(new[] { fact });
@@ -26,8 +26,8 @@ public sealed class WhenProposeIsCalled
     public async Task GivenNullAggregateThenThrowsArgumentNullException()
     {
         // Arrange
-        MuTestData.TestAggregate aggregate = null!;
-        var fact = new MuTestData.TestFact();
+        TestData.TestAggregate aggregate = null!;
+        var fact = new TestData.TestFact();
 
         // Act
         Exception? exception = Capture(() => _ = aggregate.Propose(fact));
@@ -40,8 +40,8 @@ public sealed class WhenProposeIsCalled
     public async Task GivenNullFactThenThrowsArgumentNullException()
     {
         // Arrange
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        MuTestData.TestFact fact = null!;
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        TestData.TestFact fact = null!;
 
         // Act
         Exception? exception = Capture(() => _ = aggregate.Propose(fact));

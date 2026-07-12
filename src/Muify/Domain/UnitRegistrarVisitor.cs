@@ -1,10 +1,11 @@
 namespace Muify.Domain
 {
     using System.Collections.Generic;
+    using System.Linq;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
-    using Result = MooVC.Syntax.CSharp.Result;
+    using Muify.Syntax.CSharp;
 
     internal sealed class UnitRegistrarVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit, File>
@@ -16,28 +17,23 @@ namespace Muify.Domain
                 yield break;
             }
 
-            Symbol configuration = (Name: "IConfiguration", Qualifier: "Microsoft.Extensions.Configuration");
-            Symbol container = (Name: "Container", Qualifier: "SimpleInjector");
+            Snippet registrations = ApplyRegistrars(unit);
 
             string content = Builder
                 .New<Definition>()
-                .For<Record>(record => record
-                    .Implements((Name: "IRegistrar", Qualifier: "Mu.Composition"))
-                    .Named(unit.Value.Name)
-                    .WithMethods(register => register
-                        .Accepts((Name: "Configuration", Type: configuration))
-                        .Accepts((Name: "Container", Type: container))
-                        .Named("Register")
-                        .Returns(result => result
-                            .OfType(container)
-                            .WithMode(Result.Modes.Synchronous))
-                        .WithExtensibility(Modifiers.Static)
-                        .WithBody("return container;")))
+                .For<Record>(record => record.WithRegistrar(registrations, unit.Value.Name))
                 .From(unit.Namespace)
-                .Referencing(container.Name.Qualifier)
+                .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, "Registrar");
+        }
+
+        private static Snippet ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit unit)
+        {
+            return unit.Value.Metadata.Registrars
+                .Select(registrar => $"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);")
+                .ToSnippet(Configuration.Options);
         }
     }
 }

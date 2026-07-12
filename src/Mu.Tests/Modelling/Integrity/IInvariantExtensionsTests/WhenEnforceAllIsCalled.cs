@@ -9,13 +9,13 @@ public sealed class WhenEnforceAllIsCalled
     public async Task GivenInvariantsThenCollectsAllFailures()
     {
         // Arrange
-        ValidationResult first = MuTestData.CreateFailure();
-        ValidationResult second = MuTestData.CreateFailure(MuTestData.AlternateFailureMessage);
-        var firstInvariant = new MuTestData.TestInvariant<MuTestData.TestMutation>(first);
-        var secondInvariant = new MuTestData.TestInvariant<MuTestData.TestMutation>(second);
-        IInvariant<MuTestData.TestAggregate, MuTestData.TestMutation>[] invariants = [firstInvariant, secondInvariant];
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        var mutation = new MuTestData.TestMutation();
+        ValidationResult first = TestData.CreateFailure();
+        ValidationResult second = TestData.CreateFailure(TestData.AlternateFailureMessage);
+        var firstInvariant = new TestData.TestInvariant<TestData.TestMutation>(first);
+        var secondInvariant = new TestData.TestInvariant<TestData.TestMutation>(second);
+        IInvariant<TestData.TestAggregate, TestData.TestMutation>[] invariants = [firstInvariant, secondInvariant];
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        var mutation = new TestData.TestMutation();
 
         // Act
         IReadOnlyCollection<ValidationResult> result = await invariants.EnforceAll(aggregate, mutation, CancellationToken.None);

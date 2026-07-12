@@ -8,9 +8,9 @@ public sealed class WhenYieldsIsCalled
     public async Task GivenResultThenReturnsOutcomeWithNextLedger()
     {
         // Arrange
-        var useCase = new MuTestData.TestMutation(MuTestData.AlternateIdentity, MuTestData.ProposedAt);
-        var subject = new Intent<MuTestData.TestMutation>(MuTestData.CreateLedger(), MuTestData.PreparedAt, useCase);
-        Result<string> value = MuTestData.ResultValue;
+        var useCase = new TestData.TestMutation(TestData.AlternateIdentity, TestData.ProposedAt);
+        var subject = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, useCase);
+        Result<string> value = TestData.ResultValue;
 
         // Act
         Outcome<string> result = subject.Yields(value);

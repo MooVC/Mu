@@ -3,7 +3,7 @@ namespace Mu.Testing;
 using Mu.Modelling.Behavior;
 
 public sealed record TestQuery
-    : Query<MuTestData.TestAggregate>
+    : Query<TestData.TestAggregate>
 {
     public TestQuery()
     {

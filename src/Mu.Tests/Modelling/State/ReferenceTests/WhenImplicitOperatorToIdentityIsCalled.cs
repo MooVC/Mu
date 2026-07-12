@@ -8,12 +8,12 @@ public sealed class WhenImplicitOperatorToIdentityIsCalled
     public async Task GivenReferenceThenReturnsIdentity()
     {
         // Arrange
-        Reference<Guid> subject = MuTestData.CreateReference();
+        Reference<Guid> subject = TestData.CreateReference();
 
         // Act
         Guid result = subject;
 
         // Assert
-        _ = await Assert.That(result).IsEqualTo(MuTestData.Identity);
+        _ = await Assert.That(result).IsEqualTo(TestData.Identity);
     }
 }

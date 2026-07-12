@@ -8,13 +8,13 @@ public sealed class WhenImplicitOperatorToTypeIsCalled
     public async Task GivenRepresentationThenReturnsType()
     {
         // Arrange
-        Representation subject = typeof(MuTestData.TestAggregate);
+        Representation subject = typeof(TestData.TestAggregate);
 
         // Act
         Type result = subject;
 
         // Assert
-        _ = await Assert.That(result).IsEqualTo(typeof(MuTestData.TestAggregate));
+        _ = await Assert.That(result).IsEqualTo(typeof(TestData.TestAggregate));
     }
 
     [Test]

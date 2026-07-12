@@ -8,10 +8,10 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenValuesThenPropertiesAreAssigned()
     {
         // Act
-        Reference<Guid> result = MuTestData.CreateReference();
+        Reference<Guid> result = TestData.CreateReference();
 
         // Assert
-        _ = await Assert.That(result.Identity).IsEqualTo(MuTestData.Identity);
+        _ = await Assert.That(result.Identity).IsEqualTo(TestData.Identity);
         _ = await Assert.That(result.IsUnspecified).IsFalse();
         _ = await Assert.That(result.Revision).IsEqualTo(3ul);
     }
@@ -20,7 +20,7 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenZeroRevisionThenIsUnspecified()
     {
         // Act
-        Reference<Guid> result = MuTestData.CreateReference(revision: 0);
+        Reference<Guid> result = TestData.CreateReference(revision: 0);
 
         // Assert
         _ = await Assert.That(result.IsUnspecified).IsTrue();

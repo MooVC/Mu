@@ -11,7 +11,7 @@ public sealed class WhenSurrenderIsCalled
         var subject = new GuidAllocator();
 
         // Act
-        ValueTask result = subject.Surrender(MuTestData.Identity, CancellationToken.None);
+        ValueTask result = subject.Surrender(TestData.Identity, CancellationToken.None);
 
         // Assert
         _ = await Assert.That(result.IsCompletedSuccessfully).IsTrue();

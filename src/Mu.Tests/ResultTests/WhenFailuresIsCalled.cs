@@ -8,7 +8,7 @@ public sealed class WhenFailuresIsCalled
     public async Task GivenSuccessfulResultThenThrowsInvalidOperationException()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
 
         // Act
         Exception? exception = Capture(() => _ = subject.Failures);

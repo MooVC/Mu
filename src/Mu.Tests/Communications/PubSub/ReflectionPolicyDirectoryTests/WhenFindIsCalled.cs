@@ -10,8 +10,8 @@ public sealed class WhenFindIsCalled
     public async Task GivenRegisteredPoliciesThenReturnsPolicyWrapper()
     {
         // Arrange
-        Event<MuTestData.TestFact, Guid> @event = MuTestData.CreateEvent();
-        var policy = new MuTestData.TestPolicy();
+        Event<TestData.TestFact, Guid> @event = TestData.CreateEvent();
+        var policy = new TestData.TestPolicy();
         IServiceProvider provider = Substitute.For<IServiceProvider>();
         IServiceScope scope = Substitute.For<IServiceScope>();
         var subject = new ReflectionPolicyDirectory();
@@ -21,8 +21,8 @@ public sealed class WhenFindIsCalled
             .Returns(provider);
 
         _ = provider
-            .GetService(typeof(IEnumerable<IPolicy<MuTestData.TestFact, Guid>>))
-            .Returns(new IPolicy<MuTestData.TestFact, Guid>[] { policy });
+            .GetService(typeof(IEnumerable<IPolicy<TestData.TestFact, Guid>>))
+            .Returns(new IPolicy<TestData.TestFact, Guid>[] { policy });
 
         // Act
         IPolicy? result = subject.Find(@event, scope);
@@ -48,7 +48,7 @@ public sealed class WhenFindIsCalled
             .Returns(provider);
 
         // Act
-        IPolicy? result = subject.Find(MuTestData.CreateEvent(), scope);
+        IPolicy? result = subject.Find(TestData.CreateEvent(), scope);
 
         // Assert
         _ = await Assert.That(result).IsNull();

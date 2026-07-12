@@ -10,17 +10,17 @@ public sealed class WhenHandleIsCalled
     public async Task GivenIntentThenDelegatesToServiceAndReturnsOutcome()
     {
         // Arrange
-        var useCase = new MuTestData.TestMutation(MuTestData.Identity, MuTestData.ProposedAt);
-        var intent = new Intent<MuTestData.TestMutation>(MuTestData.CreateLedger(), MuTestData.PreparedAt, useCase);
-        IService<MuTestData.TestMutation, string> service = Substitute.For<IService<MuTestData.TestMutation, string>>();
-        Result<string> serviceResult = MuTestData.ResultValue;
+        var useCase = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
+        var intent = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, useCase);
+        IService<TestData.TestMutation, string> service = Substitute.For<IService<TestData.TestMutation, string>>();
+        Result<string> serviceResult = TestData.ResultValue;
         using var source = new CancellationTokenSource();
 
         _ = service
             .Execute(useCase, source.Token)
             .Returns(Task.FromResult(serviceResult));
 
-        var subject = new ServiceHandler<MuTestData.TestMutation, string>(service);
+        var subject = new ServiceHandler<TestData.TestMutation, string>(service);
 
         // Act
         Outcome<string> result = await subject.Handle(intent, source.Token);

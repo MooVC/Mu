@@ -8,11 +8,11 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenCausationThenCreatesInitiatorLedger()
     {
         // Act
-        var result = new Ledger(MuTestData.Identity);
+        var result = new Ledger(TestData.Identity);
 
         // Assert
-        _ = await Assert.That(result.Causation).IsEqualTo(MuTestData.Identity);
-        _ = await Assert.That(result.Correlation).IsEqualTo(MuTestData.Identity);
+        _ = await Assert.That(result.Causation).IsEqualTo(TestData.Identity);
+        _ = await Assert.That(result.Correlation).IsEqualTo(TestData.Identity);
         _ = await Assert.That(result.IsInitiator).IsTrue();
     }
 
@@ -20,11 +20,11 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenCausationAndCorrelationThenCreatesContinuationLedger()
     {
         // Act
-        Ledger result = MuTestData.CreateLedger();
+        Ledger result = TestData.CreateLedger();
 
         // Assert
-        _ = await Assert.That(result.Causation).IsEqualTo(MuTestData.Identity);
-        _ = await Assert.That(result.Correlation).IsEqualTo(MuTestData.Correlation);
+        _ = await Assert.That(result.Causation).IsEqualTo(TestData.Identity);
+        _ = await Assert.That(result.Correlation).IsEqualTo(TestData.Correlation);
         _ = await Assert.That(result.IsInitiator).IsFalse();
     }
 }

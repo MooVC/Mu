@@ -11,22 +11,22 @@ public sealed class WhenExecuteIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        Reference<Guid> target = MuTestData.CreateReference(revision: 2);
-        var useCase = new MuTestData.TestTransitional(target);
-        IRoot<MuTestData.TestAggregate, MuTestData.TestTransitional> root = Substitute.For<IRoot<MuTestData.TestAggregate, MuTestData.TestTransitional>>();
-        IWriteStore<MuTestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<MuTestData.TestAggregate, Guid>>();
-        MuTestData.TestAggregate existing = MuTestData.CreateAggregateWithChanges(MuTestData.CreateRevision(2));
-        MuTestData.TestAggregate updated = MuTestData.CreateAggregateWithChanges(MuTestData.CreateRevision(3), new MuTestData.TestFact());
+        Reference<Guid> target = TestData.CreateReference(revision: 2);
+        var useCase = new TestData.TestTransitional(target);
+        IRoot<TestData.TestAggregate, TestData.TestTransitional> root = Substitute.For<IRoot<TestData.TestAggregate, TestData.TestTransitional>>();
+        IWriteStore<TestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<TestData.TestAggregate, Guid>>();
+        TestData.TestAggregate existing = TestData.CreateAggregateWithChanges(TestData.CreateRevision(2));
+        TestData.TestAggregate updated = TestData.CreateAggregateWithChanges(TestData.CreateRevision(3), new TestData.TestFact());
 
         _ = store
             .Get(target.Identity, target.Revision, source.Token)
-            .Returns(Task.FromResult<MuTestData.TestAggregate?>(existing));
+            .Returns(Task.FromResult<TestData.TestAggregate?>(existing));
 
         _ = root
             .Apply(existing, useCase, source.Token)
-            .Returns(Task.FromResult<Result<MuTestData.TestAggregate>>(updated));
+            .Returns(Task.FromResult<Result<TestData.TestAggregate>>(updated));
 
-        var subject = new TransitionalService<MuTestData.TestAggregate, Guid, MuTestData.TestTransitional>(root, store);
+        var subject = new TransitionalService<TestData.TestAggregate, Guid, TestData.TestTransitional>(root, store);
 
         // Act
         Result<Revision> result = await subject.Execute(useCase, source.Token);
@@ -41,24 +41,24 @@ public sealed class WhenExecuteIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        Reference<Guid> target = MuTestData.CreateReference();
-        var useCase = new MuTestData.TestTransitional(target);
-        IRoot<MuTestData.TestAggregate, MuTestData.TestTransitional> root = Substitute.For<IRoot<MuTestData.TestAggregate, MuTestData.TestTransitional>>();
-        IWriteStore<MuTestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<MuTestData.TestAggregate, Guid>>();
+        Reference<Guid> target = TestData.CreateReference();
+        var useCase = new TestData.TestTransitional(target);
+        IRoot<TestData.TestAggregate, TestData.TestTransitional> root = Substitute.For<IRoot<TestData.TestAggregate, TestData.TestTransitional>>();
+        IWriteStore<TestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<TestData.TestAggregate, Guid>>();
 
         _ = store
             .Get(target.Identity, target.Revision, source.Token)
-            .Returns(Task.FromResult<MuTestData.TestAggregate?>(null));
+            .Returns(Task.FromResult<TestData.TestAggregate?>(null));
 
-        var subject = new TransitionalService<MuTestData.TestAggregate, Guid, MuTestData.TestTransitional>(root, store);
+        var subject = new TransitionalService<TestData.TestAggregate, Guid, TestData.TestTransitional>(root, store);
 
         // Act
         Result<Revision> result = await subject.Execute(useCase, source.Token);
 
         // Assert
         _ = await Assert.That(result.IsSuccessful).IsFalse();
-        await root.DidNotReceive().Apply(Arg.Any<MuTestData.TestAggregate>(), Arg.Any<MuTestData.TestTransitional>(), Arg.Any<CancellationToken>());
-        await store.DidNotReceive().Save(Arg.Any<MuTestData.TestAggregate>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+        await root.DidNotReceive().Apply(Arg.Any<TestData.TestAggregate>(), Arg.Any<TestData.TestTransitional>(), Arg.Any<CancellationToken>());
+        await store.DidNotReceive().Save(Arg.Any<TestData.TestAggregate>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -66,28 +66,28 @@ public sealed class WhenExecuteIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        Reference<Guid> target = MuTestData.CreateReference();
-        var useCase = new MuTestData.TestTransitional(target);
-        IRoot<MuTestData.TestAggregate, MuTestData.TestTransitional> root = Substitute.For<IRoot<MuTestData.TestAggregate, MuTestData.TestTransitional>>();
-        IWriteStore<MuTestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<MuTestData.TestAggregate, Guid>>();
-        MuTestData.TestAggregate existing = MuTestData.CreateAggregate();
-        Result<MuTestData.TestAggregate> failure = MuTestData.CreateFailure();
+        Reference<Guid> target = TestData.CreateReference();
+        var useCase = new TestData.TestTransitional(target);
+        IRoot<TestData.TestAggregate, TestData.TestTransitional> root = Substitute.For<IRoot<TestData.TestAggregate, TestData.TestTransitional>>();
+        IWriteStore<TestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<TestData.TestAggregate, Guid>>();
+        TestData.TestAggregate existing = TestData.CreateAggregate();
+        Result<TestData.TestAggregate> failure = TestData.CreateFailure();
 
         _ = store
             .Get(target.Identity, target.Revision, source.Token)
-            .Returns(Task.FromResult<MuTestData.TestAggregate?>(existing));
+            .Returns(Task.FromResult<TestData.TestAggregate?>(existing));
 
         _ = root
             .Apply(existing, useCase, source.Token)
             .Returns(Task.FromResult(failure));
 
-        var subject = new TransitionalService<MuTestData.TestAggregate, Guid, MuTestData.TestTransitional>(root, store);
+        var subject = new TransitionalService<TestData.TestAggregate, Guid, TestData.TestTransitional>(root, store);
 
         // Act
         Result<Revision> result = await subject.Execute(useCase, source.Token);
 
         // Assert
         _ = await Assert.That(result.Failures).IsEquivalentTo(failure.Failures);
-        await store.DidNotReceive().Save(Arg.Any<MuTestData.TestAggregate>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+        await store.DidNotReceive().Save(Arg.Any<TestData.TestAggregate>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
     }
 }

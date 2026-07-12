@@ -10,7 +10,7 @@ public sealed class WhenWhenIsCalled
     public async Task GivenSuccessfulResultThenSuccessActionIsInvoked()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
         string? observed = default;
         bool failed = false;
 
@@ -22,14 +22,14 @@ public sealed class WhenWhenIsCalled
         // Assert
         _ = await Assert.That(result).IsSameReferenceAs(subject);
         _ = await Assert.That(failed).IsFalse();
-        _ = await Assert.That(observed).IsEqualTo(MuTestData.ResultValue);
+        _ = await Assert.That(observed).IsEqualTo(TestData.ResultValue);
     }
 
     [Test]
     public async Task GivenSuccessfulResultWhenAsyncThenSuccessActionIsInvoked()
     {
         // Arrange
-        Result<string> subject = MuTestData.ResultValue;
+        Result<string> subject = TestData.ResultValue;
         string? observed = default;
         bool failed = false;
 
@@ -51,14 +51,14 @@ public sealed class WhenWhenIsCalled
         // Assert
         _ = await Assert.That(result).IsSameReferenceAs(subject);
         _ = await Assert.That(failed).IsFalse();
-        _ = await Assert.That(observed).IsEqualTo(MuTestData.ResultValue);
+        _ = await Assert.That(observed).IsEqualTo(TestData.ResultValue);
     }
 
     [Test]
     public async Task GivenUnsuccessfulResultThenFailureActionIsInvoked()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
+        ValidationResult failure = TestData.CreateFailure();
         Result<string> subject = failure;
         ImmutableArray<ValidationResult> observed = [];
         bool succeeded = false;
@@ -78,7 +78,7 @@ public sealed class WhenWhenIsCalled
     public async Task GivenUnsuccessfulResultWhenAsyncThenFailureActionIsInvoked()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
+        ValidationResult failure = TestData.CreateFailure();
         Result<string> subject = failure;
         ImmutableArray<ValidationResult> observed = [];
         bool succeeded = false;

@@ -8,7 +8,7 @@ public sealed class WhenThenIsCalled
     public async Task GivenSuccessfulResultTaskThenInvokesSuccessAction()
     {
         // Arrange
-        Task<Result<string>> subject = Task.FromResult<Result<string>>(MuTestData.ResultValue);
+        Task<Result<string>> subject = Task.FromResult<Result<string>>(TestData.ResultValue);
         string? observed = default;
 
         // Act
@@ -20,15 +20,15 @@ public sealed class WhenThenIsCalled
         });
 
         // Assert
-        _ = await Assert.That(result.Value).IsEqualTo(MuTestData.ResultValue);
-        _ = await Assert.That(observed).IsEqualTo(MuTestData.ResultValue);
+        _ = await Assert.That(result.Value).IsEqualTo(TestData.ResultValue);
+        _ = await Assert.That(observed).IsEqualTo(TestData.ResultValue);
     }
 
     [Test]
     public async Task GivenUnsuccessfulResultTaskThenDoesNotInvokeSuccessAction()
     {
         // Arrange
-        Task<Result<string>> subject = Task.FromResult<Result<string>>(MuTestData.CreateFailure());
+        Task<Result<string>> subject = Task.FromResult<Result<string>>(TestData.CreateFailure());
         bool invoked = false;
 
         // Act

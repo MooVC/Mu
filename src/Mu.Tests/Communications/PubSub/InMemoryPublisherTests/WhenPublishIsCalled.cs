@@ -11,7 +11,7 @@ public sealed class WhenPublishIsCalled
     {
         // Arrange
         var channel = Channel.CreateUnbounded<Event>();
-        Event @event = MuTestData.CreateEvent();
+        Event @event = TestData.CreateEvent();
         var subject = new InMemoryPublisher(channel.Writer);
 
         // Act
@@ -32,7 +32,7 @@ public sealed class WhenPublishIsCalled
         var subject = new InMemoryPublisher(channel.Writer);
 
         // Act
-        Exception? exception = Capture(() => subject.Publish(CancellationToken.None, MuTestData.CreateEvent()));
+        Exception? exception = Capture(() => subject.Publish(CancellationToken.None, TestData.CreateEvent()));
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<InvalidOperationException>();

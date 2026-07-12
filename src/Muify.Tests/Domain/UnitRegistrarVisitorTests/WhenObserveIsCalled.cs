@@ -18,11 +18,9 @@ public sealed class WhenObserveIsCalled
             public sealed partial record Car
                 : global::Mu.Composition.IRegistrar
             {
-                public static global::SimpleInjector.Container Register(
-                    global::Microsoft.Extensions.Configuration.IConfiguration configuration,
-                    global::SimpleInjector.Container container)
+                public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    return container;
+                    // There are no registrars defines within the assembly
                 }
             }
             """;

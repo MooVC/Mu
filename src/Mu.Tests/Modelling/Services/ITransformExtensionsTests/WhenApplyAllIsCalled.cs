@@ -8,13 +8,13 @@ public sealed class WhenApplyAllIsCalled
     public async Task GivenSingleTransformAndFactsThenAppliesEachFact()
     {
         // Arrange
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        var first = new MuTestData.TestFact();
-        var second = new MuTestData.TestFact(MuTestData.AlternateValue);
-        var transform = new MuTestData.TestTransform();
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        var first = new TestData.TestFact();
+        var second = new TestData.TestFact(TestData.AlternateValue);
+        var transform = new TestData.TestTransform();
 
         // Act
-        MuTestData.TestAggregate result = transform.ApplyAll(aggregate, first, second);
+        TestData.TestAggregate result = transform.ApplyAll(aggregate, first, second);
 
         // Assert
         _ = await Assert.That(result.Value).IsEqualTo(aggregate.Value + first.Value + second.Value);
@@ -25,14 +25,14 @@ public sealed class WhenApplyAllIsCalled
     public async Task GivenMultipleTransformsAndFactsThenAppliesEveryTransformToEveryFact()
     {
         // Arrange
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        var fact = new MuTestData.TestFact();
-        var first = new MuTestData.TestTransform();
-        var second = new MuTestData.TestTransform();
-        ITransform<MuTestData.TestAggregate, MuTestData.TestFact>[] transforms = [first, second];
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        var fact = new TestData.TestFact();
+        var first = new TestData.TestTransform();
+        var second = new TestData.TestTransform();
+        ITransform<TestData.TestAggregate, TestData.TestFact>[] transforms = [first, second];
 
         // Act
-        MuTestData.TestAggregate result = transforms.ApplyAll(aggregate, fact);
+        TestData.TestAggregate result = transforms.ApplyAll(aggregate, fact);
 
         // Assert
         _ = await Assert.That(result.Value).IsEqualTo(aggregate.Value + fact.Value + fact.Value);

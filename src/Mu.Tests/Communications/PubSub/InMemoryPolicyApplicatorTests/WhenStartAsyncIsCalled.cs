@@ -11,12 +11,12 @@ public sealed class WhenStartAsyncIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        var subscriber = new MuTestData.TestSubscriber();
-        var policy = new MuTestData.TestPolicy();
+        var subscriber = new TestData.TestSubscriber();
+        var policy = new TestData.TestPolicy();
         IPolicyDirectory directory = Substitute.For<IPolicyDirectory>();
         IServiceScopeFactory factory = Substitute.For<IServiceScopeFactory>();
         IServiceScope scope = Substitute.For<IServiceScope>();
-        Event<MuTestData.TestFact, Guid> @event = MuTestData.CreateEvent();
+        Event<TestData.TestFact, Guid> @event = TestData.CreateEvent();
 
         _ = factory
             .CreateScope()
@@ -24,7 +24,7 @@ public sealed class WhenStartAsyncIsCalled
 
         _ = directory
             .Find(@event, Arg.Any<IServiceScope>())
-            .Returns(new Policy<MuTestData.TestFact, Guid>([policy]));
+            .Returns(new Policy<TestData.TestFact, Guid>([policy]));
 
         var subject = new InMemoryPolicyApplicator(directory, factory, [subscriber]);
 

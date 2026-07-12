@@ -9,8 +9,8 @@ public sealed class WhenEnforceIsCalled
     public async Task GivenIntentThenReturnsFailuresFromImplementation()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
-        var subject = new MuTestData.TestSpecification<TestQuery>(failure);
+        ValidationResult failure = TestData.CreateFailure();
+        var subject = new TestData.TestSpecification<TestQuery>(failure);
         var intent = new TestQuery();
 
         // Act
@@ -25,7 +25,7 @@ public sealed class WhenEnforceIsCalled
     public async Task GivenNullIntentThenThrowsArgumentNullException()
     {
         // Arrange
-        var subject = new MuTestData.TestSpecification<TestQuery>();
+        var subject = new TestData.TestSpecification<TestQuery>();
         TestQuery intent = null!;
 
         // Act

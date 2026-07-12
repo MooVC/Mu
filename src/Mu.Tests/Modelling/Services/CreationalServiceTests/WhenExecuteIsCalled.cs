@@ -11,25 +11,25 @@ public sealed class WhenExecuteIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        var useCase = new MuTestData.TestCreational();
-        var allocator = new MuTestData.TestAllocator();
-        IRoot<MuTestData.TestAggregate, MuTestData.TestCreational> root = Substitute.For<IRoot<MuTestData.TestAggregate, MuTestData.TestCreational>>();
-        IWriteStore<MuTestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<MuTestData.TestAggregate, Guid>>();
-        var fact = new MuTestData.TestFact();
-        MuTestData.TestAggregate opened = MuTestData.CreateAggregateWithChanges(new Revision(), fact);
+        var useCase = new TestData.TestCreational();
+        var allocator = new TestData.TestAllocator();
+        IRoot<TestData.TestAggregate, TestData.TestCreational> root = Substitute.For<IRoot<TestData.TestAggregate, TestData.TestCreational>>();
+        IWriteStore<TestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<TestData.TestAggregate, Guid>>();
+        var fact = new TestData.TestFact();
+        TestData.TestAggregate opened = TestData.CreateAggregateWithChanges(new Revision(), fact);
 
         _ = root
-            .Apply(Arg.Any<MuTestData.TestAggregate>(), useCase, source.Token)
-            .Returns(Task.FromResult<Result<MuTestData.TestAggregate>>(opened));
+            .Apply(Arg.Any<TestData.TestAggregate>(), useCase, source.Token)
+            .Returns(Task.FromResult<Result<TestData.TestAggregate>>(opened));
 
-        var subject = new CreationalService<MuTestData.TestAggregate, Guid, MuTestData.TestCreational>(allocator, root, store);
+        var subject = new CreationalService<TestData.TestAggregate, Guid, TestData.TestCreational>(allocator, root, store);
 
         // Act
         Result<Guid> result = await subject.Execute(useCase, source.Token);
 
         // Assert
-        _ = await Assert.That(result.Value).IsEqualTo(MuTestData.Identity);
-        await store.Received(1).Save(opened, MuTestData.Identity, source.Token);
+        _ = await Assert.That(result.Value).IsEqualTo(TestData.Identity);
+        await store.Received(1).Save(opened, TestData.Identity, source.Token);
         _ = await Assert.That(allocator.Surrendered).IsEmpty();
     }
 
@@ -38,25 +38,25 @@ public sealed class WhenExecuteIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        var useCase = new MuTestData.TestCreational();
-        var allocator = new MuTestData.TestAllocator();
-        IRoot<MuTestData.TestAggregate, MuTestData.TestCreational> root = Substitute.For<IRoot<MuTestData.TestAggregate, MuTestData.TestCreational>>();
-        IWriteStore<MuTestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<MuTestData.TestAggregate, Guid>>();
-        Result<MuTestData.TestAggregate> failure = MuTestData.CreateFailure();
+        var useCase = new TestData.TestCreational();
+        var allocator = new TestData.TestAllocator();
+        IRoot<TestData.TestAggregate, TestData.TestCreational> root = Substitute.For<IRoot<TestData.TestAggregate, TestData.TestCreational>>();
+        IWriteStore<TestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<TestData.TestAggregate, Guid>>();
+        Result<TestData.TestAggregate> failure = TestData.CreateFailure();
 
         _ = root
-            .Apply(Arg.Any<MuTestData.TestAggregate>(), useCase, source.Token)
+            .Apply(Arg.Any<TestData.TestAggregate>(), useCase, source.Token)
             .Returns(Task.FromResult(failure));
 
-        var subject = new CreationalService<MuTestData.TestAggregate, Guid, MuTestData.TestCreational>(allocator, root, store);
+        var subject = new CreationalService<TestData.TestAggregate, Guid, TestData.TestCreational>(allocator, root, store);
 
         // Act
         Result<Guid> result = await subject.Execute(useCase, source.Token);
 
         // Assert
         _ = await Assert.That(result.Failures).IsEquivalentTo(failure.Failures);
-        _ = await Assert.That(allocator.Surrendered).IsEquivalentTo(new[] { MuTestData.Identity });
-        await store.DidNotReceive().Save(Arg.Any<MuTestData.TestAggregate>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+        _ = await Assert.That(allocator.Surrendered).IsEquivalentTo(new[] { TestData.Identity });
+        await store.DidNotReceive().Save(Arg.Any<TestData.TestAggregate>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -65,23 +65,23 @@ public sealed class WhenExecuteIsCalled
         // Arrange
         using var source = new CancellationTokenSource();
         var exception = new InvalidOperationException();
-        var useCase = new MuTestData.TestCreational();
-        var allocator = new MuTestData.TestAllocator();
-        IRoot<MuTestData.TestAggregate, MuTestData.TestCreational> root = Substitute.For<IRoot<MuTestData.TestAggregate, MuTestData.TestCreational>>();
-        IWriteStore<MuTestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<MuTestData.TestAggregate, Guid>>();
+        var useCase = new TestData.TestCreational();
+        var allocator = new TestData.TestAllocator();
+        IRoot<TestData.TestAggregate, TestData.TestCreational> root = Substitute.For<IRoot<TestData.TestAggregate, TestData.TestCreational>>();
+        IWriteStore<TestData.TestAggregate, Guid> store = Substitute.For<IWriteStore<TestData.TestAggregate, Guid>>();
 
         _ = root
-            .Apply(Arg.Any<MuTestData.TestAggregate>(), useCase, source.Token)
-            .Returns(Task.FromException<Result<MuTestData.TestAggregate>>(exception));
+            .Apply(Arg.Any<TestData.TestAggregate>(), useCase, source.Token)
+            .Returns(Task.FromException<Result<TestData.TestAggregate>>(exception));
 
-        var subject = new CreationalService<MuTestData.TestAggregate, Guid, MuTestData.TestCreational>(allocator, root, store);
+        var subject = new CreationalService<TestData.TestAggregate, Guid, TestData.TestCreational>(allocator, root, store);
 
         // Act
         Exception? result = await Capture(() => subject.Execute(useCase, source.Token));
 
         // Assert
         _ = await Assert.That(result).IsSameReferenceAs(exception);
-        _ = await Assert.That(allocator.Surrendered).IsEquivalentTo(new[] { MuTestData.Identity });
+        _ = await Assert.That(allocator.Surrendered).IsEquivalentTo(new[] { TestData.Identity });
     }
 
     private static async Task<Exception?> Capture(Func<Task> action)

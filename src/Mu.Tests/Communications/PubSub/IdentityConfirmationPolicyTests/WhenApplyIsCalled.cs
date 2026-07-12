@@ -10,14 +10,14 @@ public sealed class WhenApplyIsCalled
     {
         // Arrange
         using var source = new CancellationTokenSource();
-        var allocator = new MuTestData.TestAllocator();
-        var subject = new IdentityConfirmationPolicy<MuTestData.TestAggregate, MuTestData.TestFact, Guid>(allocator);
-        Event<MuTestData.TestFact, Guid> @event = MuTestData.CreateEvent();
+        var allocator = new TestData.TestAllocator();
+        var subject = new IdentityConfirmationPolicy<TestData.TestAggregate, TestData.TestFact, Guid>(allocator);
+        Event<TestData.TestFact, Guid> @event = TestData.CreateEvent();
 
         // Act
         await subject.Apply(@event, source.Token);
 
         // Assert
-        _ = await Assert.That(allocator.Confirmed).IsEquivalentTo(new[] { MuTestData.Identity });
+        _ = await Assert.That(allocator.Confirmed).IsEquivalentTo(new[] { TestData.Identity });
     }
 }

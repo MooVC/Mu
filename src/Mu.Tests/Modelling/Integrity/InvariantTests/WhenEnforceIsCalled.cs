@@ -10,10 +10,10 @@ public sealed class WhenEnforceIsCalled
     public async Task GivenAggregateAndMutationThenReturnsFailuresFromImplementation()
     {
         // Arrange
-        ValidationResult failure = MuTestData.CreateFailure();
+        ValidationResult failure = TestData.CreateFailure();
         var subject = new TestInvariant(failure);
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        var mutation = new MuTestData.TestMutation();
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        var mutation = new TestData.TestMutation();
 
         // Act
         ValidationResult[] result = await ToArray(subject.Enforce(aggregate, mutation, CancellationToken.None));
@@ -29,8 +29,8 @@ public sealed class WhenEnforceIsCalled
     {
         // Arrange
         var subject = new TestInvariant();
-        MuTestData.TestAggregate aggregate = null!;
-        var mutation = new MuTestData.TestMutation();
+        TestData.TestAggregate aggregate = null!;
+        var mutation = new TestData.TestMutation();
 
         // Act
         Exception? exception = Capture(() => _ = subject.Enforce(aggregate, mutation, CancellationToken.None));
@@ -44,8 +44,8 @@ public sealed class WhenEnforceIsCalled
     {
         // Arrange
         var subject = new TestInvariant();
-        MuTestData.TestAggregate aggregate = MuTestData.CreateAggregate();
-        MuTestData.TestMutation mutation = null!;
+        TestData.TestAggregate aggregate = TestData.CreateAggregate();
+        TestData.TestMutation mutation = null!;
 
         // Act
         Exception? exception = Capture(() => _ = subject.Enforce(aggregate, mutation, CancellationToken.None));
@@ -81,13 +81,13 @@ public sealed class WhenEnforceIsCalled
     }
 
     private sealed class TestInvariant(params ValidationResult[] failures)
-        : Invariant<MuTestData.TestAggregate, MuTestData.TestMutation>
+        : Invariant<TestData.TestAggregate, TestData.TestMutation>
     {
-        public IList<MuTestData.TestAggregate> Aggregates { get; } = [];
+        public IList<TestData.TestAggregate> Aggregates { get; } = [];
 
-        public IList<MuTestData.TestMutation> Mutations { get; } = [];
+        public IList<TestData.TestMutation> Mutations { get; } = [];
 
-        protected override async IAsyncEnumerable<ValidationResult> PerformEnforce(MuTestData.TestAggregate aggregate, MuTestData.TestMutation mutation, [EnumeratorCancellation] CancellationToken cancellationToken)
+        protected override async IAsyncEnumerable<ValidationResult> PerformEnforce(TestData.TestAggregate aggregate, TestData.TestMutation mutation, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             Aggregates.Add(aggregate);
             Mutations.Add(mutation);

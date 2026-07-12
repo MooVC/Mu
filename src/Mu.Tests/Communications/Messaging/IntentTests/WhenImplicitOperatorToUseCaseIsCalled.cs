@@ -8,11 +8,11 @@ public sealed class WhenImplicitOperatorToUseCaseIsCalled
     public async Task GivenIntentThenReturnsUseCase()
     {
         // Arrange
-        var useCase = new MuTestData.TestMutation();
-        var subject = new Intent<MuTestData.TestMutation>(MuTestData.CreateLedger(), MuTestData.PreparedAt, useCase);
+        var useCase = new TestData.TestMutation();
+        var subject = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, useCase);
 
         // Act
-        MuTestData.TestMutation result = subject;
+        TestData.TestMutation result = subject;
 
         // Assert
         _ = await Assert.That(result).IsSameReferenceAs(useCase);
@@ -22,12 +22,12 @@ public sealed class WhenImplicitOperatorToUseCaseIsCalled
     public async Task GivenNullIntentThenThrowsArgumentNullException()
     {
         // Arrange
-        Intent<MuTestData.TestMutation> subject = null!;
+        Intent<TestData.TestMutation> subject = null!;
 
         // Act
         Exception? exception = Capture(() =>
         {
-            MuTestData.TestMutation result = subject;
+            TestData.TestMutation result = subject;
 
             _ = result;
         });
