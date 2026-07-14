@@ -89,7 +89,7 @@ public sealed class WhenParseModelIsCalled
             public sealed partial record Car;
             """;
 
-        Unit expected = Unit.Undefined.IdentifiedBy(typeof(Guid));
+        Unit expected = Unit.Undefined.IdentifiedBy(Identity.Default);
 
         // Act
         Model result = GetModel(source);

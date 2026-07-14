@@ -44,14 +44,13 @@ namespace Muify.Service
             var registrations = new List<string>();
 
             if (feature.Value.Metadata.Handler.IsUnnamed
-            && !feature.Features.Unit.Value.Identity.IsUnnamed
             && (feature.Value.Type.IsMutational || feature.Value.Results.Length > 0))
             {
-                registrations.Add(GetMutationalHandlerRegistration(feature));
+                registrations.Add(DefineMutationalHandlerRegistration(feature));
 
-                if (feature.Value.Type.IsMutational && feature.Value.Metadata.Serivce.IsUnnamed)
+                if (feature.Value.Type.IsMutational && feature.Value.Metadata.Service.IsUnnamed)
                 {
-                    registrations.Add(GetMutationalServiceRegistration(feature));
+                    registrations.Add(DefineMutationalServiceRegistration(feature));
                 }
             }
 
@@ -60,24 +59,24 @@ namespace Muify.Service
             return Snippet.From(Configuration.Options, registrations.ToArray());
         }
 
-        private static string GetMutationalHandlerRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
+        private static string DefineMutationalHandlerRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            Qualification GetMutationalResult()
+            Qualification DefineMutationalResult()
             {
                 return feature.Value.Mutational.Type.IsCreational
-                    ? feature.Features.Unit.Value.Identity
+                    ? feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace).Name
                     : (Name: "Revision", Qualifier: "Mu.Modelling.State");
             }
 
-            Symbol GetUseCase(Symbol usecase)
+            Symbol DefineUseCase(Symbol usecase)
             {
                 return usecase.Named((feature.Value.Name, feature.Namespace));
             }
 
-            Symbol GetResult(Symbol outcome)
+            Symbol DefineResult(Symbol outcome)
             {
                 Qualification result = feature.Value.Results.Length == 0
-                    ? GetMutationalResult()
+                    ? DefineMutationalResult()
                     : (Name: $"{feature.Value.Name}.Result", Qualifier: feature.Namespace);
 
                 return outcome.Named(result);
@@ -85,23 +84,25 @@ namespace Muify.Service
 
             Symbol contract = Symbol.Undefined
                 .Named((Name: "IHandler", Qualifier: "Mu.Communications.Mediation"))
-                .WithArguments(GetUseCase)
-                .WithArguments(GetResult);
+                .WithArguments(DefineUseCase)
+                .WithArguments(DefineResult);
 
             Symbol service = Symbol.Undefined
                 .Named((Name: "ServiceHandler", Qualifier: "Mu.Communications.Mediation"))
-                .WithArguments(GetUseCase)
-                .WithArguments(GetResult);
+                .WithArguments(DefineUseCase)
+                .WithArguments(DefineResult);
 
             return GetRegistration(contract, service);
         }
 
-        private static string GetMutationalServiceRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
+        private static string DefineMutationalServiceRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
+            Symbol identity = feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace);
+
             Symbol contract = Symbol.Undefined
                 .Named((Name: "IService", Qualifier: "Mu.Modelling.Services"))
                 .WithArguments(usecase => usecase.Named((feature.Value.Name, feature.Namespace)))
-                .WithArguments(result => result.Named(feature.Features.Unit.Value.Identity));
+                .WithArguments(identity);
 
             Symbol service = Symbol.Undefined
                 .Named(qualification => qualification
@@ -111,7 +112,7 @@ namespace Muify.Service
                         @true: creational => creational.KnownAs("CreationalService"),
                         @false: transitional => transitional.KnownAs("TransitionalService")))
                 .WithArguments(aggregate => aggregate.Named((feature.Features.Unit.Value.Name, feature.Features.Unit.Namespace)))
-                .WithArguments(identity => identity.Named(feature.Features.Unit.Value.Identity))
+                .WithArguments(identity)
                 .WithArguments(usecase => usecase.Named((feature.Value.Name, feature.Namespace)));
 
             return GetRegistration(contract, service);

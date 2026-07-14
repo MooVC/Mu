@@ -20,8 +20,8 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    container.Register<global::Mu.Communications.Mediation.IHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::System.Guid>, global::Mu.Communications.Mediation.ServiceHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::System.Guid>>(global::SimpleInjector.Lifestyle.Scoped);
-                    container.Register<global::Mu.Modelling.Services.IService<global::MooVC.Testing.Mechanics.Car.Register.Register, global::System.Guid>, global::Mu.Modelling.Services.CreationalService<global::MooVC.Testing.Mechanics.Car.Car, global::System.Guid, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
+                    container.Register<global::Mu.Communications.Mediation.IHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Communications.Mediation.ServiceHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>>(global::SimpleInjector.Lifestyle.Scoped);
+                    container.Register<global::Mu.Modelling.Services.IService<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Modelling.Services.CreationalService<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
                 }
             }
             """;

@@ -38,7 +38,7 @@
         public ImmutableArray<Feature> Features { get; internal set; } = ImmutableArray<Feature>.Empty;
 
         [Descriptor("IdentifiedBy")]
-        public Qualification Identity { get; internal set; } = typeof(Guid);
+        public Identity Identity { get; internal set; } = Identity.Default;
 
         [Ignore]
         [Traverse(Scope = TraverseScope.None)]
@@ -68,7 +68,6 @@
                 .AndIf(!Components.IsDefaultOrEmpty, nameof(Components), component => !component.IsUndefined, Components)
                 .AndIf(!Features.IsDefaultOrEmpty, nameof(Features), feature => !feature.IsUndefined, Features)
                 .AndIf(!Lists.IsDefaultOrEmpty, nameof(Lists), list => !list.IsUndefined, Lists)
-                .And(nameof(Identity), identity => !identity.IsUnnamed, Identity)
                 .And(nameof(Name), name => !name.IsUnnamed, Name)
                 .AndIf(!Views.IsDefaultOrEmpty, nameof(Views), view => !view.IsUndefined, Views)
                 .Results;

@@ -74,13 +74,12 @@ public sealed class WhenObserveIsCalled
         const string content = """
             namespace MooVC.Testing.Mechanics.Car.Unregister;
 
-            using System;
             using System.ComponentModel;
             using Muify.Service;
 
             [Description("Removes a Car from the Mechanics System")]
             [Transitional(Fact = "Unregistered")]
-            public sealed partial record Unregister(Guid Identity);
+            public sealed partial record Unregister(Registration Identity);
             """;
 
         var expected = new File(content, "cs", "Unregister", "src/MooVC.Testing.Mechanics.Car.Unregister/");

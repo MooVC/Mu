@@ -43,7 +43,7 @@ internal sealed class Request
         {
             record = record.WithParameters(identity => identity
                 .Named(nameof(feature.Features.Unit.Value.Identity))
-                .OfType(feature.Features.Unit.Value.Identity));
+                .OfType(feature.Features.Unit.Value.Identity.GetSymbol(feature.Namespace)));
         }
 
         return record.WithParameters(feature.Value.Parameters);

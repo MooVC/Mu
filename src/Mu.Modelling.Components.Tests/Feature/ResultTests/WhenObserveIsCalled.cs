@@ -16,12 +16,11 @@ public sealed class WhenObserveIsCalled
         const string content = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            using System;
             using System.ComponentModel;
 
             public sealed partial record Register
             {
-                public sealed partial record Result([Description("The Identity of the Newly Created Car")] Guid Identity);
+                public sealed partial record Result([Description("The Identity of the Newly Created Car")] Registration Identity);
             }
             """;
 

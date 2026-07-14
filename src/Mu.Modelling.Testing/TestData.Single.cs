@@ -15,6 +15,8 @@
             public static readonly Model.Graph.Areas.Area.Units.Unit.Components Components;
             public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Pressure;
             public static readonly Model.Graph.Areas.Area.Units.Unit.Components.Component Wheel;
+            public static readonly Model.Graph.Areas.Area.Units.Unit.Identity Identity;
+            public static readonly Model.Graph.Areas.Area.Units.Unit.Identity.Component Registration;
             public static readonly Model.Graph.Areas.Area.Units.Unit.Lists Lists;
             public static readonly Model.Graph.Areas.Area.Units.Unit.Lists.List Location;
             public static readonly Model.Graph.Areas.Area.Units.Unit.Features Features;
@@ -44,6 +46,7 @@
                             .Featuring(DefineFindCarsBy)
                             .Featuring(DefineRegister)
                             .Featuring(DefineUnregister)
+                            .IdentifiedBy(identity => DefineRegistration(identity.Component))
                             .Named("Car")
                             .Owns(DefinePressure)
                             .Owns(DefineWheel)
@@ -59,6 +62,8 @@
                 Components = new Model.Graph.Areas.Area.Units.Unit.Components(Car, Model, Car.Value.Components);
                 Pressure = new Model.Graph.Areas.Area.Units.Unit.Components.Component(Components, 0, Model, Components.Value[0]);
                 Wheel = new Model.Graph.Areas.Area.Units.Unit.Components.Component(Components, 1, Model, Components.Value[1]);
+                Identity = new Model.Graph.Areas.Area.Units.Unit.Identity(Car, Model, Car.Value.Identity);
+                Registration = new Model.Graph.Areas.Area.Units.Unit.Identity.Component(Identity, Model, Identity.Value.Component);
                 Lists = new Model.Graph.Areas.Area.Units.Unit.Lists(Car, Model, Car.Value.Lists);
                 Location = new Model.Graph.Areas.Area.Units.Unit.Lists.List(Lists, 0, Model, Lists.Value[0]);
                 Features = new Model.Graph.Areas.Area.Units.Unit.Features(Car, Model, Car.Value.Features);
@@ -123,6 +128,17 @@
                     .Using((Name: "Doors", Type: typeof(byte)))
                     .Using((Name: "Make", Type: typeof(string)))
                     .Using((Name: "Model", Type: typeof(string)));
+            }
+
+            private static Component DefineRegistration(Component registration)
+            {
+                return registration
+                    .AttributedWith(number => number
+                        .DescribedAs("The unique number attributed to the Car")
+                        .Named("Number")
+                        .OfType((Name: "string", Qualifier: "System")))
+                    .DescribedAs("Represents a Registration for a Car")
+                    .Named("Registration");
             }
 
             private static Feature DefineUnregister(Feature unregister)

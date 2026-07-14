@@ -32,7 +32,7 @@ internal sealed class Result
                 .Containing(Type
                     .New<Record>()
                     .Named(nameof(Result))
-                    .ForkOn(_ => isCreational, @true: result => CreateIdentity(feature, result), @false: _ => _)
+                    .ForkOn(_ => isCreational, @true: result => DefineIdentity(feature, result), @false: _ => _)
                     .WithParameters(results))
                 .Named(feature.Value.Name))
             .From(feature.Namespace)
@@ -42,7 +42,7 @@ internal sealed class Result
         yield return new File(content, Extensions.Code, $"{feature.Value.Name}.{nameof(Result)}", $"{Folders.Source}/{feature.ProjectName}/");
     }
 
-    private static Record CreateIdentity(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, Record record)
+    private static Record DefineIdentity(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, Record record)
     {
         string description = $"The {nameof(feature.Features.Unit.Value.Identity)} of the Newly Created {feature.Features.Unit.Value.Name}";
 
@@ -51,6 +51,6 @@ internal sealed class Result
                 typeof(DescriptionAttribute),
                 attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\"")))
             .Named(nameof(feature.Features.Unit.Value.Identity))
-            .OfType(feature.Features.Unit.Value.Identity));
+            .OfType(feature.Features.Unit.Value.Identity.GetSymbol(feature.Namespace)));
     }
 }
