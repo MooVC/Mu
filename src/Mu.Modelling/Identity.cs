@@ -18,10 +18,13 @@
 
         public Component Component { get; internal set; } = Component.Undefined;
 
+        [Ignore]
         public bool IsComponent => Component != Component.Undefined;
 
+        [Ignore]
         public bool IsDefault => this == Default;
 
+        [Ignore]
         public bool IsType => Component == Component.Undefined;
 
         public Qualification Type { get; internal set; } = typeof(Guid);

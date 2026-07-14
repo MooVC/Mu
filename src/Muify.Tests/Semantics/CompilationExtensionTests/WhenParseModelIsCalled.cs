@@ -124,10 +124,12 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
-        Qualification expected = (Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation");
+        Service expected = Service.Undefined
+            .HasRegistrar(false)
+            .WithDefinition((Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation"));
 
         // Act
-        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
+        Service result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
         _ = await Assert.That(result).IsEqualTo(expected);
@@ -155,10 +157,12 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
-        Qualification expected = (Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation");
+        Service expected = Service.Undefined
+            .HasRegistrar(false)
+            .WithDefinition((Name: "GuidAllocator", Qualifier: "MooVC.Testing.Mechanics.Car.Allocation"));
 
         // Act
-        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
+        Service result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
         _ = await Assert.That(result).IsEqualTo(expected);
@@ -187,10 +191,12 @@ public sealed class WhenParseModelIsCalled
             }
             """;
 
-        Qualification expected = (Name: "CarIdentityAllocator", Qualifier: "MooVC.Testing.Mechanics.Car");
+        Service expected = Service.Undefined
+            .HasRegistrar(false)
+            .WithDefinition((Name: "CarIdentityAllocator", Qualifier: "MooVC.Testing.Mechanics.Car"));
 
         // Act
-        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
+        Service result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
         _ = await Assert.That(result).IsEqualTo(expected);
@@ -214,10 +220,10 @@ public sealed class WhenParseModelIsCalled
             """;
 
         // Act
-        Qualification result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
+        Service result = GetModel(source).Areas[0].Units[0].Metadata.Allocator;
 
         // Assert
-        _ = await Assert.That(result.IsUnnamed).IsTrue();
+        _ = await Assert.That(result.IsUndefined).IsTrue();
     }
 
     [Test]

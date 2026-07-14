@@ -14,7 +14,7 @@
         {
             public static readonly Semantics OutOfScope = new Semantics();
 
-            public Qualification Allocator { get; set; } = Qualification.Unnamed;
+            public Service Allocator { get; set; } = Service.Undefined;
 
             public bool HasBase { get; set; } = true;
 

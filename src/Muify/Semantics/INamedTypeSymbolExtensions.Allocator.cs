@@ -2,25 +2,27 @@ namespace Muify.Semantics
 {
     using System.Linq;
     using Microsoft.CodeAnalysis;
-    using MooVC.Syntax.CSharp;
+    using Mu.Modelling;
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        internal static Qualification Allocator(this INamedTypeSymbol definition)
+        internal static Service Allocator(this INamedTypeSymbol definition)
         {
-            ITypeSymbol identityType = definition.GetUnitIdentityType();
+            ITypeSymbol identity = definition.GetUnitIdentityType();
 
             INamedTypeSymbol allocator = definition.ContainingAssembly.GlobalNamespace
                 .GetAllTypes()
                 .Where(type => type.TypeKind == TypeKind.Class)
-                .FirstOrDefault(type => type.AllInterfaces.Any(@interface => @interface.IsAllocator(identityType)));
+                .FirstOrDefault(type => type.AllInterfaces.Any(@interface => @interface.IsAllocator(identity)));
 
             if (allocator is object)
             {
-                return allocator.ToQualification();
+                return Service.Undefined
+                    .HasRegistrar(allocator.HasRegistrar())
+                    .WithDefinition(allocator.ToQualification());
             }
 
-            return Qualification.Unnamed;
+            return Service.Undefined;
         }
     }
 }
