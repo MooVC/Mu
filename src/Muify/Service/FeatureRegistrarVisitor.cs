@@ -28,7 +28,7 @@ namespace Muify.Service
                 .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, "Registrar");
+            yield return new File(content, $"{feature.Value.Name}.Registrar");
         }
 
         private static void ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, List<string> registrations)
