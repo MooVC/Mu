@@ -7,7 +7,6 @@ namespace Muify.Service
     using Mu.Modelling;
     using Muify.Syntax.CSharp;
     using static Muify.Configuration;
-    using Result = MooVC.Syntax.CSharp.Result;
 
     internal sealed class FeatureRegistrarVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>

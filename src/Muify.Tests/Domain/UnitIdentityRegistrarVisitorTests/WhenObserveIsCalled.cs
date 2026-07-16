@@ -1,5 +1,7 @@
 namespace Muify.Domain.UnitIdentityRegistrarVisitorTests;
 
+using MooVC.Syntax;
+using MooVC.Syntax.CSharp;
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
@@ -21,13 +23,21 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    container.RegisterConditional<global::Mu.Modelling.Services.IAllocator<global::MooVC.Testing.Mechanics.Car.Registration>, Allocator>(Lifestyle.Scoped, context => context.Consumer.ImplementationType.Namespace.StartsWith("My.Namespace", StringComparison.Ordinal));
+                    container.RegisterConditional<global::Mu.Modelling.Services.IAllocator<global::MooVC.Testing.Mechanics.Car.Registration>, global::MooVC.Testing.Mechanics.Car.Allocator>(
+                        global::SimpleInjector.Lifestyle.Scoped,
+                        context => context.Consumer.ImplementationType.Namespace.StartsWith("MooVC.Testing.Mechanics.Car", StringComparison.Ordinal));
                 }
             }
             """;
 
         var visitor = new UnitIdentityRegistrarVisitor();
-        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator.HasRegistrar(false)));
+
+        Unit car = TestData.Single.Car.Value
+            .WithMetadata(metadata => metadata
+                .WithAllocator(allocator => allocator
+                    .HasRegistrar(false)
+                    .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
         Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, TestData.Single.Model, unit.Value.Identity);
 

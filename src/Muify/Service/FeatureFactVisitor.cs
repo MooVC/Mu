@@ -9,6 +9,7 @@ namespace Muify.Service
     using Mu.Modelling;
     using Mu.Modelling.Syntax.CSharp;
     using Conversion = MooVC.Syntax.CSharp.Conversion;
+    using Parameter = Mu.Modelling.Parameter;
 
     internal sealed class FeatureFactVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
@@ -26,6 +27,11 @@ namespace Muify.Service
             Symbol request = (feature.Value.Name, Qualifier: feature.Namespace);
             Symbol unit = (feature.Features.Unit.Value.Name, Qualifier: feature.Features.Unit.Namespace);
 
+            IOrderedEnumerable<Parameter> parameters = feature.Value.Parameters
+                .Append((Name: "Identity", Type: typeof(Guid)))
+                .Append((Name: "Proposed", Type: typeof(DateTimeOffset)))
+                .OrderBy(parameter => parameter.Name);
+
             string content = Builder
                 .New<Definition>()
                 .For<Record>(record => record
@@ -41,11 +47,9 @@ namespace Muify.Service
                     .WithConstructors(serialization => serialization
                         .AttributedWith(attribute => attribute
                             .Named((Name: "JsonConstructorAttribute", Qualifier: "System.Text.Json.Serialization")))
-                        .Enumerate((current, subject) => subject.WithParameters(parameter => parameter.From(current)), feature.Value.Parameters)
+                        .Enumerate((current, subject) => subject.WithParameters(parameter => parameter.From(current)), parameters)
                         .WithArguments("identity", "proposed")
-                        .WithBody(assignments)
-                        .WithParameters((Name: "Identity", Type: typeof(Guid)))
-                        .WithParameters((Name: "Proposed", Type: typeof(DateTimeOffset))))
+                        .WithBody(assignments))
                     .WithParameters(feature.Value.Parameters)
                     .WithOperators(operators => operators
                         .WithConversions(conversion => conversion
