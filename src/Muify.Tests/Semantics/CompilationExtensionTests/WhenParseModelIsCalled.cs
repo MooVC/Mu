@@ -76,6 +76,63 @@ public sealed class WhenParseModelIsCalled
     private static readonly MetadataReference[] _references = GetReferences();
 
     [Test]
+    public async Task GivenAssemblyReferencesThenAssembliesAreCatalogued()
+    {
+        // Arrange
+        const string ReferenceAssemblyName = "Referenced.Assembly";
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            public sealed record Car;
+            """;
+
+        MetadataReference reference = CreateReference(ReferenceAssemblyName);
+
+        // Act
+        Model result = GetModel(source, reference);
+
+        // Assert
+        _ = await Assert.That(result.Metadata.Assemblies).Contains(ReferenceAssemblyName);
+    }
+
+    [Test]
+    public async Task GivenMuCompositionIsNotReferencedThenHasCompositionIsFalse()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            public sealed record Car;
+            """;
+
+        // Act
+        Model result = GetModel(source);
+
+        // Assert
+        _ = await Assert.That(result.Metadata.HasComposition).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenMuCompositionIsReferencedThenHasCompositionIsTrue()
+    {
+        // Arrange
+        const string CompositionAssemblyName = "Mu.Composition";
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            public sealed record Car;
+            """;
+
+        MetadataReference reference = CreateReference(CompositionAssemblyName);
+
+        // Act
+        Model result = GetModel(source, reference);
+
+        // Assert
+        _ = await Assert.That(result.Metadata.HasComposition).IsTrue();
+    }
+
+    [Test]
     public async Task GivenAUnitAttributeThenUnitIdentityIsDiscoveredFromTheGenericArgument()
     {
         // Arrange
@@ -709,7 +766,22 @@ public sealed class WhenParseModelIsCalled
         _ = await Assert.That(result).IsTrue();
     }
 
-    private static Model GetModel(string source)
+    private static MetadataReference CreateReference(string assemblyName)
+    {
+        var compilation = CSharpCompilation.Create(
+            assemblyName,
+            [CSharpSyntaxTree.ParseText("public sealed class Reference { }")],
+            _references,
+            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        using var stream = new MemoryStream();
+        _ = compilation.Emit(stream);
+        stream.Position = 0;
+
+        return MetadataReference.CreateFromStream(stream);
+    }
+
+    private static Model GetModel(string source, params MetadataReference[] references)
     {
         var compilation = CSharpCompilation.Create(
             AssemblyName,
@@ -720,7 +792,7 @@ public sealed class WhenParseModelIsCalled
                 CSharpSyntaxTree.ParseText(StateSource),
                 CSharpSyntaxTree.ParseText(source),
             ],
-            _references,
+            _references.Concat(references),
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
         return compilation.ParseModel(CancellationToken.None);

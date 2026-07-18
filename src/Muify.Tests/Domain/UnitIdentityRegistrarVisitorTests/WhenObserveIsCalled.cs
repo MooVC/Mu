@@ -31,6 +31,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new UnitIdentityRegistrarVisitor();
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
 
         Unit car = TestData.Single.Car.Value
             .WithMetadata(metadata => metadata
@@ -38,8 +39,8 @@ public sealed class WhenObserveIsCalled
                     .HasRegistrar(false)
                     .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
 
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
-        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, TestData.Single.Model, unit.Value.Identity);
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
 
         // Act
         IEnumerable<File> result = visitor.Observe(identity);
@@ -51,13 +52,19 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
+    public async Task GivenAUnitWhenHasCompositionIsFalseThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitIdentityRegistrarVisitor();
-        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator.HasRegistrar(true)));
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
-        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, TestData.Single.Model, unit.Value.Identity);
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(false));
+        Unit car = TestData.Single.Car.Value
+            .WithMetadata(metadata => metadata
+                .WithAllocator(allocator => allocator
+                    .HasRegistrar(false)
+                    .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
+
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
 
         // Act
         IEnumerable<File> result = visitor.Observe(identity);
@@ -67,13 +74,33 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAFeatureWhenOutOfScopeThenNothingIsGenerated()
+    public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitIdentityRegistrarVisitor();
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator.HasRegistrar(true)));
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
 
         // Act
-        IEnumerable<File> result = visitor.Observe(TestData.Single.Identity);
+        IEnumerable<File> result = visitor.Observe(identity);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    public async Task GivenAUnitWhenAllocatorIsUndefinedThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new UnitIdentityRegistrarVisitor();
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(identity);
 
         // Assert
         _ = await Assert.That(result).IsEmpty();

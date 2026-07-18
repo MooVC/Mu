@@ -48,6 +48,8 @@
         [Traverse(Scope = TraverseScope.Property)]
         public Options Options { get; internal set; } = Options.Default;
 
+        internal Semantics Metadata { get; set; } = Semantics.OutOfScope;
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (IsUndefined)

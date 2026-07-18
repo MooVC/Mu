@@ -26,8 +26,9 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new UnitRegistrarVisitor();
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
         Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(false));
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
         IEnumerable<File> result = visitor.Observe(unit);
@@ -39,12 +40,29 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
+    public async Task GivenAUnitWhenHasCompositionIsFalseThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new UnitRegistrarVisitor();
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(false));
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(false));
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(unit);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
     public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitRegistrarVisitor();
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
         Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(true));
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
         IEnumerable<File> result = visitor.Observe(unit);
@@ -58,7 +76,8 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new UnitRegistrarVisitor();
-        Model.Graph.Areas.Area.Units.Unit unit = TestData.Single.Car;
+        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
 
         // Act
         IEnumerable<File> result = visitor.Observe(unit);
