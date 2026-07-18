@@ -16,3 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Muify default feature transform generation.
 - Added Muify feature fact generation.
 - Added structured mediator execution logging and ledger log context.
+- Added Mu composition root integration for Simple Injector.

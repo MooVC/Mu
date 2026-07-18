@@ -3,6 +3,7 @@ namespace Mu.Sample;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mu.Composition;
 using Mu.Modelling.Integrity;
 using Mu.Modelling.Services;
 using Mu.Persistence;
@@ -17,11 +18,8 @@ internal static class Program
 {
     public static async Task<int> Main(string[] arguments)
     {
-        using var container = new Container();
-        container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
-
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(arguments);
-        _ = builder.Services.AddSimpleInjector(container, options => options.AddLogging());
+        using Container container = builder.AddMu();
 
         using IHost host = builder
             .Build()

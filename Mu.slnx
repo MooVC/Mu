@@ -40,6 +40,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Framework/">
+    <Project Path="src/Mu.Composition/Mu.Composition.csproj" />
     <Project Path="src/Mu.Modelling.Components/Mu.Modelling.Components.csproj" />
     <Project Path="src/Mu.Modelling/Mu.Modelling.csproj" />
     <Project Path="src/Mu.Sample/Mu.Sample.csproj" />
@@ -52,6 +53,7 @@
     <File Path=".github/pull_request_template.md" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="src/Mu.Composition.Tests/Mu.Composition.Tests.csproj" />
     <Project Path="src/Mu.Modelling.Components.Tests/Mu.Modelling.Components.Tests.csproj" />
     <Project Path="src/Mu.Modelling.Testing/Mu.Modelling.Testing.csproj" Id="d9cb584e-349c-4832-80cd-0cca7beae52b" />
     <Project Path="src/Mu.Modelling.Tests/Mu.Modelling.Tests.csproj" />

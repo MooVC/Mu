@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="SimpleInjector" />
+    <PackageReference Include="SimpleInjector.Integration.GenericHost" />
+  </ItemGroup>
+</Project>
