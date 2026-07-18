@@ -15,7 +15,7 @@ public sealed class Service(IRoot<Account, Open> root, IWriteStore<Account, Guid
 
         return root
             .Apply(account, open, cancellationToken)
-            .Then(opened => store.Save(account, identity, cancellationToken))
+            .Then(opened => store.Save(opened, identity, cancellationToken))
             .Select(_ => identity);
     }
 }
