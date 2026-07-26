@@ -1,7 +1,15 @@
-﻿namespace Mu.Sample.Open;
+namespace Mu.Sample.Open;
 
 using Mu.Modelling.Behavior;
 using Mu.Sample.Account;
+using ProtoBuf;
 
-public sealed record Open(Owner Owner)
-    : Creational<Account>;
+[ProtoContract]
+public sealed record Open([property: ProtoMember(1)] Owner Owner)
+    : Creational<Account>
+{
+    private Open()
+        : this(Owner.Unspecified)
+    {
+    }
+}

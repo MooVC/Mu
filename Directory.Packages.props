@@ -22,6 +22,7 @@
     <PackageVersion Include="MooVC.Syntax" Version="9.3.0-beta.36" />
     <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.0-beta.36" />
     <PackageVersion Include="NSubstitute" Version="6.0.0" />
+    <PackageVersion Include="protobuf-net.Grpc.AspNetCore" Version="1.2.2" />
     <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="SimpleInjector" Version="5.6.0" />
     <PackageVersion Include="SimpleInjector.Integration.GenericHost" Version="5.5.0" />

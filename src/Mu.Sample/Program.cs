@@ -1,16 +1,17 @@
 namespace Mu.Sample;
 
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Mu.Communications.Mediation;
 using Mu.Composition;
 using Mu.Modelling.Integrity;
 using Mu.Modelling.Services;
 using Mu.Persistence;
 using Mu.Sample.Account;
 using Mu.Sample.Open;
+using ProtoBuf.Grpc.Server;
 using SimpleInjector;
-using SimpleInjector.Lifestyles;
 using AccountAggregate = global::Mu.Sample.Account.Account;
 using OpenAccount = global::Mu.Sample.Open.Open;
 
@@ -18,48 +19,28 @@ internal static class Program
 {
     public static async Task<int> Main(string[] arguments)
     {
-        HostApplicationBuilder builder = Host.CreateApplicationBuilder(arguments);
-        _ = builder.Services.AddMu(out Container container);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(arguments);
+        _ = builder.WebHost.ConfigureKestrel(options =>
+            options.ConfigureEndpointDefaults(endpoint => endpoint.Protocols = HttpProtocols.Http2));
+        builder.Services.AddCodeFirstGrpc();
 
-        using IHost host = builder
-            .Build()
-            .UseMu(container);
+        _ = builder.Services.AddMu(out Container container);
+        _ = builder.Services.AddScoped<IMediator, InMemoryMediator>();
+        _ = builder.Services.AddScoped<IService<OpenAccount, Guid>>(_ => container.GetInstance<IService<OpenAccount, Guid>>());
+        _ = builder.Services.AddScoped<IHandler<OpenAccount, Guid>, ServiceHandler<OpenAccount, Guid>>();
 
         RegisterApplication(container);
-        container.Verify();
-        await host.StartAsync().ConfigureAwait(false);
 
-        try
-        {
-            using (AsyncScopedLifestyle.BeginScope(container))
-            {
-                IService<OpenAccount, Guid> service = container.GetInstance<IService<OpenAccount, Guid>>();
-                IHostApplicationLifetime lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
-                string ownerName = builder.Configuration[nameof(Owner)] ?? nameof(Owner);
+        await using WebApplication application = builder.Build();
 
-                Result<Guid> result = await service
-                    .Execute(new(new(ownerName)), lifetime.ApplicationStopping)
-                    .ConfigureAwait(false);
+        _ = application.MapGrpcService<OpenGrpcService>();
+        _ = application.UseMu(container);
 
-                if (result.IsSuccessful)
-                {
-                    Console.WriteLine(result.Value);
+        await application
+            .RunAsync()
+            .ConfigureAwait(false);
 
-                    return 0;
-                }
-
-                foreach (ValidationResult failure in result.Failures)
-                {
-                    await Console.Error.WriteLineAsync(failure.ErrorMessage).ConfigureAwait(false);
-                }
-
-                return 1;
-            }
-        }
-        finally
-        {
-            await host.StopAsync().ConfigureAwait(false);
-        }
+        return 0;
     }
 
     private static void RegisterApplication(Container container)
@@ -67,7 +48,7 @@ internal static class Program
         container.Collection.Register(Enumerable.Empty<IInvariant<AccountAggregate, OpenAccount>>());
         container.Collection.Append<ITransform<AccountAggregate, Opened>, Transform>();
         container.Register<IRoot<AccountAggregate, OpenAccount>, Root>();
-        container.Register<IWriteStore<AccountAggregate, Guid>, WriteStore<AccountAggregate, Guid>>();
+        container.Register<IWriteStore<AccountAggregate, Guid>, Store>(Lifestyle.Singleton);
         container.Register<IService<OpenAccount, Guid>, Service>();
     }
 }
