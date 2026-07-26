@@ -19,11 +19,11 @@ internal static class Program
     public static async Task<int> Main(string[] arguments)
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(arguments);
-        using Container container = builder.AddMu();
+        _ = builder.Services.AddMu(out Container container);
 
         using IHost host = builder
             .Build()
-            .UseSimpleInjector(container);
+            .UseMu(container);
 
         RegisterApplication(container);
         container.Verify();
