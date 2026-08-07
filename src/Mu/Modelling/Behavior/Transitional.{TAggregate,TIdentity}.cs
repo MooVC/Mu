@@ -2,12 +2,14 @@
 
 using Mu.Modelling;
 using Mu.Modelling.State;
+using ProtoBuf;
 
 /// <summary>
 /// Represents a transitional use case targeting a specific aggregate reference.
 /// </summary>
 /// <typeparam name="TAggregate">The aggregate type being transitioned.</typeparam>
 /// <typeparam name="TIdentity">The identity type for the aggregate.</typeparam>
+[ProtoContract]
 public abstract record Transitional<TAggregate, TIdentity>
     : Transitional
     where TAggregate : Aggregate
@@ -29,6 +31,7 @@ public abstract record Transitional<TAggregate, TIdentity>
     /// <summary>
     /// Gets the aggregate reference targeted by the transition.
     /// </summary>
+    [ProtoMember(1, Name = nameof(Target))]
     public Reference<TIdentity> Target { get; }
 
     /// <summary>

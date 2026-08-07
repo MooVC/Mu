@@ -4,11 +4,13 @@ using System;
 using System.Text.Json.Serialization;
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
+using ProtoBuf;
 
 /// <summary>
 /// Wraps a use case as a synchronous intent message.
 /// </summary>
 /// <typeparam name="TUseCase">The use case type being expressed.</typeparam>
+[ProtoContract(SkipConstructor = true)]
 public sealed record Intent<TUseCase>
     : Message
     where TUseCase : UseCase
@@ -26,16 +28,31 @@ public sealed record Intent<TUseCase>
     /// </summary>
     [JsonConstructor]
     internal Intent(Ledger ledger, DateTimeOffset preparedAt, TUseCase useCase)
-        : base(ledger, preparedAt)
+        : base()
     {
         ArgumentNullException.ThrowIfNull(useCase);
 
+        Ledger = ledger;
+        PreparedAt = preparedAt;
         UseCase = useCase;
     }
 
     /// <summary>
+    /// Gets the tracing ledger for the message.
+    /// </summary>
+    [ProtoMember(1, Name = nameof(Ledger))]
+    public override Ledger Ledger { get; }
+
+    /// <summary>
+    /// Gets the time the message was prepared.
+    /// </summary>
+    [ProtoMember(2, Name = nameof(PreparedAt))]
+    public override DateTimeOffset PreparedAt { get; }
+
+    /// <summary>
     /// Gets the use case carried by the intent.
     /// </summary>
+    [ProtoMember(3, Name = nameof(UseCase))]
     public TUseCase UseCase { get; }
 
     /// <summary>

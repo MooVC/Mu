@@ -3,11 +3,13 @@
 using System;
 using Mu.Modelling;
 using Mu.Modelling.State;
+using ProtoBuf;
 
 /// <summary>
 /// Represents a domain fact bound to a specific aggregate model.
 /// </summary>
 /// <typeparam name="TAggregate">The aggregate type associated with the fact.</typeparam>
+[ProtoContract]
 public abstract record Fact<TAggregate>
     : Fact
     where TAggregate : Aggregate

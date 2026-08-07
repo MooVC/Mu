@@ -2,10 +2,12 @@
 
 using System;
 using Mu.Modelling.State;
+using ProtoBuf;
 
 /// <summary>
 /// Describes the aggregate model metadata used by causal messages.
 /// </summary>
+[ProtoContract(SkipConstructor = true)]
 public sealed record Representation
 {
     private static readonly Type _basis = typeof(Aggregate);
@@ -22,24 +24,32 @@ public sealed record Representation
             throw new ArgumentException($"Type `{type}` must be a sealed, concrete derivation of `{_basis}`.", nameof(type));
         }
 
-        Name = type.FullName![(type.Namespace!.Length + 1)..];
-        Namespace = type.Namespace!;
-        Assembly = type.Assembly.GetName().Name!;
+        if (type.Assembly is null || type.FullName is null || type.Namespace is null)
+        {
+            throw new ArgumentException($"Type `{type}` must have a valid namespace and full name.", nameof(type));
+        }
+
+        Name = type.FullName[(type.Namespace.Length + 1)..];
+        Namespace = type.Namespace;
+        Assembly = type.Assembly.GetName().Name ?? string.Empty;
     }
 
     /// <summary>
     /// Gets the assembly name containing the aggregate type.
     /// </summary>
+    [ProtoMember(1, Name = nameof(Assembly))]
     public string Assembly { get; }
 
     /// <summary>
     /// Gets the aggregate type name.
     /// </summary>
+    [ProtoMember(2, Name = nameof(Name))]
     public string Name { get; }
 
     /// <summary>
     /// Gets the namespace containing the aggregate type.
     /// </summary>
+    [ProtoMember(3, Name = nameof(Namespace))]
     public string Namespace { get; }
 
     /// <summary>

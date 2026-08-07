@@ -32,12 +32,14 @@
     <File Path=".github/CONTRIBUTING.md" />
     <File Path=".github/SECURITY.md" />
     <File Path="CHANGELOG.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Documentation/Analyzers/">
     <File Path="docs/rules/MUIFY01.md" />
     <File Path="docs/rules/MUIFY02.md" />
     <File Path="docs/rules/MUIFY03.md" />
     <File Path="docs/rules/MUIFY04.md" />
-    <File Path="LICENSE" />
-    <File Path="README.md" />
   </Folder>
   <Folder Name="/Framework/">
     <Project Path="src/Mu.Composition/Mu.Composition.csproj" />

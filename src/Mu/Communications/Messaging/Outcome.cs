@@ -2,11 +2,13 @@
 
 using System.Text.Json.Serialization;
 using Mu.Communications.Tracing;
+using ProtoBuf;
 
 /// <summary>
 /// Wraps a use case result as a synchronous outcome message.
 /// </summary>
 /// <typeparam name="TResult">The successful result type.</typeparam>
+[ProtoContract(SkipConstructor = true)]
 public sealed record Outcome<TResult>
     : Message
     where TResult : notnull
@@ -24,14 +26,29 @@ public sealed record Outcome<TResult>
     /// </summary>
     [JsonConstructor]
     internal Outcome(Ledger ledger, DateTimeOffset preparedAt, Result<TResult> result)
-        : base(ledger, preparedAt)
+        : base()
     {
+        Ledger = ledger;
+        PreparedAt = preparedAt;
         Result = result;
     }
 
     /// <summary>
+    /// Gets the tracing ledger for the message.
+    /// </summary>
+    [ProtoMember(1, Name = nameof(Ledger))]
+    public override Ledger Ledger { get; }
+
+    /// <summary>
+    /// Gets the time the message was prepared.
+    /// </summary>
+    [ProtoMember(2, Name = nameof(PreparedAt))]
+    public override DateTimeOffset PreparedAt { get; }
+
+    /// <summary>
     /// Gets the result carried by the outcome.
     /// </summary>
+    [ProtoMember(3, Name = nameof(Result))]
     public Result<TResult> Result { get; }
 
     /// <summary>

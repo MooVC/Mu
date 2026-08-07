@@ -5,4 +5,7 @@
     <PackageReference Include="SimpleInjector" />
     <PackageReference Include="SimpleInjector.Integration.GenericHost" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mu\Mu.csproj" />
+  </ItemGroup>
 </Project>

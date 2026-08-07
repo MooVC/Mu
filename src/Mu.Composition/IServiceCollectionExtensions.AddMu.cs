@@ -2,6 +2,8 @@ namespace Mu.Composition;
 
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.DependencyInjection;
+using Mu.Serialization;
+using ProtoBuf.Meta;
 using SimpleInjector;
 using SimpleInjector.Lifestyles;
 
@@ -29,6 +31,8 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddMu(this IServiceCollection services, out Container container)
     {
         _ = Guard.Against.Null(services, message: "The service collection must be provided.");
+
+        _ = RuntimeTypeModel.Default.AddMu();
 
         container = new Container();
         container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();

@@ -1,8 +1,12 @@
 ﻿namespace Mu.Modelling.Behavior;
 
+using ProtoBuf;
+
 /// <summary>
 /// Represents a use case that observes state without mutation.
 /// </summary>
+[ProtoContract]
+[ProtoInclude(100, typeof(Query))]
 public abstract record NonMutational
     : UseCase
 {

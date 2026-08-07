@@ -1,10 +1,12 @@
 ﻿namespace Mu.Modelling.State;
 
 using System.Text.Json.Serialization;
+using ProtoBuf;
 
 /// <summary>
 /// Represents the revision metadata for an aggregate stream.
 /// </summary>
+[ProtoContract]
 public readonly record struct Revision
 {
     /// <summary>
@@ -28,11 +30,13 @@ public readonly record struct Revision
     /// <summary>
     /// Gets the initiation timestamp for the revision.
     /// </summary>
+    [ProtoMember(1, Name = nameof(InitiatedAt))]
     public DateTimeOffset InitiatedAt { get; }
 
     /// <summary>
     /// Gets the monotonically increasing revision number.
     /// </summary>
+    [ProtoMember(2, Name = nameof(Number))]
     public ulong Number { get; }
 
     /// <summary>
@@ -40,7 +44,7 @@ public readonly record struct Revision
     /// </summary>
     public static Revision operator ++(Revision revision)
     {
-        unchecked
+        checked
         {
             return new Revision(DateTimeOffset.UtcNow, revision.Number + 1);
         }

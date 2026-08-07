@@ -17,3 +17,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Muify feature fact generation.
 - Added structured mediator execution logging and ledger log context.
 - Added Mu composition root integration for Simple Injector.
+- Added protobuf-net contracts for Mu gRPC DTOs.

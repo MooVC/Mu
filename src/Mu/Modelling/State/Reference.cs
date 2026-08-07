@@ -1,9 +1,12 @@
 ﻿namespace Mu.Modelling.State;
 
+using ProtoBuf;
+
 /// <summary>
 /// Represents a reference to a specific aggregate identity and revision.
 /// </summary>
 /// <typeparam name="TIdentity">The type used as aggregate identity.</typeparam>
+[ProtoContract]
 public readonly record struct Reference<TIdentity>
     where TIdentity : struct
 {
@@ -19,16 +22,19 @@ public readonly record struct Reference<TIdentity>
     /// <summary>
     /// Gets a value indicating whether the reference points to an unspecified revision.
     /// </summary>
+    [ProtoIgnore]
     public bool IsUnspecified => Revision == ulong.MinValue;
 
     /// <summary>
     /// Gets the aggregate identity.
     /// </summary>
+    [ProtoMember(1, Name = nameof(Identity))]
     public TIdentity Identity { get; }
 
     /// <summary>
     /// Gets the aggregate revision.
     /// </summary>
+    [ProtoMember(2, Name = nameof(Revision))]
     public ulong Revision { get; }
 
     /// <summary>

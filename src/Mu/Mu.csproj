@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="MooVC" />
+    <PackageReference Include="protobuf-net" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
 </Project>

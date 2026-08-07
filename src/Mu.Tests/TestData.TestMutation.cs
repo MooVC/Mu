@@ -2,9 +2,11 @@ namespace Mu.Testing;
 
 using Mu.Modelling;
 using Mu.Modelling.Behavior;
+using ProtoBuf;
 
 public static partial class TestData
 {
+    [ProtoContract(SkipConstructor = true)]
     public sealed record TestMutation
         : Mutational
     {
@@ -21,6 +23,7 @@ public static partial class TestData
 
         public override Representation Model => typeof(TestAggregate);
 
+        [ProtoMember(1, Name = nameof(Value))]
         public int Value { get; init; }
     }
 }
