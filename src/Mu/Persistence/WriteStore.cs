@@ -9,7 +9,7 @@ using Mu.Modelling.State;
 /// <summary>
 /// Persists aggregate changes by writing proposed facts to an event stream.
 /// </summary>
-public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream, ITransform<TAggregate, Fact> transform)
+public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream, ITransform<TAggregate> transform)
     : IWriteStore<TAggregate, TIdentity>
     where TAggregate : Aggregate, new()
     where TIdentity : struct

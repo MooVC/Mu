@@ -1,10 +1,11 @@
 ﻿namespace Mu.Composition;
 
 using Ardalis.GuardClauses;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
 using SimpleInjector;
+using SimpleInjector.Lifestyles;
 
-public static partial class IHostApplicationBuilderExtensions
+public static partial class IApplicationBuilderExtensions
 {
     /// <summary>
     /// Configures the application host to use Mu with the specified dependency injection container.
@@ -14,12 +15,22 @@ public static partial class IHostApplicationBuilderExtensions
     /// <returns>The configured application host.</returns>
     /// <exception cref="ArgumentNullException">Thrown when host or container are null references.</exception>
     /// <exception cref="InvalidOperationException">Thrown when the dependency injection container is not properly configured.</exception>
-    public static IHost UseMu(this IHost host, Container container)
+    public static IApplicationBuilder UseMu(this IApplicationBuilder host, Container container, Action<SimpleInjectorUseOptions>? options = default)
     {
         _ = Guard.Against.Null(host, message: "The application host must be provided.");
         _ = Guard.Against.Null(container, message: "The dependency injection container must be provided.");
 
-        host = host.UseSimpleInjector(container);
+        options ??= _ => { };
+
+        host = host
+            .UseSimpleInjector(container, options)
+            .Use(async (context, next) =>
+            {
+                using (AsyncScopedLifestyle.BeginScope(container))
+                {
+                    await next(context);
+                }
+            });
 
         container.Verify();
 

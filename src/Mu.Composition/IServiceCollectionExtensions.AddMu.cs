@@ -1,10 +1,14 @@
 namespace Mu.Composition;
 
 using Ardalis.GuardClauses;
+using Grpc.AspNetCore.Server;
 using Microsoft.Extensions.DependencyInjection;
+using Mu.Composition.gRpc;
 using Mu.Serialization;
+using ProtoBuf.Grpc.Server;
 using ProtoBuf.Meta;
 using SimpleInjector;
+using SimpleInjector.Integration.ServiceCollection;
 using SimpleInjector.Lifestyles;
 
 /// <summary>
@@ -28,7 +32,7 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The service collection.</param>
     /// <param name="container">The configured dependency injection container.</param>
     /// <returns>The configured dependency injection container.</returns>
-    public static IServiceCollection AddMu(this IServiceCollection services, out Container container)
+    public static IServiceCollection AddMu(this IServiceCollection services, out Container container, Action<SimpleInjectorAddOptions>? options = default)
     {
         _ = Guard.Against.Null(services, message: "The service collection must be provided.");
 
@@ -37,7 +41,11 @@ public static class IServiceCollectionExtensions
         container = new Container();
         container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
-        _ = services.AddSimpleInjector(container, options => options.AddLogging());
+        options ??= options => options.AddLogging();
+
+        services
+            .AddSimpleInjector(container, options)
+            .AddCodeFirstGrpc();
 
         return services;
     }

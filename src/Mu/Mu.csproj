@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Fluentify" />
     <PackageReference Include="MooVC" />
-    <PackageReference Include="protobuf-net" />
+    <PackageReference Include="protobuf-net.Grpc" />
     <PackageReference Include="Serilog" />
   </ItemGroup>
 </Project>

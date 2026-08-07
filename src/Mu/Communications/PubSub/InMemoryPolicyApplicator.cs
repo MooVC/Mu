@@ -42,7 +42,7 @@ public sealed class InMemoryPolicyApplicator(IPolicyDirectory directory, IServic
     {
         using AsyncServiceScope scope = factory.CreateAsyncScope();
 
-        IPolicy? policy = directory.Find(@event, scope);
+        IPolicy? policy = directory.Find(@event, scope.ServiceProvider);
 
         if (policy is null)
         {

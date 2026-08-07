@@ -14,7 +14,7 @@ using Mu.Modelling.State;
 /// <summary>
 /// Stores aggregate events in memory for development and testing scenarios.
 /// </summary>
-internal sealed class InMemoryStream<TIdentity>
+public sealed class InMemoryStream<TIdentity>
     : IStream<TIdentity>
     where TIdentity : struct
 {
@@ -25,7 +25,7 @@ internal sealed class InMemoryStream<TIdentity>
     /// <summary>
     /// Initializes a <see langword="new"/> instance of the <see cref="InMemoryStream{TIdentity}"/> class.
     /// </summary>
-    internal InMemoryStream()
+    public InMemoryStream()
         : this(new SemaphoreSlim(1, 1))
     {
     }

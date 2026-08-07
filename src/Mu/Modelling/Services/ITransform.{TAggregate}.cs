@@ -6,7 +6,9 @@ using Mu.Modelling.State;
 /// <summary>
 /// Mutates the <see cref="TAggregate"/>, resulting in a <see langword="new"/> instance of the aggregate with the changes applied.
 /// </summary>
-public interface ITransform
+/// <typeparam name="TAggregate">The type of the <see cref="Aggregate"/> to which the mutation is applied.</typeparam>
+public interface ITransform<TAggregate>
+    where TAggregate : Aggregate
 {
-    Aggregate Apply(Aggregate aggregate, Fact fact);
+    TAggregate Apply(TAggregate aggregate, Fact fact);
 }

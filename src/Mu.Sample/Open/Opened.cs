@@ -3,7 +3,9 @@
 using System.Text.Json.Serialization;
 using Mu.Modelling.Behavior;
 using Mu.Sample.Account;
+using ProtoBuf;
 
+[ProtoContract]
 public sealed record Opened
     : Fact<Account>
 {
@@ -19,6 +21,7 @@ public sealed record Opened
         Owner = owner;
     }
 
+    [ProtoMember(1, Name = "Owner")]
     public Owner Owner { get; }
 
     public static implicit operator Opened(Open open)

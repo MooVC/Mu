@@ -1,6 +1,9 @@
 ﻿namespace Mu.Sample.Account;
 
-public sealed record Owner(string Name)
+using ProtoBuf;
+
+[ProtoContract(SkipConstructor = true)]
+public sealed record Owner([property: ProtoMember(1, Name = "Name")] string Name)
 {
     public static readonly Owner Unspecified = new(string.Empty);
 }
