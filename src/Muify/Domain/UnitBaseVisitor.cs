@@ -10,7 +10,7 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (unit.Value.Metadata.IsOutOfScope || unit.Value.Metadata.HasBase)
+            if (!unit.Value.Metadata.IsPartial || unit.Value.Metadata.HasBase || unit.Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }

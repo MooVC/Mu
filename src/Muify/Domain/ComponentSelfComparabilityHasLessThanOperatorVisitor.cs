@@ -21,9 +21,9 @@ namespace Muify.Domain
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined
-             || component.Metadata.Self.Comparability.IsComparable == Presence.NotApplicable
-             || component.Metadata.Self.Comparability.HasLessThanOperator)
+            if (component.Metadata.Self.Comparability.IsComparable == Presence.NotApplicable
+             || component.Metadata.Self.Comparability.HasLessThanOperator
+             || component.Identifier.IsUndefined)
             {
                 yield break;
             }

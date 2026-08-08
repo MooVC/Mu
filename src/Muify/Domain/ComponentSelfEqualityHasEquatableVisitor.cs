@@ -23,7 +23,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Self.Equality.HasEquatable)
+            if (component.Metadata.Self.Equality.HasEquatable || component.Identifier.IsUndefined)
             {
                 yield break;
             }

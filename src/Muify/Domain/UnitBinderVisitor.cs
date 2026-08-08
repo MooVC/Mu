@@ -13,7 +13,7 @@ namespace Muify.Domain
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (unit.Value.Metadata.IsOutOfScope || unit.Value.Metadata.HasBinder)
+            if (!unit.Value.Metadata.IsPartial || unit.Value.Metadata.HasBinder || unit.Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }

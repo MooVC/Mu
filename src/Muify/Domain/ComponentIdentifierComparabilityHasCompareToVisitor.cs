@@ -22,9 +22,9 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined
-             || component.Metadata.Identifier.Comparability.IsComparable == Presence.NotApplicable
-             || component.Metadata.Identifier.Comparability.HasCompareTo)
+            if (component.Metadata.Identifier.Comparability.IsComparable == Presence.NotApplicable
+             || component.Metadata.Identifier.Comparability.HasCompareTo
+             || component.Identifier.IsUndefined)
             {
                 yield break;
             }

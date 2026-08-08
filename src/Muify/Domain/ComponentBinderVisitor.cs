@@ -24,7 +24,7 @@ namespace Muify.Domain
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Metadata.IsOutOfScope || component.Metadata.HasBinder)
+            if (component.Metadata.HasBinder || component.Metadata.IsOutOfScope)
             {
                 yield break;
             }

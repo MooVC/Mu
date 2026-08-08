@@ -22,6 +22,8 @@
 
             public bool HasRegistrar { get; set; } = true;
 
+            public bool IsPartial { get; set; }
+
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
 

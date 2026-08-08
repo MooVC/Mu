@@ -24,7 +24,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Identifier.HasImplicitConversion)
+            if (component.Metadata.Identifier.HasImplicitConversion && !component.Identifier.IsUndefined)
             {
                 yield break;
             }
