@@ -15,7 +15,7 @@ public sealed class WhenObserveIsCalled
 
             using SimpleInjector;
 
-            public sealed partial record Register
+            partial record Register
                 : global::Mu.Composition.IRegistrar
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)

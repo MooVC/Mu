@@ -23,11 +23,11 @@ namespace Muify.Semantics
             }
 
             return component.WithMetadata(metadata => metadata
+                .WithCharacteristics(entity.GetCharacteristics())
                 .WithIdentifier(identifier => identifier
                     .HasImplicitConversion(entity.HasImplicitConversionTo(match.Type))
                     .WithComparability(entity.GetComparability(match.Type)))
-                .WithSelf(self => self
-                    .WithComparability(entity.GetComparability(entity))));
+                .WithSelf(self => self.WithComparability(entity.GetComparability(entity))));
         }
     }
 }

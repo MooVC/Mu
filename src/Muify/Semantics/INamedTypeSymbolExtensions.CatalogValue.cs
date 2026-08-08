@@ -12,7 +12,8 @@ namespace Muify.Semantics
 
             return Component.Undefined
                 .AttributedWith(properties)
-                .Named(value.Name);
+                .Named(value.Name)
+                .WithMetadata(metadata => metadata.WithCharacteristics(value.GetCharacteristics()));
         }
     }
 }
