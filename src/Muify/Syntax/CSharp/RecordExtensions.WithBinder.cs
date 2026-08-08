@@ -16,6 +16,7 @@
 
             return record.Implements((Name: "IBinder", Qualifier: "Mu.Serialization"))
                 .Named(name)
+                .WithExtensibility(Modifiers.Implicit)
                 .WithMethods(register => register
                     .Accepts((Name: "Model", Type: model))
                     .Named("Bind")
@@ -23,7 +24,8 @@
                         .OfType(model)
                         .WithMode(Result.Modes.Synchronous))
                     .WithBody(body)
-                    .WithExtensibility(Modifiers.Static));
+                    .WithExtensibility(Modifiers.Static))
+                .WithScope(Scopes.Unspecified);
         }
     }
 }

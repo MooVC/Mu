@@ -13,7 +13,7 @@ public sealed class WhenObserveIsCalled
         string expected = """
             namespace MooVC.Testing.Mechanics.Car;
 
-            public sealed partial record Car
+            partial record Car
                 : global::Mu.Serialization.IBinder
             {
                 public static global::ProtoBuf.Meta.RuntimeTypeModel Bind(global::ProtoBuf.Meta.RuntimeTypeModel model)

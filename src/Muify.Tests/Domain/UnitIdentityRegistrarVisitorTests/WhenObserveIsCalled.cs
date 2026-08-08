@@ -18,7 +18,7 @@ public sealed class WhenObserveIsCalled
             using System;
             using SimpleInjector;
 
-            public sealed partial class Allocator
+            partial class Allocator
                 : global::Mu.Composition.IRegistrar
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
