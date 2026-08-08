@@ -8,7 +8,7 @@ using ProtoBuf.Meta;
 /// </summary>
 public static partial class RuntimeTypeModelExtensions
 {
-    private static readonly ConditionalWeakTable<RuntimeTypeModel, object> _models = new();
+    private static readonly ConditionalWeakTable<RuntimeTypeModel, object> _models = [];
     private static readonly Lock _sync = new();
 
     /// <summary>

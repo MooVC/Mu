@@ -18,6 +18,8 @@
 
             public bool HasBase { get; set; } = true;
 
+            public bool HasBinder { get; set; } = true;
+
             public bool HasRegistrar { get; set; } = true;
 
             [Ignore]

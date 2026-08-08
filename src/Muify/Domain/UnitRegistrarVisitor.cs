@@ -12,9 +12,7 @@ namespace Muify.Domain
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (!unit.Root.Metadata.HasComposition
-             || unit.Value.Metadata.IsOutOfScope
-             || unit.Value.Metadata.HasRegistrar)
+            if (unit.Value.Metadata.IsOutOfScope || unit.Value.Metadata.HasRegistrar)
             {
                 yield break;
             }

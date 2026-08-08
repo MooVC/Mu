@@ -8,7 +8,6 @@ using ProtoBuf;
 /// <summary>
 /// Base immutable representation of aggregate state and proposed facts.
 /// </summary>
-[ProtoContract]
 public abstract record Aggregate
 {
     /// <summary>
@@ -20,7 +19,6 @@ public abstract record Aggregate
     /// Gets a value indicating whether the aggregate has pending propositions.
     /// </summary>
     [JsonIgnore]
-    [ProtoIgnore]
     internal bool HasChanges => Propositions.Length > 0;
 
     /// <summary>
@@ -28,12 +26,11 @@ public abstract record Aggregate
     /// </summary>
     [JsonPropertyName("$propositions")]
     [JsonInclude]
-    [ProtoMember(1, Name = nameof(Propositions))]
     internal ImmutableArray<Fact> Propositions { get; init; } = [];
 
     /// <summary>
     /// Gets the current revision for the aggregate.
     /// </summary>
-    [ProtoMember(2, Name = nameof(Revision))]
+    [JsonInclude]
     internal Revision Revision { get; init; }
 }

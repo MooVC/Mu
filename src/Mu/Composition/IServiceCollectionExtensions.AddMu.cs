@@ -3,7 +3,7 @@ namespace Mu.Composition;
 using Ardalis.GuardClauses;
 using Grpc.AspNetCore.Server;
 using Microsoft.Extensions.DependencyInjection;
-using Mu.Composition.gRpc;
+using Mu.Communications.Ipc;
 using Mu.Serialization;
 using ProtoBuf.Grpc.Server;
 using ProtoBuf.Meta;

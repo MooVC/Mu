@@ -96,43 +96,6 @@ public sealed class WhenParseModelIsCalled
     }
 
     [Test]
-    public async Task GivenMuCompositionIsNotReferencedThenHasCompositionIsFalse()
-    {
-        // Arrange
-        const string source = """
-            namespace MooVC.Testing.Mechanics.Car;
-
-            public sealed record Car;
-            """;
-
-        // Act
-        Model result = GetModel(source);
-
-        // Assert
-        _ = await Assert.That(result.Metadata.HasComposition).IsFalse();
-    }
-
-    [Test]
-    public async Task GivenMuCompositionIsReferencedThenHasCompositionIsTrue()
-    {
-        // Arrange
-        const string CompositionAssemblyName = "Mu.Composition";
-        const string source = """
-            namespace MooVC.Testing.Mechanics.Car;
-
-            public sealed record Car;
-            """;
-
-        MetadataReference reference = CreateReference(CompositionAssemblyName);
-
-        // Act
-        Model result = GetModel(source, reference);
-
-        // Assert
-        _ = await Assert.That(result.Metadata.HasComposition).IsTrue();
-    }
-
-    [Test]
     public async Task GivenAUnitAttributeThenUnitIdentityIsDiscoveredFromTheGenericArgument()
     {
         // Arrange

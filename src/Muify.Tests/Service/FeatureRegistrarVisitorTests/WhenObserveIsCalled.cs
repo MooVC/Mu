@@ -27,7 +27,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
         Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasRegistrar(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, register);
 
@@ -41,27 +41,11 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAFeatureWhenHasCompositionIsFalseThenNothingIsGenerated()
-    {
-        // Arrange
-        var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(false));
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasRegistrar(false));
-        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, register);
-
-        // Act
-        IEnumerable<File> result = visitor.Observe(feature);
-
-        // Assert
-        _ = await Assert.That(result).IsEmpty();
-    }
-
-    [Test]
     public async Task GivenAFeatureWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
         Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasRegistrar(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, register);
 
@@ -77,7 +61,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, TestData.Single.Register.Value);
 
         // Act

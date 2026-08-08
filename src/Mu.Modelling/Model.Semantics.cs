@@ -17,8 +17,6 @@ namespace Mu.Modelling
             [Traverse(Scope = TraverseScope.None)]
             public ImmutableArray<string> Assemblies { get; set; } = ImmutableArray<string>.Empty;
 
-            public bool HasComposition { get; set; }
-
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
         }

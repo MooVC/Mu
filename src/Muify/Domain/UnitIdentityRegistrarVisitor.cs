@@ -12,9 +12,7 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Identity identity)
         {
-            if (!identity.Root.Metadata.HasComposition
-             || identity.Unit.Value.Metadata.Allocator.IsUndefined
-             || identity.Unit.Value.Metadata.Allocator.HasRegistrar)
+            if (identity.Unit.Value.Metadata.Allocator.IsUndefined || identity.Unit.Value.Metadata.Allocator.HasRegistrar)
             {
                 yield break;
             }

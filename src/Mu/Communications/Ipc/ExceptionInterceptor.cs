@@ -1,4 +1,4 @@
-﻿namespace Mu.Composition.gRpc;
+﻿namespace Mu.Communications.Ipc;
 
 using System;
 using Grpc.Core;

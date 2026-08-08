@@ -5,7 +5,6 @@
   <ItemGroup>
     <PackageReference Include="Grpc.Net.Client" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
-    <ProjectReference Include="..\Mu.Composition\Mu.Composition.csproj" />
     <ProjectReference Include="..\Mu\Mu.csproj" />
   </ItemGroup>
 </Project>

@@ -11,8 +11,6 @@
 
     internal static partial class CompilationExtensions
     {
-        private const string CompositionAssemblyName = "Mu.Composition";
-
         internal static Model ParseModel(this Compilation compilation, CancellationToken cancellationToken)
         {
             string assemblyName = compilation.AssemblyName ?? string.Empty;
@@ -60,9 +58,7 @@
 
         private static Model WithMetadata(Model model, ImmutableArray<string> assemblies)
         {
-            return model.WithMetadata(metadata => metadata
-                .HasComposition(assemblies.Contains(CompositionAssemblyName))
-                .Enumerate((assembly, subject) => subject.WithAssemblies(assembly), assemblies));
+            return model.WithMetadata(metadata => metadata.Enumerate((assembly, subject) => subject.WithAssemblies(assembly), assemblies));
         }
     }
 }
