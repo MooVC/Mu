@@ -5,9 +5,9 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using ModellingResult = Mu.Modelling.Result;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        internal static IPropertySymbol[] GetResults(this INamedTypeSymbol request)
+        public static IPropertySymbol[] GetResults(this ITypeSymbol request)
         {
             INamedTypeSymbol result = request
                 .GetTypeMembers()

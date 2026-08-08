@@ -6,7 +6,7 @@ namespace Muify.Semantics
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        internal static IEnumerable<INamedTypeSymbol> GetAllTypes(this INamedTypeSymbol type)
+        public static IEnumerable<INamedTypeSymbol> GetAllTypes(this INamedTypeSymbol type)
         {
             INamedTypeSymbol[] types = type
                 .GetTypeMembers()

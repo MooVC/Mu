@@ -6,7 +6,7 @@ namespace Muify.Semantics
 
     internal static partial class IPropertySymbolExtensions
     {
-        internal static Feature CreateResult(this IPropertySymbol result, Feature feature)
+        public static Feature CreateResult(this IPropertySymbol result, Feature feature)
         {
             return feature.Returning(member => member
                 .Named(result.Name)

@@ -7,7 +7,7 @@ namespace Muify.Semantics
         private const string SerializationNamespace = "Mu.Serialization";
         private const string BinderInterfaceMetadataName = "IBinder";
 
-        internal static bool IsBinder(this INamedTypeSymbol type)
+        public static bool IsBinder(this INamedTypeSymbol type)
         {
             INamedTypeSymbol definition = type.OriginalDefinition;
 

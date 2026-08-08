@@ -22,9 +22,8 @@ namespace Muify.Semantics
                 .Named(names.Feature)
                 .Enumerate((result, feature) => result.CreateResult(feature), results)
                 .WithMetadata(metadata => metadata
-                    .Enumerate(
-                        (registrar, subject) => subject.WithRegistrars(registrar),
-                        request.ContainingNamespace.GetRegistrars())
+                    .Enumerate((reference, subject) => subject.WithReferences(reference), request.GetReferences())
+                    .Enumerate((registrar, subject) => subject.WithRegistrars(registrar), request.ContainingNamespace.GetRegistrars())
                     .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms())
                     .HasBase(request.HasUseCaseBase())
                     .HasBinder(request.HasBinder())

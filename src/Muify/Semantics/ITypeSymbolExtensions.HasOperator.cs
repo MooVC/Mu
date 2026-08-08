@@ -3,9 +3,9 @@ namespace Muify.Semantics
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        private static bool HasOperator(this INamedTypeSymbol symbol, string metadataName, ITypeSymbol operandType)
+        public static bool HasOperator(this ITypeSymbol symbol, string metadataName, ITypeSymbol operandType)
         {
             return symbol
                 .GetMembers(metadataName)

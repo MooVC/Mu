@@ -3,13 +3,13 @@ namespace Muify.Semantics
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
         private const string CompareToMethodName = "CompareTo";
 
-        private static bool HasCompareTo(this INamedTypeSymbol symbol, ITypeSymbol parameterType)
+        public static bool HasCompareTo(this ITypeSymbol symbol, ITypeSymbol parameterType)
         {
-            INamedTypeSymbol current = symbol;
+            ITypeSymbol current = symbol;
 
             while (current is object)
             {

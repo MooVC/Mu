@@ -8,7 +8,7 @@ namespace Muify.Semantics
 
     internal static partial class INamespaceSymbolExtensions
     {
-        internal static ImmutableArray<Qualification> GetRegistrars(this INamespaceSymbol @namespace)
+        public static ImmutableArray<Qualification> GetRegistrars(this INamespaceSymbol @namespace)
         {
             return @namespace
                 .GetTypeMembers()

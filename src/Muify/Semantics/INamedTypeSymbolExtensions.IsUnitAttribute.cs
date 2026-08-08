@@ -5,7 +5,7 @@ namespace Muify.Semantics
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        internal static bool IsUnitAttribute(this INamedTypeSymbol symbol)
+        public static bool IsUnitAttribute(this INamedTypeSymbol symbol)
         {
             return symbol != null
                 && symbol.TypeArguments.Length == 1

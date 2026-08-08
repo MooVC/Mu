@@ -5,9 +5,9 @@ namespace Muify.Semantics
     using Mu.Modelling;
     using Muify.Modelling;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        private static Component CatalogEntity(this INamedTypeSymbol entity)
+        public static Component CatalogEntity(this ITypeSymbol entity)
         {
             IPropertySymbol[] properties = entity.GetProperties();
             Attribute identity = properties.GetIdentity(out IPropertySymbol match);

@@ -4,9 +4,9 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using MooVC.Syntax.CSharp;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        internal static Qualification GetUnitIdentity(this INamedTypeSymbol definition)
+        public static Qualification GetUnitIdentity(this ITypeSymbol definition)
         {
             ITypeSymbol identityType = definition.GetUnitIdentityType();
 
@@ -18,7 +18,7 @@ namespace Muify.Semantics
             return identityType.ToQualification();
         }
 
-        internal static ITypeSymbol GetUnitIdentityType(this INamedTypeSymbol definition)
+        public static ITypeSymbol GetUnitIdentityType(this ITypeSymbol definition)
         {
             AttributeData match = definition
                 .GetAttributes()

@@ -3,9 +3,9 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using Muify.Domain;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        internal static bool IsIdentityAttribute(this INamedTypeSymbol symbol)
+        public static bool IsIdentityAttribute(this ITypeSymbol symbol)
         {
             return symbol != null
                 && (symbol.Name == $"{IdentityAttributeStrategy.Name}Attribute"

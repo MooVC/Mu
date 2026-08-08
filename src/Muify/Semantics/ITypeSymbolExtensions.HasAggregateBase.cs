@@ -7,9 +7,9 @@ namespace Muify.Semantics
         private const string AggregateName = "Aggregate";
         private const string StateNamespace = "Mu.Modelling.State";
 
-        internal static bool HasAggregateBase(this INamedTypeSymbol definition)
+        public static bool HasAggregateBase(this ITypeSymbol definition)
         {
-            INamedTypeSymbol current = definition.BaseType;
+            ITypeSymbol current = definition.BaseType;
 
             while (current is object)
             {

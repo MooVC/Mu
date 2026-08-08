@@ -4,9 +4,9 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using Mu.Modelling;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        internal static Service Allocator(this INamedTypeSymbol definition)
+        public static Service Allocator(this ITypeSymbol definition)
         {
             ITypeSymbol identity = definition.GetUnitIdentityType();
 

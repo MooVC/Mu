@@ -8,7 +8,7 @@ namespace Muify.Semantics
 
     internal static partial class IPropertySymbolArrayExtensions
     {
-        internal static Attribute GetIdentity(this IPropertySymbol[] properties, out IPropertySymbol identity)
+        public static Attribute GetIdentity(this IPropertySymbol[] properties, out IPropertySymbol identity)
         {
             identity = properties.FirstOrDefault(property => property
                 .GetAttributes()

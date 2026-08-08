@@ -8,7 +8,7 @@ namespace Muify.Semantics
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        internal static ImmutableArray<Qualification> GetTransforms(this INamedTypeSymbol request)
+        public static ImmutableArray<Qualification> GetTransforms(this INamedTypeSymbol request)
         {
             return request
                 .ContainingNamespace

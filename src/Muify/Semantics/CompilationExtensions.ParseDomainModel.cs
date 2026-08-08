@@ -26,9 +26,7 @@ namespace Muify.Semantics
                         .IdentifiedBy(definition.GetUnitIdentity())
                         .Named(names.Unit)
                         .WithMetadata(metadata => metadata
-                            .Enumerate(
-                                (registrar, subject) => subject.WithRegistrars(registrar),
-                                definition.ContainingNamespace.GetRegistrars())
+                            .Enumerate((registrar, subject) => subject.WithRegistrars(registrar), definition.ContainingNamespace.GetRegistrars())
                             .IsPartial(definition.IsPartial())
                             .HasBase(definition.HasAggregateBase())
                             .HasBinder(definition.HasBinder())

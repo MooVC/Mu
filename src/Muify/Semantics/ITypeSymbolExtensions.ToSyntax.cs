@@ -1,4 +1,4 @@
-﻿namespace Muify.Semanrtics
+﻿namespace Muify.Semantics
 {
     using Microsoft.CodeAnalysis;
     using MooVC.Syntax.CSharp;

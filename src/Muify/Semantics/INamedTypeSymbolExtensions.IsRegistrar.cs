@@ -7,7 +7,7 @@ namespace Muify.Semantics
         private const string CompositionNamespace = "Mu.Composition";
         private const string RegistrarInterfaceMetadataName = "IRegistrar";
 
-        internal static bool IsRegistrar(this INamedTypeSymbol type)
+        public static bool IsRegistrar(this INamedTypeSymbol type)
         {
             INamedTypeSymbol definition = type.OriginalDefinition;
 

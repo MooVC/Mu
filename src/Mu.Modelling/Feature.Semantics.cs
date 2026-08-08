@@ -29,6 +29,8 @@
 
             public bool IsPartial { get; set; }
 
+            public ImmutableArray<Poco> References { get; set; } = ImmutableArray<Poco>.Empty;
+
             public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;
 
             public Qualification Service { get; set; } = Qualification.Unnamed;

@@ -7,7 +7,7 @@ namespace Muify.Semantics
     {
         private const string AllocatorMetadataName = "IAllocator`1";
 
-        private static bool IsAllocator(this INamedTypeSymbol type, ITypeSymbol identityType)
+        public static bool IsAllocator(this INamedTypeSymbol type, ITypeSymbol identityType)
         {
             INamedTypeSymbol definition = type.OriginalDefinition;
 

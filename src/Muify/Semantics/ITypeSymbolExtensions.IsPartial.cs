@@ -5,9 +5,9 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        public static bool IsPartial(this INamedTypeSymbol symbol)
+        public static bool IsPartial(this ITypeSymbol symbol)
         {
             return symbol
                 .DeclaringSyntaxReferences

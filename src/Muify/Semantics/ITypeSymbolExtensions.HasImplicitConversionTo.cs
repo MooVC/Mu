@@ -3,11 +3,11 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
         private const string ImplicitConversionMetadataName = "op_Implicit";
 
-        private static bool HasImplicitConversionTo(this INamedTypeSymbol symbol, ITypeSymbol targetType)
+        public static bool HasImplicitConversionTo(this ITypeSymbol symbol, ITypeSymbol targetType)
         {
             return symbol
                 .GetMembers(ImplicitConversionMetadataName)

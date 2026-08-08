@@ -6,9 +6,9 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using Mu.Modelling;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        public static void IdentifyMembers(this INamedTypeSymbol symbol, out Component[] components, out List[] lists, CancellationToken cancellationToken)
+        public static void IdentifyMembers(this ITypeSymbol symbol, out Component[] components, out List[] lists, CancellationToken cancellationToken)
         {
             var entities = new List<Component>();
             var enumerations = new List<List>();

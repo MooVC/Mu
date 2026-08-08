@@ -3,9 +3,9 @@ namespace Muify.Semantics
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
-    internal static partial class INamedTypeSymbolExtensions
+    internal static partial class ITypeSymbolExtensions
     {
-        internal static bool HasFact(this INamedTypeSymbol request)
+        public static bool HasFact(this ITypeSymbol request)
         {
             ITypeSymbol fact = request
                 .GetAttributes()

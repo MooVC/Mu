@@ -12,7 +12,7 @@
         {
             public static readonly Semantics OutOfScope = new Semantics();
 
-            public Characteristics Characteristics { get; set; } = Characteristics.OutOfScope;
+            public Characteristics Characteristics { get; set; } = Characteristics.Undefined;
 
             public bool HasBinder { get; set; } = true;
 
