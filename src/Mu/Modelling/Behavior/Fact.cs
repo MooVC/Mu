@@ -5,7 +5,6 @@ using ProtoBuf;
 /// <summary>
 /// Represents a domain fact emitted as a consequence of a mutational use case.
 /// </summary>
-[ProtoContract]
 public abstract record Fact
     : Causal
 {

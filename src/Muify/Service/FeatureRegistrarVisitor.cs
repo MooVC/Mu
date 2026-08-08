@@ -13,7 +13,7 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.HasRegistrar || feature.Value.Metadata.IsOutOfScope)
+            if (!feature.Value.Metadata.IsPartial || feature.Value.Metadata.HasRegistrar || feature.Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }

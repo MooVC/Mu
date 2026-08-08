@@ -18,12 +18,16 @@
 
             public bool HasBase { get; set; } = true;
 
+            public bool HasBinder { get; set; } = true;
+
             public bool HasFact { get; set; } = true;
 
             public bool HasRegistrar { get; set; } = true;
 
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
+
+            public bool IsPartial { get; set; }
 
             public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;
 

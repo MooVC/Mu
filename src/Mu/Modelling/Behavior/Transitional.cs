@@ -5,7 +5,6 @@ using ProtoBuf;
 /// <summary>
 /// Represents a mutational use case that transitions existing aggregate state.
 /// </summary>
-[ProtoContract]
 public abstract record Transitional
     : Mutational
 {

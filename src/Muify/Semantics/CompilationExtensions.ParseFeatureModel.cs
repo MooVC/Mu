@@ -27,8 +27,10 @@ namespace Muify.Semantics
                         request.ContainingNamespace.GetRegistrars())
                     .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms())
                     .HasBase(request.HasUseCaseBase())
+                    .HasBinder(request.HasBinder())
                     .HasFact(request.HasFact())
-                    .HasRegistrar(request.HasRegistrar()));
+                    .HasRegistrar(request.HasRegistrar())
+                    .IsPartial(request.IsPartial()));
         }
     }
 }

@@ -5,7 +5,6 @@ using ProtoBuf;
 /// <summary>
 /// Represents a non-mutational query use case.
 /// </summary>
-[ProtoContract]
 public abstract record Query
     : NonMutational
 {

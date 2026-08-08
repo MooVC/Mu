@@ -8,7 +8,6 @@ using ProtoBuf;
 /// Represents a creational use case bound to a specific aggregate model.
 /// </summary>
 /// <typeparam name="TAggregate">The aggregate type created by the use case.</typeparam>
-[ProtoContract]
 public abstract record Creational<TAggregate>
     : Creational
     where TAggregate : Aggregate

@@ -8,12 +8,11 @@ using ProtoBuf;
 /// Represents a query use case bound to a specific aggregate model.
 /// </summary>
 /// <typeparam name="TAggregate">The aggregate type observed by the query.</typeparam>
-[ProtoContract]
 public abstract record Query<TAggregate>
     : Query
     where TAggregate : Aggregate
 {
-    private static readonly Representation model = typeof(TAggregate);
+    private static readonly Representation _model = typeof(TAggregate);
 
     protected Query()
     {
@@ -27,5 +26,5 @@ public abstract record Query<TAggregate>
     /// <summary>
     /// Gets the model metadata associated with the query.
     /// </summary>
-    public override Representation Model => model;
+    public override Representation Model => _model;
 }
