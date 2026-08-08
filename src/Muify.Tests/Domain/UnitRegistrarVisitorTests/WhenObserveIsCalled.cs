@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
         // Arrange
         string expected = """
@@ -27,7 +27,11 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new UnitRegistrarVisitor();
         Model model = TestData.Single.Model;
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(false));
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
@@ -40,12 +44,36 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitRegistrarVisitor();
         Model model = TestData.Single.Model;
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(true));
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(true));
+
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(unit);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    public async Task GivenAUnitWhenHasRegistrarIsFalseThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new UnitRegistrarVisitor();
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(false)
+            .HasRegistrar(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act

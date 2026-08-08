@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenHasBaseIsFalseThenBaseDefinitionIsGenerated()
+    public async Task GivenAPartialUnitWhenHasBaseIsFalseThenBaseDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -18,7 +18,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new UnitBaseVisitor();
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasBase(false));
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
 
         // Act
@@ -31,11 +31,32 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasBaseThenNothingIsGenerated()
+    public async Task GivenAPartialUnitWhenHasBaseThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitBaseVisitor();
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasBase(true));
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasBase(true));
+
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(unit);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    public async Task GivenAUnitWhenHasBaseIsFalseThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new UnitBaseVisitor();
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(false)
+            .HasBase(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
 
         // Act

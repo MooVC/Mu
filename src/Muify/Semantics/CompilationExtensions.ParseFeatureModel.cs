@@ -22,13 +22,13 @@ namespace Muify.Semantics
                 .Named(names.Feature)
                 .Enumerate((result, feature) => result.CreateResult(feature), results)
                 .WithMetadata(metadata => metadata
-                    .HasBase(request.HasUseCaseBase())
-                    .HasFact(request.HasFact())
-                    .HasRegistrar(request.HasRegistrar())
                     .Enumerate(
                         (registrar, subject) => subject.WithRegistrars(registrar),
                         request.ContainingNamespace.GetRegistrars())
-                    .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms()));
+                    .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms())
+                    .HasBase(request.HasUseCaseBase())
+                    .HasFact(request.HasFact())
+                    .HasRegistrar(request.HasRegistrar()));
         }
     }
 }

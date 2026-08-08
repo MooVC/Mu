@@ -26,13 +26,14 @@ namespace Muify.Semantics
                         .IdentifiedBy(definition.GetUnitIdentity())
                         .Named(names.Unit)
                         .WithMetadata(metadata => metadata
-                            .WithAllocator(definition.Allocator())
+                            .Enumerate(
+                                (registrar, subject) => subject.WithRegistrars(registrar),
+                                definition.ContainingNamespace.GetRegistrars())
+                            .IsPartial(definition.IsPartial())
                             .HasBase(definition.HasAggregateBase())
                             .HasBinder(definition.HasBinder())
                             .HasRegistrar(definition.HasRegistrar())
-                            .Enumerate(
-                                (registrar, subject) => subject.WithRegistrars(registrar),
-                                definition.ContainingNamespace.GetRegistrars()))
+                            .WithAllocator(definition.Allocator()))
                         .Featuring(feature)
                         .Owns(components)
                         .Sets(lists)));

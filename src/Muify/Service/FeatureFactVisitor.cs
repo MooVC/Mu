@@ -43,6 +43,7 @@ namespace Muify.Service
                         conversion => conversion.WithArguments(
                             (Name: "Registered", Qualifier: feature.Namespace),
                             (Name: "Register", Qualifier: feature.Namespace)))
+                    .IsPartial(true)
                     .Named(fact)
                     .WithConstructors(serialization => serialization
                         .AttributedWith(attribute => attribute

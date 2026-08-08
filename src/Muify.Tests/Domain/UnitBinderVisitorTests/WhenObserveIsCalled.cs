@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenHasBinderIsFalseThenBinderDefinitionIsGenerated()
+    public async Task GivenAPartialUnitWhenHasBinderIsFalseThenBinderDefinitionIsGenerated()
     {
         // Arrange
         string expected = """
@@ -36,7 +36,11 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new UnitBinderVisitor();
         Model model = TestData.Single.Model;
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasBinder(false));
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasBinder(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
@@ -49,12 +53,36 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasBinderThenNothingIsGenerated()
+    public async Task GivenAPartialUnitWhenHasBinderThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitBinderVisitor();
         Model model = TestData.Single.Model;
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasBinder(true));
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasBinder(true));
+
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(unit);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    public async Task GivenAUnitWhenHasBinderIsFalseThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new UnitBinderVisitor();
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(false)
+            .HasBinder(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
