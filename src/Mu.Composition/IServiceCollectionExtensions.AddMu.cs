@@ -43,9 +43,9 @@ public static class IServiceCollectionExtensions
 
         options ??= options => options.AddLogging();
 
-        services
+        _ = services
             .AddSimpleInjector(container, options)
-            .AddCodeFirstGrpc();
+            .AddCodeFirstGrpc(options => options.Interceptors.Add<ExceptionInterceptor>());
 
         return services;
     }

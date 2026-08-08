@@ -1,14 +1,8 @@
 namespace Mu.Sample;
 
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
-using Grpc.AspNetCore.Server;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Mu.Composition;
 using Mu.Modelling.Integrity;
 using Mu.Modelling.Services;
@@ -16,6 +10,7 @@ using Mu.Persistence;
 using Mu.Sample.Open;
 using ProtoBuf.Grpc.Client;
 using SimpleInjector;
+using SimpleInjector.Integration.ServiceCollection;
 using AccountAggregate = global::Mu.Sample.Account.Account;
 using OpenAccount = global::Mu.Sample.Open.Open;
 
@@ -24,21 +19,9 @@ internal static class Program
     public static async Task<int> Main(string[] arguments)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(arguments);
-
-        _ = builder.Services.AddMu(out Container container);
-
-        RegisterApplication(container);
-
-        _ = builder.Services.Replace(ServiceDescriptor.Singleton(
-            typeof(IGrpcServiceActivator<>),
-            typeof(Mu.Composition.gRpc.Activator<>)));
-
-        using WebApplication host = builder
-            .ConfigureMu()
-            .Build();
+        using WebApplication host = builder.BuildMu(add: RegisterApplication);
 
         _ = host.MapGrpcService<GrpcService>();
-        _ = host.UseMu(container);
 
         try
         {
@@ -73,16 +56,16 @@ internal static class Program
         }
     }
 
-    private static void RegisterApplication(Container container)
+    private static void RegisterApplication(SimpleInjectorAddOptions options)
     {
-        container.Collection.Register(Enumerable.Empty<IInvariant<AccountAggregate, OpenAccount>>());
-        container.Collection.Append<ITransform<AccountAggregate, Opened>, Transform>();
-        container.Register<IRoot<AccountAggregate, OpenAccount>, Root>();
-        container.Register<IWriteStore<AccountAggregate, Guid>, WriteStore<AccountAggregate, Guid>>();
-        container.Register<ITransform<AccountAggregate>, ReflectionTransform<AccountAggregate>>();
-        container.Register<IStream<Guid>, InMemoryStream<Guid>>();
-        container.Register<IService<OpenAccount, OpenAccount.Result>, Service>();
-        container.RegisterInstance<IServiceProvider>(container);
-        container.Register<GrpcService>(Lifestyle.Scoped);
+        options.Container.Collection.Register(Enumerable.Empty<IInvariant<AccountAggregate, OpenAccount>>());
+        options.Container.Collection.Append<ITransform<AccountAggregate, Opened>, Transform>();
+        options.Container.Register<IRoot<AccountAggregate, OpenAccount>, Root>();
+        options.Container.Register<IWriteStore<AccountAggregate, Guid>, WriteStore<AccountAggregate, Guid>>();
+        options.Container.Register<ITransform<AccountAggregate>, ReflectionTransform<AccountAggregate>>();
+        options.Container.Register<IStream<Guid>, InMemoryStream<Guid>>();
+        options.Container.Register<IService<OpenAccount, OpenAccount.Result>, Service>();
+        options.Container.RegisterInstance<IServiceProvider>(options.Container);
+        options.Container.Register<GrpcService>(Lifestyle.Scoped);
     }
 }

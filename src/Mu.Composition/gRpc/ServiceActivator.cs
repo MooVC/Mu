@@ -4,7 +4,7 @@ using System;
 using Grpc.AspNetCore.Server;
 using SimpleInjector;
 
-public sealed class Activator<TService>(Container container)
+public sealed class ServiceActivator<TService>(Container container)
     : IGrpcServiceActivator<TService>
     where TService : class
 {
