@@ -15,14 +15,15 @@ namespace Muify.Semantics
                 .Where(type => type.TypeKind == TypeKind.Class)
                 .FirstOrDefault(type => type.AllInterfaces.Any(@interface => @interface.IsAllocator(identity)));
 
-            if (allocator is object)
+            if (allocator is null)
             {
-                return Service.Undefined
-                    .HasRegistrar(allocator.HasRegistrar())
-                    .WithDefinition(allocator.ToQualification());
+                return Service.Undefined;
             }
 
-            return Service.Undefined;
+            return Service.Undefined
+                .HasRegistrar(allocator.HasRegistrar())
+                .IsPartial(allocator.IsPartial())
+                .WithDefinition(allocator.ToQualification());
         }
     }
 }

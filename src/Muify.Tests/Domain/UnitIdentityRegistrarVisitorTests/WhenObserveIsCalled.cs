@@ -9,7 +9,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -37,6 +37,7 @@ public sealed class WhenObserveIsCalled
             .WithMetadata(metadata => metadata
                 .WithAllocator(allocator => allocator
                     .HasRegistrar(false)
+                    .IsPartial(true)
                     .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
 
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
@@ -52,12 +53,37 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitIdentityRegistrarVisitor();
         Model model = TestData.Single.Model;
-        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator.HasRegistrar(true)));
+
+        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+            .IsPartial(true)
+            .HasRegistrar(true)));
+
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(identity);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    public async Task GivenAUnitWhenHasRegistrarIsFalseThenNothingIsGenerated()
+    {
+        // Arrange
+        var visitor = new UnitIdentityRegistrarVisitor();
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+            .IsPartial(false)
+            .HasRegistrar(false)));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
         Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
 

@@ -13,7 +13,9 @@
 
         public Qualification Definition { get; set; } = Qualification.Unnamed;
 
-        public bool HasRegistrar { get; set; }
+        public bool HasRegistrar { get; set; } = true;
+
+        public bool IsPartial { get; set; }
 
         [Ignore]
         public bool IsUndefined => this == Undefined;
