@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\MooVC.Testing.Modelling.Account\MooVC.Testing.Modelling.Account.csproj" />
+    <ProjectReference Include="..\Mu\Mu.csproj" />
+    <ProjectReference Include="..\Muify\Muify.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0;GeneratePackageOnBuild=false;IncludeAnalyzerDependencies=true" />
+  </ItemGroup>
+</Project>

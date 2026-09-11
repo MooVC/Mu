@@ -1,9 +1,12 @@
 ﻿namespace Mu;
 
+using ProtoBuf;
+
 /// <summary>
 /// Represents an inclusive range between two comparable values.
 /// </summary>
 /// <typeparam name="T">The comparable value type bounded by the range.</typeparam>
+[ProtoContract]
 public readonly record struct Range<T>
     where T : IComparable<T>
 {
@@ -26,11 +29,13 @@ public readonly record struct Range<T>
     /// <summary>
     /// Gets the inclusive lower bound for the range.
     /// </summary>
+    [ProtoMember(1, Name = nameof(From))]
     public T From { get; }
 
     /// <summary>
     /// Gets the inclusive upper bound for the range.
     /// </summary>
+    [ProtoMember(2, Name = nameof(To))]
     public T To { get; }
 
     /// <summary>

@@ -22,7 +22,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.HasEqualsOverride)
+            if (component.Metadata.HasEqualsOverride || component.Identifier.IsUndefined)
             {
                 yield break;
             }

@@ -1,4 +1,4 @@
-﻿namespace Muify.Semantics
+namespace Muify.Semantics
 {
     using System.Collections.Immutable;
     using System.Linq;
@@ -11,8 +11,6 @@
 
     internal static partial class CompilationExtensions
     {
-        private const string CompositionAssemblyName = "Mu.Composition";
-
         internal static Model ParseModel(this Compilation compilation, CancellationToken cancellationToken)
         {
             string assemblyName = compilation.AssemblyName ?? string.Empty;
@@ -53,16 +51,17 @@
                 feature = compilation.ParseFeatureModel((Area: segments[2], Feature: segments[4], Unit: segments[3]));
             }
 
-            model = compilation.ParseDomainModel(feature, (Area: segments[2], Unit: segments[3]), cancellationToken);
+            model = compilation
+                .ParseDomainModel(feature, (Area: segments[2], Unit: segments[3]), cancellationToken)
+                .For(company)
+                .Named(name);
 
             return WithMetadata(model, assemblies);
         }
 
         private static Model WithMetadata(Model model, ImmutableArray<string> assemblies)
         {
-            return model.WithMetadata(metadata => metadata
-                .HasComposition(assemblies.Contains(CompositionAssemblyName))
-                .Enumerate((assembly, subject) => subject.WithAssemblies(assembly), assemblies));
+            return model.WithMetadata(metadata => metadata.Enumerate((assembly, subject) => subject.WithAssemblies(assembly), assemblies));
         }
     }
 }

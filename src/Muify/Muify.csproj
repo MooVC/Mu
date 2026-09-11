@@ -50,23 +50,21 @@
       <LastGenOutput>UnitAttributeAnalyzer.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <Target Name="GetDependencyTargetPaths">
-    <MSBuild Projects="@(ProjectReference)" Targets="GetTargetPath" Properties="Configuration=$(Configuration);TargetFramework=$(TargetFramework)">
-      <Output TaskParameter="TargetOutputs" ItemName="_ProjectReferenceTargetPaths" />
-    </MSBuild>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.CodeAnalysis.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <Target Name="GetDependencyTargetPaths" Condition="'$(IncludeAnalyzerDependencies)' == 'true'" DependsOnTargets="ResolveReferences">
     <ItemGroup>
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgArdalis_GuardClauses)\lib\netstandard2.0\Ardalis.GuardClauses.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC)\lib\netstandard2.0\MooVC.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Modelling)\lib\netstandard2.0\MooVC.Modelling.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax)\lib\netstandard2.0\MooVC.Syntax.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgMooVC_Syntax_CSharp)\lib\netstandard2.0\MooVC.Syntax.CSharp.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgSystem_Collections_Immutable)\lib\netstandard2.0\System.Collections.Immutable.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="@(_ProjectReferenceTargetPaths)" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll' AND '%(ReferenceCopyLocalPaths.Filename)' != '$(AssemblyName)' AND !$([System.String]::Copy('%(ReferenceCopyLocalPaths.Filename)').StartsWith('Microsoft.CodeAnalysis'))" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
   <Target Name="PackAnalyzerDependencies" DependsOnTargets="ResolveReferences">
     <ItemGroup>
       <_AnalyzerDependency Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll' AND '%(ReferenceCopyLocalPaths.Filename)' != '$(AssemblyName)' AND !$([System.String]::Copy('%(ReferenceCopyLocalPaths.Filename)').StartsWith('Microsoft.CodeAnalysis'))" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\$(AssemblyName).pdb" PackagePath="analyzers/dotnet/cs" />
       <TfmSpecificPackageFile Include="@(_AnalyzerDependency)" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>

@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling;
+using Identifier = MooVC.Syntax.Identifier;
 
 public sealed class WhenParseFeatureModelIsCalled
 {
@@ -113,23 +114,25 @@ public sealed class WhenParseFeatureModelIsCalled
     }
 
     [Test]
-    public async Task GivenACreationalAttributeReferencingAMissingClassThenHasFactIsFalse()
+    public async Task GivenACreationalAttributeReferencingAMissingClassThenFactIsIdentifiedForGeneration()
     {
         // Arrange
         const string source = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            using Muify.Modelling.Services;
+            using Muify.Service;
 
             [Creational<MissingFact>]
             public sealed record Register;
             """;
 
         // Act
-        bool result = GetFeature(source).Metadata.HasFact;
+        Feature result = GetFeature(source);
 
         // Assert
-        _ = await Assert.That(result).IsFalse();
+        _ = await Assert.That(result.Metadata.HasFact).IsFalse();
+        _ = await Assert.That(result.Mutational.Fact.ToString()).IsEqualTo("MissingFact");
+        _ = await Assert.That(result.Mutational.Type.IsCreational).IsTrue();
     }
 
     [Test]
@@ -150,10 +153,42 @@ public sealed class WhenParseFeatureModelIsCalled
             """;
 
         // Act
-        bool result = GetFeature(source).Metadata.HasFact;
+        Feature result = GetFeature(source);
 
         // Assert
-        _ = await Assert.That(result).IsTrue();
+        _ = await Assert.That(result.Metadata.HasFact).IsTrue();
+        _ = await Assert.That(result.Mutational.Fact.ToString()).IsEqualTo("Registered");
+        _ = await Assert.That(result.Mutational.Type.IsTransitional).IsTrue();
+    }
+
+    [Test]
+    public async Task GivenPublicInstancePropertiesThenParametersRetainTheirTypesInAlphabeticalOrder()
+    {
+        // Arrange
+        const string source = """
+            #nullable enable
+
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            public sealed record Register(string[] Owners, string? Description)
+            {
+                public static int Count { get; set; }
+
+                private int State { get; set; }
+
+                public sealed record Result(string Value);
+            }
+            """;
+
+        string[] expected = ["Description", "Owners"];
+
+        // Act
+        Feature result = GetFeature(source);
+
+        // Assert
+        _ = await Assert.That(result.Parameters.Select(parameter => parameter.Name.ToSnippet(Identifier.Options.Pascal).ToString())).IsEquivalentTo(expected);
+        _ = await Assert.That(result.Parameters[0].Type.IsNullable).IsTrue();
+        _ = await Assert.That(result.Parameters[1].Type.IsArray).IsTrue();
     }
 
     [Test]

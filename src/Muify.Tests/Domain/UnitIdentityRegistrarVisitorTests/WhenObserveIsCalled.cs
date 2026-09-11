@@ -9,7 +9,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -18,7 +18,7 @@ public sealed class WhenObserveIsCalled
             using System;
             using SimpleInjector;
 
-            public sealed partial class Allocator
+            partial class Allocator
                 : global::Mu.Composition.IRegistrar
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
@@ -31,12 +31,13 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new UnitIdentityRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
 
         Unit car = TestData.Single.Car.Value
             .WithMetadata(metadata => metadata
                 .WithAllocator(allocator => allocator
                     .HasRegistrar(false)
+                    .IsPartial(true)
                     .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
 
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
@@ -52,16 +53,15 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasCompositionIsFalseThenNothingIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitIdentityRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(false));
-        Unit car = TestData.Single.Car.Value
-            .WithMetadata(metadata => metadata
-                .WithAllocator(allocator => allocator
-                    .HasRegistrar(false)
-                    .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+            .IsPartial(true)
+            .HasRegistrar(true)));
 
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
         Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
@@ -74,12 +74,16 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
+    public async Task GivenAUnitWhenHasRegistrarIsFalseThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitIdentityRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
-        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator.HasRegistrar(true)));
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+            .IsPartial(false)
+            .HasRegistrar(false)));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
         Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
 
@@ -95,7 +99,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new UnitIdentityRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
         Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
 

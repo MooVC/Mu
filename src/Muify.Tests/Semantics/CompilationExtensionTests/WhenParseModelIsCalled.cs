@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using MooVC.Syntax.CSharp;
 using Mu.Modelling;
+using Attribute = Mu.Modelling.Attribute;
 
 public sealed class WhenParseModelIsCalled
 {
@@ -76,6 +77,44 @@ public sealed class WhenParseModelIsCalled
     private static readonly MetadataReference[] _references = GetReferences();
 
     [Test]
+    public async Task GivenAUnitWithPropertiesThenOnlyPublicWritableInstancePropertiesAreCatalogued()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            public sealed record Car(string Model, byte Doors)
+            {
+                public static string DefaultModel { get; set; }
+
+                public string Display => Model;
+
+                public string Locked { get; private init; }
+
+                private string Secret { get; init; }
+
+                public string this[int index]
+                {
+                    get => Model;
+                    set { }
+                }
+            }
+            """;
+
+        Attribute[] expected =
+        [
+            (Name: "Doors", Type: typeof(byte)),
+            (Name: "Model", Type: typeof(string)),
+        ];
+
+        // Act
+        IEnumerable<Attribute> result = GetModel(source).Areas[0].Units[0].Attributes;
+
+        // Assert
+        _ = await Assert.That(result).IsEquivalentTo(expected);
+    }
+
+    [Test]
     public async Task GivenAssemblyReferencesThenAssembliesAreCatalogued()
     {
         // Arrange
@@ -93,43 +132,6 @@ public sealed class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Metadata.Assemblies).Contains(ReferenceAssemblyName);
-    }
-
-    [Test]
-    public async Task GivenMuCompositionIsNotReferencedThenHasCompositionIsFalse()
-    {
-        // Arrange
-        const string source = """
-            namespace MooVC.Testing.Mechanics.Car;
-
-            public sealed record Car;
-            """;
-
-        // Act
-        Model result = GetModel(source);
-
-        // Assert
-        _ = await Assert.That(result.Metadata.HasComposition).IsFalse();
-    }
-
-    [Test]
-    public async Task GivenMuCompositionIsReferencedThenHasCompositionIsTrue()
-    {
-        // Arrange
-        const string CompositionAssemblyName = "Mu.Composition";
-        const string source = """
-            namespace MooVC.Testing.Mechanics.Car;
-
-            public sealed record Car;
-            """;
-
-        MetadataReference reference = CreateReference(CompositionAssemblyName);
-
-        // Act
-        Model result = GetModel(source, reference);
-
-        // Assert
-        _ = await Assert.That(result.Metadata.HasComposition).IsTrue();
     }
 
     [Test]

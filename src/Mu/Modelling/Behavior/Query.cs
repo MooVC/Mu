@@ -1,5 +1,7 @@
 ﻿namespace Mu.Modelling.Behavior;
 
+using ProtoBuf;
+
 /// <summary>
 /// Represents a non-mutational query use case.
 /// </summary>

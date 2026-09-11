@@ -5,7 +5,7 @@ namespace Muify.Semantics
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        private static bool IsMutationalAttribute(this INamedTypeSymbol attribute)
+        public static bool IsMutationalAttribute(this INamedTypeSymbol attribute)
         {
             INamedTypeSymbol definition = attribute?.OriginalDefinition;
 

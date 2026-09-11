@@ -21,7 +21,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Self.Equality.HasNotEqualsOperator)
+            if (component.Metadata.Self.Equality.HasNotEqualsOperator || component.Identifier.IsUndefined)
             {
                 yield break;
             }

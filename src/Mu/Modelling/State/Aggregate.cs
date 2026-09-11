@@ -3,6 +3,7 @@
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using Mu.Modelling.Behavior;
+using ProtoBuf;
 
 /// <summary>
 /// Base immutable representation of aggregate state and proposed facts.
@@ -30,5 +31,6 @@ public abstract record Aggregate
     /// <summary>
     /// Gets the current revision for the aggregate.
     /// </summary>
+    [JsonInclude]
     internal Revision Revision { get; init; }
 }

@@ -2,7 +2,7 @@
 {
     using Microsoft.CodeAnalysis;
     using Mu.Modelling;
-    using Muify.Semanrtics;
+    using Muify.Semantics;
 
     internal static partial class AttributeExtensions
     {

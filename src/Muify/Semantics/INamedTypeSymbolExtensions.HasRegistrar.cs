@@ -5,7 +5,7 @@ namespace Muify.Semantics
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        internal static bool HasRegistrar(this INamedTypeSymbol type)
+        public static bool HasRegistrar(this INamedTypeSymbol type)
         {
             return type.AllInterfaces.Any(@interface => @interface.IsRegistrar());
         }

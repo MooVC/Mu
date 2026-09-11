@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAFeatureWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
+    public async Task GivenAPartialFeatureWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
         // Arrange
         const string expected = """
@@ -15,7 +15,7 @@ public sealed class WhenObserveIsCalled
 
             using SimpleInjector;
 
-            public sealed partial record Register
+            partial record Register
                 : global::Mu.Composition.IRegistrar
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
@@ -27,8 +27,12 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasRegistrar(false));
+        Model model = TestData.Single.Model;
+
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(false));
+
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, register);
 
         // Act
@@ -41,12 +45,16 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAFeatureWhenHasCompositionIsFalseThenNothingIsGenerated()
+    public async Task GivenAPartialFeatureWhenHasRegistrarIsTrueThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(false));
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasRegistrar(false));
+        Model model = TestData.Single.Model;
+
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(true));
+
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, register);
 
         // Act
@@ -57,12 +65,16 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAFeatureWhenHasRegistrarThenNothingIsGenerated()
+    public async Task GivenAFeatureWhenHasRegistrarIsFalseThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasRegistrar(true));
+        Model model = TestData.Single.Model;
+
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .IsPartial(false)
+            .HasRegistrar(false));
+
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, register);
 
         // Act
@@ -77,7 +89,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new FeatureRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, TestData.Single.Register.Value);
 
         // Act

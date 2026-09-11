@@ -2,6 +2,7 @@
 
 using Mu.Modelling;
 using Mu.Modelling.State;
+using ProtoBuf;
 
 /// <summary>
 /// Represents a transitional use case targeting a specific aggregate reference.

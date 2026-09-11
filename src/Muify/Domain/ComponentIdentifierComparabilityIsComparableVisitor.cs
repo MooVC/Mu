@@ -21,7 +21,7 @@
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Identifier.IsUndefined || component.Metadata.Identifier.Comparability.IsComparable != Presence.Missing)
+            if (component.Metadata.Identifier.Comparability.IsComparable != Presence.Missing || component.Identifier.IsUndefined)
             {
                 yield break;
             }

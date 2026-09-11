@@ -6,7 +6,7 @@ namespace Muify.Semantics
     {
         private const string ServicesNamespace = "Mu.Modelling.Services";
 
-        private static bool IsTransform(this INamedTypeSymbol type)
+        public static bool IsTransform(this INamedTypeSymbol type)
         {
             INamedTypeSymbol definition = type.OriginalDefinition;
 

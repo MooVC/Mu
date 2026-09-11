@@ -1,9 +1,11 @@
 namespace Mu.Testing;
 
 using Mu.Modelling.Behavior;
+using ProtoBuf;
 
 public static partial class TestData
 {
+    [ProtoContract(SkipConstructor = true)]
     public sealed record TestFact
         : Fact<TestAggregate>,
           IConvertFrom<TestFact, TestCreational>,
@@ -21,6 +23,7 @@ public static partial class TestData
             Value = value;
         }
 
+        [ProtoMember(1, Name = nameof(Value))]
         public int Value { get; init; }
 
         public static implicit operator TestFact(TestCreational subject)

@@ -3,12 +3,9 @@ namespace Muify.Service
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using MooVC;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
-    using Mu.Modelling.Syntax.CSharp;
-    using Conversion = MooVC.Syntax.CSharp.Conversion;
     using Parameter = Mu.Modelling.Parameter;
 
     internal sealed class FeatureFactVisitor
@@ -21,46 +18,73 @@ namespace Muify.Service
                 yield break;
             }
 
-            string arguments = string.Join(", ", feature.Value.Parameters.Select(parameter => $"subject.{parameter.Name.ToSnippet(Identifier.Options.Pascal)}"));
-            Snippet assignments = feature.Value.Parameters.ToAssignments(Configuration.Options);
             Name fact = feature.Value.Mutational.Fact;
             Symbol request = (feature.Value.Name, Qualifier: feature.Namespace);
             Symbol unit = (feature.Features.Unit.Value.Name, Qualifier: feature.Features.Unit.Namespace);
-
-            IOrderedEnumerable<Parameter> parameters = feature.Value.Parameters
+            Symbol definition = (fact, Qualifier: feature.Namespace);
+            Parameter[] payload = feature.Value.Parameters.OrderBy(parameter => parameter.Name).ToArray();
+            Parameter[] parameters = payload
                 .Append((Name: "Identity", Type: typeof(Guid)))
                 .Append((Name: "Proposed", Type: typeof(DateTimeOffset)))
-                .OrderBy(parameter => parameter.Name);
+                .OrderBy(parameter => parameter.Name)
+                .ToArray();
 
-            string content = Builder
-                .New<Definition>()
-                .For<Record>(record => record
-                    .DerivesFrom(@base => @base
-                        .Named((Name: "Fact", Qualifier: "Mu.Modelling.Behavior"))
-                        .WithGenerics(unit))
-                    .Implements(
-                        (Name: "IConvertFrom", Qualifier: "Mu.Modelling.Behavior"),
-                        conversion => conversion.WithArguments(
-                            (Name: "Registered", Qualifier: feature.Namespace),
-                            (Name: "Register", Qualifier: feature.Namespace)))
-                    .Named(fact)
-                    .WithConstructors(serialization => serialization
-                        .AttributedWith(attribute => attribute
-                            .Named((Name: "JsonConstructorAttribute", Qualifier: "System.Text.Json.Serialization")))
-                        .Enumerate((current, subject) => subject.WithParameters(parameter => parameter.From(current)), parameters)
-                        .WithArguments("identity", "proposed")
-                        .WithBody(assignments))
-                    .WithParameters(feature.Value.Parameters)
-                    .WithOperators(operators => operators
-                        .WithConversions(conversion => conversion
-                            .ForType(request)
-                            .WithBody($"return new {fact}({arguments});")
-                            .WithDirection(Conversion.Intents.From)
-                            .WithMode(Conversion.Types.Implicit))))
-                .From(feature.Namespace)
-                .ToSnippet(Configuration.Options);
+            var content = new List<string>
+            {
+                $"namespace {feature.Namespace};",
+                string.Empty,
+                $"public sealed partial record {fact}",
+                $"    : global::Mu.Modelling.Behavior.Fact<{Configuration.Render(unit)}>,",
+                $"      global::Mu.Modelling.Behavior.IConvertFrom<{Configuration.Render(definition)}, {Configuration.Render(request)}>",
+                "{",
+            };
 
-            yield return new File(content, feature.Value.Mutational.Fact);
+            AddConstructor(content, fact, payload, payload, serialization: false);
+            content.Add(string.Empty);
+            AddConstructor(content, fact, parameters, payload, serialization: true);
+
+            foreach (Parameter parameter in payload)
+            {
+                content.Add(string.Empty);
+                content.Add($"    public {Configuration.Render(parameter.Type)} {parameter.Name.ToSnippet(Identifier.Options.Pascal)} {{ get; init; }}");
+            }
+
+            string arguments = string.Join(", ", payload.Select(parameter => $"subject.{parameter.Name.ToSnippet(Identifier.Options.Pascal)}"));
+
+            content.Add(string.Empty);
+            content.Add($"    public static implicit operator {fact}({Configuration.Render(request)} subject)");
+            content.Add("    {");
+            content.Add($"        return new {fact}({arguments});");
+            content.Add("    }");
+            content.Add("}");
+
+            yield return new File(content.ToSnippet(Configuration.Options), fact);
+        }
+
+        private static void AddConstructor(List<string> content, Name fact, IEnumerable<Parameter> parameters, IEnumerable<Parameter> payload, bool serialization)
+        {
+            if (serialization)
+            {
+                content.Add("    [global::System.Text.Json.Serialization.JsonConstructorAttribute]");
+            }
+
+            string arguments = string.Join(", ", parameters.Select(parameter => $"{Configuration.Render(parameter.Type)} {parameter.Name.ToSnippet(Variable.Options.Camel)}"));
+
+            content.Add($"    internal {fact}({arguments})");
+
+            if (serialization)
+            {
+                content.Add("        : base(identity, proposed)");
+            }
+
+            content.Add("    {");
+
+            foreach (Variable name in payload.Select(parameter => parameter.Name))
+            {
+                content.Add($"        {name.ToSnippet(Identifier.Options.Pascal)} = {name.ToSnippet(Variable.Options.Camel)};");
+            }
+
+            content.Add("    }");
         }
     }
 }

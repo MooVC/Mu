@@ -7,7 +7,7 @@ namespace Muify.Semantics
         private const string ComparableInterfaceMetadataName = "IComparable`1";
         private const string SystemNamespaceName = "System";
 
-        internal static bool IsComparableTo(this INamedTypeSymbol symbol, ITypeSymbol comparedType)
+        public static bool IsComparableTo(this INamedTypeSymbol symbol, ITypeSymbol comparedType)
         {
             INamedTypeSymbol definition = symbol.OriginalDefinition;
 

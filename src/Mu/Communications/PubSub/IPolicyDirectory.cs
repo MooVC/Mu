@@ -5,5 +5,5 @@ using Mu.Communications.Messaging;
 
 public interface IPolicyDirectory
 {
-    IPolicy? Find(Event @event, IServiceScope scope);
+    IPolicy? Find(Event @event, IServiceProvider provider);
 }

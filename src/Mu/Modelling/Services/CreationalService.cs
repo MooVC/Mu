@@ -8,10 +8,7 @@ using Mu.Persistence;
 /// <summary>
 /// Executes creational use cases by allocating an identity, applying the mutation, and persisting <see langword="new"/> facts.
 /// </summary>
-public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
-    IAllocator<TIdentity> allocator,
-    IRoot<TAggregate, TUseCase> root,
-    IWriteStore<TAggregate, TIdentity> store)
+public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(IAllocator<TIdentity> allocator, IRoot<TAggregate, TUseCase> root, IWriteStore<TAggregate, TIdentity> store)
     : IService<TUseCase, TIdentity>
     where TAggregate : Aggregate, new()
     where TIdentity : struct
@@ -26,20 +23,20 @@ public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
             .Allocate(useCase, cancellationToken)
             .ConfigureAwait(false);
 
-        Result<TAggregate> opened;
+        Result<TAggregate> created;
 
         try
         {
             var aggregate = new TAggregate();
 
-            opened = await root
+            created = await root
                 .Apply(aggregate, useCase, cancellationToken)
                 .ConfigureAwait(false);
 
-            if (opened.IsSuccessful)
+            if (created.IsSuccessful)
             {
                 await store
-                    .Save(opened.Value, identity, cancellationToken)
+                    .Save(created.Value, identity, cancellationToken)
                     .ConfigureAwait(false);
 
                 return identity;
@@ -58,6 +55,6 @@ public sealed class CreationalService<TAggregate, TIdentity, TUseCase>(
             .Surrender(identity, cancellationToken)
             .ConfigureAwait(false);
 
-        return opened.Failures;
+        return created.Failures;
     }
 }

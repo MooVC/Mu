@@ -2,29 +2,28 @@
 
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
+using ProtoBuf;
 
 /// <summary>
 /// Base type for asynchronous event messages that carry facts.
 /// </summary>
+[ProtoContract(SkipConstructor = true)]
 public abstract record Event
     : Message
 {
-    private protected Event(DateTimeOffset committedAt, Ledger context, Fact fact, DateTimeOffset preparedAt)
-        : base(context, preparedAt)
+    private protected Event()
     {
-        ArgumentNullException.ThrowIfNull(fact);
-
-        CommittedAt = committedAt;
-        Fact = fact;
     }
 
     /// <summary>
     /// Gets the time the fact was committed to persistence.
     /// </summary>
-    public DateTimeOffset CommittedAt { get; }
+    [ProtoMember(1, Name = nameof(CommittedAt))]
+    public abstract DateTimeOffset CommittedAt { get; }
 
     /// <summary>
     /// Gets the fact carried by the event.
     /// </summary>
-    public Fact Fact { get; }
+    [ProtoIgnore]
+    public abstract Fact Fact { get; }
 }

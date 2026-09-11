@@ -4,12 +4,14 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using ProtoBuf;
 
 /// <summary>
 /// Represents the outcome of an operation that can either succeed with a value or fail with validation errors.
 /// </summary>
 /// <typeparam name="T">The type of value produced when the operation succeeds.</typeparam>
-public sealed record Result<T>
+[ProtoContract(Surrogate = typeof(Result.Contract<>))]
+public sealed partial record Result<T>
     where T : notnull
 {
     private Result(T value)

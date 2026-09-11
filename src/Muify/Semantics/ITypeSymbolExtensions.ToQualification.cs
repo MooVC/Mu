@@ -5,14 +5,14 @@ namespace Muify.Semantics
 
     internal static partial class ITypeSymbolExtensions
     {
-        internal static Qualification ToQualification(this ITypeSymbol type)
+        public static Qualification ToQualification(this ITypeSymbol type)
         {
             if (type.ContainingNamespace is null || type.ContainingNamespace.IsGlobalNamespace)
             {
                 return type.Name;
             }
 
-            return (Name: type.Name, Qualifier: type.ContainingNamespace.ToDisplayString());
+            return (type.Name, Qualifier: type.ContainingNamespace.ToDisplayString());
         }
     }
 }

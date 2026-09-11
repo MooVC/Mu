@@ -3,6 +3,7 @@
 using System;
 using Mu.Modelling;
 using Mu.Modelling.State;
+using ProtoBuf;
 
 /// <summary>
 /// Represents a domain fact bound to a specific aggregate model.

@@ -32,18 +32,18 @@
     <File Path=".github/CONTRIBUTING.md" />
     <File Path=".github/SECURITY.md" />
     <File Path="CHANGELOG.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Documentation/Analyzers/">
     <File Path="docs/rules/MUIFY01.md" />
     <File Path="docs/rules/MUIFY02.md" />
     <File Path="docs/rules/MUIFY03.md" />
     <File Path="docs/rules/MUIFY04.md" />
-    <File Path="LICENSE" />
-    <File Path="README.md" />
   </Folder>
   <Folder Name="/Framework/">
-    <Project Path="src/Mu.Composition/Mu.Composition.csproj" />
     <Project Path="src/Mu.Modelling.Components/Mu.Modelling.Components.csproj" />
     <Project Path="src/Mu.Modelling/Mu.Modelling.csproj" />
-    <Project Path="src/Mu.Sample/Mu.Sample.csproj" />
     <Project Path="src/Mu/Mu.csproj" />
     <Project Path="src/Muify/Muify.csproj" />
   </Folder>
@@ -53,12 +53,14 @@
     <File Path=".github/pull_request_template.md" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="src/Mu.Composition.Tests/Mu.Composition.Tests.csproj" />
     <Project Path="src/Mu.Modelling.Components.Tests/Mu.Modelling.Components.Tests.csproj" />
     <Project Path="src/Mu.Modelling.Testing/Mu.Modelling.Testing.csproj" Id="d9cb584e-349c-4832-80cd-0cca7beae52b" />
     <Project Path="src/Mu.Modelling.Tests/Mu.Modelling.Tests.csproj" />
-    <Project Path="src/Mu.Sample.Tests/Mu.Sample.Tests.csproj" />
     <Project Path="src/Mu.Tests/Mu.Tests.csproj" />
     <Project Path="src/Muify.Tests/Muify.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Tests/Roslyn/">
+    <Project Path="src/MooVC.Testing.Modelling.Account.Open/MooVC.Testing.Modelling.Account.Open.csproj" Id="31b04f1e-9534-4e78-ac2d-da3df81bcdce" />
+    <Project Path="src/MooVC.Testing.Modelling.Account/MooVC.Testing.Modelling.Account.csproj" Id="b428dab7-f6ce-4cd6-b410-b55d5aaec5b2" />
   </Folder>
 </Solution>

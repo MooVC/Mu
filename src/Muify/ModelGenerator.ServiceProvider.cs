@@ -9,6 +9,7 @@ namespace Muify
     using Feature = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Features.Feature;
     using Unit = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit;
     using UnitComponent = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Components.Component;
+    using UnitIdentity = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Identity;
 
     public partial class ModelGenerator
     {
@@ -44,23 +45,31 @@ namespace Muify
 
             private static readonly Type[] _featureVisitors = new Type[]
             {
+                typeof(FeatureBaseVisitor),
                 typeof(FeatureFactVisitor),
                 typeof(FeatureRegistrarVisitor),
                 typeof(FeatureTransformVisitor),
             };
 
+            private static readonly Type[] _unitIdentityVisitors = new Type[]
+            {
+                typeof(UnitIdentityRegistrarVisitor),
+            };
+
             private static readonly Type[] _unitVisitors = new Type[]
             {
                 typeof(UnitBaseVisitor),
+                typeof(UnitBinderVisitor),
                 typeof(UnitRegistrarVisitor),
             };
 
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
-                { typeof(IModelVisitor<AreaComponent, File>), new CollectionVisitor<AreaComponent>(_componentVisitors) },
-                { typeof(IModelVisitor<Feature, File>), new CollectionVisitor<Feature>(_featureVisitors) },
-                { typeof(IModelVisitor<Unit, File>), new CollectionVisitor<Unit>(_unitVisitors) },
-                { typeof(IModelVisitor<UnitComponent, File>), new CollectionVisitor<UnitComponent>(_componentVisitors) },
+                { typeof(IEnumerable<IModelVisitor<AreaComponent, File>>), new[] { new CollectionVisitor<AreaComponent>(_componentVisitors) } },
+                { typeof(IEnumerable<IModelVisitor<Feature, File>>), new[] { new CollectionVisitor<Feature>(_featureVisitors) } },
+                { typeof(IEnumerable<IModelVisitor<Unit, File>>), new[] { new CollectionVisitor<Unit>(_unitVisitors) } },
+                { typeof(IEnumerable<IModelVisitor<UnitComponent, File>>), new[] { new CollectionVisitor<UnitComponent>(_componentVisitors) } },
+                { typeof(IEnumerable<IModelVisitor<UnitIdentity, File>>), new[] { new CollectionVisitor<UnitIdentity>(_unitIdentityVisitors) } },
             };
 
             public object GetService(Type serviceType)

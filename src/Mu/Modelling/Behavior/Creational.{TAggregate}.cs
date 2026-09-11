@@ -2,6 +2,7 @@
 
 using Mu.Modelling;
 using Mu.Modelling.State;
+using ProtoBuf;
 
 /// <summary>
 /// Represents a creational use case bound to a specific aggregate model.

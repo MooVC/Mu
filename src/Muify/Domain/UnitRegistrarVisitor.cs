@@ -12,9 +12,7 @@ namespace Muify.Domain
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (!unit.Root.Metadata.HasComposition
-             || unit.Value.Metadata.IsOutOfScope
-             || unit.Value.Metadata.HasRegistrar)
+            if (!unit.Value.Metadata.IsPartial || unit.Value.Metadata.HasRegistrar || unit.Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
@@ -28,7 +26,7 @@ namespace Muify.Domain
                 .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, "Registrar");
+            yield return new File(content, $"{unit.Value.Name}.Registrar");
         }
 
         private static Snippet ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit unit)

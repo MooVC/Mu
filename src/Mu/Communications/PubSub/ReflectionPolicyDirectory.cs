@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
 using Mu.Communications.Messaging;
+using Mu.Modelling.Behavior;
 
 public sealed class ReflectionPolicyDirectory
     : IPolicyDirectory
@@ -12,7 +13,7 @@ public sealed class ReflectionPolicyDirectory
     private static readonly Type _policy = typeof(IPolicy<,>);
     private static readonly Type _wrapper = typeof(Policy<,>);
 
-    public IPolicy? Find(Event @event, IServiceScope scope)
+    public IPolicy? Find(Event @event, IServiceProvider provider)
     {
         Type type = @event.GetType();
         Type[] arguments = type.GetGenericArguments();
@@ -25,7 +26,7 @@ public sealed class ReflectionPolicyDirectory
         Type policy = _policy.MakeGenericType(arguments);
         Type enumerable = _enumerable.MakeGenericType(policy);
 
-        object? instance = scope.ServiceProvider.GetService(enumerable);
+        object? instance = provider.GetService(enumerable);
 
         if (instance is not IEnumerable services)
         {

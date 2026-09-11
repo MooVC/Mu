@@ -13,12 +13,19 @@ public sealed class WhenObserveIsCalled
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            public sealed partial record Registered(byte Doors, string Make, string Model)
+            public sealed partial record Registered
                 : global::Mu.Modelling.Behavior.Fact<global::MooVC.Testing.Mechanics.Car.Car>,
                   global::Mu.Modelling.Behavior.IConvertFrom<global::MooVC.Testing.Mechanics.Car.Register.Registered, global::MooVC.Testing.Mechanics.Car.Register.Register>
             {
+                internal Registered(byte doors, string make, string model)
+                {
+                    Doors = doors;
+                    Make = make;
+                    Model = model;
+                }
+
                 [global::System.Text.Json.Serialization.JsonConstructorAttribute]
-                public Registered(byte doors, Guid identity, string make, string model, DateTimeOffset proposed)
+                internal Registered(byte doors, global::System.Guid identity, string make, string model, global::System.DateTimeOffset proposed)
                     : base(identity, proposed)
                 {
                     Doors = doors;
@@ -26,7 +33,13 @@ public sealed class WhenObserveIsCalled
                     Model = model;
                 }
             
-                public static implicit operator Registered(Register subject)
+                public byte Doors { get; init; }
+
+                public string Make { get; init; }
+
+                public string Model { get; init; }
+
+                public static implicit operator Registered(global::MooVC.Testing.Mechanics.Car.Register.Register subject)
                 {
                     return new Registered(subject.Doors, subject.Make, subject.Model);
                 }

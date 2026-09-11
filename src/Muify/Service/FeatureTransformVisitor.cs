@@ -14,9 +14,9 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.IsOutOfScope
-             || feature.Value.Type.IsNonMutational
-             || !feature.Value.Metadata.Transforms.IsDefaultOrEmpty)
+            if (feature.Value.Type.IsNonMutational
+             || !feature.Value.Metadata.Transforms.IsDefaultOrEmpty
+             || feature.Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }

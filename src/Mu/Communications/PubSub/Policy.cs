@@ -9,13 +9,17 @@ internal sealed class Policy<TFact, TIdentity>(IEnumerable<IPolicy<TFact, TIdent
     where TFact : Fact
     where TIdentity : struct
 {
-    public Task Apply(Event @event, CancellationToken cancellationToken)
+    public async Task Apply(Event @event, CancellationToken cancellationToken)
     {
         if (@event is not Event<TFact, TIdentity> expected)
         {
             throw new InvalidCastException($"Event is not of the type `Event<{typeof(TFact).Name}, {typeof(TIdentity).Name}>` expected by the Policy.");
         }
 
-        return Parallel.ForEachAsync(services, cancellationToken, (service, cancellationToken) => new ValueTask(service.Apply(expected, cancellationToken)));
+        IEnumerable<Task> policies = services.Select(service => service.Apply(expected, cancellationToken));
+
+        await Task
+            .WhenAll(policies)
+            .ConfigureAwait(false);
     }
 }

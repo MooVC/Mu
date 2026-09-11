@@ -1,5 +1,7 @@
 ﻿namespace Mu.Modelling.Behavior;
 
+using ProtoBuf;
+
 /// <summary>
 /// Represents a request to execute a domain behavior.
 /// </summary>

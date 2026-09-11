@@ -7,7 +7,7 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
         // Arrange
         string expected = """
@@ -15,7 +15,7 @@ public sealed class WhenObserveIsCalled
 
             using SimpleInjector;
 
-            public sealed partial record Car
+            partial record Car
                 : global::Mu.Composition.IRegistrar
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
@@ -26,8 +26,12 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new UnitRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(false));
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
@@ -36,16 +40,20 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo("Registrar");
+        _ = await Assert.That(definition.Hint).IsEqualTo("Car.Registrar");
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasCompositionIsFalseThenNothingIsGenerated()
+    public async Task GivenAPartialUnitWhenHasRegistrarThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(false));
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(false));
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(true));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
@@ -56,12 +64,16 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAUnitWhenHasRegistrarThenNothingIsGenerated()
+    public async Task GivenAUnitWhenHasRegistrarIsFalseThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new UnitRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.HasRegistrar(true));
+        Model model = TestData.Single.Model;
+
+        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+            .IsPartial(false)
+            .HasRegistrar(false));
+
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
 
         // Act
@@ -76,7 +88,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new UnitRegistrarVisitor();
-        Model model = TestData.Single.Model.WithMetadata(metadata => metadata.HasComposition(true));
+        Model model = TestData.Single.Model;
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
 
         // Act

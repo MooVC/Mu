@@ -1,5 +1,7 @@
 namespace Muify.Semantics
 {
+    using System;
+    using System.Linq;
     using System.Threading;
     using Microsoft.CodeAnalysis;
     using MooVC;
@@ -10,7 +12,10 @@ namespace Muify.Semantics
     {
         public static Model ParseDomainModel(this Compilation compilation, Feature feature, (Name Area, Name Unit) names, CancellationToken cancellationToken)
         {
-            INamedTypeSymbol definition = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{names.Unit}");
+            const int DomainSegments = 4;
+
+            string domainNamespace = string.Join(".", (compilation.AssemblyName ?? string.Empty).Split('.').Take(DomainSegments));
+            INamedTypeSymbol definition = compilation.GetTypeByMetadataName($"{domainNamespace}.{names.Unit}");
 
             if (definition is null || !definition.IsRecord)
             {
@@ -19,19 +24,31 @@ namespace Muify.Semantics
 
             definition.IdentifyMembers(out Component[] components, out List[] lists, cancellationToken);
 
+            IOrderedEnumerable<IPropertySymbol> attributes = definition
+                .GetProperties(property => property.DeclaredAccessibility == Accessibility.Public
+                    && !property.IsStatic
+                    && !property.IsIndexer
+                    && property.SetMethod?.DeclaredAccessibility == Accessibility.Public)
+                .OrderBy(property => property.Name, StringComparer.Ordinal);
+
             return Model.Undefined
                 .Defines(area => area
                     .Named(names.Area)
                     .ResponsibleFor(unit => unit
+                        .Enumerate(
+                            (property, subject) => subject.AttributedWith(attribute => attribute
+                                .Named(property.Name)
+                                .OfType(property.Type.ToSyntax())),
+                            attributes)
                         .IdentifiedBy(definition.GetUnitIdentity())
                         .Named(names.Unit)
                         .WithMetadata(metadata => metadata
-                            .WithAllocator(definition.Allocator())
+                            .Enumerate((registrar, subject) => subject.WithRegistrars(registrar), definition.ContainingNamespace.GetRegistrars())
+                            .IsPartial(definition.IsPartial())
                             .HasBase(definition.HasAggregateBase())
+                            .HasBinder(definition.HasBinder())
                             .HasRegistrar(definition.HasRegistrar())
-                            .Enumerate(
-                                (registrar, subject) => subject.WithRegistrars(registrar),
-                                definition.ContainingNamespace.GetRegistrars()))
+                            .WithAllocator(definition.Allocator()))
                         .Featuring(feature)
                         .Owns(components)
                         .Sets(lists)));

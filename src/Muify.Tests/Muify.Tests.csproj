@@ -30,4 +30,7 @@
       <Private>true</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service\FeatureGrpcServiceVisitorTests\" />
+  </ItemGroup>
 </Project>

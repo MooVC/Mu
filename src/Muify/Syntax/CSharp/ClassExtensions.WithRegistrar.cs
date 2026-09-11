@@ -16,13 +16,15 @@
 
             return @class.Implements((Name: "IRegistrar", Qualifier: "Mu.Composition"))
                 .Named(name)
+                .WithExtensibility(Modifiers.Implicit)
                 .WithMethods(register => register
                     .Accepts((Name: "Configuration", Type: configuration))
                     .Accepts((Name: "Container", Type: container))
                     .Named("Register")
                     .Returns(Result.Void)
                     .WithBody(body)
-                    .WithExtensibility(Modifiers.Static));
+                    .WithExtensibility(Modifiers.Static))
+                .WithScope(Scopes.Unspecified);
         }
     }
 }
