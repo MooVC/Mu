@@ -1,6 +1,6 @@
-////namespace MooVC.Testing.Modelling.Account.Open;
+namespace MooVC.Testing.Modelling.Account.Open;
 
-////using Muify.Service;
+using Muify.Service;
 
-////[Creational<Opened>]
-////public sealed partial record Open(Owner Owner);
+[Creational<Opened>]
+public sealed partial record Open(Owner Owner);

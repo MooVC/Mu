@@ -40,6 +40,7 @@
     <File Path="docs/rules/MUIFY02.md" />
     <File Path="docs/rules/MUIFY03.md" />
     <File Path="docs/rules/MUIFY04.md" />
+    <File Path="docs/rules/MUIFY05.md" />
   </Folder>
   <Folder Name="/Framework/">
     <Project Path="src/Mu.Modelling.Components/Mu.Modelling.Components.csproj" />
