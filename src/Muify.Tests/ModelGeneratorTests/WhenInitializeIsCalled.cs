@@ -4,7 +4,7 @@ using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-public sealed class WhenInitializeIsCalled
+public sealed partial class WhenInitializeIsCalled
 {
     private const string AssemblyName = "MooVC.Testing.Mechanics.Car";
 

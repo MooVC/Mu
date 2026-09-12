@@ -5,6 +5,7 @@ namespace Muify.Semantics
     using Microsoft.CodeAnalysis;
     using MooVC;
     using MooVC.Syntax;
+    using MooVC.Syntax.CSharp;
     using Mu.Modelling;
     using Muify.Service;
 
@@ -19,18 +20,11 @@ namespace Muify.Semantics
                 return Feature.Undefined;
             }
 
-            IPropertySymbol[] results = request.GetResults();
-            IOrderedEnumerable<IPropertySymbol> parameters = request
-                .GetProperties(property => property.DeclaredAccessibility == Accessibility.Public
-                    && !property.IsStatic
-                    && !property.IsIndexer
-                    && property.SetMethod is object)
-                .OrderBy(property => property.Name, StringComparer.Ordinal);
-
-            INamedTypeSymbol mutation = request
-                .GetAttributes()
-                .Select(attribute => attribute.AttributeClass)
-                .FirstOrDefault(attribute => attribute.IsMutationalAttribute());
+            request.ParseFeatureMetadata(
+                out INamedTypeSymbol @base,
+                out INamedTypeSymbol mutation,
+                out IOrderedEnumerable<IPropertySymbol> parameters,
+                out IPropertySymbol[] results);
 
             Feature feature = Feature.Undefined
                 .Named(names.Feature)
@@ -46,20 +40,71 @@ namespace Muify.Semantics
                     .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms())
                     .HasBase(request.HasUseCaseBase())
                     .HasBinder(request.HasBinder())
+                    .HasConstructors(request.HasConstructors())
                     .HasFact(request.HasFact())
                     .HasRegistrar(request.HasRegistrar())
-                    .IsPartial(request.IsPartial()));
+                    .IsPartial(request.IsPartial())
+                    .WithTargetIdentity(@base.GetTargetIdentity()));
 
-            if (mutation is null)
+            if (@base?.Name == "Query" || (@base is null && mutation is null))
             {
-                return feature;
+                return feature.IsNonMutational();
             }
 
+            bool isCreational = @base.IsCreational(mutation);
+
             return feature.IsMutational(mutational => mutational
-                .Raises(mutation.TypeArguments[0].Name)
-                .OfType(mutation.Name == $"{CreationalAttributeStrategy.Name}Attribute"
+                .Raises(mutation.GetFactName())
+                .OfType(isCreational
                     ? Mutational.Kinds.Creational
                     : Mutational.Kinds.Transitional));
+        }
+
+        private static string GetFactName(this INamedTypeSymbol mutation)
+        {
+            const int ExpectedArgumentsForMutationalAttribute = 1;
+
+            return mutation is object && mutation.TypeArguments.Length == ExpectedArgumentsForMutationalAttribute
+                ? mutation.TypeArguments[0].Name
+                : string.Empty;
+        }
+
+        private static Symbol GetTargetIdentity(this INamedTypeSymbol @base)
+        {
+            return @base?.Name == TransitionalAttributeStrategy.Name
+                ? @base.TypeArguments[1].ToSyntax()
+                : Symbol.Undefined;
+        }
+
+        private static bool IsCreational(this INamedTypeSymbol @base, INamedTypeSymbol mutation)
+        {
+            return @base is object
+                ? @base.Name == CreationalAttributeStrategy.Name
+                : mutation.Name == $"{CreationalAttributeStrategy.Name}Attribute";
+        }
+
+        private static void ParseFeatureMetadata(
+            this INamedTypeSymbol request,
+            out INamedTypeSymbol @base,
+            out INamedTypeSymbol mutation,
+            out IOrderedEnumerable<IPropertySymbol> parameters,
+            out IPropertySymbol[] results)
+        {
+            @base = request.GetFeatureBase();
+
+            mutation = request
+                .GetAttributes()
+                .Select(attribute => attribute.AttributeClass)
+                .FirstOrDefault(attribute => attribute.IsMutationalAttribute());
+
+            parameters = request
+                .GetProperties(property => property.DeclaredAccessibility == Accessibility.Public
+                    && !property.IsStatic
+                    && !property.IsIndexer
+                    && property.SetMethod is object)
+                .OrderBy(property => property.Name, StringComparer.Ordinal);
+
+            results = request.GetResults();
         }
     }
 }

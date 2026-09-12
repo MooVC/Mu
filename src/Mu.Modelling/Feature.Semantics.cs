@@ -20,6 +20,8 @@
 
             public bool HasBinder { get; set; } = true;
 
+            public bool HasConstructors { get; set; } = true;
+
             public bool HasFact { get; set; } = true;
 
             public bool HasRegistrar { get; set; } = true;
@@ -34,6 +36,8 @@
             public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;
 
             public Qualification Service { get; set; } = Qualification.Unnamed;
+
+            public Symbol TargetIdentity { get; set; } = Symbol.Undefined;
 
             public ImmutableArray<Qualification> Transforms { get; set; } = ImmutableArray<Qualification>.Empty;
         }

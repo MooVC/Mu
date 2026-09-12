@@ -20,6 +20,12 @@ public sealed class WhenParseFeatureModelIsCalled
 
             public abstract record Creational<TAggregate>
                 : UseCase;
+
+            public abstract record Query<TAggregate>
+                : UseCase;
+
+            public abstract record Transitional<TAggregate, TIdentity>
+                : UseCase;
         }
 
         namespace Mu.Modelling.Services
@@ -75,6 +81,56 @@ public sealed class WhenParseFeatureModelIsCalled
     private static readonly MetadataReference[] _references = GetReferences();
 
     [Test]
+    [Arguments("public sealed partial record Register;", false)]
+    [Arguments("public sealed partial record Register(string Value);", true)]
+    [Arguments("public sealed partial record Register { public Register() { } }", true)]
+    [Arguments("public sealed partial record Register { private Register(int value) { } }", true)]
+    [Arguments("public sealed partial record Register; public sealed partial record Register { public Register() { } }", true)]
+    [Arguments("public sealed partial record Register { static Register() { } }", false)]
+    public async Task GivenARequestThenExplicitConstructorsAreDetected(string declaration, bool expected)
+    {
+        // Arrange
+        string source = $"namespace {AssemblyName}; {declaration}";
+
+        // Act
+        bool result = GetFeature(source).Metadata.HasConstructors;
+
+        // Assert
+        _ = await Assert.That(result).IsEqualTo(expected);
+    }
+
+    [Test]
+    [Arguments("Creational<Car>", true, false)]
+    [Arguments("Transitional<Car, System.Guid>", true, true)]
+    [Arguments("Query<Car>", false, false)]
+    public async Task GivenARequestWithAFeatureBaseThenItsKindIsInferred(string baseType, bool isMutational, bool isTransitional)
+    {
+        // Arrange
+        string source = $$"""
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            using Mu.Modelling.Behavior;
+
+            public sealed record Car;
+
+            public abstract record CustomBase : {{baseType}};
+
+            public sealed partial record Register : CustomBase;
+            """;
+
+        // Act
+        Feature result = GetFeature(source);
+
+        // Assert
+        _ = await Assert.That(result.Type.IsMutational).IsEqualTo(isMutational);
+
+        if (isMutational)
+        {
+            _ = await Assert.That(result.Mutational.Type.IsTransitional).IsEqualTo(isTransitional);
+        }
+    }
+
+    [Test]
     public async Task GivenARequestWithoutAUseCaseBaseThenHasBaseIsFalse()
     {
         // Arrange
@@ -89,6 +145,23 @@ public sealed class WhenParseFeatureModelIsCalled
 
         // Assert
         _ = await Assert.That(result).IsFalse();
+    }
+
+    [Test]
+    public async Task GivenARequestWithoutABaseOrMutationalAttributeThenItsKindIsNonMutational()
+    {
+        // Arrange
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            public sealed partial record Register;
+            """;
+
+        // Act
+        Feature result = GetFeature(source);
+
+        // Assert
+        _ = await Assert.That(result.Type.IsNonMutational).IsTrue();
     }
 
     [Test]
