@@ -6,7 +6,8 @@ namespace Muify.Service
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
-    using Parameter = Mu.Modelling.Parameter;
+    using Conversion = MooVC.Syntax.CSharp.Conversion;
+    using Parameter = MooVC.Syntax.CSharp.Parameter;
 
     internal sealed class FeatureFactVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
@@ -22,69 +23,63 @@ namespace Muify.Service
             Symbol request = (feature.Value.Name, Qualifier: feature.Namespace);
             Symbol unit = (feature.Features.Unit.Value.Name, Qualifier: feature.Features.Unit.Namespace);
             Symbol definition = (fact, Qualifier: feature.Namespace);
-            Parameter[] payload = feature.Value.Parameters.OrderBy(parameter => parameter.Name).ToArray();
+
+            Parameter[] payload = feature.Value.Parameters
+                .OrderBy(parameter => parameter.Name)
+                .Select(parameter => Parameter.Undefined.Named(parameter.Name).OfType(parameter.Type))
+                .ToArray();
+
             Parameter[] parameters = payload
                 .Append((Name: "Identity", Type: typeof(Guid)))
                 .Append((Name: "Proposed", Type: typeof(DateTimeOffset)))
                 .OrderBy(parameter => parameter.Name)
                 .ToArray();
 
-            var content = new List<string>
-            {
-                $"namespace {feature.Namespace};",
-                string.Empty,
-                $"public sealed partial record {fact}",
-                $"    : global::Mu.Modelling.Behavior.Fact<{Configuration.Render(unit)}>,",
-                $"      global::Mu.Modelling.Behavior.IConvertFrom<{Configuration.Render(definition)}, {Configuration.Render(request)}>",
-                "{",
-            };
+            var body = payload
+                .Select(parameter => $"{parameter.Name.ToSnippet(Identifier.Options.Pascal)} = {parameter.Name.ToSnippet(Variable.Options.Camel)};")
+                .ToSnippet(Configuration.Options);
 
-            AddConstructor(content, fact, payload, payload, serialization: false);
-            content.Add(string.Empty);
-            AddConstructor(content, fact, parameters, payload, serialization: true);
+            Constructor constructor = Constructor.Undefined
+                .WithBody(body)
+                .WithScope(Scopes.Internal);
 
-            foreach (Parameter parameter in payload)
-            {
-                content.Add(string.Empty);
-                content.Add($"    public {Configuration.Render(parameter.Type)} {parameter.Name.ToSnippet(Identifier.Options.Pascal)} {{ get; init; }}");
-            }
+            Property[] properties = payload
+                .Select(parameter => Property.Undefined
+                    .Named(parameter.Name.ToSnippet(Identifier.Options.Pascal).ToString())
+                    .OfType(parameter.Type))
+                .ToArray();
 
             string arguments = string.Join(", ", payload.Select(parameter => $"subject.{parameter.Name.ToSnippet(Identifier.Options.Pascal)}"));
 
-            content.Add(string.Empty);
-            content.Add($"    public static implicit operator {fact}({Configuration.Render(request)} subject)");
-            content.Add("    {");
-            content.Add($"        return new {fact}({arguments});");
-            content.Add("    }");
-            content.Add("}");
+            var content = Builder
+                .New<Definition>()
+                .For<Record>(record => record
+                    .DerivesFrom(@base => @base
+                        .Named((Name: "Fact", Qualifier: "Mu.Modelling.Behavior"))
+                        .WithGenerics(unit))
+                    .Implements(@interface => @interface
+                        .Named((Name: "IConvertFrom", Qualifier: "Mu.Modelling.Behavior"))
+                        .WithArguments(definition, request))
+                    .Named(fact)
+                    .WithConstructors(
+                        constructor.WithParameters(payload),
+                        constructor
+                            .AttributedWith(attribute => attribute
+                                .Named((Name: "JsonConstructorAttribute", Qualifier: "System.Text.Json.Serialization")))
+                            .WithArguments("identity", "proposed")
+                            .WithParameters(parameters))
+                    .WithOperators(operators => operators
+                        .WithConversions(conversion => conversion
+                            .ForType(request)
+                            .WithBody(Snippet.From(Configuration.Options, $"return new {fact}({arguments});"))
+                            .WithDirection(Conversion.Intents.From)
+                            .WithMode(Conversion.Types.Implicit)))
+                    .WithProperties(properties))
+                .From(feature.Namespace)
+                .ImportReferences(feature.Namespace)
+                .ToSnippet(Configuration.Options);
 
-            yield return new File(content.ToSnippet(Configuration.Options), fact);
-        }
-
-        private static void AddConstructor(List<string> content, Name fact, IEnumerable<Parameter> parameters, IEnumerable<Parameter> payload, bool serialization)
-        {
-            if (serialization)
-            {
-                content.Add("    [global::System.Text.Json.Serialization.JsonConstructorAttribute]");
-            }
-
-            string arguments = string.Join(", ", parameters.Select(parameter => $"{Configuration.Render(parameter.Type)} {parameter.Name.ToSnippet(Variable.Options.Camel)}"));
-
-            content.Add($"    internal {fact}({arguments})");
-
-            if (serialization)
-            {
-                content.Add("        : base(identity, proposed)");
-            }
-
-            content.Add("    {");
-
-            foreach (Variable name in payload.Select(parameter => parameter.Name))
-            {
-                content.Add($"        {name.ToSnippet(Identifier.Options.Pascal)} = {name.ToSnippet(Variable.Options.Camel)};");
-            }
-
-            content.Add("    }");
+            yield return new File(content, fact);
         }
     }
 }
