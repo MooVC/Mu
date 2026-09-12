@@ -16,7 +16,7 @@ public sealed partial class WhenInitializeIsCalled
     [Arguments("Transitional", true)]
     [Arguments("Query", false)]
     [Arguments("Query", true)]
-    public async Task GivenAFeatureWithoutConstructorsThenGeneratedJsonConstructorCompilesAndRestoresItsState(string kind, bool generateBase)
+    public async Task GivenAFeatureWithoutConstructorsThenGeneratedConstructorsCompileAndPreserveTheirState(string kind, bool generateBase)
     {
         // Arrange
         const string featureAssemblyName = "MooVC.Testing.Mechanics.Car.Register";
@@ -27,6 +27,8 @@ public sealed partial class WhenInitializeIsCalled
         const string targetText = "66b7d3bd-8c39-4df0-bd52-1e9a10c53579";
         const string expectedOwner = "Owner";
         const int expectedCount = 3;
+        const string expectedDefaultOwner = "Unspecified";
+        const int expectedDefaultCount = 1;
 
         bool isTransitional = kind == "Transitional";
         string arguments = isTransitional ? "Car, System.Guid" : "Car";
@@ -42,6 +44,11 @@ public sealed partial class WhenInitializeIsCalled
 
                 public abstract record UseCase
                 {
+                    protected UseCase()
+                        : this(Guid.NewGuid(), DateTimeOffset.UtcNow)
+                    {
+                    }
+
                     protected UseCase(Guid identity, DateTimeOffset proposed)
                     {
                         Identity = identity;
@@ -55,6 +62,10 @@ public sealed partial class WhenInitializeIsCalled
 
                 public abstract record Creational<TAggregate> : UseCase
                 {
+                    protected Creational()
+                    {
+                    }
+
                     protected Creational(Guid identity, DateTimeOffset proposed)
                         : base(identity, proposed)
                     {
@@ -64,6 +75,11 @@ public sealed partial class WhenInitializeIsCalled
                 public abstract record Transitional<TAggregate, TIdentity> : UseCase
                     where TIdentity : struct
                 {
+                    protected Transitional(Reference<TIdentity> target)
+                    {
+                        Target = target;
+                    }
+
                     protected Transitional(Guid identity, DateTimeOffset proposed, Reference<TIdentity> target)
                         : base(identity, proposed)
                     {
@@ -75,6 +91,10 @@ public sealed partial class WhenInitializeIsCalled
 
                 public abstract record Query<TAggregate> : UseCase
                 {
+                    protected Query()
+                    {
+                    }
+
                     protected Query(Guid identity, DateTimeOffset proposed)
                         : base(identity, proposed)
                     {
@@ -113,12 +133,23 @@ public sealed partial class WhenInitializeIsCalled
                 {{attribute}}
                 public sealed partial record Register {{inheritance}}
                 {
-                    public Owner Owner { get; init; }
+                    public Owner Owner { get; init; } = new Owner("{{expectedDefaultOwner}}");
 
-                    public int Count { get; init; }
+                    public int Count { get; init; } = {{expectedDefaultCount}};
                 }
 
                 public sealed record Registered;
+
+                public static class FeatureFactory
+                {
+                    public static Register Create() => Create<Register>();
+
+                    private static TFeature Create<TFeature>()
+                        where TFeature : new()
+                    {
+                        return new TFeature();
+                    }
+                }
             }
             """;
 
@@ -160,6 +191,15 @@ public sealed partial class WhenInitializeIsCalled
         _ = await Assert.That(generatedCompilation.Emit(stream).Success).IsTrue();
         Assembly assembly = Assembly.Load(stream.ToArray());
         Type requestType = assembly.GetType($"{featureAssemblyName}.Register", throwOnError: true)!;
+        Type factoryType = assembly.GetType($"{featureAssemblyName}.FeatureFactory", throwOnError: true)!;
+        object defaultRequest = factoryType.GetMethod("Create")!.Invoke(null, null)!;
+
+        _ = await Assert.That((Guid)requestType.GetProperty("Identity")!.GetValue(defaultRequest)!).IsNotEqualTo(Guid.Empty);
+        _ = await Assert.That((DateTimeOffset)requestType.GetProperty("Proposed")!.GetValue(defaultRequest)!).IsNotEqualTo(DateTimeOffset.MinValue);
+        _ = await Assert.That((int)requestType.GetProperty("Count")!.GetValue(defaultRequest)!).IsEqualTo(expectedDefaultCount);
+        object defaultOwner = requestType.GetProperty("Owner")!.GetValue(defaultRequest)!;
+        _ = await Assert.That((string)defaultOwner.GetType().GetProperty("Name")!.GetValue(defaultOwner)!).IsEqualTo(expectedDefaultOwner);
+
         object request = JsonSerializer.Deserialize(json, requestType)!;
 
         _ = await Assert.That(request).IsNotNull();
@@ -171,6 +211,8 @@ public sealed partial class WhenInitializeIsCalled
 
         if (isTransitional)
         {
+            object defaultTarget = requestType.GetProperty("Target")!.GetValue(defaultRequest)!;
+            _ = await Assert.That((Guid)defaultTarget.GetType().GetProperty("Identity")!.GetValue(defaultTarget)!).IsEqualTo(Guid.Empty);
             object target = requestType.GetProperty("Target")!.GetValue(request)!;
             _ = await Assert.That((Guid)target.GetType().GetProperty("Identity")!.GetValue(target)!).IsEqualTo(Guid.Parse(targetText));
         }

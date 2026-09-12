@@ -61,7 +61,7 @@ namespace Muify.Domain {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Positional records deriving from Aggregate or annotated with Unit&lt;&gt; must satisfy the new() constraint. The type must be non-abstract and have a public parameterless constructor. If it has required members, that constructor must be annotated with SetsRequiredMembers..
+        ///   Looks up a localized string similar to Positional aggregate, unit, and feature records must satisfy the new() constraint. Features are recognized through their UseCase base or Creational&lt;&gt;, Transitional&lt;&gt;, or NonMutational attributes. The type must be non-abstract and have a public parameterless constructor. If it has required members, that constructor must be annotated with SetsRequiredMembers..
         /// </summary>
         internal static string ConstructorConstraintDescription {
             get {
@@ -69,7 +69,7 @@ namespace Muify.Domain {
             }
         }
         /// <summary>
-        ///   Looks up a localized string similar to Type `{0}` deriving from Aggregate or annotated with Unit&lt;&gt; must satisfy the new() constraint: it must be non-abstract and have a public parameterless constructor that satisfies any required members.
+        ///   Looks up a localized string similar to Aggregate or feature type `{0}` must satisfy the new() constraint: it must be non-abstract and have a public parameterless constructor that satisfies any required members.
         /// </summary>
         internal static string ConstructorConstraintMessage {
             get {
@@ -77,7 +77,7 @@ namespace Muify.Domain {
             }
         }
         /// <summary>
-        ///   Looks up a localized string similar to Aggregate Constructor Constraint Not Satisfied.
+        ///   Looks up a localized string similar to Aggregate or Feature Constructor Constraint Not Satisfied.
         /// </summary>
         internal static string ConstructorConstraintTitle {
             get {

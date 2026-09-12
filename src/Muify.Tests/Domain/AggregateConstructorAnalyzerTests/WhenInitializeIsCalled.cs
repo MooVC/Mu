@@ -12,6 +12,44 @@ public sealed class WhenInitializeIsCalled
         namespace Mu.Modelling.State
         {
             public abstract record Aggregate;
+
+            public readonly record struct Reference<TIdentity>(TIdentity Identity)
+                where TIdentity : struct;
+        }
+
+        namespace Mu.Modelling.Behavior
+        {
+            using Mu.Modelling.State;
+
+            public abstract record Fact;
+
+            public abstract record UseCase;
+
+            public abstract record Creational<TAggregate> : UseCase;
+
+            public abstract record Query<TAggregate> : UseCase;
+
+            public abstract record Transitional<TAggregate, TIdentity> : UseCase
+                where TIdentity : struct
+            {
+                protected Transitional(Reference<TIdentity> target)
+                {
+                }
+            }
+        }
+
+        namespace Muify.Service
+        {
+            using System;
+
+            [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+            public sealed class CreationalAttribute<TFact> : Attribute;
+
+            [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+            public sealed class TransitionalAttribute<TFact> : Attribute;
+
+            [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+            public sealed class NonMutationalAttribute : Attribute;
         }
 
         namespace Muify.Domain
@@ -26,7 +64,7 @@ public sealed class WhenInitializeIsCalled
         }
         """;
 
-    private const string ExpectedMessage = "Type `Wheel` deriving from Aggregate or annotated with Unit<> must satisfy the new() constraint: it must be non-abstract and have a public parameterless constructor that satisfies any required members";
+    private const string ExpectedMessage = "Aggregate or feature type `Wheel` must satisfy the new() constraint: it must be non-abstract and have a public parameterless constructor that satisfies any required members";
     private const string ExpectedTypeName = "Wheel";
 
     private static readonly MetadataReference[] _references = GetReferences();
@@ -39,14 +77,29 @@ public sealed class WhenInitializeIsCalled
     [Arguments("[Unit<int>] public sealed record Wheel(int Size) : Aggregate;")]
     [Arguments("public abstract record Wheel(int Size) : Aggregate { public Wheel() : this(0) { } }")]
     [Arguments("[Unit<int>] public abstract record Wheel(int Size) { public Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel(int Size) : Creational<Aggregate>;")]
+    [Arguments("public sealed record Wheel(int Size) : Transitional<Aggregate, int>(target: default);")]
+    [Arguments("public sealed record Wheel(int Size) : Query<Aggregate>;")]
+    [Arguments("public sealed record Wheel(int Size = 0) : Query<Aggregate>;")]
+    [Arguments("public sealed record Wheel(params int[] Sizes) : Query<Aggregate>;")]
+    [Arguments("[Creational<Fact>] public sealed partial record Wheel(int Size);")]
+    [Arguments("[Transitional<Fact>] public sealed partial record Wheel(int Size);")]
+    [Arguments("[NonMutational] public sealed partial record Wheel(int Size);")]
+    [Arguments("[Creational<Fact>] public sealed record Wheel(int Size) : Creational<Aggregate>;")]
+    [Arguments("public abstract record Wheel(int Size) : Query<Aggregate> { public Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel(int Size) : Query<Aggregate> { private Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel(int Size) : Creational<Aggregate> { internal Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel(int Size) : Query<Aggregate> { public Wheel() : this(0) { } public required string Name { get; init; } }")]
     public async Task GivenAPositionalRecordThatCannotSatisfyTheConstructorConstraintThenAnErrorShouldBeReturned(string declaration)
     {
         // Arrange
         string source = $$"""
             namespace Testing.Wheel;
 
+            using Mu.Modelling.Behavior;
             using Mu.Modelling.State;
             using Muify.Domain;
+            using Muify.Service;
 
             {{declaration}}
             """;
@@ -102,14 +155,31 @@ public sealed class WhenInitializeIsCalled
     [Arguments("public sealed record Wheel(int Size) : Unrelated.Aggregate;")]
     [Arguments("[Unrelated.Unit<int>] public sealed record Wheel(int Size);")]
     [Arguments("[Unit<int>] public sealed class Wheel(int size);")]
+    [Arguments("public sealed record Wheel(int Size) : Creational<Aggregate> { public Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel(int Size) : Transitional<Aggregate, int>(target: default) { public Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel(int Size) : Query<Aggregate> { public Wheel() : this(0) { } }")]
+    [Arguments("[Creational<Fact>] public sealed record Wheel(int Size) { public Wheel() : this(0) { } }")]
+    [Arguments("[Transitional<Fact>] public sealed record Wheel(int Size) { public Wheel() : this(0) { } }")]
+    [Arguments("[NonMutational] public sealed record Wheel(int Size) { public Wheel() : this(0) { } }")]
+    [Arguments("public sealed record Wheel : Creational<Aggregate>;")]
+    [Arguments("public sealed record Wheel() : Query<Aggregate>;")]
+    [Arguments("[NonMutational] public sealed partial record Wheel;")]
+    [Arguments("public sealed record Wheel(int Size) : Unrelated.Query<Aggregate>;")]
+    [Arguments("[Unrelated.Creational<Fact>] public sealed record Wheel(int Size);")]
+    [Arguments("[Unrelated.Transitional<Fact>] public sealed record Wheel(int Size);")]
+    [Arguments("[Unrelated.NonMutational] public sealed record Wheel(int Size);")]
+    [Arguments("[Creational<Fact>] public sealed class Wheel(int size);")]
+    [Arguments("public sealed record Wheel(int Size) : Query<Aggregate> { [System.Diagnostics.CodeAnalysis.SetsRequiredMembers] public Wheel() : this(0) { Name = string.Empty; } public required string Name { get; init; } }")]
     public async Task GivenAValidOrUnrelatedTypeThenNoDiagnosticShouldBeReturned(string declaration)
     {
         // Arrange
         string source = $$"""
             namespace Testing.Wheel
             {
+                using Mu.Modelling.Behavior;
                 using Mu.Modelling.State;
                 using Muify.Domain;
+                using Muify.Service;
 
                 {{declaration}}
             }
@@ -119,6 +189,14 @@ public sealed class WhenInitializeIsCalled
                 public abstract record Aggregate;
 
                 public sealed class UnitAttribute<TIdentity> : System.Attribute;
+
+                public abstract record Query<TAggregate>;
+
+                public sealed class CreationalAttribute<TFact> : System.Attribute;
+
+                public sealed class TransitionalAttribute<TFact> : System.Attribute;
+
+                public sealed class NonMutationalAttribute : System.Attribute;
             }
             """;
 
@@ -149,6 +227,100 @@ public sealed class WhenInitializeIsCalled
         // Assert
         Diagnostic diagnostic = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(diagnostic.GetMessage()).IsEqualTo(ExpectedMessage);
+    }
+
+    [Test]
+    [Arguments("Creational<Aggregate>")]
+    [Arguments("Transitional<Aggregate, int>(target: default)")]
+    [Arguments("Query<Aggregate>")]
+    public async Task GivenAnIndirectPositionalFeatureThenAnErrorShouldBeReturned(string baseType)
+    {
+        // Arrange
+        string source = $$"""
+            namespace Testing.Wheel;
+
+            using Mu.Modelling.Behavior;
+            using Mu.Modelling.State;
+
+            public abstract record FeatureBase() : {{baseType}};
+
+            public sealed record Wheel(int Size) : FeatureBase;
+            """;
+
+        // Act
+        ImmutableArray<Diagnostic> result = await GetDiagnostics(source);
+
+        // Assert
+        Diagnostic diagnostic = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(diagnostic.GetMessage()).IsEqualTo(ExpectedMessage);
+    }
+
+    [Test]
+    [Arguments("Muify.Service.CreationalAttribute<Mu.Modelling.Behavior.Fact>", false)]
+    [Arguments("Muify.Service.CreationalAttribute<Mu.Modelling.Behavior.Fact>", true)]
+    [Arguments("Muify.Service.TransitionalAttribute<Mu.Modelling.Behavior.Fact>", false)]
+    [Arguments("Muify.Service.NonMutationalAttribute", false)]
+    [Arguments("Muify.Service.NonMutationalAttribute", true)]
+    public async Task GivenAFeatureAttributeOnAnotherPartialDeclarationThenAnErrorShouldBeReturned(string attributeType, bool hasGeneratedBase)
+    {
+        // Arrange
+        const string source = """
+            namespace Testing.Wheel;
+
+            public sealed partial record Wheel(int Size);
+            """;
+        string attributeSource = $$"""
+            namespace Testing.Wheel;
+
+            using Feature = {{attributeType}};
+
+            [Feature]
+            public sealed partial record Wheel;
+            """;
+        string baseSource = hasGeneratedBase
+            ? "namespace Testing.Wheel; public sealed partial record Wheel : Mu.Modelling.Behavior.Query<Mu.Modelling.State.Aggregate>;"
+            : string.Empty;
+
+        // Act
+        ImmutableArray<Diagnostic> result = await GetDiagnostics(source, attributeSource, baseSource);
+
+        // Assert
+        Diagnostic diagnostic = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(diagnostic.GetMessage()).IsEqualTo(ExpectedMessage);
+        _ = await Assert.That(diagnostic.Location.SourceTree?.ToString()).IsEqualTo(source);
+    }
+
+    [Test]
+    [Arguments("Creational<Aggregate>")]
+    [Arguments("Transitional<Aggregate, int>(target: default)")]
+    [Arguments("Query<Aggregate>")]
+    public async Task GivenAFeatureWithAParameterlessConstructorOnAnotherPartialDeclarationThenNoDiagnosticShouldBeReturned(string baseType)
+    {
+        // Arrange
+        string source = $$"""
+            namespace Testing.Wheel;
+
+            using Mu.Modelling.Behavior;
+            using Mu.Modelling.State;
+
+            public sealed partial record Wheel(int Size) : {{baseType}};
+            """;
+        const string constructorSource = """
+            namespace Testing.Wheel;
+
+            public sealed partial record Wheel
+            {
+                public Wheel() : this(0)
+                {
+                }
+            }
+            """;
+
+        // Act
+        ImmutableArray<Diagnostic> result = await GetDiagnostics(source, constructorSource);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
     }
 
     [Test]

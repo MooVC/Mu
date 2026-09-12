@@ -17,6 +17,10 @@ public sealed class WhenObserveIsCalled
 
             public sealed partial record Register
             {
+                public Register()
+                {
+                }
+
                 [global::System.Text.Json.Serialization.JsonConstructorAttribute]
                 internal Register(byte doors, Guid identity, string make, string model, DateTimeOffset proposed)
                     : base(identity, proposed)
@@ -55,6 +59,11 @@ public sealed class WhenObserveIsCalled
 
             public sealed partial record Unregister
             {
+                public Unregister()
+                    : base(target: default)
+                {
+                }
+
                 [global::System.Text.Json.Serialization.JsonConstructorAttribute]
                 internal Unregister(Guid identity, DateTimeOffset proposed, Reference<Registration> target)
                     : base(identity, proposed, target)
@@ -88,6 +97,10 @@ public sealed class WhenObserveIsCalled
 
             public sealed partial record FindCarsBy
             {
+                public FindCarsBy()
+                {
+                }
+
                 [global::System.Text.Json.Serialization.JsonConstructorAttribute]
                 internal FindCarsBy(Guid identity, string? make, string? model, DateTimeOffset proposed)
                     : base(identity, proposed)

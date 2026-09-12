@@ -48,7 +48,7 @@ namespace Muify.Domain
                 .GetAttributes()
                 .Any(attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass?.OriginalDefinition, unitAttribute));
 
-            if (!(type.HasAggregateBase() || isUnit) || SatisfiesConstructorConstraint(type))
+            if (!(type.HasAggregateBase() || isUnit || IsFeature(context.Compilation, type)) || SatisfiesConstructorConstraint(type))
             {
                 return;
             }
@@ -90,6 +90,20 @@ namespace Muify.Domain
         {
             return (member is IPropertySymbol property && property.IsRequired)
                 || (member is IFieldSymbol field && field.IsRequired);
+        }
+
+        private static bool IsFeature(Compilation compilation, INamedTypeSymbol type)
+        {
+            if (type.HasUseCaseBase())
+            {
+                return true;
+            }
+
+            INamedTypeSymbol nonMutationalAttribute = compilation.GetTypeByMetadataName("Muify.Service.NonMutationalAttribute");
+
+            return type.GetAttributes().Any(attribute => attribute.AttributeClass.IsMutationalAttribute()
+                || (nonMutationalAttribute is object
+                    && SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, nonMutationalAttribute)));
         }
 
         private static bool SatisfiesConstructorConstraint(INamedTypeSymbol type)
