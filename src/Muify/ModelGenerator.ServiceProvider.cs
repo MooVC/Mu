@@ -18,50 +18,50 @@ namespace Muify
         {
             private static readonly Type[] _componentVisitors = new Type[]
             {
-                typeof(ComponentHasEqualsOverrideVisitor),
-                typeof(ComponentHasGetHashCodeOverrideVisitor),
-                typeof(ComponentIdentifierComparabilityHasCompareToVisitor),
-                typeof(ComponentIdentifierComparabilityHasGreaterThanOperatorVisitor),
-                typeof(ComponentIdentifierComparabilityHasGreaterThanOrEqualOperatorVisitor),
-                typeof(ComponentIdentifierComparabilityHasLessThanOperatorVisitor),
-                typeof(ComponentIdentifierComparabilityHasLessThanOrEqualOperatorVisitor),
-                typeof(ComponentIdentifierComparabilityIsComparableVisitor),
-                typeof(ComponentIdentifierEqualityHasEqualsOperatorVisitor),
-                typeof(ComponentIdentifierEqualityHasEquatableVisitor),
-                typeof(ComponentIdentifierEqualityHasNotEqualsOperatorVisitor),
-                typeof(ComponentIdentifierEqualityIsEquatableVisitor),
-                typeof(ComponentIdentifierHasImplicitConversionVisitor),
-                typeof(ComponentSelfComparabilityHasCompareToVisitor),
-                typeof(ComponentSelfComparabilityHasGreaterThanOperatorVisitor),
-                typeof(ComponentSelfComparabilityHasGreaterThanOrEqualOperatorVisitor),
-                typeof(ComponentSelfComparabilityHasLessThanOperatorVisitor),
-                typeof(ComponentSelfComparabilityHasLessThanOrEqualOperatorVisitor),
-                typeof(ComponentSelfComparabilityIsComparableVisitor),
-                typeof(ComponentSelfEqualityHasEqualsOperatorVisitor),
-                typeof(ComponentSelfEqualityHasEquatableVisitor),
-                typeof(ComponentSelfEqualityHasNotEqualsOperatorVisitor),
-                typeof(ComponentSelfEqualityIsEquatableVisitor),
+                typeof(GenerateEqualsOverrideWhenComponentVisited),
+                typeof(GenerateGetHashCodeOverrideWhenComponentVisited),
+                typeof(GenerateIdentifierComparabilityCompareToWhenComponentVisited),
+                typeof(GenerateIdentifierComparabilityGreaterThanOperatorWhenComponentVisited),
+                typeof(GenerateIdentifierComparabilityGreaterThanOrEqualOperatorWhenComponentVisited),
+                typeof(GenerateIdentifierComparabilityLessThanOperatorWhenComponentVisited),
+                typeof(GenerateIdentifierComparabilityLessThanOrEqualOperatorWhenComponentVisited),
+                typeof(GenerateIdentifierComparabilityComparableInterfaceWhenComponentVisited),
+                typeof(GenerateIdentifierEqualityEqualsOperatorWhenComponentVisited),
+                typeof(GenerateIdentifierEqualityEqualsWhenComponentVisited),
+                typeof(GenerateIdentifierEqualityNotEqualsOperatorWhenComponentVisited),
+                typeof(GenerateIdentifierEqualityEquatableInterfaceWhenComponentVisited),
+                typeof(GenerateIdentifierImplicitConversionWhenComponentVisited),
+                typeof(GenerateSelfComparabilityCompareToWhenComponentVisited),
+                typeof(GenerateSelfComparabilityGreaterThanOperatorWhenComponentVisited),
+                typeof(GenerateSelfComparabilityGreaterThanOrEqualOperatorWhenComponentVisited),
+                typeof(GenerateSelfComparabilityLessThanOperatorWhenComponentVisited),
+                typeof(GenerateSelfComparabilityLessThanOrEqualOperatorWhenComponentVisited),
+                typeof(GenerateSelfComparabilityComparableInterfaceWhenComponentVisited),
+                typeof(GenerateSelfEqualityEqualsOperatorWhenComponentVisited),
+                typeof(GenerateSelfEqualityEqualsWhenComponentVisited),
+                typeof(GenerateSelfEqualityNotEqualsOperatorWhenComponentVisited),
+                typeof(GenerateSelfEqualityEquatableInterfaceWhenComponentVisited),
             };
 
             private static readonly Type[] _featureVisitors = new Type[]
             {
-                typeof(FeatureBaseVisitor),
-                typeof(FeatureConstructorsVisitor),
-                typeof(FeatureFactVisitor),
-                typeof(FeatureRegistrarVisitor),
-                typeof(FeatureTransformVisitor),
+                typeof(GenerateBaseWhenFeatureVisited),
+                typeof(GenerateConstructorsWhenFeatureVisited),
+                typeof(GenerateFactWhenFeatureVisited),
+                typeof(GenerateRegistrarWhenFeatureVisited),
+                typeof(GenerateTransformWhenFeatureVisited),
             };
 
             private static readonly Type[] _unitIdentityVisitors = new Type[]
             {
-                typeof(UnitIdentityRegistrarVisitor),
+                typeof(GenerateRegistrarWhenUnitIdentityVisited),
             };
 
             private static readonly Type[] _unitVisitors = new Type[]
             {
-                typeof(UnitBaseVisitor),
-                typeof(UnitBinderVisitor),
-                typeof(UnitRegistrarVisitor),
+                typeof(GenerateBaseWhenUnitVisited),
+                typeof(GenerateBinderWhenUnitVisited),
+                typeof(GenerateRegistrarWhenUnitVisited),
             };
 
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>

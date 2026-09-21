@@ -1,6 +1,6 @@
 # Feature constructors
 
-`FeatureConstructorsVisitor` generates two constructors for partial Creational, Transitional, and Query features without explicit instance constructors:
+`GenerateConstructorsWhenFeatureVisited` generates two constructors for partial Creational, Transitional, and Query features without explicit instance constructors:
 
 - A public parameterless constructor for creating a new request, including through a `new()` constraint.
 - An internal `[JsonConstructor]` constructor that restores the payload, causal identity, proposed time, and transitional target from JSON.

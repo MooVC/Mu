@@ -25,10 +25,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AggregateConstructorAnalyzer.Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Domain\ComponentIdentifierHasImplicitConversionVisitor.Resources.Designer.cs">
+    <Compile Update="Domain\GenerateIdentifierImplicitConversionWhenComponentVisited.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ComponentIdentifierHasImplicitConversionVisitor.Resources.resx</DependentUpon>
+      <DependentUpon>GenerateIdentifierImplicitConversionWhenComponentVisited.Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="Domain\IdentityAttributeAnalyzer.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -46,9 +46,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AggregateConstructorAnalyzer.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Domain\ComponentIdentifierHasImplicitConversionVisitor.Resources.resx">
+    <EmbeddedResource Update="Domain\GenerateIdentifierImplicitConversionWhenComponentVisited.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ComponentIdentifierHasImplicitConversionVisitor.Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>GenerateIdentifierImplicitConversionWhenComponentVisited.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Domain\IdentityAttributeAnalyzer.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
