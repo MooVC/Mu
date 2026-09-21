@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Channels;
+using MooVC;
 using Mu.Communications.Messaging;
+using static Mu.Communications.PubSub.InMemoryPublisher_Resources;
 
 public sealed class InMemoryPublisher(ChannelWriter<Event> channel)
     : IPublisher
@@ -14,11 +16,7 @@ public sealed class InMemoryPublisher(ChannelWriter<Event> channel)
 
         if (!string.IsNullOrEmpty(failures))
         {
-            throw new InvalidOperationException($"""
-                The following events failed to be published to the channel:
-
-                {failures}
-                """);
+            throw new InvalidOperationException(PublishEventsAcceptedRequired.Format(Environment.NewLine, failures));
         }
 
         return Task.CompletedTask;

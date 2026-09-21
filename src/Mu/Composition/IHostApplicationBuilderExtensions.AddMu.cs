@@ -3,6 +3,7 @@ namespace Mu.Composition;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Hosting;
 using SimpleInjector;
+using static Mu.Composition.IHostApplicationBuilderExtensions_Resources;
 
 /// <summary>
 /// Provides extensions for composing Mu applications.
@@ -16,7 +17,7 @@ public static partial class IHostApplicationBuilderExtensions
     /// <returns>The configured dependency injection container.</returns>
     public static Container AddMu(this IHostApplicationBuilder root)
     {
-        _ = Guard.Against.Null(root, message: "The application composition root must be provided.");
+        _ = Guard.Against.Null(root, message: AddMuRootRequired);
 
         _ = root.Services.AddMu(out Container container);
 

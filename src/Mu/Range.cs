@@ -1,6 +1,8 @@
 ﻿namespace Mu;
 
+using MooVC;
 using ProtoBuf;
+using static Mu.Range_Resources;
 
 /// <summary>
 /// Represents an inclusive range between two comparable values.
@@ -19,7 +21,7 @@ public readonly record struct Range<T>
     {
         if (from.CompareTo(to) > 0)
         {
-            throw new ArgumentException($"The {nameof(From)} value of `{from}` must be lower than the To value {nameof(To)} `{to}`.", nameof(to));
+            throw new ArgumentException(ToNotLessThanFromRequired.Format(nameof(From), from, nameof(To), to), nameof(to));
         }
 
         From = from;

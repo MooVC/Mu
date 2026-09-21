@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Move remaining guard and precondition messages into class-level resource files while preserving exception types, parameter names, and message text.
 - Initial Release
 - Add `IScribe` and `Scribe` to manage ambient ledger causation and correlation through disposable use case scopes, restoring parent context and supporting initialization from an incoming ledger with localized Ardalis guards.
 - Generate unit protobuf binders and identity allocator registrars through the model generation pipeline.

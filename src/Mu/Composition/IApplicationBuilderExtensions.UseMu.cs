@@ -4,6 +4,7 @@ using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Builder;
 using SimpleInjector;
 using SimpleInjector.Lifestyles;
+using static Mu.Composition.IApplicationBuilderExtensions_Resources;
 
 public static partial class IApplicationBuilderExtensions
 {
@@ -17,8 +18,8 @@ public static partial class IApplicationBuilderExtensions
     /// <exception cref="InvalidOperationException">Thrown when the dependency injection container is not properly configured.</exception>
     public static IApplicationBuilder UseMu(this IApplicationBuilder host, Container container, Action<SimpleInjectorUseOptions>? options = default)
     {
-        _ = Guard.Against.Null(host, message: "The application host must be provided.");
-        _ = Guard.Against.Null(container, message: "The dependency injection container must be provided.");
+        _ = Guard.Against.Null(host, message: UseMuHostRequired);
+        _ = Guard.Against.Null(container, message: UseMuContainerRequired);
 
         options ??= _ => { };
 

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using ProtoBuf;
+using static Mu.Result_Resources;
 
 /// <summary>
 /// Represents the outcome of an operation that can either succeed with a value or fail with validation errors.
@@ -24,7 +25,7 @@ public sealed partial record Result<T>
     {
         if (Failures.Length == 0)
         {
-            throw new ArgumentException("At least one failure must be provided for an unsuccessful result.", nameof(failures));
+            throw new ArgumentException(FailuresRequired, nameof(failures));
         }
     }
 
@@ -46,7 +47,7 @@ public sealed partial record Result<T>
     /// Gets the validation failures associated with an unsuccessful result.
     /// </summary>
     public ImmutableArray<ValidationResult> Failures => IsSuccessful
-        ? throw new InvalidOperationException("There are no failures associated with a successful result.")
+        ? throw new InvalidOperationException(FailuresIsSuccessfulFalseRequired)
         : field;
 
     /// <summary>
@@ -54,7 +55,7 @@ public sealed partial record Result<T>
     /// </summary>
     public T? Value => IsSuccessful
         ? field
-        : throw new InvalidOperationException("There is no value associated with an unsuccessful result.");
+        : throw new InvalidOperationException(ValueIsSuccessfulTrueRequired);
 
     /// <summary>
     /// Converts a successful value to a <see cref="Result{T}"/>.

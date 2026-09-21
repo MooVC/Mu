@@ -10,6 +10,7 @@ using ProtoBuf.Meta;
 using SimpleInjector;
 using SimpleInjector.Integration.ServiceCollection;
 using SimpleInjector.Lifestyles;
+using static Mu.Composition.IServiceCollectionExtensions_Resources;
 
 /// <summary>
 /// Provides extensions for composing Mu applications.
@@ -34,7 +35,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured dependency injection container.</returns>
     public static IServiceCollection AddMu(this IServiceCollection services, out Container container, Action<SimpleInjectorAddOptions>? options = default)
     {
-        _ = Guard.Against.Null(services, message: "The service collection must be provided.");
+        _ = Guard.Against.Null(services, message: AddMuServicesRequired);
 
         _ = RuntimeTypeModel.Default.AddMu();
 

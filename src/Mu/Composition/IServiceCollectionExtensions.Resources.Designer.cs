@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mu.Modelling.Syntax.CSharp {
+namespace Mu.Composition {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,19 +19,19 @@ namespace Mu.Modelling.Syntax.CSharp {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StructExtensions_Resources {
-        
+    internal class IServiceCollectionExtensions_Resources {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal StructExtensions_Resources() {
+        internal IServiceCollectionExtensions_Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -39,13 +39,13 @@ namespace Mu.Modelling.Syntax.CSharp {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mu.Modelling.Syntax.CSharp.StructExtensions.Resources", typeof(StructExtensions_Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mu.Composition.IServiceCollectionExtensions.Resources", typeof(IServiceCollectionExtensions_Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,40 +59,13 @@ namespace Mu.Modelling.Syntax.CSharp {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Description to apply must be provided..
-        /// </summary>
-        internal static string DescribedAsDescriptionRequired {
-            get {
-                return ResourceManager.GetString("DescribedAsDescriptionRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Struct to describe must be provided..
-        /// </summary>
-        internal static string DescribedAsStructRequired {
-            get {
-                return ResourceManager.GetString("DescribedAsStructRequired", resourceCulture);
-            }
-        }
 
         /// <summary>
-        ///   Looks up a localized string similar to The attributes for the properties must be provided..
+        ///   Looks up a localized string similar to The service collection must be provided..
         /// </summary>
-        internal static string WithPropertiesAttributesRequired {
+        internal static string AddMuServicesRequired {
             get {
-                return ResourceManager.GetString("WithPropertiesAttributesRequired", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to The struct to which the Properties are applied must be provided..
-        /// </summary>
-        internal static string WithPropertiesStructRequired {
-            get {
-                return ResourceManager.GetString("WithPropertiesStructRequired", resourceCulture);
+                return ResourceManager.GetString("AddMuServicesRequired", resourceCulture);
             }
         }
     }

@@ -5,6 +5,7 @@ using Ardalis.GuardClauses;
 using Grpc.Core;
 using Mu.Modelling.Behavior;
 using ProtoBuf.Grpc;
+using static Mu.Communications.Tracing.CallContextExtensions_Resources;
 
 public static partial class CallContextExtensions
 {
@@ -13,7 +14,7 @@ public static partial class CallContextExtensions
 
     public static Ledger ToLedger(this CallContext context, UseCase useCase)
     {
-        _ = Guard.Against.Null(useCase, message: "The use case must be provided.");
+        _ = Guard.Against.Null(useCase, message: ToLedgerUseCaseRequired);
 
         Metadata? headers = context.ServerCallContext?.RequestHeaders;
 

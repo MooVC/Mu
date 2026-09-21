@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mu.Modelling.Syntax.CSharp {
+namespace Mu.Modelling {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,19 +19,19 @@ namespace Mu.Modelling.Syntax.CSharp {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StructExtensions_Resources {
-        
+    internal class Representation_Resources {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal StructExtensions_Resources() {
+        internal Representation_Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -39,13 +39,13 @@ namespace Mu.Modelling.Syntax.CSharp {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mu.Modelling.Syntax.CSharp.StructExtensions.Resources", typeof(StructExtensions_Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mu.Modelling.Representation.Resources", typeof(Representation_Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,40 +59,40 @@ namespace Mu.Modelling.Syntax.CSharp {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to The Description to apply must be provided..
+        ///   Looks up a localized string similar to The type associated with `{0}` is not available to load by this process..
         /// </summary>
-        internal static string DescribedAsDescriptionRequired {
+        internal static string ImplicitModelTypeRequired {
             get {
-                return ResourceManager.GetString("DescribedAsDescriptionRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Struct to describe must be provided..
-        /// </summary>
-        internal static string DescribedAsStructRequired {
-            get {
-                return ResourceManager.GetString("DescribedAsStructRequired", resourceCulture);
+                return ResourceManager.GetString("ImplicitModelTypeRequired", resourceCulture);
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to The attributes for the properties must be provided..
+        ///   Looks up a localized string similar to Type `{0}` must derive from `{1}`..
         /// </summary>
-        internal static string WithPropertiesAttributesRequired {
+        internal static string TypeAggregateRequired {
             get {
-                return ResourceManager.GetString("WithPropertiesAttributesRequired", resourceCulture);
+                return ResourceManager.GetString("TypeAggregateRequired", resourceCulture);
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to The struct to which the Properties are applied must be provided..
+        ///   Looks up a localized string similar to Type `{0}` must have a valid namespace and full name..
         /// </summary>
-        internal static string WithPropertiesStructRequired {
+        internal static string TypeFullNameRequired {
             get {
-                return ResourceManager.GetString("WithPropertiesStructRequired", resourceCulture);
+                return ResourceManager.GetString("TypeFullNameRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Type `{0}` must be a sealed, concrete derivation of `{1}`..
+        /// </summary>
+        internal static string TypeSealedConcreteRequired {
+            get {
+                return ResourceManager.GetString("TypeSealedConcreteRequired", resourceCulture);
             }
         }
     }

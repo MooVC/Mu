@@ -141,4 +141,17 @@
       <LastGenOutput>ProjectExtensions.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Identity.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Identity.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Identity.Resources.resx">
+      <LogicalName>Mu.Modelling.Identity.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Identity.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

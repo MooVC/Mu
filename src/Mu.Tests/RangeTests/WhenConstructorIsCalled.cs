@@ -34,11 +34,18 @@ public sealed class WhenConstructorIsCalled
     [Test]
     public async Task GivenDescendingBoundsThenThrowsArgumentException()
     {
+        // Arrange
+        const int from = 3;
+        const int to = 1;
+        const string expectedMessage = "The From value of `3` must be lower than the To value To `1`.";
+
         // Act
-        Exception? exception = Capture(() => _ = new Range<int>(3, 1));
+        Exception? exception = Capture(() => _ = new Range<int>(from, to));
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentException>();
+        _ = await Assert.That(((ArgumentException)exception!).ParamName).IsEqualTo(nameof(to));
+        _ = await Assert.That(exception.Message.StartsWith(expectedMessage, StringComparison.Ordinal)).IsTrue();
     }
 
     private static Exception? Capture(Action action)

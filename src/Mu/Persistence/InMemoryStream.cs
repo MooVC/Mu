@@ -6,10 +6,12 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using MooVC;
 using Mu.Communications.Messaging;
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
+using static Mu.Persistence.InMemoryStream_Resources;
 
 /// <summary>
 /// Stores aggregate events in memory for development and testing scenarios.
@@ -36,7 +38,7 @@ public sealed class InMemoryStream<TIdentity>
     /// <param name="semaphore">The semaphore used to synchronize access to the stream.</param>
     internal InMemoryStream(SemaphoreSlim semaphore)
     {
-        _semaphore = Guard.Against.Null(semaphore, message: "The semaphore used to synchronize access to the stream must be provided.");
+        _semaphore = Guard.Against.Null(semaphore, message: SemaphoreRequired);
     }
 
     /// <summary>
@@ -44,8 +46,8 @@ public sealed class InMemoryStream<TIdentity>
     /// </summary>
     public async Task<DateTimeOffset> Append(IEnumerable<Fact> facts, TIdentity identity, Revision revision, CancellationToken cancellationToken)
     {
-        _ = Guard.Against.Null(facts, message: $"The facts to be appended to the stream for `{identity}` at revision `{revision.Number}` must be provided.");
-        _ = Guard.Against.Default(identity, message: $"The identity of the stream to which the facts are to be appended must be provided.");
+        _ = Guard.Against.Null(facts, message: AppendFactsRequired.Format(identity, revision.Number));
+        _ = Guard.Against.Default(identity, message: AppendIdentityRequired);
 
         ImmutableArray<Fact> buffered = [.. facts];
 
@@ -62,13 +64,13 @@ public sealed class InMemoryStream<TIdentity>
         {
             if (!_revisions.TryGetValue(identity, out ulong current))
             {
-                throw new InvalidOperationException($"The stream for identity `{identity}` has not been initiated.");
+                throw new InvalidOperationException(AppendIdentityInitiatedRequired.Format(identity));
             }
 
             if (current != revision.Number)
             {
                 throw new InvalidOperationException(
-                    $"The stream for identity `{identity}` is at revision `{current}`, not `{revision.Number}`.");
+                    AppendRevisionMatchRequired.Format(identity, current, revision.Number));
             }
 
             return Write(buffered, identity, current);
@@ -84,7 +86,7 @@ public sealed class InMemoryStream<TIdentity>
     /// </summary>
     public async Task<ImmutableArray<Event>> Find(IStream<TIdentity>.FindOptions options, CancellationToken cancellationToken)
     {
-        _ = Guard.Against.Null(options, message: "The options for finding events in the stream must be provided.");
+        _ = Guard.Against.Null(options, message: FindOptionsRequired);
 
         await _semaphore
             .WaitAsync(cancellationToken)
@@ -136,8 +138,8 @@ public sealed class InMemoryStream<TIdentity>
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task<DateTimeOffset> Initiate(IEnumerable<Fact> facts, TIdentity identity, CancellationToken cancellationToken)
     {
-        _ = Guard.Against.Null(facts, message: $"The facts to initialize the stream for `{identity}` must be provided.");
-        _ = Guard.Against.Default(identity, message: $"The identity of the stream to initiate for `{identity}` must be provided.");
+        _ = Guard.Against.Null(facts, message: InitiateFactsRequired.Format(identity));
+        _ = Guard.Against.Default(identity, message: InitiateIdentityRequired.Format(identity));
 
         ImmutableArray<Fact> buffered = [.. facts];
 
@@ -149,7 +151,7 @@ public sealed class InMemoryStream<TIdentity>
         {
             if (_revisions.ContainsKey(identity))
             {
-                throw new InvalidOperationException($"The stream for identity `{identity}` has already been initiated.");
+                throw new InvalidOperationException(InitiateIdentityUninitiatedRequired.Format(identity));
             }
 
             return Write(buffered, identity, 0);
@@ -188,7 +190,7 @@ public sealed class InMemoryStream<TIdentity>
         {
             Fact fact = facts[index];
 
-            _ = Guard.Against.Null(fact, message: $"The fact at index `{index}` for the stream `{identity}` at revision `{revision}` cannot be null.");
+            _ = Guard.Against.Null(fact, message: WriteFactRequired.Format(index, identity, revision));
 
             revision = checked(revision + 1);
 

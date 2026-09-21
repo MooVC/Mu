@@ -3,8 +3,10 @@
 using System;
 using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
+using MooVC;
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
+using static Mu.Communications.PubSub.ReflectionPolicyDirectory_Resources;
 
 public sealed class ReflectionPolicyDirectory
     : IPolicyDirectory
@@ -20,7 +22,7 @@ public sealed class ReflectionPolicyDirectory
 
         if (arguments.Length != 2)
         {
-            throw new NotSupportedException($"Event type `{type.Name}` is not supported as it does not have the expected number of generic arguments.");
+            throw new NotSupportedException(FindArgumentsCountRequired.Format(type.Name));
         }
 
         Type policy = _policy.MakeGenericType(arguments);

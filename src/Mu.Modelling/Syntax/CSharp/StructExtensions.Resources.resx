@@ -18,4 +18,10 @@
   <data name="DescribedAsStructRequired" xml:space="preserve">
     <value>The Struct to describe must be provided.</value>
   </data>
+  <data name="WithPropertiesAttributesRequired" xml:space="preserve">
+    <value>The attributes for the properties must be provided.</value>
+  </data>
+  <data name="WithPropertiesStructRequired" xml:space="preserve">
+    <value>The struct to which the Properties are applied must be provided.</value>
+  </data>
 </root>

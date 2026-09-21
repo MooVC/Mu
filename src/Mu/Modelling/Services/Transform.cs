@@ -1,8 +1,10 @@
 ﻿namespace Mu.Modelling.Services;
 
 using System;
+using MooVC;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
+using static Mu.Modelling.Services.Transform_Resources;
 
 internal sealed class Transform<TAggregate, TFact>(IEnumerable<ITransform<TAggregate, TFact>> transforms)
     : ITransform<TAggregate>
@@ -13,7 +15,7 @@ internal sealed class Transform<TAggregate, TFact>(IEnumerable<ITransform<TAggre
     {
         if (fact is not TFact expected)
         {
-            throw new ArgumentException($"Expected fact of type {typeof(TFact)}, but received {fact.GetType()}.", nameof(fact));
+            throw new ArgumentException(ApplyFactTypeRequired.Format(typeof(TFact), fact.GetType()), nameof(fact));
         }
 
         return transforms.ApplyAll(aggregate, expected);

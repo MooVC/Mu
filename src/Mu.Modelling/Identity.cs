@@ -6,6 +6,7 @@
     using MooVC.Syntax.CSharp;
     using MooVC.Syntax.Validation;
     using Valuify;
+    using static Mu.Modelling.Identity_Resources;
 
     [Valuify]
     public sealed partial class Identity
@@ -65,7 +66,7 @@
 
         public Symbol GetSymbol(Qualifier @namespace)
         {
-            _ = Guard.Against.Null(@namespace, message: "The namespace must be provided.");
+            _ = Guard.Against.Null(@namespace, message: GetSymbolNamespaceRequired);
 
             if (IsComponent)
             {

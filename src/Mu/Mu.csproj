@@ -23,4 +23,160 @@
       <LastGenOutput>Scribe.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Communications\PubSub\InMemoryPublisher.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InMemoryPublisher.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\PubSub\InMemoryPublisher.Resources.resx">
+      <LogicalName>Mu.Communications.PubSub.InMemoryPublisher.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InMemoryPublisher.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Communications\PubSub\Policy.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Policy.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\PubSub\Policy.Resources.resx">
+      <LogicalName>Mu.Communications.PubSub.Policy.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Policy.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Communications\PubSub\ReflectionPolicyDirectory.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ReflectionPolicyDirectory.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\PubSub\ReflectionPolicyDirectory.Resources.resx">
+      <LogicalName>Mu.Communications.PubSub.ReflectionPolicyDirectory.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReflectionPolicyDirectory.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Communications\Tracing\CallContextExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CallContextExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Tracing\CallContextExtensions.Resources.resx">
+      <LogicalName>Mu.Communications.Tracing.CallContextExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CallContextExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Composition\IApplicationBuilderExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IApplicationBuilderExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Composition\IApplicationBuilderExtensions.Resources.resx">
+      <LogicalName>Mu.Composition.IApplicationBuilderExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>IApplicationBuilderExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Composition\IHostApplicationBuilderExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IHostApplicationBuilderExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Composition\IHostApplicationBuilderExtensions.Resources.resx">
+      <LogicalName>Mu.Composition.IHostApplicationBuilderExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>IHostApplicationBuilderExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Composition\IServiceCollectionExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IServiceCollectionExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Composition\IServiceCollectionExtensions.Resources.resx">
+      <LogicalName>Mu.Composition.IServiceCollectionExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>IServiceCollectionExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Composition\WebApplicationBuilderExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebApplicationBuilderExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Composition\WebApplicationBuilderExtensions.Resources.resx">
+      <LogicalName>Mu.Composition.WebApplicationBuilderExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebApplicationBuilderExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Modelling\Representation.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Representation.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Modelling\Representation.Resources.resx">
+      <LogicalName>Mu.Modelling.Representation.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Representation.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Modelling\Services\ReflectionTransform.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ReflectionTransform.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Modelling\Services\ReflectionTransform.Resources.resx">
+      <LogicalName>Mu.Modelling.Services.ReflectionTransform.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReflectionTransform.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Modelling\Services\Transform.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Transform.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Modelling\Services\Transform.Resources.resx">
+      <LogicalName>Mu.Modelling.Services.Transform.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Transform.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Persistence\InMemoryStream.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InMemoryStream.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Persistence\InMemoryStream.Resources.resx">
+      <LogicalName>Mu.Persistence.InMemoryStream.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InMemoryStream.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Range.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Range.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Range.Resources.resx">
+      <LogicalName>Mu.Range.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Range.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Result.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Result.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Result.Resources.resx">
+      <LogicalName>Mu.Result.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Result.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

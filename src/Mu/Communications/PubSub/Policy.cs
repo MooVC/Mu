@@ -1,8 +1,10 @@
 ﻿namespace Mu.Communications.PubSub;
 
 using System;
+using MooVC;
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
+using static Mu.Communications.PubSub.Policy_Resources;
 
 internal sealed class Policy<TFact, TIdentity>(IEnumerable<IPolicy<TFact, TIdentity>> services)
     : IPolicy
@@ -13,7 +15,7 @@ internal sealed class Policy<TFact, TIdentity>(IEnumerable<IPolicy<TFact, TIdent
     {
         if (@event is not Event<TFact, TIdentity> expected)
         {
-            throw new InvalidCastException($"Event is not of the type `Event<{typeof(TFact).Name}, {typeof(TIdentity).Name}>` expected by the Policy.");
+            throw new InvalidCastException(ApplyEventTypeRequired.Format(typeof(TFact).Name, typeof(TIdentity).Name));
         }
 
         IEnumerable<Task> policies = services.Select(service => service.Apply(expected, cancellationToken));

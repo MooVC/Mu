@@ -27,15 +27,19 @@ public sealed class WhenPublishIsCalled
     public async Task GivenClosedChannelThenThrowsInvalidOperationException()
     {
         // Arrange
+        const string expectedHeading = "The following events failed to be published to the channel:";
+        Event @event = TestData.CreateEvent();
+        string expectedMessage = $"{expectedHeading}{Environment.NewLine}{Environment.NewLine}{@event}";
         var channel = Channel.CreateUnbounded<Event>();
         channel.Writer.Complete();
         var subject = new InMemoryPublisher(channel.Writer);
 
         // Act
-        Exception? exception = Capture(() => subject.Publish(CancellationToken.None, TestData.CreateEvent()));
+        Exception? exception = Capture(() => subject.Publish(CancellationToken.None, @event));
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<InvalidOperationException>();
+        _ = await Assert.That(exception!.Message).IsEqualTo(expectedMessage);
     }
 
     private static Exception? Capture(Action action)

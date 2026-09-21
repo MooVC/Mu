@@ -1,8 +1,10 @@
 ﻿namespace Mu.Modelling;
 
 using System;
+using MooVC;
 using Mu.Modelling.State;
 using ProtoBuf;
+using static Mu.Modelling.Representation_Resources;
 
 /// <summary>
 /// Describes the aggregate model metadata used by causal messages.
@@ -16,17 +18,17 @@ public sealed record Representation
     {
         if (!_basis.IsAssignableFrom(type))
         {
-            throw new ArgumentException($"Type `{type}` must derive from `{_basis}`.", nameof(type));
+            throw new ArgumentException(TypeAggregateRequired.Format(type, _basis), nameof(type));
         }
 
         if (type != _basis && (type.IsAbstract || !type.IsSealed))
         {
-            throw new ArgumentException($"Type `{type}` must be a sealed, concrete derivation of `{_basis}`.", nameof(type));
+            throw new ArgumentException(TypeSealedConcreteRequired.Format(type, _basis), nameof(type));
         }
 
         if (type.Assembly is null || type.FullName is null || type.Namespace is null)
         {
-            throw new ArgumentException($"Type `{type}` must have a valid namespace and full name.", nameof(type));
+            throw new ArgumentException(TypeFullNameRequired.Format(type), nameof(type));
         }
 
         Name = type.FullName[(type.Namespace.Length + 1)..];
@@ -70,7 +72,7 @@ public sealed record Representation
         ArgumentNullException.ThrowIfNull(model);
 
         Type type = Type.GetType($"{model.Namespace}.{model.Name}, {model.Assembly}", throwOnError: false)
-            ?? throw new ArgumentException($"The type associated with `{model}` is not available to load by this process.");
+            ?? throw new ArgumentException(ImplicitModelTypeRequired.Format(model));
 
         return type;
     }
