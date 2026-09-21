@@ -30,4 +30,8 @@
       <Private>true</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service\GenerateGrpcClientWhenFeatureVisitedTests\" />
+    <Folder Include="Service\GenerateUseExtensionWhenFeatureVisitedTests\" />
+  </ItemGroup>
 </Project>

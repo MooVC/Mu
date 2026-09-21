@@ -9,31 +9,34 @@ using static Mu.Communications.Tracing.CallContextExtensions_Resources;
 
 public static partial class CallContextExtensions
 {
-    private const string CausationHeader = "causation";
-    private const string CorrelationHeader = "correlation";
+    public const string CausationHeader = "causation";
+    public const string CorrelationHeader = "correlation";
 
-    public static Ledger ToLedger(this CallContext context, UseCase useCase)
+    extension(CallContext context)
     {
-        _ = Guard.Against.Null(useCase, message: ToLedgerUseCaseRequired);
-
-        Metadata? headers = context.ServerCallContext?.RequestHeaders;
-
-        if (headers is null)
+        public Ledger ToLedger(UseCase useCase)
         {
-            return new Ledger(useCase.Identity);
+            _ = Guard.Against.Null(useCase, message: ToLedgerUseCaseRequired);
+
+            Metadata? headers = context.ServerCallContext?.RequestHeaders;
+
+            if (headers is null)
+            {
+                return new Ledger(useCase.Identity);
+            }
+
+            string? correlationValue = headers?.GetValue(CorrelationHeader);
+            string? causationValue = headers?.GetValue(CausationHeader);
+
+            if (causationValue is null
+             || correlationValue is null
+             || !Guid.TryParse(correlationValue, out Guid correlationId)
+             || !Guid.TryParse(causationValue, out Guid causationId))
+            {
+                return new Ledger(useCase.Identity);
+            }
+
+            return new Ledger(causationId, correlationId);
         }
-
-        string? correlationValue = headers?.GetValue(CorrelationHeader);
-        string? causationValue = headers?.GetValue(CausationHeader);
-
-        if (causationValue is null
-         || correlationValue is null
-         || !Guid.TryParse(correlationValue, out Guid correlationId)
-         || !Guid.TryParse(causationValue, out Guid causationId))
-        {
-            return new Ledger(useCase.Identity);
-        }
-
-        return new Ledger(causationId, correlationId);
     }
 }

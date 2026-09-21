@@ -77,4 +77,17 @@
       <TfmSpecificPackageFile Include="@(_AnalyzerDependency)" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>
+  <ItemGroup>
+    <Compile Update="Semantics\ITypeSymbolExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ITypeSymbolExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Semantics\ITypeSymbolExtensions.Resources.resx">
+      <LogicalName>Muify.Semantics.ITypeSymbolExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ITypeSymbolExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

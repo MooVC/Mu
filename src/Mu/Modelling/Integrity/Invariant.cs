@@ -3,8 +3,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
+using Ardalis.GuardClauses;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
+using static Mu.Modelling.Integrity.Invariant_Resources;
 
 /// <summary>
 /// Base implementation for invariant checks over mutational use cases.
@@ -21,8 +23,8 @@ public abstract class Invariant<TAggregate, TIntent>
     /// </summary>
     public IAsyncEnumerable<ValidationResult> Enforce(TAggregate aggregate, TIntent mutation, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(aggregate);
-        ArgumentNullException.ThrowIfNull(mutation);
+        _ = Guard.Against.Null(aggregate, message: EnforceAggregateRequired);
+        _ = Guard.Against.Null(mutation, message: EnforceMutationRequired);
 
         return PerformEnforce(aggregate, mutation, cancellationToken);
     }

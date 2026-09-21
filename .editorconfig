@@ -509,3 +509,10 @@ dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
 dotnet_style_prefer_conditional_expression_over_return = false:error
 [*.vb]
 dotnet_diagnostic.CA1047.severity=error
+
+[src/Mu/**Extensions.*.cs]
+# CA1708 treats separate C# 14 extension blocks as identically named members.
+dotnet_diagnostic.CA1708.severity = none
+
+# StyleCop does not recognize extension blocks when checking member ordering.
+dotnet_diagnostic.SA1201.severity = none

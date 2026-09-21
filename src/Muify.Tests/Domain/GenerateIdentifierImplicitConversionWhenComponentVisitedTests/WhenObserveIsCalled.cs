@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.GenerateIdentifierImplicitConversionWhenComponentVisitedTests;
+namespace Muify.Domain.GenerateIdentifierImplicitConversionWhenComponentVisitedTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -13,11 +13,13 @@ public sealed class WhenObserveIsCalled
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            using Ardalis.GuardClauses;
+
             partial class Wheel
             {
                 public static implicit operator Locations(Wheel subject)
                 {
-                    global::System.ArgumentNullException.ThrowIfNull(subject);
+                    _ = Guard.Against.Null(subject, message: "The subject to convert to its identifier must be provided.");
 
                     return subject.Location;
                 }

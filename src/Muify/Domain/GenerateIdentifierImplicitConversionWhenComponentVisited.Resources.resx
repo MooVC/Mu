@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,8 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Body" xml:space="preserve">
-    <value>global::System.ArgumentNullException.ThrowIfNull(subject);
+    <value>_ = Guard.Against.Null(subject, message: {1});
 
 return subject.{0};</value>
+  </data>
+  <data name="ImplicitSubjectRequired" xml:space="preserve">
+    <value>The subject to convert to its identifier must be provided.</value>
   </data>
 </root>

@@ -120,6 +120,8 @@ public sealed class WhenSelectIsCalled
     public async Task GivenNullFailureSelectorThenThrowsArgumentNullException()
     {
         // Arrange
+        const string expectedMessage = "The selector for an unsuccessful result must be provided.";
+        const string expectedParameter = "failure";
         Result<string> subject = TestData.ResultValue;
 
         // Act
@@ -127,12 +129,16 @@ public sealed class WhenSelectIsCalled
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();
+        _ = await Assert.That(exception!.Message).StartsWith(expectedMessage);
+        _ = await Assert.That(((ArgumentNullException)exception).ParamName).IsEqualTo(expectedParameter);
     }
 
     [Test]
     public async Task GivenNullSuccessSelectorThenThrowsArgumentNullException()
     {
         // Arrange
+        const string expectedMessage = "The selector for a successful result must be provided.";
+        const string expectedParameter = "success";
         Result<string> subject = TestData.ResultValue;
 
         // Act
@@ -140,6 +146,8 @@ public sealed class WhenSelectIsCalled
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();
+        _ = await Assert.That(exception!.Message).StartsWith(expectedMessage);
+        _ = await Assert.That(((ArgumentNullException)exception).ParamName).IsEqualTo(expectedParameter);
     }
 
     private static Exception? Capture(Action action)

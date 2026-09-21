@@ -9,14 +9,17 @@ using static Mu.Composition.WebApplicationBuilderExtensions_Resources;
 
 public static partial class WebApplicationBuilderExtensions
 {
-    public static WebApplicationBuilder ConfigureMu(this WebApplicationBuilder builder, Action<KestrelServerOptions>? kestrel = default)
+    extension(WebApplicationBuilder builder)
     {
-        _ = Guard.Against.Null(builder, message: ConfigureMuBuilderRequired);
+        public WebApplicationBuilder ConfigureMu(Action<KestrelServerOptions>? kestrel = default)
+        {
+            _ = Guard.Against.Null(builder, message: ConfigureMuBuilderRequired);
 
-        kestrel ??= options => options.ListenAnyIP(50051, listen => listen.Protocols = HttpProtocols.Http2);
+            kestrel ??= options => options.ListenAnyIP(50051, listen => listen.Protocols = HttpProtocols.Http2);
 
-        _ = builder.WebHost.ConfigureKestrel(kestrel);
+            _ = builder.WebHost.ConfigureKestrel(kestrel);
 
-        return builder;
+            return builder;
+        }
     }
 }

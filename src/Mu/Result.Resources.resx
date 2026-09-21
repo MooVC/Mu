@@ -21,4 +21,10 @@
   <data name="ValueIsSuccessfulTrueRequired" xml:space="preserve">
     <value>There is no value associated with an unsuccessful result.</value>
   </data>
+  <data name="SelectSuccessRequired" xml:space="preserve">
+    <value>The selector for a successful result must be provided.</value>
+  </data>
+  <data name="SelectFailureRequired" xml:space="preserve">
+    <value>The selector for an unsuccessful result must be provided.</value>
+  </data>
 </root>

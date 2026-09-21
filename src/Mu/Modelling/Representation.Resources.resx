@@ -24,4 +24,10 @@
   <data name="TypeSealedConcreteRequired" xml:space="preserve">
     <value>Type `{0}` must be a sealed, concrete derivation of `{1}`.</value>
   </data>
+  <data name="ImplicitTypeRequired" xml:space="preserve">
+    <value>The aggregate type to represent must be provided.</value>
+  </data>
+  <data name="ImplicitModelRequired" xml:space="preserve">
+    <value>The aggregate representation to convert must be provided.</value>
+  </data>
 </root>

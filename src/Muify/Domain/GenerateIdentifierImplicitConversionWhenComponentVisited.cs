@@ -1,6 +1,7 @@
 ﻿namespace Muify.Domain
 {
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis.CSharp;
     using MooVC;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
@@ -29,7 +30,7 @@
                 yield break;
             }
 
-            string body = Body.Format(component.Identifier.Name);
+            string body = Body.Format(component.Identifier.Name, SymbolDisplay.FormatLiteral(ImplicitSubjectRequired, quote: true));
 
             var content = Builder
                 .New<Definition>()
@@ -44,6 +45,7 @@
                             .WithMode(Conversion.Types.Implicit)))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
+                .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, $"{component.Name}.Identifier.Conversion.Implicit");

@@ -1,10 +1,13 @@
 namespace Muify.Semantics
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using Ardalis.GuardClauses;
     using Microsoft.CodeAnalysis;
     using Mu.Modelling;
+    using static Muify.Semantics.ITypeSymbolExtensions_Resources;
 
     internal static partial class ITypeSymbolExtensions
     {
@@ -16,7 +19,12 @@ namespace Muify.Semantics
 
             foreach (ITypeSymbol type in symbol.GetReferencedTypes())
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                _ = Guard.Against.InvalidInput(
+                    cancellationToken,
+                    nameof(cancellationToken),
+                    token => !token.IsCancellationRequested,
+                    message: IdentifyMembersCancellationTokenUncancelledRequired,
+                    exceptionCreator: () => new OperationCanceledException(IdentifyMembersCancellationTokenUncancelledRequired, cancellationToken));
 
                 if (!(type is INamedTypeSymbol named && named.SpecialType == SpecialType.None))
                 {

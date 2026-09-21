@@ -179,4 +179,134 @@
       <LastGenOutput>Result.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Communications\Tracing\Scope.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scope.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Tracing\Scope.Resources.resx">
+      <LogicalName>Mu.Communications.Tracing.Scope.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Scope.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Modelling\Integrity\Specification.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Specification.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Modelling\Integrity\Specification.Resources.resx">
+      <LogicalName>Mu.Modelling.Integrity.Specification.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Specification.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Contract.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Contract.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Contract.Resources.resx">
+      <LogicalName>Mu.Contract.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Contract.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Serialization\RuntimeTypeModelExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RuntimeTypeModelExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Serialization\RuntimeTypeModelExtensions.Resources.resx">
+      <LogicalName>Mu.Serialization.RuntimeTypeModelExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RuntimeTypeModelExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Modelling\State\AggregateExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AggregateExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Modelling\State\AggregateExtensions.Resources.resx">
+      <LogicalName>Mu.Modelling.State.AggregateExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AggregateExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Modelling\Integrity\Invariant.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Invariant.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Modelling\Integrity\Invariant.Resources.resx">
+      <LogicalName>Mu.Modelling.Integrity.Invariant.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Invariant.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Persistence\WriteStore.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WriteStore.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Persistence\WriteStore.Resources.resx">
+      <LogicalName>Mu.Persistence.WriteStore.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WriteStore.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Communications\Messaging\Intent.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Intent.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Messaging\Intent.Resources.resx">
+      <LogicalName>Mu.Communications.Messaging.Intent.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Intent.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Failure.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Failure.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Failure.Resources.resx">
+      <LogicalName>Mu.Failure.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Failure.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Communications\Messaging\Event.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Event.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Messaging\Event.Resources.resx">
+      <LogicalName>Mu.Communications.Messaging.Event.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Event.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

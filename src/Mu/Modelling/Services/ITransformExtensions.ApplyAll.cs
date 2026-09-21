@@ -8,87 +8,105 @@ using Mu.Modelling.State;
 /// </summary>
 public static partial class ITransformExtensions
 {
-    /// <summary>
-    /// Applies one transform over a sequence of facts.
-    /// </summary>
-    public static Aggregate ApplyAll(this ITransform transform, Aggregate aggregate, params IEnumerable<Fact> facts)
+    extension(ITransform transform)
     {
-        IEnumerable<ITransform> transforms = [transform];
-
-        return transforms.ApplyAll(aggregate, facts);
-    }
-
-    /// <summary>
-    /// Applies multiple transforms over a sequence of facts.
-    /// </summary>
-    public static Aggregate ApplyAll(this IEnumerable<ITransform> transforms, Aggregate aggregate, params IEnumerable<Fact> facts)
-    {
-        foreach (Fact fact in facts)
+        /// <summary>
+        /// Applies one transform over a sequence of facts.
+        /// </summary>
+        public Aggregate ApplyAll(Aggregate aggregate, params IEnumerable<Fact> facts)
         {
-            foreach (ITransform transform in transforms)
-            {
-                aggregate = transform.Apply(aggregate, fact);
-            }
-        }
+            IEnumerable<ITransform> transforms = [transform];
 
-        return aggregate;
+            return transforms.ApplyAll(aggregate, facts);
+        }
     }
 
-    /// <summary>
-    /// Applies one transform over a sequence of facts.
-    /// </summary>
-    public static TAggregate ApplyAll<TAggregate>(this ITransform<TAggregate> transform, TAggregate aggregate, params IEnumerable<Fact> facts)
+    extension(IEnumerable<ITransform> transforms)
+    {
+        /// <summary>
+        /// Applies multiple transforms over a sequence of facts.
+        /// </summary>
+        public Aggregate ApplyAll(Aggregate aggregate, params IEnumerable<Fact> facts)
+        {
+            foreach (Fact fact in facts)
+            {
+                foreach (ITransform transform in transforms)
+                {
+                    aggregate = transform.Apply(aggregate, fact);
+                }
+            }
+
+            return aggregate;
+        }
+    }
+
+    extension<TAggregate>(ITransform<TAggregate> transform)
         where TAggregate : Aggregate
     {
-        IEnumerable<ITransform<TAggregate>> transforms = [transform];
+        /// <summary>
+        /// Applies one transform over a sequence of facts.
+        /// </summary>
+        public TAggregate ApplyAll(TAggregate aggregate, params IEnumerable<Fact> facts)
+        {
+            IEnumerable<ITransform<TAggregate>> transforms = [transform];
 
-        return transforms.ApplyAll(aggregate, facts);
+            return transforms.ApplyAll(aggregate, facts);
+        }
     }
 
-    /// <summary>
-    /// Applies multiple transforms over a sequence of facts.
-    /// </summary>
-    public static TAggregate ApplyAll<TAggregate>(this IEnumerable<ITransform<TAggregate>> transforms, TAggregate aggregate, params IEnumerable<Fact> facts)
+    extension<TAggregate>(IEnumerable<ITransform<TAggregate>> transforms)
         where TAggregate : Aggregate
     {
-        foreach (Fact fact in facts)
+        /// <summary>
+        /// Applies multiple transforms over a sequence of facts.
+        /// </summary>
+        public TAggregate ApplyAll(TAggregate aggregate, params IEnumerable<Fact> facts)
         {
-            foreach (ITransform<TAggregate> transform in transforms)
+            foreach (Fact fact in facts)
             {
-                aggregate = transform.Apply(aggregate, fact);
+                foreach (ITransform<TAggregate> transform in transforms)
+                {
+                    aggregate = transform.Apply(aggregate, fact);
+                }
             }
-        }
 
-        return aggregate;
+            return aggregate;
+        }
     }
 
-    /// <summary>
-    /// Applies one transform over a sequence of facts.
-    /// </summary>
-    public static TAggregate ApplyAll<TAggregate, TFact>(this ITransform<TAggregate, TFact> transform, TAggregate aggregate, params IEnumerable<TFact> facts)
+    extension<TAggregate, TFact>(ITransform<TAggregate, TFact> transform)
         where TAggregate : Aggregate
         where TFact : Fact
     {
-        IEnumerable<ITransform<TAggregate, TFact>> transforms = [transform];
+        /// <summary>
+        /// Applies one transform over a sequence of facts.
+        /// </summary>
+        public TAggregate ApplyAll(TAggregate aggregate, params IEnumerable<TFact> facts)
+        {
+            IEnumerable<ITransform<TAggregate, TFact>> transforms = [transform];
 
-        return transforms.ApplyAll(aggregate, facts);
+            return transforms.ApplyAll(aggregate, facts);
+        }
     }
 
-    /// <summary>
-    /// Applies multiple transforms over a sequence of facts.
-    /// </summary>
-    public static TAggregate ApplyAll<TAggregate, TFact>(this IEnumerable<ITransform<TAggregate, TFact>> transforms, TAggregate aggregate, params IEnumerable<TFact> facts)
+    extension<TAggregate, TFact>(IEnumerable<ITransform<TAggregate, TFact>> transforms)
         where TAggregate : Aggregate
         where TFact : Fact
     {
-        foreach (TFact fact in facts)
+        /// <summary>
+        /// Applies multiple transforms over a sequence of facts.
+        /// </summary>
+        public TAggregate ApplyAll(TAggregate aggregate, params IEnumerable<TFact> facts)
         {
-            foreach (ITransform<TAggregate, TFact> transform in transforms)
+            foreach (TFact fact in facts)
             {
-                aggregate = transform.Apply(aggregate, fact);
+                foreach (ITransform<TAggregate, TFact> transform in transforms)
+                {
+                    aggregate = transform.Apply(aggregate, fact);
+                }
             }
-        }
 
-        return aggregate;
+            return aggregate;
+        }
     }
 }

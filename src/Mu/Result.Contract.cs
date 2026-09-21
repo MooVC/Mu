@@ -2,7 +2,9 @@ namespace Mu;
 
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
+using Ardalis.GuardClauses;
 using ProtoBuf;
+using static Mu.Contract_Resources;
 
 public static partial class Result
 {
@@ -33,7 +35,7 @@ public static partial class Result
 
         public static implicit operator Result<T>(Contract<T> contract)
         {
-            ArgumentNullException.ThrowIfNull(contract);
+            _ = Guard.Against.Null(contract, message: ImplicitContractRequired);
 
             if (contract.IsSuccessful)
             {

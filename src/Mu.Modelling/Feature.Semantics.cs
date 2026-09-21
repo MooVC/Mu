@@ -26,6 +26,8 @@
 
             public bool HasRegistrar { get; set; } = true;
 
+            public bool HasGrpcClient { get; set; } = true;
+
             public bool HasGrpcService { get; set; } = true;
 
             public bool HasGrpcServiceContract { get; set; } = true;

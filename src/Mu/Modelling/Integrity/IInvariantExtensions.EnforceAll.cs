@@ -10,27 +10,29 @@ using Mu.Modelling.State;
 /// </summary>
 public static partial class IInvariantExtensions
 {
-    /// <summary>
-    /// Enforces all provided invariants and returns the collected failures.
-    /// </summary>
-    public static async Task<ImmutableArray<ValidationResult>> EnforceAll<TAggregate, TIntent>(
-        this IEnumerable<IInvariant<TAggregate, TIntent>> invariants,
-        TAggregate aggregate,
-        TIntent intent,
-        CancellationToken cancellationToken)
+    extension<TAggregate, TIntent>(IEnumerable<IInvariant<TAggregate, TIntent>> invariants)
         where TAggregate : Aggregate
         where TIntent : Mutational
     {
-        var failures = new List<ValidationResult>();
-
-        foreach (IInvariant<TAggregate, TIntent> invariant in invariants)
+        /// <summary>
+        /// Enforces all provided invariants and returns the collected failures.
+        /// </summary>
+        public async Task<ImmutableArray<ValidationResult>> EnforceAll(
+            TAggregate aggregate,
+            TIntent intent,
+            CancellationToken cancellationToken)
         {
-            await foreach (ValidationResult failure in invariant.Enforce(aggregate, intent, cancellationToken))
-            {
-                failures.AddRange(failure);
-            }
-        }
+            var failures = new List<ValidationResult>();
 
-        return [.. failures];
+            foreach (IInvariant<TAggregate, TIntent> invariant in invariants)
+            {
+                await foreach (ValidationResult failure in invariant.Enforce(aggregate, intent, cancellationToken))
+                {
+                    failures.AddRange(failure);
+                }
+            }
+
+            return [.. failures];
+        }
     }
 }

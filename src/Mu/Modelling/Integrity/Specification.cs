@@ -3,7 +3,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
+using Ardalis.GuardClauses;
 using Mu.Modelling.Behavior;
+using static Mu.Modelling.Integrity.Specification_Resources;
 
 /// <summary>
 /// Base implementation for specifications over non-mutational use cases.
@@ -18,7 +20,7 @@ public abstract class Specification<TIntent>
     /// </summary>
     public IAsyncEnumerable<ValidationResult> Enforce(TIntent intent, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(intent);
+        _ = Guard.Against.Null(intent, message: EnforceIntentRequired);
 
         return PerformEnforce(intent, cancellationToken);
     }

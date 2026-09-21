@@ -1,7 +1,9 @@
 ﻿namespace Mu.Communications.Tracing;
 
+using Ardalis.GuardClauses;
 using Mu.Modelling.Behavior;
 using Serilog.Context;
+using static Mu.Communications.Tracing.Scope_Resources;
 
 /// <summary>
 /// Manages ambient trace ledger scope for nested use case execution.
@@ -47,7 +49,7 @@ public sealed class Scope
 
     private static Ledger GetLedger(UseCase useCase)
     {
-        ArgumentNullException.ThrowIfNull(useCase);
+        _ = Guard.Against.Null(useCase, message: GetLedgerUseCaseRequired);
 
         Ledger? current = _current.Value;
 

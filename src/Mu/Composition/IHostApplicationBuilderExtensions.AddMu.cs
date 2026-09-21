@@ -10,17 +10,20 @@ using static Mu.Composition.IHostApplicationBuilderExtensions_Resources;
 /// </summary>
 public static partial class IHostApplicationBuilderExtensions
 {
-    /// <summary>
-    /// Adds Mu to the application composition root.
-    /// </summary>
-    /// <param name="root">The application composition root.</param>
-    /// <returns>The configured dependency injection container.</returns>
-    public static Container AddMu(this IHostApplicationBuilder root)
+    extension(IHostApplicationBuilder root)
     {
-        _ = Guard.Against.Null(root, message: AddMuRootRequired);
+        /// <summary>
+        /// Adds Mu to the application composition root.
+        /// </summary>
+        /// <param name="root">The application composition root.</param>
+        /// <returns>The configured dependency injection container.</returns>
+        public Container AddMu()
+        {
+            _ = Guard.Against.Null(root, message: AddMuRootRequired);
 
-        _ = root.Services.AddMu(out Container container);
+            _ = root.Services.AddMu(out Container container);
 
-        return container;
+            return container;
+        }
     }
 }

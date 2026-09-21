@@ -1,10 +1,12 @@
 ﻿namespace Mu.Communications.Messaging;
 
 using System.Text.Json.Serialization;
+using Ardalis.GuardClauses;
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.State;
 using ProtoBuf;
+using static Mu.Communications.Messaging.Event_Resources;
 
 /// <summary>
 /// Represents a concrete event containing a fact and its aggregate origin.
@@ -24,7 +26,7 @@ public sealed record Event<TFact, TIdentity>
     internal Event(DateTimeOffset committedAt, Ledger context, TFact fact, Reference<TIdentity> origin, DateTimeOffset preparedAt)
         : base()
     {
-        ArgumentNullException.ThrowIfNull(fact);
+        _ = Guard.Against.Null(fact, message: FactRequired);
 
         CommittedAt = committedAt;
         Fact = fact;

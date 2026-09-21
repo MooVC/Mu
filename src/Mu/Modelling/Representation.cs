@@ -1,6 +1,7 @@
 ﻿namespace Mu.Modelling;
 
 using System;
+using Ardalis.GuardClauses;
 using MooVC;
 using Mu.Modelling.State;
 using ProtoBuf;
@@ -59,7 +60,7 @@ public sealed record Representation
     /// </summary>
     public static implicit operator Representation(Type type)
     {
-        ArgumentNullException.ThrowIfNull(type);
+        _ = Guard.Against.Null(type, message: ImplicitTypeRequired);
 
         return new Representation(type);
     }
@@ -69,7 +70,7 @@ public sealed record Representation
     /// </summary>
     public static implicit operator Type(Representation model)
     {
-        ArgumentNullException.ThrowIfNull(model);
+        _ = Guard.Against.Null(model, message: ImplicitModelRequired);
 
         Type type = Type.GetType($"{model.Namespace}.{model.Name}, {model.Assembly}", throwOnError: false)
             ?? throw new ArgumentException(ImplicitModelTypeRequired.Format(model));

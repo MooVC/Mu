@@ -37,6 +37,7 @@ public sealed class WhenConstructorForUseCaseIsCalled
     public async Task GivenNullUseCaseThenThrowsArgumentNullException()
     {
         // Arrange
+        const string expectedMessage = "The use case used to create the tracing ledger must be provided.";
         TestData.TestMutation useCase = null!;
 
         // Act
@@ -44,6 +45,9 @@ public sealed class WhenConstructorForUseCaseIsCalled
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();
+        var argumentException = (ArgumentNullException)exception!;
+        _ = await Assert.That(argumentException.Message).StartsWith(expectedMessage);
+        _ = await Assert.That(argumentException.ParamName).IsEqualTo(nameof(useCase));
     }
 
     private static Exception? Capture(Action action)

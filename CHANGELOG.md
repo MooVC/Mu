@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Replace ThrowIf checks with Ardalis guards and resource-backed messages, including generated identifier conversions and cancellation checks that preserve the original token.
+- Migrate Mu runtime extension methods to C# 14 extension blocks while preserving behavior and keeping Muify and Mu.Modelling compatible with C# 7.3.
 - Move remaining guard and precondition messages into class-level resource files while preserving exception types, parameter names, and message text.
 - Initial Release
 - Add `IScribe` and `Scribe` to manage ambient ledger causation and correlation through disposable use case scopes, restoring parent context and supporting initialization from an incoming ledger with localized Ardalis guards.

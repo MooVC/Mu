@@ -5,16 +5,19 @@
 /// </summary>
 public static partial class ResultExtensions
 {
-    /// <summary>
-    /// Executes an asynchronous action when the result is successful.
-    /// </summary>
-    public static async Task<Result<T>> Then<T>(this Task<Result<T>> result, Func<T, Task> success)
+    extension<T>(Task<Result<T>> result)
         where T : notnull
     {
-        Result<T> value = await result.ConfigureAwait(false);
+        /// <summary>
+        /// Executes an asynchronous action when the result is successful.
+        /// </summary>
+        public async Task<Result<T>> Then(Func<T, Task> success)
+        {
+            Result<T> value = await result.ConfigureAwait(false);
 
-        return await value
-            .When(success: success)
-            .ConfigureAwait(false);
+            return await value
+                .When(success: success)
+                .ConfigureAwait(false);
+        }
     }
 }

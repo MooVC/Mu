@@ -2,9 +2,11 @@
 
 using System;
 using System.Text.Json.Serialization;
+using Ardalis.GuardClauses;
 using Mu.Communications.Tracing;
 using Mu.Modelling.Behavior;
 using ProtoBuf;
+using static Mu.Communications.Messaging.Intent_Resources;
 
 /// <summary>
 /// Wraps a use case as a synchronous intent message.
@@ -30,7 +32,7 @@ public sealed record Intent<TUseCase>
     internal Intent(Ledger ledger, DateTimeOffset preparedAt, TUseCase useCase)
         : base()
     {
-        ArgumentNullException.ThrowIfNull(useCase);
+        _ = Guard.Against.Null(useCase, message: UseCaseRequired);
 
         Ledger = ledger;
         PreparedAt = preparedAt;
@@ -60,7 +62,7 @@ public sealed record Intent<TUseCase>
     /// </summary>
     public static implicit operator TUseCase(Intent<TUseCase> request)
     {
-        ArgumentNullException.ThrowIfNull(request);
+        _ = Guard.Against.Null(request, message: ImplicitRequestRequired);
 
         return request.UseCase;
     }

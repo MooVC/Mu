@@ -1,10 +1,12 @@
 ﻿namespace Mu.Persistence;
 
 using System.Collections.Immutable;
+using Ardalis.GuardClauses;
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
 using Mu.Modelling.Services;
 using Mu.Modelling.State;
+using static Mu.Persistence.WriteStore_Resources;
 
 /// <summary>
 /// Persists aggregate changes by writing proposed facts to an event stream.
@@ -47,7 +49,7 @@ public sealed class WriteStore<TAggregate, TIdentity>(IStream<TIdentity> stream,
     /// </summary>
     public async Task Save(TAggregate aggregate, TIdentity identity, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(aggregate);
+        _ = Guard.Against.Null(aggregate, message: SaveAggregateRequired);
 
         if (!aggregate.HasChanges)
         {

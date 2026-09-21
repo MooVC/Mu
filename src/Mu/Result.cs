@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using Ardalis.GuardClauses;
 using ProtoBuf;
 using static Mu.Result_Resources;
 
@@ -127,7 +128,7 @@ public sealed partial record Result<T>
     public Result<TResult> Select<TResult>(Func<T, TResult> success)
         where TResult : notnull
     {
-        ArgumentNullException.ThrowIfNull(success);
+        _ = Guard.Against.Null(success, message: SelectSuccessRequired);
 
         if (IsSuccessful)
         {
@@ -143,7 +144,7 @@ public sealed partial record Result<T>
     public async Task<Result<TResult>> Select<TResult>(Func<T, Task<TResult>> success)
         where TResult : notnull
     {
-        ArgumentNullException.ThrowIfNull(success);
+        _ = Guard.Against.Null(success, message: SelectSuccessRequired);
 
         if (IsSuccessful)
         {
@@ -159,8 +160,8 @@ public sealed partial record Result<T>
     /// </summary>
     public TResult Select<TResult>(Func<ImmutableArray<ValidationResult>, TResult> failure, Func<T, TResult> success)
     {
-        ArgumentNullException.ThrowIfNull(success);
-        ArgumentNullException.ThrowIfNull(failure);
+        _ = Guard.Against.Null(success, message: SelectSuccessRequired);
+        _ = Guard.Against.Null(failure, message: SelectFailureRequired);
 
         return IsSuccessful
             ? success(Value)
@@ -172,8 +173,8 @@ public sealed partial record Result<T>
     /// </summary>
     public Task<TResult> Select<TResult>(Func<ImmutableArray<ValidationResult>, Task<TResult>> failure, Func<T, Task<TResult>> success)
     {
-        ArgumentNullException.ThrowIfNull(success);
-        ArgumentNullException.ThrowIfNull(failure);
+        _ = Guard.Against.Null(success, message: SelectSuccessRequired);
+        _ = Guard.Against.Null(failure, message: SelectFailureRequired);
 
         return IsSuccessful
             ? success(Value)
