@@ -2,12 +2,12 @@
 
 using System;
 
-public sealed class AuditScopeManager
-    : IAuditScopeManager
+public sealed class ScopeManager
+    : IScopeManager
 {
     private static readonly AsyncLocal<State?> _current = new();
 
-    public AuditScope Scope
+    public Scope Scope
     {
         get
         {
@@ -15,32 +15,32 @@ public sealed class AuditScopeManager
 
             if (current is null)
             {
-                return AuditScope.External;
+                return Scope.External;
             }
 
             return current.Scope;
         }
     }
 
-    public IDisposable Begin(AuditScope scope)
+    public IDisposable Begin(Scope scope)
     {
         State? previous = _current.Value;
         var current = new State(previous, scope);
 
         _current.Value = current;
 
-        return new Scope(current);
+        return new ScopeLease(current);
     }
 
-    private sealed record State(State? Previous, AuditScope Scope);
+    private sealed record State(State? Previous, Scope Scope);
 
-    private sealed class Scope
+    private sealed class ScopeLease
         : IDisposable
     {
         private readonly State _state;
         private bool _disposed;
 
-        public Scope(State state)
+        public ScopeLease(State state)
         {
             _state = state;
         }

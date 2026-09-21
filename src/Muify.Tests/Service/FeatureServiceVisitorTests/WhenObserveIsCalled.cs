@@ -8,6 +8,7 @@ using Mu.Modelling.Testing;
 
 public sealed class WhenObserveIsCalled
 {
+    [Test]
     public async Task GivenAFeatureWhenHasServiceContractIsFalseThenServiceContractIsGenerated()
     {
         // Arrange
@@ -16,17 +17,18 @@ public sealed class WhenObserveIsCalled
 
             public sealed partial class RegisterService(
                 global::Mu.Communications.Mediation.IHandler<Register, Register.Result> handler,
-                global::Mu.Auditing.IAuditScopeManager manager)
+                global::Mu.Auditing.IScopeManager manager,
+                global::Mu.Communications.Tracing.IScribe scribe)
                 : IRegisterService
             {
                 public async global::System.Threading.Tasks.Task<Register.Result> Register(Register register, global::System.Threading.CancellationToken cancellationToken)
                 {
-                    using (manager.Begin(global::Mu.Auditing.AuditScope.Internal))
-                    {
-                        return await handler
-                            .Handle(register, cancellationToken)
-                            .ConfigureAwait(false);
-                    }
+                    using (manager.Begin(global::Mu.Auditing.Scope.Internal));
+                    using (scribe.Next(register));
+
+                    return await handler
+                        .Handle(register, cancellationToken)
+                        .ConfigureAwait(false);
                 }
             }
             """;

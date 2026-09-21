@@ -6,7 +6,7 @@ using Mu.Communications.Mediation;
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
 
-public sealed class AuditHandler<TUseCase, TResult>(IAuditor auditor, AuditOptions options, IAuditScopeManager manager, IHandler<TUseCase, TResult> next)
+public sealed class AuditHandler<TUseCase, TResult>(IAuditor auditor, AuditOptions options, IScopeManager manager, IHandler<TUseCase, TResult> next)
     : IHandler<TUseCase, TResult>
     where TUseCase : UseCase
     where TResult : notnull
@@ -61,6 +61,6 @@ public sealed class AuditHandler<TUseCase, TResult>(IAuditor auditor, AuditOptio
             ? options.Mutational
             : options.NonMutational;
 
-        return manager.Scope == AuditScope.External || operation == AuditOperationScope.All;
+        return manager.Scope == Scope.External || operation == AuditOperationScope.All;
     }
 }

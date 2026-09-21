@@ -1,5 +1,6 @@
 namespace Mu.Auditing.AuditHandlerTests;
 
+using Mu.Auditing.Configuration;
 using Mu.Communications.Mediation;
 using Mu.Communications.Messaging;
 using Mu.Testing;
@@ -24,7 +25,7 @@ public sealed class WhenHandleIsCalled
             .Handle(intent, source.Token)
             .Returns(Task.FromResult(outcome));
 
-        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, next);
+        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, new AuditOptions(), Substitute.For<IScopeManager>(), next);
 
         // Act
         Outcome<string> result = await subject.Handle(intent, source.Token);
@@ -49,14 +50,14 @@ public sealed class WhenHandleIsCalled
             .Capture(intent, source.Token)
             .Returns(Task.FromException<Guid>(exception));
 
-        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, next);
+        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, new AuditOptions(), Substitute.For<IScopeManager>(), next);
 
         // Act
         Exception? result = await Capture(() => subject.Handle(intent, source.Token));
 
         // Assert
         _ = await Assert.That(result).IsSameReferenceAs(exception);
-        await next.DidNotReceive().Handle(Arg.Any<Intent<TestData.TestMutation>>(), Arg.Any<CancellationToken>());
+        _ = await next.DidNotReceive().Handle(Arg.Any<Intent<TestData.TestMutation>>(), Arg.Any<CancellationToken>());
         await auditor.DidNotReceive().Fail(Arg.Any<Exception>(), Arg.Any<Guid>(), Arg.Any<CancellationToken>());
     }
 
@@ -78,7 +79,7 @@ public sealed class WhenHandleIsCalled
             .Handle(intent, source.Token)
             .Returns(Task.FromException<Outcome<string>>(exception));
 
-        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, next);
+        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, new AuditOptions(), Substitute.For<IScopeManager>(), next);
 
         // Act
         Exception? result = await Capture(() => subject.Handle(intent, source.Token));
@@ -111,7 +112,7 @@ public sealed class WhenHandleIsCalled
             .Complete(TestData.Identity, outcome, source.Token)
             .Returns(Task.FromException(exception));
 
-        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, next);
+        var subject = new AuditHandler<TestData.TestMutation, string>(auditor, new AuditOptions(), Substitute.For<IScopeManager>(), next);
 
         // Act
         Exception? result = await Capture(() => subject.Handle(intent, source.Token));

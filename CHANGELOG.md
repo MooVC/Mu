@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Initial Release
+- Add `IScribe` and `Scribe` to manage ambient ledger causation and correlation through disposable use case scopes, restoring parent context and supporting initialization from an incoming ledger with localized Ardalis guards.
 - Generate unit protobuf binders and identity allocator registrars through the model generation pipeline.
 - Discover referenced domain units and generate feature facts with their declared payloads, namespaces, and internal constructors.
 - Build generated feature facts with the shared syntax engine, including imports, constructors, properties, and conversion operators.

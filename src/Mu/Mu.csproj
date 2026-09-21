@@ -8,4 +8,19 @@
     <PackageReference Include="Serilog" />
     <PackageReference Include="SimpleInjector.Integration.AspNetCore" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Communications\Tracing\Scribe.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scribe.Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Communications\Tracing\Scribe.Resources.resx">
+      <LogicalName>Mu.Communications.Tracing.Scribe.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Scribe.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

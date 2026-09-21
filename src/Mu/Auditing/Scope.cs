@@ -1,6 +1,6 @@
 ﻿namespace Mu.Auditing;
 
-public enum AuditScope
+public enum Scope
 {
     External = 0,
     Internal = 1,
