@@ -16,5 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Generate JSON constructors for partial features without explicit constructors, restoring their payload, causal identity, proposed time, and transitional target.
 - Generate public parameterless constructors alongside feature JSON constructors, preserving payload initializers and initializing causal metadata through the feature base.
 - Implement feature service contract and service visitors with the shared syntax builder, including asynchronous handler delegation within audit and tracing scopes.
+- Implement nested gRPC service contracts and services with the shared syntax builder, including operation metadata, call cancellation, and incoming trace ledger scopes.
 - Add error MUIFY05 when a positional record deriving from Aggregate or annotated with Unit<> does not satisfy the new() constraint.
 - Extend MUIFY05 to positional Creational, Transitional, and Query features, including features identified by their attributes before base generation.

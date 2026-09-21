@@ -1,4 +1,4 @@
-﻿namespace Muify.Service.GenerateServiceWhenFeatureVisitedTests;
+﻿namespace Muify.Service.GenerateGrpcServiceContractWhenFeatureVisitedTests;
 
 using System.Collections.Generic;
 using Mu.Modelling;
@@ -9,41 +9,28 @@ public sealed class WhenObserveIsCalled
     [Test]
     [Arguments(false)]
     [Arguments(true)]
-    public async Task GivenAFeatureWhenHasServiceIsFalseThenServiceIsGenerated(bool hasServiceContract)
+    public async Task GivenAFeatureWhenHasGrpcServiceContractIsFalseThenServiceContractIsGenerated(bool hasService)
     {
         // Arrange
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            public sealed partial class RegisterService(
-                global::Mu.Communications.Mediation.IHandler<Register,
-                Register.Result> handler,
-                global::Mu.Auditing.IScopeManager manager,
-                global::Mu.Communications.Tracing.IScribe scribe)
-                : IRegisterService
+            partial interface IRegisterService
             {
-                public async global::System.Threading.Tasks.Task<Register.Result> Register(
-                    Register register,
-                    global::System.Threading.CancellationToken cancellationToken)
+                [global::ProtoBuf.Grpc.Configuration.Service("MooVC.Testing.Mechanics.Car.Register.Service")]
+                public partial interface IGrpc
                 {
-                    using (manager.Begin(global::Mu.Auditing.Scope.Internal))
-                    {
-                        using (scribe.Next(register))
-                        {
-                            return await handler
-                                .Handle(register, cancellationToken)
-                                .ConfigureAwait(false);
-                        }
-                    }
+                    [global::ProtoBuf.Grpc.Configuration.Operation("Register")]
+                    global::System.Threading.Tasks.ValueTask<Register.Result> Register(Register register, global::ProtoBuf.Grpc.CallContext context = default);
                 }
             }
             """;
 
-        var visitor = new GenerateServiceWhenFeatureVisited();
+        var visitor = new GenerateGrpcServiceContractWhenFeatureVisited();
 
         Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
-            .HasService(false)
-            .HasServiceContract(hasServiceContract));
+            .HasGrpcService(hasService)
+            .HasGrpcServiceContract(false));
 
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
@@ -57,11 +44,13 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenAFeatureWhenHasServiceThenNothingIsGenerated()
+    public async Task GivenAFeatureWhenHasGrpcServiceContractThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new GenerateServiceWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasService(true));
+        var visitor = new GenerateGrpcServiceContractWhenFeatureVisited();
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .HasGrpcServiceContract(true)
+            .IsPartial(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -75,7 +64,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAFeatureWhenOutOfScopeThenNothingIsGenerated()
     {
         // Arrange
-        var visitor = new GenerateServiceWhenFeatureVisited();
+        var visitor = new GenerateGrpcServiceContractWhenFeatureVisited();
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = TestData.Single.Register;
 
         // Act
