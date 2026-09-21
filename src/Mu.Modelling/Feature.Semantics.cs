@@ -26,6 +26,14 @@
 
             public bool HasRegistrar { get; set; } = true;
 
+            public bool HasGrpcService { get; set; } = true;
+
+            public bool HasGrpcServiceContract { get; set; } = true;
+
+            public bool HasService { get; set; } = true;
+
+            public bool HasServiceContract { get; set; } = true;
+
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
 

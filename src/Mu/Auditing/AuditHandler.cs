@@ -1,16 +1,29 @@
 ﻿namespace Mu.Auditing;
 
 using System;
+using Mu.Auditing.Configuration;
 using Mu.Communications.Mediation;
 using Mu.Communications.Messaging;
 using Mu.Modelling.Behavior;
 
-public sealed class AuditHandler<TUseCase, TResult>(IAuditor auditor, IHandler<TUseCase, TResult> next)
+public sealed class AuditHandler<TUseCase, TResult>(IAuditor auditor, AuditOptions options, IAuditScopeManager manager, IHandler<TUseCase, TResult> next)
     : IHandler<TUseCase, TResult>
     where TUseCase : UseCase
     where TResult : notnull
 {
     public async Task<Outcome<TResult>> Handle(Intent<TUseCase> intent, CancellationToken cancellationToken)
+    {
+        if (ShouldAudit(intent))
+        {
+            return await HandleWithAuditing(intent, cancellationToken);
+        }
+
+        return await next
+            .Handle(intent, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    private async Task<Outcome<TResult>> HandleWithAuditing(Intent<TUseCase> intent, CancellationToken cancellationToken)
     {
         Guid identity = Guid.Empty;
 
@@ -40,5 +53,14 @@ public sealed class AuditHandler<TUseCase, TResult>(IAuditor auditor, IHandler<T
 
             throw;
         }
+    }
+
+    private bool ShouldAudit(TUseCase useCase)
+    {
+        AuditOperationScope operation = useCase is Mutational
+            ? options.Mutational
+            : options.NonMutational;
+
+        return manager.Scope == AuditScope.External || operation == AuditOperationScope.All;
     }
 }

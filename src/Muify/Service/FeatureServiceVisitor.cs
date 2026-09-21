@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Mu.Modelling;
 
-    internal sealed class FeatureGrpcServiceVisitor
+    internal sealed class FeatureServiceVisitor
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature instance)

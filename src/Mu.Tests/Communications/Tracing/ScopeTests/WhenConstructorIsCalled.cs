@@ -10,10 +10,12 @@ public sealed class WhenConstructorIsCalled
     {
         // Arrange
         var sink = new TestSink();
+
         using Logger logger = new Serilog.LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Sink(sink)
             .CreateLogger();
+
         var ledger = new Ledger(Guid.NewGuid(), Guid.NewGuid());
 
         // Act
