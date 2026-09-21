@@ -1,27 +1,30 @@
 ﻿namespace Muify.Service.GenerateServiceContractWhenFeatureVisitedTests;
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 
 public sealed class WhenObserveIsCalled
 {
-    public async Task GivenAFeatureWhenHasServiceContractIsFalseThenServiceContractIsGenerated()
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenAFeatureWhenHasServiceContractIsFalseThenServiceContractIsGenerated(bool hasService)
     {
         // Arrange
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
-            public sealed partial interface IRegisterService
+            public partial interface IRegisterService
             {
                 global::System.Threading.Tasks.Task<Register.Result> Register(Register register, global::System.Threading.CancellationToken cancellationToken);
             }
             """;
 
         var visitor = new GenerateServiceContractWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasServiceContract(false));
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .HasService(hasService)
+            .HasServiceContract(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -34,12 +37,14 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
-    public async Task GivenFeatureWhenHasServiceContractThenNothingIsGenerated()
+    public async Task GivenAFeatureWhenHasServiceContractThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new GenerateServiceContractWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasServiceContract(true));
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .HasServiceContract(true)
+            .IsPartial(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
