@@ -2,9 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Threading;
+    using Microsoft.CodeAnalysis.CSharp;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using static Muify.Service.GenerateServiceWhenFeatureVisited_Resources;
 
     internal sealed class GenerateServiceWhenFeatureVisited
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
@@ -39,8 +41,12 @@
                     "return await handler",
                     $"    .Handle({parameter}, cancellationToken)",
                     "    .ConfigureAwait(false);")
-                .Block(Configuration.Options, $"using (scribe.Next({parameter}))")
-                .Block(Configuration.Options, "using (manager.Begin(global::Mu.Auditing.Scope.Internal))");
+                .Block(Configuration.Options, $"using (scribe.Next({parameter}, out _))")
+                .Block(Configuration.Options, "using (manager.Begin(global::Mu.Auditing.Scope.Internal))")
+                .Prepend(Configuration.Options, Snippet.Blank)
+                .Prepend(
+                    Configuration.Options,
+                    $"_ = global::Ardalis.GuardClauses.Guard.Against.Null({parameter}, message: {SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true)});");
 
             string content = Builder
                 .New<Definition>()
@@ -57,6 +63,7 @@
                     .WithParameters((Name: "Manager", Type: manager))
                     .WithParameters((Name: "Scribe", Type: scribe)))
                 .From(feature.Namespace)
+                .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, feature.Value.Name);

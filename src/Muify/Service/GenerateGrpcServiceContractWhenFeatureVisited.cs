@@ -28,7 +28,7 @@
                     .WithArguments((Name: string.Empty, Value: $"\"{feature.Namespace}.Service\"")))
                 .Named("IGrpc")
                 .WithMethods(method => method
-                    .Accepts((Name: feature.Value.Name, Type: request))
+                    .Accepts((feature.Value.Name, Type: request))
                     .Accepts(context => context
                         .DefaultedTo("default")
                         .Named("Context")

@@ -90,4 +90,39 @@
       <LastGenOutput>ITypeSymbolExtensions.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Service\GenerateGrpcClientWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateGrpcClientWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateGrpcClientWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateGrpcClientWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateGrpcClientWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Service\GenerateGrpcServiceWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateGrpcServiceWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateGrpcServiceWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateGrpcServiceWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateGrpcServiceWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Service\GenerateServiceWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateServiceWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateServiceWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateServiceWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateServiceWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

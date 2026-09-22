@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Generate gRPC clients with trace headers, deadlines, and cancellation forwarding; add request guards to generated services and nest gRPC implementations under Service.Grpc.
 - Replace ThrowIf checks with Ardalis guards and resource-backed messages, including generated identifier conversions and cancellation checks that preserve the original token.
 - Migrate Mu runtime extension methods to C# 14 extension blocks while preserving behavior and keeping Muify and Mu.Modelling compatible with C# 7.3.
 - Move remaining guard and precondition messages into class-level resource files while preserving exception types, parameter names, and message text.

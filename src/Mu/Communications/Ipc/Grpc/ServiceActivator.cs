@@ -1,7 +1,7 @@
-﻿namespace Mu.Communications.Ipc;
+﻿namespace Mu.Communications.Ipc.Grpc;
 
 using System;
-using Grpc.AspNetCore.Server;
+using global::Grpc.AspNetCore.Server;
 using SimpleInjector;
 
 public sealed class ServiceActivator<TService>(Container container)

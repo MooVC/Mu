@@ -1,8 +1,8 @@
-﻿namespace Mu.Communications.Ipc;
+﻿namespace Mu.Communications.Ipc.Grpc;
 
 using System;
-using Grpc.Core;
-using Grpc.Core.Interceptors;
+using global::Grpc.Core;
+using global::Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;
 
 public sealed partial class ExceptionInterceptor(ILogger<ExceptionInterceptor> logger)

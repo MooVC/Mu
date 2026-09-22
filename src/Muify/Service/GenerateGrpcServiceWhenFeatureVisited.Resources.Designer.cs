@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mu.Communications.Tracing {
+namespace Muify.Service {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Mu.Communications.Tracing {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Scribe_Resources {
+    internal class GenerateGrpcServiceWhenFeatureVisited_Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Scribe_Resources() {
+        internal GenerateGrpcServiceWhenFeatureVisited_Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Mu.Communications.Tracing {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mu.Communications.Tracing.Scribe.Resources", typeof(Scribe_Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Muify.Service.GenerateGrpcServiceWhenFeatureVisited.Resources", typeof(GenerateGrpcServiceWhenFeatureVisited_Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,11 @@ namespace Mu.Communications.Tracing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The use case must be provided..
+        ///   Looks up a localized string similar to The request must be provided..
         /// </summary>
-        internal static string CurrentUseCaseRequired {
+        internal static string ObserveRequestRequired {
             get {
-                return ResourceManager.GetString("CurrentUseCaseRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Nested ledger scopes must be disposed before their parent scope..
-        /// </summary>
-        internal static string DisposeScopeOrderRequired {
-            get {
-                return ResourceManager.GetString("DisposeScopeOrderRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The use case for the next ledger scope must be provided..
-        /// </summary>
-        internal static string NextUseCaseRequired {
-            get {
-                return ResourceManager.GetString("NextUseCaseRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A ledger scope is already active in the current execution context..
-        /// </summary>
-        internal static string SetLedgerAlreadyEstablished {
-            get {
-                return ResourceManager.GetString("SetLedgerAlreadyEstablished", resourceCulture);
+                return ResourceManager.GetString("ObserveRequestRequired", resourceCulture);
             }
         }
     }

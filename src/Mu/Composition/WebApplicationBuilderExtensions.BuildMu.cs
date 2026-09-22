@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mu.Communications.Ipc;
+using Mu.Communications.Ipc.Grpc;
 using SimpleInjector;
 using SimpleInjector.Integration.ServiceCollection;
 

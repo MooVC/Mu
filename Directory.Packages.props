@@ -19,10 +19,10 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.12" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Monify" Version="1.5.2" />
-    <PackageVersion Include="MooVC" Version="9.3.3" />
-    <PackageVersion Include="MooVC.Modelling" Version="9.3.3" />
-    <PackageVersion Include="MooVC.Syntax" Version="9.3.3" />
-    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.3" />
+    <PackageVersion Include="MooVC" Version="9.3.4" />
+    <PackageVersion Include="MooVC.Modelling" Version="9.3.4" />
+    <PackageVersion Include="MooVC.Syntax" Version="9.3.4" />
+    <PackageVersion Include="MooVC.Syntax.CSharp" Version="9.3.4" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="protobuf-net" Version="3.2.56" />
     <PackageVersion Include="protobuf-net.Grpc" Version="1.2.2" />

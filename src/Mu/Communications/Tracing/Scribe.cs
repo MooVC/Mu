@@ -14,25 +14,19 @@ public sealed partial class Scribe
     private static readonly AsyncLocal<State?> _current = new();
 
     /// <inheritdoc/>
-    public Ledger Ledger => Guard.Against.Null(
-        _current.Value,
-        message: LedgerScopeRequired,
-        exceptionCreator: () => new InvalidOperationException(LedgerScopeRequired)).Ledger;
-
-    /// <inheritdoc/>
-    public IDisposable Next(UseCase useCase)
+    public IDisposable Next(UseCase useCase, out Ledger current)
     {
         _ = Guard.Against.Null(useCase, message: NextUseCaseRequired);
 
         State? previous = _current.Value;
-        Ledger ledger = previous?.Ledger ?? new Ledger(useCase.Identity);
+        current = previous?.Ledger ?? new Ledger(useCase.Identity);
 
         if (previous?.Identity is Guid identity)
         {
-            ledger = ledger.Next(identity);
+            current = current.Next(identity);
         }
 
-        return Begin(useCase.Identity, ledger);
+        return Begin(useCase.Identity, current);
     }
 
     /// <inheritdoc/>

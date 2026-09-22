@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net10.0</TargetFrameworks>
   </PropertyGroup>
@@ -21,6 +21,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mu\Mu.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Mu.Modelling">
       <HintPath>..\Mu.Modelling\bin\$(Configuration)\netstandard2.0\Mu.Modelling.dll</HintPath>
       <Private>true</Private>
@@ -31,7 +34,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Service\GenerateGrpcClientWhenFeatureVisitedTests\" />
     <Folder Include="Service\GenerateUseExtensionWhenFeatureVisitedTests\" />
   </ItemGroup>
 </Project>

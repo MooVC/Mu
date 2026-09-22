@@ -1,9 +1,11 @@
 ﻿namespace Muify.Service
 {
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis.CSharp;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using static Muify.Service.GenerateGrpcServiceWhenFeatureVisited_Resources;
 
     internal sealed class GenerateGrpcServiceWhenFeatureVisited
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
@@ -15,21 +17,24 @@
                 yield break;
             }
 
+            Symbol contract = ($"I{feature.Value.Name}Service.IGrpc", Qualifier.Unqualified);
+            Symbol extensions = (Name: "CallContextExtensions", Qualifier: "Mu.Communications.Tracing");
+            Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
+            Symbol ledger = (Name: "Ledger", Qualifier: "Mu.Communications.Tracing");
+            Symbol manager = (Name: "IScopeManager", Qualifier: "Mu.Auditing");
             Symbol request = (feature.Value.Name, Qualifier.Unqualified);
             Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
-            Symbol contract = ($"I{feature.Value.Name}Service.IGrpc", Qualifier.Unqualified);
+            Symbol scribe = (Name: "IScribe", Qualifier: "Mu.Communications.Tracing");
 
             Symbol handler = Symbol.Undefined
                 .Named((Name: "IHandler", Qualifier: "Mu.Communications.Mediation"))
                 .WithArguments(request, response);
 
-            Symbol manager = (Name: "IScopeManager", Qualifier: "Mu.Auditing");
-            Symbol scribe = (Name: "IScribe", Qualifier: "Mu.Communications.Tracing");
-
             Symbol task = Symbol.Undefined
                 .Named((Name: "ValueTask", Qualifier: "System.Threading.Tasks"))
                 .WithArguments(response);
 
+            string message = SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true);
             Variable parameter = feature.Value.Name;
 
             Snippet body = Snippet
@@ -41,15 +46,15 @@
                 .Block(Configuration.Options, "using (scribe.Set(ledger))")
                 .Block(Configuration.Options, "using (manager.Begin(global::Mu.Auditing.Scope.External))")
                 .Prepend(Configuration.Options, Snippet.Blank)
-                .Prepend(
-                    Configuration.Options,
-                    $"global::Mu.Communications.Tracing.Ledger ledger = global::Mu.Communications.Tracing.CallContextExtensions.ToLedger(context, {parameter});");
+                .Prepend(Configuration.Options, $"{ledger.ToSnippet(Configuration.Options.Types)} ledger = {extensions.ToSnippet(Configuration.Options.Types)}.ToLedger(context, {parameter});")
+                .Prepend(Configuration.Options, Snippet.Blank)
+                .Prepend(Configuration.Options, $"_ = {guard.ToSnippet(Configuration.Options.Types)}.Against.Null({parameter}, message: {message});");
 
             Class service = Class.Undefined
                 .Implements(contract)
-                .Named("Grpc")
+                .Named("Service")
                 .WithMethods(method => method
-                    .Accepts((Name: feature.Value.Name, Type: request))
+                    .Accepts((feature.Value.Name, Type: request))
                     .Accepts(context => context
                         .DefaultedTo("default")
                         .Named("Context")
@@ -64,7 +69,10 @@
             string content = Builder
                 .New<Definition>()
                 .For<Class>(@class => @class
-                    .Containing(service)
+                    .Containing(Class.Undefined
+                        .Containing(service)
+                        .IsStatic(true)
+                        .Named("Grpc"))
                     .Named($"{feature.Value.Name}Service")
                     .WithExtensibility(Modifiers.Implicit)
                     .WithScope(Scopes.Unspecified))

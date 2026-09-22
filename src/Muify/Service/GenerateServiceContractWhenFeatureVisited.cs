@@ -27,7 +27,7 @@
                 .For<Interface>(@interface => @interface
                     .Named($"I{feature.Value.Name}Service")
                     .WithMethods(method => method
-                        .Accepts((Name: feature.Value.Name, Type: request))
+                        .Accepts((feature.Value.Name, Type: request))
                         .Accepts((Name: "CancellationToken", Type: typeof(CancellationToken)))
                         .Named(feature.Value.Name)
                         .Returns(task)))

@@ -1,4 +1,4 @@
-﻿namespace Muify.Service.GenerateServiceWhenFeatureVisitedTests;
+namespace Muify.Service.GenerateServiceWhenFeatureVisitedTests;
 
 using System.Collections.Generic;
 using Mu.Modelling;
@@ -15,9 +15,10 @@ public sealed class WhenObserveIsCalled
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
+            using Ardalis.GuardClauses;
+
             public sealed partial class RegisterService(
-                global::Mu.Communications.Mediation.IHandler<Register,
-                Register.Result> handler,
+                global::Mu.Communications.Mediation.IHandler<Register, Register.Result> handler,
                 global::Mu.Auditing.IScopeManager manager,
                 global::Mu.Communications.Tracing.IScribe scribe)
                 : IRegisterService
@@ -26,9 +27,11 @@ public sealed class WhenObserveIsCalled
                     Register register,
                     global::System.Threading.CancellationToken cancellationToken)
                 {
+                    _ = global::Ardalis.GuardClauses.Guard.Against.Null(register, message: "The request must be provided.");
+
                     using (manager.Begin(global::Mu.Auditing.Scope.Internal))
                     {
-                        using (scribe.Next(register))
+                        using (scribe.Next(register, out _))
                         {
                             return await handler
                                 .Handle(register, cancellationToken)

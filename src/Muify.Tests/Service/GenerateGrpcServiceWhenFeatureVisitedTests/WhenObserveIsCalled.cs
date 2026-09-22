@@ -1,4 +1,4 @@
-﻿namespace Muify.Service.GenerateGrpcServiceWhenFeatureVisitedTests;
+namespace Muify.Service.GenerateGrpcServiceWhenFeatureVisitedTests;
 
 using System.Collections.Generic;
 using Mu.Modelling;
@@ -17,26 +17,30 @@ public sealed class WhenObserveIsCalled
 
             partial class RegisterService
             {
-                public sealed partial class Grpc(
-                    global::Mu.Communications.Mediation.IHandler<Register,
-                    Register.Result> handler,
-                    global::Mu.Auditing.IScopeManager manager,
-                    global::Mu.Communications.Tracing.IScribe scribe)
-                    : IRegisterService.IGrpc
+                public static partial class Grpc
                 {
-                    public async global::System.Threading.Tasks.ValueTask<Register.Result> Register(
-                        Register register,
-                        global::ProtoBuf.Grpc.CallContext context = default)
+                    public sealed partial class Service(
+                        global::Mu.Communications.Mediation.IHandler<Register, Register.Result> handler,
+                        global::Mu.Auditing.IScopeManager manager,
+                        global::Mu.Communications.Tracing.IScribe scribe)
+                        : IRegisterService.IGrpc
                     {
-                        global::Mu.Communications.Tracing.Ledger ledger = global::Mu.Communications.Tracing.CallContextExtensions.ToLedger(context, register);
-
-                        using (manager.Begin(global::Mu.Auditing.Scope.External))
+                        public async global::System.Threading.Tasks.ValueTask<Register.Result> Register(
+                            Register register,
+                            global::ProtoBuf.Grpc.CallContext context = default)
                         {
-                            using (scribe.Set(ledger))
+                            _ = global::Ardalis.GuardClauses.Guard.Against.Null(register, message: "The request must be provided.");
+
+                            global::Mu.Communications.Tracing.Ledger ledger = global::Mu.Communications.Tracing.CallContextExtensions.ToLedger(context, register);
+
+                            using (manager.Begin(global::Mu.Auditing.Scope.External))
                             {
-                                return await handler
-                                    .Handle(register, context.CancellationToken)
-                                    .ConfigureAwait(false);
+                                using (scribe.Set(ledger))
+                                {
+                                    return await handler
+                                        .Handle(register, context.CancellationToken)
+                                        .ConfigureAwait(false);
+                                }
                             }
                         }
                     }
@@ -66,9 +70,11 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateGrpcServiceWhenFeatureVisited();
+
         Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
             .HasGrpcService(true)
             .IsPartial(true));
+
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act

@@ -48,9 +48,11 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateGrpcServiceContractWhenFeatureVisited();
+
         Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
             .HasGrpcServiceContract(true)
             .IsPartial(true));
+
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act

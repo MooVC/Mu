@@ -10,14 +10,16 @@ public sealed class WhenSetIsCalled
         // Arrange
         IScribe subject = new Scribe();
         Ledger ledger = default;
+        var useCase = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
 
         // Act
         using IDisposable scope = subject.Set(ledger);
         Exception? exception = Capture(() => _ = subject.Set(TestData.CreateLedger()));
+        using IDisposable child = subject.Next(useCase, out Ledger result);
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<InvalidOperationException>();
-        _ = await Assert.That(subject.Ledger).IsEqualTo(ledger);
+        _ = await Assert.That(result).IsEqualTo(ledger);
     }
 
     [Test]
@@ -28,15 +30,17 @@ public sealed class WhenSetIsCalled
         IScribe subject = new Scribe();
         Ledger ledger = TestData.CreateLedger();
         Ledger replacement = TestData.CreateLedger(TestData.AlternateIdentity, TestData.Identity);
+        var useCase = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
         using IDisposable scope = subject.Set(ledger);
 
         // Act
         Exception? exception = Capture(() => _ = subject.Set(replacement));
+        using IDisposable child = subject.Next(useCase, out Ledger result);
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<InvalidOperationException>();
         _ = await Assert.That(exception!.Message).IsEqualTo(expectedMessage);
-        _ = await Assert.That(subject.Ledger).IsEqualTo(ledger);
+        _ = await Assert.That(result).IsEqualTo(ledger);
     }
 
     [Test]
@@ -46,34 +50,33 @@ public sealed class WhenSetIsCalled
         IScribe subject = new Scribe();
         var first = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
         var second = new TestData.TestMutation(TestData.AlternateIdentity, TestData.ProposedAt);
-        using IDisposable root = subject.Next(first);
-        using IDisposable child = subject.Next(second);
-        Ledger previous = subject.Ledger;
+        using IDisposable root = subject.Next(first, out _);
+        using IDisposable child = subject.Next(second, out _);
 
         // Act
         Exception? exception = Capture(() => _ = subject.Set(TestData.CreateLedger()));
-        Ledger unchanged = subject.Ledger;
-        using IDisposable grandchild = subject.Next(new TestData.TestMutation(TestData.Correlation, TestData.ProposedAt));
+        using IDisposable grandchild = subject.Next(new TestData.TestMutation(TestData.Correlation, TestData.ProposedAt), out Ledger result);
 
         // Assert
         _ = await Assert.That(exception).IsTypeOf<InvalidOperationException>();
-        _ = await Assert.That(unchanged).IsEqualTo(previous);
-        _ = await Assert.That(subject.Ledger.Causation).IsEqualTo(second.Identity);
-        _ = await Assert.That(subject.Ledger.Correlation).IsEqualTo(first.Identity);
+        _ = await Assert.That(result.Causation).IsEqualTo(second.Identity);
+        _ = await Assert.That(result.Correlation).IsEqualTo(first.Identity);
     }
 
     [Test]
-    public async Task GivenNoCurrentLedgerThenEstablishesLedgerImmediately()
+    public async Task GivenNoCurrentLedgerThenSeedsNextUseCase()
     {
         // Arrange
         IScribe subject = new Scribe();
         Ledger ledger = TestData.CreateLedger();
+        var useCase = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
 
         // Act
         using IDisposable scope = subject.Set(ledger);
+        using IDisposable child = subject.Next(useCase, out Ledger result);
 
         // Assert
-        _ = await Assert.That(subject.Ledger).IsEqualTo(ledger);
+        _ = await Assert.That(result).IsEqualTo(ledger);
     }
 
     [Test]
