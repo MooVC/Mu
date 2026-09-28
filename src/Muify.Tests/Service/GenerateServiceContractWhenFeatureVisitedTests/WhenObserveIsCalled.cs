@@ -12,6 +12,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAFeatureWhenHasServiceContractIsFalseThenServiceContractIsGenerated(bool hasService)
     {
         // Arrange
+        const string expectedHint = "IRegisterService";
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
@@ -35,7 +36,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(register.Name);
+        _ = await Assert.That(definition.Hint).IsEqualTo(expectedHint);
     }
 
     [Test]

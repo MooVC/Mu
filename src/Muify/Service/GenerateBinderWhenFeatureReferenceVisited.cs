@@ -36,7 +36,7 @@
                 .From(poco.Value.Qualification.Qualifier)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, "Binder");
+            yield return new File(content, $"{poco.Value.Qualification.Qualifier}.{poco.Value.Qualification.Moniker}.Binder");
         }
 
         private static Snippet ApplyBindings(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)

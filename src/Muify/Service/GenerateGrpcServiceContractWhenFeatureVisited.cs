@@ -49,7 +49,7 @@
                 .ToSnippet(Configuration.Options.WithTypes(types => types
                     .WithMethods(methods => methods.WithQualifications(types.Qualifications))));
 
-            yield return new File(content, feature.Value.Name);
+            yield return new File(content, $"I{feature.Value.Name}Service.Grpc");
         }
     }
 }

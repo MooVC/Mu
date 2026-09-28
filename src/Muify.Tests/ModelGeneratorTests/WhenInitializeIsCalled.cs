@@ -209,10 +209,49 @@ public sealed partial class WhenInitializeIsCalled
         _ = await Assert.That(result.GeneratedSources.Select(definition => definition.HintName)).Contains(expectedHint);
     }
 
-    private static GeneratorRunResult Generate(string source)
+    [Test]
+    public async Task GivenAFeatureWithReferencesOfTheSameNameThenEachBinderHasADistinctSourceName()
+    {
+        // Arrange
+        const string featureAssemblyName = "MooVC.Testing.Mechanics.Car.Register";
+        const string expectedFeatureHint = "Register.Binder.g.cs";
+        const string expectedReferenceHint = "MooVC.Testing.Mechanics.Car.Register.Details.Binder.g.cs";
+        const string expectedNestedReferenceHint = "MooVC.Testing.Mechanics.Car.Register.Extras.Details.Binder.g.cs";
+        const string source = """
+            namespace MooVC.Testing.Mechanics.Car
+            {
+                public sealed record Car;
+            }
+
+            namespace MooVC.Testing.Mechanics.Car.Register
+            {
+                public sealed partial record Register(Details Details, Extras.Details Extra);
+
+                public sealed partial record Details(string Value);
+            }
+
+            namespace MooVC.Testing.Mechanics.Car.Register.Extras
+            {
+                public sealed partial record Details(string Value);
+            }
+            """;
+
+        // Act
+        GeneratorRunResult result = Generate(source, featureAssemblyName);
+
+        // Assert
+        _ = await Assert.That(result.Diagnostics).IsEmpty();
+        string[] hints = result.GeneratedSources.Select(definition => definition.HintName).ToArray();
+        _ = await Assert.That(hints).Contains(expectedFeatureHint);
+        _ = await Assert.That(hints).Contains(expectedReferenceHint);
+        _ = await Assert.That(hints).Contains(expectedNestedReferenceHint);
+        _ = await Assert.That(hints.Distinct().Count()).IsEqualTo(hints.Length);
+    }
+
+    private static GeneratorRunResult Generate(string source, string assemblyName = AssemblyName)
     {
         var compilation = CSharpCompilation.Create(
-            AssemblyName,
+            assemblyName,
             [
                 CSharpSyntaxTree.ParseText(ContractsSource),
                 CSharpSyntaxTree.ParseText(source),

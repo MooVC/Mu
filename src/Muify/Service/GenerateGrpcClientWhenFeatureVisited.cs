@@ -86,7 +86,7 @@
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, feature.Value.Name);
+            yield return new File(content, $"{feature.Value.Name}Service.Grpc.Client");
         }
     }
 }

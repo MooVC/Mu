@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Register all implemented model visitors, including component, feature, and feature-reference binders and service/gRPC generators, with distinct generated source names.
 - Generate gRPC clients with trace headers, deadlines, and cancellation forwarding; add request guards to generated services and nest gRPC implementations under Service.Grpc.
 - Replace ThrowIf checks with Ardalis guards and resource-backed messages, including generated identifier conversions and cancellation checks that preserve the original token.
 - Migrate Mu runtime extension methods to C# 14 extension blocks while preserving behavior and keeping Muify and Mu.Modelling compatible with C# 7.3.

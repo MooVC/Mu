@@ -7,17 +7,19 @@ namespace Muify
     using Muify.Service;
     using AreaComponent = Mu.Modelling.Model.Graph.Areas.Area.Components.Component;
     using Feature = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Features.Feature;
+    using FeatureReference = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco;
     using Unit = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit;
     using UnitComponent = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Components.Component;
     using UnitIdentity = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Identity;
 
     public partial class ModelGenerator
     {
-        private sealed class ServiceProvider
+        internal sealed class ServiceProvider
             : IServiceProvider
         {
             private static readonly Type[] _componentVisitors = new Type[]
             {
+                typeof(GenerateBinderWhenComponentVisited),
                 typeof(GenerateEqualsOverrideWhenComponentVisited),
                 typeof(GenerateGetHashCodeOverrideWhenComponentVisited),
                 typeof(GenerateIdentifierComparabilityCompareToWhenComponentVisited),
@@ -43,12 +45,23 @@ namespace Muify
                 typeof(GenerateSelfEqualityEquatableInterfaceWhenComponentVisited),
             };
 
+            private static readonly Type[] _featureReferenceVisitors = new Type[]
+            {
+                typeof(GenerateBinderWhenFeatureReferenceVisited),
+            };
+
             private static readonly Type[] _featureVisitors = new Type[]
             {
                 typeof(GenerateBaseWhenFeatureVisited),
+                typeof(GenerateBinderWhenFeatureVisited),
                 typeof(GenerateConstructorsWhenFeatureVisited),
                 typeof(GenerateFactWhenFeatureVisited),
+                typeof(GenerateGrpcClientWhenFeatureVisited),
+                typeof(GenerateGrpcServiceContractWhenFeatureVisited),
+                typeof(GenerateGrpcServiceWhenFeatureVisited),
                 typeof(GenerateRegistrarWhenFeatureVisited),
+                typeof(GenerateServiceContractWhenFeatureVisited),
+                typeof(GenerateServiceWhenFeatureVisited),
                 typeof(GenerateTransformWhenFeatureVisited),
             };
 
@@ -68,6 +81,7 @@ namespace Muify
             {
                 { typeof(IEnumerable<IModelVisitor<AreaComponent, File>>), new[] { new CollectionVisitor<AreaComponent>(_componentVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<Feature, File>>), new[] { new CollectionVisitor<Feature>(_featureVisitors) } },
+                { typeof(IEnumerable<IModelVisitor<FeatureReference, File>>), new[] { new CollectionVisitor<FeatureReference>(_featureReferenceVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<Unit, File>>), new[] { new CollectionVisitor<Unit>(_unitVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<UnitComponent, File>>), new[] { new CollectionVisitor<UnitComponent>(_componentVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<UnitIdentity, File>>), new[] { new CollectionVisitor<UnitIdentity>(_unitIdentityVisitors) } },
