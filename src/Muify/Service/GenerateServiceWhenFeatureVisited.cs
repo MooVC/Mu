@@ -21,12 +21,14 @@
             Symbol request = (feature.Value.Name, Qualifier.Unqualified);
             Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
             Symbol contract = ($"I{feature.Value.Name}Service", Qualifier.Unqualified);
+            Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
 
             Symbol handler = Symbol.Undefined
                 .Named((Name: "IHandler", Qualifier: "Mu.Communications.Mediation"))
                 .WithArguments(request, response);
 
             Symbol manager = (Name: "IScopeManager", Qualifier: "Mu.Auditing");
+            Symbol scope = (Name: "Scope", Qualifier: "Mu.Auditing");
             Symbol scribe = (Name: "IScribe", Qualifier: "Mu.Communications.Tracing");
 
             Symbol task = Symbol.Undefined
@@ -42,11 +44,11 @@
                     $"    .Handle({parameter}, cancellationToken)",
                     "    .ConfigureAwait(false);")
                 .Block(Configuration.Options, $"using (scribe.Next({parameter}, out _))")
-                .Block(Configuration.Options, "using (manager.Begin(global::Mu.Auditing.Scope.Internal))")
+                .Block(Configuration.Options, $"using (manager.Begin({scope.ToSnippet(Configuration.Options)}.Internal))")
                 .Prepend(Configuration.Options, Snippet.Blank)
                 .Prepend(
                     Configuration.Options,
-                    $"_ = global::Ardalis.GuardClauses.Guard.Against.Null({parameter}, message: {SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true)});");
+                    $"_ = {guard.ToSnippet(Configuration.Options)}.Against.Null({parameter}, message: {SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true)});");
 
             string content = Builder
                 .New<Definition>()

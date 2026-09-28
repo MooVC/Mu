@@ -24,6 +24,7 @@
             Symbol manager = (Name: "IScopeManager", Qualifier: "Mu.Auditing");
             Symbol request = (feature.Value.Name, Qualifier.Unqualified);
             Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
+            Symbol scope = (Name: "Scope", Qualifier: "Mu.Auditing");
             Symbol scribe = (Name: "IScribe", Qualifier: "Mu.Communications.Tracing");
 
             Symbol handler = Symbol.Undefined
@@ -44,11 +45,11 @@
                     $"    .Handle({parameter}, context.CancellationToken)",
                     "    .ConfigureAwait(false);")
                 .Block(Configuration.Options, "using (scribe.Set(ledger))")
-                .Block(Configuration.Options, "using (manager.Begin(global::Mu.Auditing.Scope.External))")
+                .Block(Configuration.Options, $"using (manager.Begin({scope.ToSnippet(Configuration.Options)}.External))")
                 .Prepend(Configuration.Options, Snippet.Blank)
-                .Prepend(Configuration.Options, $"{ledger.ToSnippet(Configuration.Options.Types)} ledger = {extensions.ToSnippet(Configuration.Options.Types)}.ToLedger(context, {parameter});")
+                .Prepend(Configuration.Options, $"{ledger.ToSnippet(Configuration.Options)} ledger = {extensions.ToSnippet(Configuration.Options)}.ToLedger(context, {parameter});")
                 .Prepend(Configuration.Options, Snippet.Blank)
-                .Prepend(Configuration.Options, $"_ = {guard.ToSnippet(Configuration.Options.Types)}.Against.Null({parameter}, message: {message});");
+                .Prepend(Configuration.Options, $"_ = {guard.ToSnippet(Configuration.Options)}.Against.Null({parameter}, message: {message});");
 
             Class service = Class.Undefined
                 .Implements(contract)

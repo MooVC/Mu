@@ -27,6 +27,8 @@
                 yield break;
             }
 
+            Symbol hashCode = (Name: "HashCode", Qualifier: "System");
+
             var content = Builder
                 .New<Definition>()
                 .For<Class>(@class => @class
@@ -35,7 +37,7 @@
                     .WithMethods(getHashCode => getHashCode
                         .Named("GetHashCode")
                         .Returns(typeof(int), result => result.WithMode(Result.Modes.Synchronous))
-                        .WithBody($"return global::System.HashCode.Combine({component.Identifier.Name});")
+                        .WithBody($"return {hashCode.ToSnippet(Configuration.Options)}.Combine({component.Identifier.Name});")
                         .WithExtensibility(Modifiers.Override))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)

@@ -26,6 +26,8 @@ namespace Muify.Service
 
         protected override Snippet GetContent()
         {
+            Symbol targets = typeof(AttributeTargets);
+
             return Builder
                 .New<Definition>()
                 .From(typeof(NonMutationalStrategy))
@@ -34,7 +36,7 @@ namespace Muify.Service
                     .AttributedWith(usage => usage
                         .Named(typeof(AttributeUsageAttribute))
                         .WithArguments(
-                            (Name: string.Empty, Value: "global::System.AttributeTargets.Class"),
+                            (Name: string.Empty, Value: $"{targets.ToSnippet(Configuration.Options)}.Class"),
                             (Name: nameof(AttributeUsageAttribute.AllowMultiple), Value: "false"),
                             (Name: nameof(AttributeUsageAttribute.Inherited), Value: "false")))
                     .DerivesFrom(typeof(Attribute))

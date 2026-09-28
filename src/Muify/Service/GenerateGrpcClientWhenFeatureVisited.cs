@@ -18,11 +18,18 @@
                 yield break;
             }
 
+            Symbol context = (Name: "CallContext", Qualifier: "ProtoBuf.Grpc");
+            Symbol options = (Name: "CallOptions", Qualifier: "Grpc.Core");
+            Symbol contract = ($"I{feature.Value.Name}Service", Qualifier.Unqualified);
+            Symbol dateTime = (Name: "DateTime", Qualifier: "System");
+            Symbol extensions = (Name: "CallContextExtensions", Qualifier: "Mu.Communications.Tracing");
+            Symbol grpc = ($"I{feature.Value.Name}Service.IGrpc", Qualifier.Unqualified);
+            Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
+            Symbol ledger = (Name: "Ledger", Qualifier: "Mu.Communications.Tracing");
+            Symbol metadata = (Name: "Metadata", Qualifier: "Grpc.Core");
+            Symbol configuration = (Name: "Options", Qualifier: feature.Namespace);
             Symbol request = (feature.Value.Name, Qualifier.Unqualified);
             Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
-            Symbol contract = ($"I{feature.Value.Name}Service", Qualifier.Unqualified);
-            Symbol grpc = ($"I{feature.Value.Name}Service.IGrpc", Qualifier.Unqualified);
-            Symbol options = (Name: "Options", Qualifier: feature.Namespace);
             Symbol scribe = (Name: "IScribe", Qualifier: "Mu.Communications.Tracing");
 
             Symbol task = Symbol.Undefined
@@ -33,23 +40,23 @@
 
             var body = Snippet.From(
                 Configuration.Options,
-                $"_ = global::Ardalis.GuardClauses.Guard.Against.Null({parameter}, message: {SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true)});",
+                $"_ = {guard.ToSnippet(Configuration.Options)}.Against.Null({parameter}, message: {SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true)});",
                 Snippet.Blank,
-                $"using var scope = scribe.Next({parameter}, out global::Mu.Communications.Tracing.Ledger ledger);",
+                $"using var scope = scribe.Next({parameter}, out {ledger.ToSnippet(Configuration.Options)} ledger);",
                 Snippet.Blank,
-                "var headers = new global::Grpc.Core.Metadata",
+                $"var headers = new {metadata.ToSnippet(Configuration.Options)}",
                 "{",
-                "    { global::Mu.Communications.Tracing.CallContextExtensions.CausationHeader, ledger.Causation.ToString(\"D\") },",
-                "    { global::Mu.Communications.Tracing.CallContextExtensions.CorrelationHeader, ledger.Correlation.ToString(\"D\") },",
+                $"    {{ {extensions.ToSnippet(Configuration.Options)}.CausationHeader, ledger.Causation.ToString(\"D\") }},",
+                $"    {{ {extensions.ToSnippet(Configuration.Options)}.CorrelationHeader, ledger.Correlation.ToString(\"D\") }},",
                 "};",
                 Snippet.Blank,
-                "var callOptions = new global::Grpc.Core.CallOptions(",
+                $"var callOptions = new {options.ToSnippet(Configuration.Options)}(",
                 "    headers: headers,",
-                "    deadline: global::System.DateTime.UtcNow.Add(options.Timeout),",
+                $"    deadline: {dateTime.ToSnippet(Configuration.Options)}.UtcNow.Add(options.Timeout),",
                 "    cancellationToken: cancellationToken);",
                 Snippet.Blank,
                 "return await client",
-                $"    .{feature.Value.Name}({parameter}, new global::ProtoBuf.Grpc.CallContext(callOptions))",
+                $"    .{feature.Value.Name}({parameter}, new {context.ToSnippet(Configuration.Options)}(callOptions))",
                 "    .ConfigureAwait(false);");
 
             Class client = Class.Undefined
@@ -62,7 +69,7 @@
                     .Returns(task)
                     .WithBody(body))
                 .WithParameters((Name: "Client", Type: grpc))
-                .WithParameters((Name: "Options", Type: options))
+                .WithParameters((Name: "Options", Type: configuration))
                 .WithParameters((Name: "Scribe", Type: scribe));
 
             string content = Builder
