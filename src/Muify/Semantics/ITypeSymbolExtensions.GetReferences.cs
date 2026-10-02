@@ -14,8 +14,9 @@
             return symbol
                 .GetReferencedTypes()
                 .Select(type => Poco.Undefined
-                    .Enumerate((property, poco) => poco.WithAttributes(attribute => attribute.From(property)), symbol.GetProperties())
-                    .IsPartial(type.IsPartial())
+                    .Enumerate((property, poco) => poco.WithAttributes(attribute => attribute.From(property)), type.GetProperties())
+                    .HasBinder(type is INamedTypeSymbol named && named.HasBinder())
+                    .IsPartial(type.IsPartial() && SymbolEqualityComparer.Default.Equals(type.ContainingAssembly, symbol.ContainingAssembly))
                     .WithCharacteristics(type.GetCharacteristics())
                     .WithQualification(type.ToQualification()))
                 .ToImmutableArray();

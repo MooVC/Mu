@@ -40,7 +40,7 @@ namespace Muify.Domain
                             .OfType((component.Name, Qualifier: @namespace), type => type.IsNullable(true)))
                         .Named("CompareTo")
                         .Returns(typeof(int), result => result.WithMode(Result.Modes.Synchronous))
-                        .WithBody($"return other is null ? 1 : other.CompareTo({component.Identifier.Name});"))
+                        .WithBody($"return other is null ? 1 : CompareTo(other.{component.Identifier.Name});"))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);

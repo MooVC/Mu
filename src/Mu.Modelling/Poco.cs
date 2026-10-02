@@ -16,6 +16,8 @@
 
         public Characteristics Characteristics { get; set; } = Characteristics.Undefined;
 
+        public bool HasBinder { get; set; }
+
         public bool IsPartial { get; set; }
 
         [Ignore]

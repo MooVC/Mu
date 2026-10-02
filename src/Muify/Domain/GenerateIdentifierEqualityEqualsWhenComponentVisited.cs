@@ -28,6 +28,10 @@
                 yield break;
             }
 
+            Symbol comparer = Symbol.Undefined
+                .Named((Name: "EqualityComparer", Qualifier: "System.Collections.Generic"))
+                .WithArguments(component.Identifier.Type);
+
             var content = Builder
                 .New<Definition>()
                 .For<Class>(@class => @class
@@ -36,10 +40,10 @@
                     .WithMethods(equals => equals
                         .Accepts(parameter => parameter
                             .Named("Other")
-                            .OfType(component.Identifier.Type, type => type.IsNullable(true)))
+                            .OfType(component.Identifier.Type))
                         .Named("Equals")
                         .Returns(typeof(bool), result => result.WithMode(Result.Modes.Synchronous))
-                        .WithBody($"return other is not null && other == {component.Identifier.Name};"))
+                        .WithBody($"return {comparer.ToSnippet(Configuration.Options)}.Default.Equals({component.Identifier.Name}, other);"))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);

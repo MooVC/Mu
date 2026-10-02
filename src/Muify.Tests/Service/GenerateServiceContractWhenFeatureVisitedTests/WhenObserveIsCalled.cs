@@ -18,7 +18,9 @@ public sealed class WhenObserveIsCalled
 
             public partial interface IRegisterService
             {
-                global::System.Threading.Tasks.Task<Register.Result> Register(Register register, global::System.Threading.CancellationToken cancellationToken);
+                global::System.Threading.Tasks.Task<global::Mu.Result<global::MooVC.Testing.Mechanics.Car.Registration>> Register(
+                    global::MooVC.Testing.Mechanics.Car.Register.Register register,
+                    global::System.Threading.CancellationToken cancellationToken);
             }
             """;
 

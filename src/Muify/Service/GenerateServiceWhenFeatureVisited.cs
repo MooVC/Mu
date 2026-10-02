@@ -6,6 +6,7 @@
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Muify.Modelling;
     using static Muify.Service.GenerateServiceWhenFeatureVisited_Resources;
 
     internal sealed class GenerateServiceWhenFeatureVisited
@@ -18,14 +19,16 @@
                 yield break;
             }
 
-            Symbol request = (feature.Value.Name, Qualifier.Unqualified);
-            Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
+            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol result = feature.GetResultSymbol();
+
+            Symbol response = Symbol.Undefined
+                .Named((Name: "Result", Qualifier: "Mu"))
+                .WithArguments(result);
             Symbol contract = ($"I{feature.Value.Name}Service", Qualifier.Unqualified);
             Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
 
-            Symbol handler = Symbol.Undefined
-                .Named((Name: "IHandler", Qualifier: "Mu.Communications.Mediation"))
-                .WithArguments(request, response);
+            Symbol mediator = (Name: "IMediator", Qualifier: "Mu.Communications.Mediation");
 
             Symbol manager = (Name: "IScopeManager", Qualifier: "Mu.Auditing");
             Symbol scope = (Name: "Scope", Qualifier: "Mu.Auditing");
@@ -40,8 +43,8 @@
             Snippet body = Snippet
                 .From(
                     Configuration.Options,
-                    "return await handler",
-                    $"    .Handle({parameter}, cancellationToken)",
+                    "return await mediator",
+                    $"    .Execute<{request.ToSnippet(Configuration.Options)}, {result.ToSnippet(Configuration.Options)}>({parameter}, cancellationToken)",
                     "    .ConfigureAwait(false);")
                 .Block(Configuration.Options, $"using (scribe.Next({parameter}, out _))")
                 .Block(Configuration.Options, $"using (manager.Begin({scope.ToSnippet(Configuration.Options)}.Internal))")
@@ -61,7 +64,7 @@
                         .Named(feature.Value.Name)
                         .Returns(task)
                         .WithBody(body))
-                    .WithParameters((Name: "Handler", Type: handler))
+                    .WithParameters((Name: "Mediator", Type: mediator))
                     .WithParameters((Name: "Manager", Type: manager))
                     .WithParameters((Name: "Scribe", Type: scribe)))
                 .From(feature.Namespace)

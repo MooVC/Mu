@@ -15,9 +15,9 @@ public sealed class WhenObserveIsCalled
 
             partial class Wheel
             {
-                public bool Equals(global::MooVC.Testing.Mechanics.Car.Locations? other)
+                public bool Equals(global::MooVC.Testing.Mechanics.Car.Locations other)
                 {
-                    return other is not null && other == Location;
+                    return global::System.Collections.Generic.EqualityComparer<global::MooVC.Testing.Mechanics.Car.Locations>.Default.Equals(Location, other);
                 }
             }
             """;

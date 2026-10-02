@@ -17,17 +17,30 @@ namespace Muify.Semantics
                 .IdentifiedBy(identity)
                 .Named(entity.Name);
 
-            if (match is null)
+            if (!entity.IsPartial())
+            {
+                return component;
+            }
+
+            component = component.WithMetadata(metadata => metadata
+                .WithCharacteristics(entity.GetCharacteristics())
+                .HasBinder(entity is INamedTypeSymbol named && named.HasBinder()));
+
+            if (match is null || entity.TypeKind != TypeKind.Class)
             {
                 return component;
             }
 
             return component.WithMetadata(metadata => metadata
-                .WithCharacteristics(entity.GetCharacteristics())
+                .HasEqualsOverride(entity.HasObjectOverride("Equals", SpecialType.System_Boolean, SpecialType.System_Object))
+                .HasGetHashCodeOverride(entity.HasObjectOverride("GetHashCode", SpecialType.System_Int32))
                 .WithIdentifier(identifier => identifier
                     .HasImplicitConversion(entity.HasImplicitConversionTo(match.Type))
-                    .WithComparability(entity.GetComparability(match.Type)))
-                .WithSelf(self => self.WithComparability(entity.GetComparability(entity))));
+                    .WithComparability(entity.GetComparability(match.Type))
+                    .WithEquality(entity.GetEquality(match.Type)))
+                .WithSelf(self => self
+                    .WithComparability(entity.GetComparability(entity, match.Type))
+                    .WithEquality(entity.GetEquality(entity))));
         }
     }
 }

@@ -4,6 +4,7 @@
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Muify.Modelling;
 
     internal sealed class GenerateGrpcServiceContractWhenFeatureVisited
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature, File>
@@ -15,8 +16,12 @@
                 yield break;
             }
 
-            Symbol request = (feature.Value.Name, Qualifier.Unqualified);
-            Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
+            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol result = feature.GetResultSymbol();
+
+            Symbol response = Symbol.Undefined
+                .Named((Name: "Result", Qualifier: "Mu"))
+                .WithArguments(result);
 
             Symbol task = Symbol.Undefined
                 .Named((Name: "ValueTask", Qualifier: "System.Threading.Tasks"))

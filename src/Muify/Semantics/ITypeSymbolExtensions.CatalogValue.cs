@@ -10,10 +10,15 @@ namespace Muify.Semantics
         {
             IPropertySymbol[] properties = value.GetProperties();
 
-            return Component.Undefined
+            Component component = Component.Undefined
                 .AttributedWith(properties)
-                .Named(value.Name)
-                .WithMetadata(metadata => metadata.WithCharacteristics(value.GetCharacteristics()));
+                .Named(value.Name);
+
+            return value.IsPartial()
+                ? component.WithMetadata(metadata => metadata
+                    .HasBinder(value is INamedTypeSymbol named && named.HasBinder())
+                    .WithCharacteristics(value.GetCharacteristics()))
+                : component;
         }
     }
 }

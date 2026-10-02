@@ -22,7 +22,9 @@ public sealed class WhenObserveIsCalled
                 public partial interface IGrpc
                 {
                     [global::ProtoBuf.Grpc.Configuration.Operation("Register")]
-                    global::System.Threading.Tasks.ValueTask<Register.Result> Register(Register register, global::ProtoBuf.Grpc.CallContext context = default);
+                    global::System.Threading.Tasks.ValueTask<global::Mu.Result<global::MooVC.Testing.Mechanics.Car.Registration>> Register(
+                        global::MooVC.Testing.Mechanics.Car.Register.Register register,
+                        global::ProtoBuf.Grpc.CallContext context = default);
                 }
             }
             """;

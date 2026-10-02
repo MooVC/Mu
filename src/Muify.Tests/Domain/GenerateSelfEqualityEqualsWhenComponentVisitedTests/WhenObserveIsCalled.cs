@@ -17,7 +17,7 @@ public sealed class WhenObserveIsCalled
             {
                 public bool Equals(global::MooVC.Testing.Mechanics.Car.Wheel? other)
                 {
-                    return Equals(other.Location);
+                    return other is not null && Equals(other.Location);
                 }
             }
             """;

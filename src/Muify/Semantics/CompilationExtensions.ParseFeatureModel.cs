@@ -15,7 +15,7 @@ namespace Muify.Semantics
         {
             INamedTypeSymbol request = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{names.Feature}");
 
-            if (request is null)
+            if (request is null || !SymbolEqualityComparer.Default.Equals(request.ContainingAssembly, compilation.Assembly))
             {
                 return Feature.Undefined;
             }
@@ -25,6 +25,10 @@ namespace Muify.Semantics
                 out INamedTypeSymbol mutation,
                 out IOrderedEnumerable<IPropertySymbol> parameters,
                 out IPropertySymbol[] results);
+
+            INamedTypeSymbol service = request.ContainingNamespace.GetTypeMembers($"{request.Name}Service").FirstOrDefault();
+            INamedTypeSymbol contract = request.ContainingNamespace.GetTypeMembers($"I{request.Name}Service").FirstOrDefault();
+            INamedTypeSymbol grpc = service?.GetTypeMembers("Grpc").FirstOrDefault();
 
             Feature feature = Feature.Undefined
                 .Named(names.Feature)
@@ -42,8 +46,15 @@ namespace Muify.Semantics
                     .HasBinder(request.HasBinder())
                     .HasConstructors(request.HasConstructors())
                     .HasFact(request.HasFact())
+                    .HasGrpcClient(grpc?.GetTypeMembers("Client").Any() == true)
+                    .HasGrpcService(grpc?.GetTypeMembers("Service").Any() == true)
+                    .HasGrpcServiceContract(contract?.GetTypeMembers("IGrpc").Any() == true)
                     .HasRegistrar(request.HasRegistrar())
+                    .HasService(service is object)
+                    .HasServiceContract(contract is object)
                     .IsPartial(request.IsPartial())
+                    .WithHandler(request.GetImplementation("IHandler`2", "Mu.Communications.Mediation"))
+                    .WithService(request.GetImplementation("IService`2", "Mu.Modelling.Services"))
                     .WithTargetIdentity(@base.GetTargetIdentity()));
 
             if (@base?.Name == "Query" || (@base is null && mutation is null))

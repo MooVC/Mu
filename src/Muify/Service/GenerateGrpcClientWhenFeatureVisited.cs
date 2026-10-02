@@ -1,11 +1,13 @@
 ﻿namespace Muify.Service
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
     using Microsoft.CodeAnalysis.CSharp;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Muify.Modelling;
     using static Muify.Service.GenerateGrpcClientWhenFeatureVisited_Resources;
 
     internal sealed class GenerateGrpcClientWhenFeatureVisited
@@ -27,9 +29,12 @@
             Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
             Symbol ledger = (Name: "Ledger", Qualifier: "Mu.Communications.Tracing");
             Symbol metadata = (Name: "Metadata", Qualifier: "Grpc.Core");
-            Symbol configuration = (Name: "Options", Qualifier: feature.Namespace);
-            Symbol request = (feature.Value.Name, Qualifier.Unqualified);
-            Symbol response = ($"{feature.Value.Name}.Result", Qualifier.Unqualified);
+            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol result = feature.GetResultSymbol();
+
+            Symbol response = Symbol.Undefined
+                .Named((Name: "Result", Qualifier: "Mu"))
+                .WithArguments(result);
             Symbol scribe = (Name: "IScribe", Qualifier: "Mu.Communications.Tracing");
 
             Symbol task = Symbol.Undefined
@@ -52,7 +57,7 @@
                 Snippet.Blank,
                 $"var callOptions = new {options.ToSnippet(Configuration.Options)}(",
                 "    headers: headers,",
-                $"    deadline: {dateTime.ToSnippet(Configuration.Options)}.UtcNow.Add(options.Timeout),",
+                $"    deadline: {dateTime.ToSnippet(Configuration.Options)}.UtcNow.Add(timeout),",
                 "    cancellationToken: cancellationToken);",
                 Snippet.Blank,
                 "return await client",
@@ -69,8 +74,8 @@
                     .Returns(task)
                     .WithBody(body))
                 .WithParameters((Name: "Client", Type: grpc))
-                .WithParameters((Name: "Options", Type: configuration))
-                .WithParameters((Name: "Scribe", Type: scribe));
+                .WithParameters((Name: "Scribe", Type: scribe))
+                .WithParameters((Name: "Timeout", Type: typeof(TimeSpan)));
 
             string content = Builder
                 .New<Definition>()

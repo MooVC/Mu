@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Populate visitor metadata from source symbols so missing component binders, equality/comparison members, and feature service/gRPC artifacts are generated while existing implementations are preserved. Generated services use the mediator and runtime result contracts; gRPC clients accept a timeout directly.
 - Register all implemented model visitors, including component, feature, and feature-reference binders and service/gRPC generators, with distinct generated source names.
 - Generate gRPC clients with trace headers, deadlines, and cancellation forwarding; add request guards to generated services and nest gRPC implementations under Service.Grpc.
 - Replace ThrowIf checks with Ardalis guards and resource-backed messages, including generated identifier conversions and cancellation checks that preserve the original token.

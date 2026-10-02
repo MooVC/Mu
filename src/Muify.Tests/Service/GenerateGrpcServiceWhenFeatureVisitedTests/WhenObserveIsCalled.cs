@@ -16,18 +16,20 @@ public sealed class WhenObserveIsCalled
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 
+            using Ardalis.GuardClauses;
+
             partial class RegisterService
             {
                 public static partial class Grpc
                 {
                     public sealed partial class Service(
-                        global::Mu.Communications.Mediation.IHandler<Register, Register.Result> handler,
+                        global::Mu.Communications.Mediation.IMediator mediator,
                         global::Mu.Auditing.IScopeManager manager,
                         global::Mu.Communications.Tracing.IScribe scribe)
                         : IRegisterService.IGrpc
                     {
-                        public async global::System.Threading.Tasks.ValueTask<Register.Result> Register(
-                            Register register,
+                        public async global::System.Threading.Tasks.ValueTask<global::Mu.Result<global::MooVC.Testing.Mechanics.Car.Registration>> Register(
+                            global::MooVC.Testing.Mechanics.Car.Register.Register register,
                             global::ProtoBuf.Grpc.CallContext context = default)
                         {
                             _ = global::Ardalis.GuardClauses.Guard.Against.Null(register, message: "The request must be provided.");
@@ -38,8 +40,10 @@ public sealed class WhenObserveIsCalled
                             {
                                 using (scribe.Set(ledger))
                                 {
-                                    return await handler
-                                        .Handle(register, context.CancellationToken)
+                                    return await mediator
+                                        .Execute<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>(
+                                            register,
+                                            context.CancellationToken)
                                         .ConfigureAwait(false);
                                 }
                             }

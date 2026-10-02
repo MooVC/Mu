@@ -19,13 +19,13 @@ public sealed class WhenObserveIsCalled
             using Ardalis.GuardClauses;
 
             public sealed partial class RegisterService(
-                global::Mu.Communications.Mediation.IHandler<Register, Register.Result> handler,
+                global::Mu.Communications.Mediation.IMediator mediator,
                 global::Mu.Auditing.IScopeManager manager,
                 global::Mu.Communications.Tracing.IScribe scribe)
                 : IRegisterService
             {
-                public async global::System.Threading.Tasks.Task<Register.Result> Register(
-                    Register register,
+                public async global::System.Threading.Tasks.Task<global::Mu.Result<global::MooVC.Testing.Mechanics.Car.Registration>> Register(
+                    global::MooVC.Testing.Mechanics.Car.Register.Register register,
                     global::System.Threading.CancellationToken cancellationToken)
                 {
                     _ = global::Ardalis.GuardClauses.Guard.Against.Null(register, message: "The request must be provided.");
@@ -34,8 +34,10 @@ public sealed class WhenObserveIsCalled
                     {
                         using (scribe.Next(register, out _))
                         {
-                            return await handler
-                                .Handle(register, cancellationToken)
+                            return await mediator
+                                .Execute<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>(
+                                    register,
+                                    cancellationToken)
                                 .ConfigureAwait(false);
                         }
                     }

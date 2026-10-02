@@ -7,7 +7,7 @@ using MooVC.Syntax.CSharp;
 using Mu.Modelling;
 using Attribute = Mu.Modelling.Attribute;
 
-public sealed class WhenParseModelIsCalled
+public sealed partial class WhenParseModelIsCalled
 {
     private const string AssemblyName = "MooVC.Testing.Mechanics.Car";
 

@@ -29,6 +29,10 @@
                 yield break;
             }
 
+            Symbol comparer = Symbol.Undefined
+                .Named((Name: "Comparer", Qualifier: "System.Collections.Generic"))
+                .WithArguments(component.Identifier.Type);
+
             var content = Builder
                 .New<Definition>()
                 .For<Class>(@class => @class
@@ -37,10 +41,10 @@
                     .WithMethods(compareTo => compareTo
                         .Accepts(parameter => parameter
                             .Named("Other")
-                            .OfType(component.Identifier.Type, type => type.IsNullable(true)))
+                            .OfType(component.Identifier.Type))
                         .Named("CompareTo")
                         .Returns(typeof(int), result => result.WithMode(Result.Modes.Synchronous))
-                        .WithBody($"return other is null ? 1 : other.CompareTo({component.Identifier.Name});"))
+                        .WithBody($"return {comparer.ToSnippet(Configuration.Options)}.Default.Compare({component.Identifier.Name}, other);"))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);

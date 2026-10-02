@@ -39,7 +39,7 @@
                             .OfType((component.Name, Qualifier: @namespace), type => type.IsNullable(true)))
                         .Named("Equals")
                         .Returns(typeof(bool), result => result.WithMode(Result.Modes.Synchronous))
-                        .WithBody($"return Equals(other.{component.Identifier.Name});"))
+                        .WithBody($"return other is not null && Equals(other.{component.Identifier.Name});"))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);

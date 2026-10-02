@@ -14,6 +14,7 @@
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)
         {
             if (!poco.Value.IsPartial
+              || poco.Value.HasBinder
               || poco.Value.Qualification.IsUnnamed
               || poco.Value.Characteristics.IsUndefined
               || poco.Value.Attributes.IsEmpty

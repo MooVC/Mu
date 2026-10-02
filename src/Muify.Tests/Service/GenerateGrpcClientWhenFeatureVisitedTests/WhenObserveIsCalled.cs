@@ -22,12 +22,12 @@ public sealed partial class WhenObserveIsCalled
                 {
                     public sealed partial class Client(
                         IRegisterService.IGrpc client,
-                        global::MooVC.Testing.Mechanics.Car.Register.Options options,
-                        global::Mu.Communications.Tracing.IScribe scribe)
+                        global::Mu.Communications.Tracing.IScribe scribe,
+                        global::System.TimeSpan timeout)
                         : IRegisterService
                     {
-                        public async global::System.Threading.Tasks.Task<Register.Result> Register(
-                            Register register,
+                        public async global::System.Threading.Tasks.Task<global::Mu.Result<global::MooVC.Testing.Mechanics.Car.Registration>> Register(
+                            global::MooVC.Testing.Mechanics.Car.Register.Register register,
                             global::System.Threading.CancellationToken cancellationToken)
                         {
                             _ = global::Ardalis.GuardClauses.Guard.Against.Null(register, message: "The request must be provided.");
@@ -42,7 +42,7 @@ public sealed partial class WhenObserveIsCalled
 
                             var callOptions = new global::Grpc.Core.CallOptions(
                                 headers: headers,
-                                deadline: global::System.DateTime.UtcNow.Add(options.Timeout),
+                                deadline: global::System.DateTime.UtcNow.Add(timeout),
                                 cancellationToken: cancellationToken);
 
                             return await client

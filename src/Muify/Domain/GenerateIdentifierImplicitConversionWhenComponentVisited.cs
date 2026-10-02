@@ -45,6 +45,7 @@
                             .WithMode(Conversion.Types.Implicit)))
                     .WithScope(Scopes.Unspecified))
                 .From(@namespace)
+                .ImportReferences(@namespace)
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 

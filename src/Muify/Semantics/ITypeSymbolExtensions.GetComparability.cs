@@ -10,9 +10,11 @@ namespace Muify.Semantics
         private const string LessThanOperatorMetadataName = "op_LessThan";
         private const string LessThanOrEqualOperatorMetadataName = "op_LessThanOrEqual";
 
-        public static Component.Semantics.Comparability GetComparability(this ITypeSymbol symbol, ITypeSymbol type)
+        public static Component.Semantics.Comparability GetComparability(this ITypeSymbol symbol, ITypeSymbol type, ITypeSymbol identity = null)
         {
-            if (!type.ImplementsComparableTo(type))
+            ITypeSymbol comparable = identity ?? type;
+
+            if (!comparable.ImplementsComparableTo(comparable))
             {
                 return Component.Semantics.Comparability.OutOfScope;
             }
