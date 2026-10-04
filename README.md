@@ -24,7 +24,9 @@ Mu must embrace automation wherever possible, enabling engineers to concentrate 
 
 `AddMu()` registers the shared application services in Simple Injector: the container itself as `IServiceProvider`, a scoped `IMediator` implemented by `InMemoryMediator`, and singleton `IScribe` and `IScopeManager` implementations. It also configures logging so the mediator can resolve its logger. `IHostApplicationBuilder.AddMu()` and `WebApplicationBuilder.BuildMu()` use the same registrations.
 
-Applications configure their domain handlers, transforms, invariants, identity allocation, persistence, and gRPC endpoints. Generated unit registrars apply the aggregate and component binders to `RuntimeTypeModel.Default`; generated feature registrars apply the request and local payload binders. Each model must be bound exactly once during application startup. Models with custom binders are supported alongside generated binders.
+Applications configure their domain handlers, identity allocation, persistence, and gRPC endpoints. Generated unit registrars apply the aggregate and component binders to `RuntimeTypeModel.Default`; generated feature registrars apply the request and local payload binders. Each model must be bound exactly once during application startup. Models with custom binders are supported alongside generated binders.
+
+For mutational features, generated feature registrars register scoped collections of matching `IInvariant<TAggregate, TIntent>` and `ITransform<TAggregate, TFact>` implementations, including implementations in child namespaces and nested types. The generated transform is registered when no custom transform exists, and an empty invariant collection is registered when no invariants exist. Feature registrars also invoke custom `IRegistrar` implementations in the feature namespace and its children, including registrars implemented by invariants and transforms.
 
 Custom Simple Injector configuration remains available through the options callback; set `container.Options.AllowOverridingRegistrations` to `true` before replacing a default registration.
 

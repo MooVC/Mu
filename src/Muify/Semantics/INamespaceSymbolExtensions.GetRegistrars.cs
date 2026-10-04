@@ -8,14 +8,14 @@ namespace Muify.Semantics
 
     internal static partial class INamespaceSymbolExtensions
     {
-        public static ImmutableArray<Qualification> GetRegistrars(this INamespaceSymbol @namespace)
+        public static ImmutableArray<Qualification> GetRegistrars(this INamespaceSymbol @namespace, bool includeDescendants = false)
         {
-            return @namespace
-                .GetTypeMembers()
-                .Where(type => type.TypeKind == TypeKind.Class
+            return (includeDescendants ? @namespace.GetAllTypes() : @namespace.GetTypeMembers())
+                .Where(type => type.TypeKind == TypeKind.Class && !type.IsGenericType
                     && type.AllInterfaces.Any(@interface => @interface.IsRegistrar()))
                 .OrderBy(type => type.ToDisplayString(), StringComparer.Ordinal)
                 .Select(type => type.ToQualification())
+                .Distinct()
                 .ToImmutableArray();
         }
     }

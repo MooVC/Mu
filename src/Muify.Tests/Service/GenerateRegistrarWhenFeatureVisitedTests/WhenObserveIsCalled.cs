@@ -23,6 +23,12 @@ public sealed class WhenObserveIsCalled
                     _ = global::MooVC.Testing.Mechanics.Car.Register.Register.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
                     container.Register<global::Mu.Communications.Mediation.IHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Communications.Mediation.ServiceHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>>(global::SimpleInjector.Lifestyle.Scoped);
                     container.Register<global::Mu.Modelling.Services.IService<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Modelling.Services.CreationalService<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
+                    container.Collection.Register<global::Mu.Modelling.Integrity.IInvariant<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Register>>(
+                        global::System.Array.Empty<global::System.Type>(),
+                        global::SimpleInjector.Lifestyle.Scoped);
+                    container.Collection.Register<global::Mu.Modelling.Services.ITransform<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered>>(
+                        new[] { typeof(global::MooVC.Testing.Mechanics.Car.Register.Transform) },
+                        global::SimpleInjector.Lifestyle.Scoped);
                 }
             }
             """;

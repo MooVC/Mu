@@ -34,7 +34,7 @@ namespace Muify.Service
 
         private static void ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, List<string> registrations)
         {
-            foreach (Qualification registrar in feature.Value.Metadata.Registrars)
+            foreach (Qualification registrar in feature.Value.Metadata.Registrars.Distinct())
             {
                 registrations.Add($"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);");
             }
@@ -70,7 +70,54 @@ namespace Muify.Service
 
             ApplyRegistrars(feature, registrations);
 
+            if (feature.Value.Type.IsMutational)
+            {
+                ApplyCollections(feature, registrations);
+            }
+
             return Snippet.From(Configuration.Options, registrations.ToArray());
+        }
+
+        private static void ApplyCollections(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, List<string> registrations)
+        {
+            Symbol aggregate = (feature.Features.Unit.Value.Name, feature.Features.Unit.Namespace);
+            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol fact = (feature.Value.Mutational.Fact, feature.Namespace);
+
+            Symbol invariants = Symbol.Undefined
+                .Named((Name: "IInvariant", Qualifier: "Mu.Modelling.Integrity"))
+                .WithArguments(aggregate)
+                .WithArguments(request);
+
+            Symbol transforms = Symbol.Undefined
+                .Named((Name: "ITransform", Qualifier: "Mu.Modelling.Services"))
+                .WithArguments(aggregate)
+                .WithArguments(fact);
+
+            IEnumerable<Qualification> implementations = feature.Value.Metadata.Transforms.IsDefaultOrEmpty
+                ? new Qualification[] { (Name: "Transform", Qualifier: feature.Namespace) }
+                : feature.Value.Metadata.Transforms.AsEnumerable();
+
+            registrations.Add(GetCollectionRegistration(invariants, feature.Value.Metadata.Invariants));
+            registrations.Add(GetCollectionRegistration(transforms, implementations));
+        }
+
+        private static string GetCollectionRegistration(Symbol contract, IEnumerable<Qualification> implementations)
+        {
+            string[] types = implementations
+                .Distinct()
+                .OrderBy(implementation => implementation.ToString(), StringComparer.Ordinal)
+                .Select(implementation => $"typeof({Render((Symbol)implementation)})")
+                .ToArray();
+
+            Symbol array = (Name: "Array", Qualifier: "System");
+            Symbol type = (Name: "Type", Qualifier: "System");
+
+            string collection = types.Length == 0
+                ? $"{Render(array)}.Empty<{Render(type)}>()"
+                : $"new[] {{ {string.Join(", ", types)} }}";
+
+            return $"container.Collection.Register<{Render(contract)}>({collection}, {Render(LifeStyles.Scoped)});";
         }
 
         private static string DefineMutationalHandlerRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)

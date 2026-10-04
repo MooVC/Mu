@@ -29,19 +29,19 @@ namespace Muify.Semantics
             INamedTypeSymbol service = request.ContainingNamespace.GetTypeMembers($"{request.Name}Service").FirstOrDefault();
             INamedTypeSymbol contract = request.ContainingNamespace.GetTypeMembers($"I{request.Name}Service").FirstOrDefault();
             INamedTypeSymbol grpc = service?.GetTypeMembers("Grpc").FirstOrDefault();
+            ITypeSymbol fact = mutation?.TypeArguments.FirstOrDefault();
+
+            ITypeSymbol aggregate = GetAggregate(names, request, @base);
 
             Feature feature = Feature.Undefined
                 .Named(names.Feature)
-                .Enumerate(
-                    (parameter, subject) => subject.Using(member => member
-                        .Named(parameter.Name)
-                        .OfType(parameter.Type.ToSyntax())),
-                    parameters)
+                .Enumerate(AddParameter, parameters)
                 .Enumerate((result, subject) => result.CreateResult(subject), results)
                 .WithMetadata(metadata => metadata
                     .Enumerate((reference, subject) => subject.WithReferences(reference), request.GetReferences())
-                    .Enumerate((registrar, subject) => subject.WithRegistrars(registrar), request.ContainingNamespace.GetRegistrars())
-                    .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms())
+                    .Enumerate((invariant, subject) => subject.WithInvariants(invariant), request.GetInvariants(aggregate))
+                    .Enumerate((registrar, subject) => subject.WithRegistrars(registrar), request.ContainingNamespace.GetRegistrars(includeDescendants: true))
+                    .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms(aggregate, fact))
                     .HasBase(request.HasUseCaseBase())
                     .HasBinder(request.HasBinder())
                     .HasConstructors(request.HasConstructors())
@@ -69,6 +69,21 @@ namespace Muify.Semantics
                 .OfType(isCreational
                     ? Mutational.Kinds.Creational
                     : Mutational.Kinds.Transitional));
+        }
+
+        private static Feature AddParameter(IPropertySymbol parameter, Feature subject)
+        {
+            return subject.Using(member => member
+                .Named(parameter.Name)
+                .OfType(parameter.Type.ToSyntax()));
+        }
+
+        private static ITypeSymbol GetAggregate((Name Area, Name Feature, Name Unit) names, INamedTypeSymbol request, INamedTypeSymbol @base)
+        {
+            return @base?.TypeArguments[0]
+                ?? request.ContainingNamespace.ContainingNamespace
+                    .GetTypeMembers(names.Unit.ToString())
+                    .FirstOrDefault();
         }
 
         private static string GetFactName(this INamedTypeSymbol mutation)

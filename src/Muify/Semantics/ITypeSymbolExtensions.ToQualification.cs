@@ -7,12 +7,16 @@ namespace Muify.Semantics
     {
         public static Qualification ToQualification(this ITypeSymbol type)
         {
+            string name = type.ContainingType is null
+                ? type.Name
+                : $"{type.ContainingType.ToQualification().Moniker}.{type.Name}";
+
             if (type.ContainingNamespace is null || type.ContainingNamespace.IsGlobalNamespace)
             {
-                return type.Name;
+                return name;
             }
 
-            return (type.Name, Qualifier: type.ContainingNamespace.ToDisplayString());
+            return (name, Qualifier: type.ContainingNamespace.ToDisplayString());
         }
     }
 }

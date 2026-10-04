@@ -35,6 +35,13 @@ public sealed partial class WhenParseFeatureModelIsCalled
             }
         }
 
+        namespace Mu.Modelling.Integrity
+        {
+            public interface IInvariant<TAggregate, TIntent>
+            {
+            }
+        }
+
         namespace Microsoft.Extensions.Configuration
         {
             public interface IConfiguration

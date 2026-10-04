@@ -8,15 +8,14 @@ namespace Muify.Semantics
 
     internal static partial class INamedTypeSymbolExtensions
     {
-        public static ImmutableArray<Qualification> GetTransforms(this INamedTypeSymbol request, ITypeSymbol aggregate, ITypeSymbol fact)
+        public static ImmutableArray<Qualification> GetInvariants(this INamedTypeSymbol request, ITypeSymbol aggregate)
         {
-            return request
-                .ContainingNamespace
+            return request.ContainingNamespace
                 .GetAllTypes()
                 .Where(type => type.TypeKind == TypeKind.Class && !type.IsAbstract && !type.IsGenericType
-                    && type.AllInterfaces.Any(@interface => @interface.IsTransform()
+                    && type.AllInterfaces.Any(@interface => @interface.IsInvariant()
                         && (aggregate is null || SymbolEqualityComparer.Default.Equals(@interface.TypeArguments[0], aggregate))
-                        && (fact is null || SymbolEqualityComparer.Default.Equals(@interface.TypeArguments[1], fact))))
+                        && SymbolEqualityComparer.Default.Equals(@interface.TypeArguments[1], request)))
                 .OrderBy(type => type.ToDisplayString(), StringComparer.Ordinal)
                 .Select(type => type.ToQualification())
                 .ToImmutableArray();

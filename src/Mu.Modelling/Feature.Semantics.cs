@@ -36,6 +36,8 @@
 
             public bool HasServiceContract { get; set; } = true;
 
+            public ImmutableArray<Qualification> Invariants { get; set; } = ImmutableArray<Qualification>.Empty;
+
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
 
