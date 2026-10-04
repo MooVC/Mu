@@ -20,6 +20,7 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.Register.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
                     container.Register<global::Mu.Communications.Mediation.IHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Communications.Mediation.ServiceHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>>(global::SimpleInjector.Lifestyle.Scoped);
                     container.Register<global::Mu.Modelling.Services.IService<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Modelling.Services.CreationalService<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
                 }
@@ -42,6 +43,45 @@ public sealed class WhenObserveIsCalled
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
         _ = await Assert.That(definition.Hint).IsEqualTo("Register.Registrar");
+    }
+
+    [Test]
+    [Arguments(false, true)]
+    [Arguments(true, false)]
+    public async Task GivenPayloadReferencesWhenBindersAreGeneratedOrExistingThenOnlyAvailableBindersAreApplied(bool hasBinder, bool isPartial)
+    {
+        // Arrange
+        const string expectedBinding = "_ = global::MooVC.Testing.Mechanics.Car.Register.Extras.Details.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);";
+        const string excludedBinding = "global::MooVC.Testing.Mechanics.Car.Register.Unbound.Bind";
+        var visitor = new GenerateRegistrarWhenFeatureVisited();
+
+        Poco details = Poco.Undefined
+            .HasBinder(hasBinder)
+            .IsPartial(isPartial)
+            .WithAttributes(attribute => attribute.Named("Value").OfType(typeof(string)))
+            .WithCharacteristics(characteristics => characteristics.IsRecord(true))
+            .WithQualification((Name: "Details", Qualifier: "MooVC.Testing.Mechanics.Car.Register.Extras"));
+
+        Poco unbound = Poco.Undefined
+            .WithAttributes(attribute => attribute.Named("Value").OfType(typeof(string)))
+            .WithCharacteristics(characteristics => characteristics.IsRecord(true))
+            .WithQualification((Name: "Unbound", Qualifier: TestData.Single.Register.Namespace));
+
+        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(false)
+            .WithReferences(details)
+            .WithReferences(unbound));
+
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(feature);
+
+        // Assert
+        File definition = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(definition.Content).Contains(expectedBinding);
+        _ = await Assert.That(definition.Content.Contains(excludedBinding, StringComparison.Ordinal)).IsFalse();
     }
 
     [Test]

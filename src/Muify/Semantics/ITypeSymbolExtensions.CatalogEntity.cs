@@ -19,7 +19,11 @@ namespace Muify.Semantics
 
             if (!entity.IsPartial())
             {
-                return component;
+                return entity is INamedTypeSymbol binder && binder.HasBinder()
+                    ? component.WithMetadata(metadata => metadata
+                        .WithCharacteristics(entity.GetCharacteristics())
+                        .HasBinder(true))
+                    : component;
             }
 
             component = component.WithMetadata(metadata => metadata

@@ -14,7 +14,7 @@ namespace Muify.Semantics
                 .AttributedWith(properties)
                 .Named(value.Name);
 
-            return value.IsPartial()
+            return value.IsPartial() || (value is INamedTypeSymbol binder && binder.HasBinder())
                 ? component.WithMetadata(metadata => metadata
                     .HasBinder(value is INamedTypeSymbol named && named.HasBinder())
                     .WithCharacteristics(value.GetCharacteristics()))

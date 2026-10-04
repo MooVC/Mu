@@ -20,7 +20,7 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    // There are no registrars defines within the assembly
+                    _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
                 }
             }
             """;
@@ -41,6 +41,41 @@ public sealed class WhenObserveIsCalled
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
         _ = await Assert.That(definition.Hint).IsEqualTo("Car.Registrar");
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenOwnedComponentsWhenBindersAreGeneratedOrExistingThenTheyAreAppliedBeforeCustomRegistrars(bool hasBinder)
+    {
+        // Arrange
+        const string expectedBinding = "_ = global::MooVC.Testing.Mechanics.Car.Wheel.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);";
+        const string expectedRegistrar = "global::MooVC.Testing.Mechanics.Car.Allocator.Register(configuration, container);";
+        const string excludedBinding = "global::MooVC.Testing.Mechanics.Car.Pressure.Bind";
+        var visitor = new GenerateRegistrarWhenUnitVisited();
+
+        Component wheel = TestData.Single.Wheel.Value.WithMetadata(metadata => metadata
+            .HasBinder(hasBinder)
+            .WithCharacteristics(characteristics => characteristics.IsClass(true)));
+
+        Unit car = TestData.Single.Car.Value
+            .Owns(wheel)
+            .WithMetadata(metadata => metadata
+                .IsPartial(true)
+                .HasRegistrar(false)
+                .WithRegistrars((Name: "Allocator", Qualifier: TestData.Single.Car.Namespace)));
+
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(unit);
+
+        // Assert
+        File definition = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(definition.Content).Contains(expectedBinding);
+        _ = await Assert.That(definition.Content.Contains(excludedBinding, StringComparison.Ordinal)).IsFalse();
+        _ = await Assert.That(definition.Content.IndexOf(expectedBinding, StringComparison.Ordinal))
+            .IsLessThan(definition.Content.IndexOf(expectedRegistrar, StringComparison.Ordinal));
     }
 
     [Test]

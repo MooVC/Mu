@@ -1,6 +1,8 @@
 namespace Muify.Service
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using MooVC;
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
@@ -40,7 +42,20 @@ namespace Muify.Service
 
         private static Snippet GetRegistrations(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            var registrations = new List<string>();
+            var registrations = feature.Value.Metadata.References
+                .Where(reference => !reference.Qualification.IsUnnamed
+                    && (reference.HasBinder
+                        || (reference.IsPartial
+                            && !reference.Characteristics.IsUndefined
+                            && !reference.Attributes.IsEmpty
+                            && !reference.IsUndefined)))
+                .OrderBy(reference => reference.Qualification.ToString(), StringComparer.Ordinal)
+                .Select(reference => (Symbol)reference.Qualification)
+                .Distinct()
+                .Select(reference => reference.ToBinding())
+                .ToList();
+
+            registrations.Add(((Symbol)(feature.Value.Name, Qualifier: feature.Namespace)).ToBinding());
 
             if (feature.Value.Metadata.Handler.IsUnnamed
             && (feature.Value.Type.IsMutational || feature.Value.Results.Length > 0))

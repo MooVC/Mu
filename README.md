@@ -20,6 +20,14 @@ Mu must support building features as self-contained, end-to-end vertical slices.
 
 Mu must embrace automation wherever possible, enabling engineers to concentrate on expressing the domain. The framework should streamline repetitive tasks and provide support for comprehensive automated testing to reduce overhead, increase confidence and accelerate delivery.
 
+## Application composition
+
+`AddMu()` registers the shared application services in Simple Injector: the container itself as `IServiceProvider`, a scoped `IMediator` implemented by `InMemoryMediator`, and singleton `IScribe` and `IScopeManager` implementations. It also configures logging so the mediator can resolve its logger. `IHostApplicationBuilder.AddMu()` and `WebApplicationBuilder.BuildMu()` use the same registrations.
+
+Applications configure their domain handlers, transforms, invariants, identity allocation, persistence, and gRPC endpoints. Generated unit registrars apply the aggregate and component binders to `RuntimeTypeModel.Default`; generated feature registrars apply the request and local payload binders. Each model must be bound exactly once during application startup. Models with custom binders are supported alongside generated binders.
+
+Custom Simple Injector configuration remains available through the options callback; set `container.Options.AllowOverridingRegistrations` to `true` before replacing a default registration.
+
 # Key Changes
 
 ## Removal of GUID as the Global Identifier for Aggregates

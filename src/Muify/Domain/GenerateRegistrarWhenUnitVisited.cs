@@ -1,5 +1,6 @@
 namespace Muify.Domain
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Syntax;
@@ -31,9 +32,22 @@ namespace Muify.Domain
 
         private static Snippet ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            return unit.Value.Metadata.Registrars
-                .Select(registrar => $"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);")
-                .ToSnippet(Configuration.Options);
+            var registrations = unit.Value.Components
+                .Where(component => !component.Metadata.IsOutOfScope)
+                .OrderBy(component => component.Name.ToString(), StringComparer.Ordinal)
+                .Select(component => (Symbol)(component.Name, Qualifier: unit.Namespace))
+                .Distinct()
+                .Select(component => component.ToBinding())
+                .ToList();
+
+            Symbol self = (unit.Value.Name, Qualifier: unit.Namespace);
+
+            registrations.Add(self.ToBinding());
+
+            registrations.AddRange(unit.Value.Metadata.Registrars
+                .Select(registrar => $"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);"));
+
+            return Snippet.From(Configuration.Options, registrations.ToArray());
         }
     }
 }
