@@ -18,23 +18,23 @@ internal sealed class List
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Lists.List list, CancellationToken cancellationToken)
     {
         return Create(
-            list.Value.Description,
-            list.Value.Name,
+            list._Value.Description,
+            list._Value.Name,
             list.Namespace,
-            list.Value.Members,
+            list._Value.Members,
             list.ProjectName,
-            list.Root.Options);
+            list._Root.Options);
     }
 
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Lists.List list, CancellationToken cancellationToken)
     {
         return Create(
-            list.Value.Description,
-            list.Value.Name,
+            list._Value.Description,
+            list._Value.Name,
             list.Namespace,
-            list.Value.Members,
+            list._Value.Members,
             list.ProjectName,
-            list.Root.Options);
+            list._Root.Options);
     }
 
     private static async IAsyncEnumerable<File> Create(

@@ -13,14 +13,14 @@
             {
                 public partial class Area
                 {
-                    public Qualifier Namespace => new Qualifier(ImmutableArray.Create(Root.Company, Root.Name, Value.Name));
+                    public Qualifier Namespace => new Qualifier(ImmutableArray.Create(_Root.Company, _Root.Name, _Value.Name));
 
                     public string ProjectName => Namespace;
 
-                    public ImmutableArray<Qualifier> Projects => Value.Components
+                    public ImmutableArray<Qualifier> Projects => _Value.Components
                         .SelectMany(component => component.Attributes)
                         .Select(attribute => attribute.Type)
-                        .GetProjects(Root.Company, Root.Name, Value.Name);
+                        .GetProjects(_Root.Company, _Root.Name, _Value.Name);
                 }
             }
         }

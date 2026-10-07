@@ -15,7 +15,7 @@ public sealed class WhenGetServiceIsCalled
         // Arrange
         const string expectedHint = "Wheel.Binder";
         var provider = new ModelGenerator.ServiceProvider();
-        Component wheel = TestData.Single.Wheel.Value.WithMetadata(metadata => metadata.HasBinder(false));
+        Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata.HasBinder(false));
         var components = new AreaComponents(TestData.Single.Mechanics, TestData.Single.Model, [wheel]);
         var component = new AreaComponent(components, 0, TestData.Single.Model, wheel);
 
@@ -49,7 +49,7 @@ public sealed class WhenGetServiceIsCalled
 
         var provider = new ModelGenerator.ServiceProvider();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasBase(false)
             .HasBinder(false)
             .HasConstructors(false)
@@ -79,7 +79,7 @@ public sealed class WhenGetServiceIsCalled
         // Arrange
         const string expectedHint = "Wheel.Binder";
         var provider = new ModelGenerator.ServiceProvider();
-        Component wheel = TestData.Single.Wheel.Value.WithMetadata(metadata => metadata.HasBinder(false));
+        Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata.HasBinder(false));
         var component = new UnitComponent(TestData.Single.Components, 1, TestData.Single.Model, wheel);
 
         // Act

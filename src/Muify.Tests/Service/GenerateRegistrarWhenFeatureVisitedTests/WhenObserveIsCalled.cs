@@ -29,6 +29,7 @@ public sealed class WhenObserveIsCalled
                     container.Collection.Register<global::Mu.Modelling.Services.ITransform<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered>>(
                         new[] { typeof(global::MooVC.Testing.Mechanics.Car.Register.Transform) },
                         global::SimpleInjector.Lifestyle.Scoped);
+                    container.Register<global::Mu.Modelling.Services.IRoot<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Register>, global::Mu.Modelling.Services.Root<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
                 }
             }
             """;
@@ -36,7 +37,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenFeatureVisited();
         Model model = TestData.Single.Model;
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasRegistrar(false));
 
@@ -73,7 +74,7 @@ public sealed class WhenObserveIsCalled
             .WithCharacteristics(characteristics => characteristics.IsRecord(true))
             .WithQualification((Name: "Unbound", Qualifier: TestData.Single.Register.Namespace));
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasRegistrar(false)
             .WithReferences(details)
@@ -91,13 +92,32 @@ public sealed class WhenObserveIsCalled
     }
 
     [Test]
+    public async Task GivenANonMutationalFeatureThenNoRootIsRegistered()
+    {
+        // Arrange
+        const string rootContract = "global::Mu.Modelling.Services.IRoot<";
+        var visitor = new GenerateRegistrarWhenFeatureVisited();
+        Feature query = TestData.Single.FindCarsBy._Value.WithMetadata(metadata => metadata
+            .IsPartial(true)
+            .HasRegistrar(false));
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 0, TestData.Single.Model, query);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(feature);
+
+        // Assert
+        File definition = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(definition.Content.Contains(rootContract, StringComparison.Ordinal)).IsFalse();
+    }
+
+    [Test]
     public async Task GivenAPartialFeatureWhenHasRegistrarIsTrueThenNothingIsGenerated()
     {
         // Arrange
         var visitor = new GenerateRegistrarWhenFeatureVisited();
         Model model = TestData.Single.Model;
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasRegistrar(true));
 
@@ -117,7 +137,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenFeatureVisited();
         Model model = TestData.Single.Model;
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(false)
             .HasRegistrar(false));
 
@@ -136,7 +156,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateRegistrarWhenFeatureVisited();
         Model model = TestData.Single.Model;
-        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, TestData.Single.Register.Value);
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, model, TestData.Single.Register._Value);
 
         // Act
         IEnumerable<File> result = visitor.Observe(feature);

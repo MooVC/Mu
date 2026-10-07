@@ -33,7 +33,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateTransformWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasFact(false));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasFact(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -51,7 +51,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateTransformWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasFact(false)
             .WithTransforms("MooVC.Testing.Transform"));
 
@@ -69,7 +69,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateTransformWhenFeatureVisited();
-        Feature findCarsBy = TestData.Single.FindCarsBy.Value.WithMetadata(metadata => metadata.HasFact(false));
+        Feature findCarsBy = TestData.Single.FindCarsBy._Value.WithMetadata(metadata => metadata.HasFact(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 0, TestData.Single.Model, findCarsBy);
 
         // Act

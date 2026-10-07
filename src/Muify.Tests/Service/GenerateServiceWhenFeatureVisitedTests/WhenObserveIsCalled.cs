@@ -47,7 +47,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateServiceWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasService(false)
             .HasServiceContract(hasServiceContract));
 
@@ -67,7 +67,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateServiceWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasService(true));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasService(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act

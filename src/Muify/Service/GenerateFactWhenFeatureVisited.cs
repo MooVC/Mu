@@ -14,17 +14,17 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.HasFact || feature.Value.Mutational.Fact.IsUnnamed)
+            if (feature._Value.Metadata.HasFact || feature._Value.Mutational.Fact.IsUnnamed)
             {
                 yield break;
             }
 
-            Name fact = feature.Value.Mutational.Fact;
-            Symbol request = (feature.Value.Name, Qualifier: feature.Namespace);
-            Symbol unit = (feature.Features.Unit.Value.Name, Qualifier: feature.Features.Unit.Namespace);
+            Name fact = feature._Value.Mutational.Fact;
+            Symbol request = (feature._Value.Name, Qualifier: feature.Namespace);
+            Symbol unit = (feature.Features.Unit._Value.Name, Qualifier: feature.Features.Unit.Namespace);
             Symbol definition = (fact, Qualifier: feature.Namespace);
 
-            Parameter[] payload = feature.Value.Parameters
+            Parameter[] payload = feature._Value.Parameters
                 .OrderBy(parameter => parameter.Name)
                 .Select(parameter => Parameter.Undefined.Named(parameter.Name).OfType(parameter.Type))
                 .ToArray();

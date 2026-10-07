@@ -28,6 +28,8 @@ Applications configure their domain handlers, identity allocation, persistence, 
 
 For mutational features, generated feature registrars register scoped collections of matching `IInvariant<TAggregate, TIntent>` and `ITransform<TAggregate, TFact>` implementations, including implementations in child namespaces and nested types. The generated transform is registered when no custom transform exists, and an empty invariant collection is registered when no invariants exist. Feature registrars also invoke custom `IRegistrar` implementations in the feature namespace and its children, including registrars implemented by invariants and transforms.
 
+Generated feature registrars also register a scoped `IRoot<TAggregate, TMutation>` for mutational features. A matching concrete root in the feature namespace or its children is used when available; otherwise, `Root<TAggregate, TFact, TMutation>` is registered with the feature's invariant and transform collections.
+
 Custom Simple Injector configuration remains available through the options callback; set `container.Options.AllowOverridingRegistrations` to `true` before replacing a default registration.
 
 # Key Changes

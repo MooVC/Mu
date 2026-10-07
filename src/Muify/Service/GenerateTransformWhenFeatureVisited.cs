@@ -14,18 +14,18 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Type.IsNonMutational
-             || !feature.Value.Metadata.Transforms.IsDefaultOrEmpty
-             || feature.Value.Metadata.IsOutOfScope)
+            if (feature._Value.Type.IsNonMutational
+             || !feature._Value.Metadata.Transforms.IsDefaultOrEmpty
+             || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
-            Symbol aggregate = (feature.Features.Unit.Value.Name, feature.Features.Unit.Namespace);
-            Symbol fact = (feature.Value.Mutational.Fact, feature.Namespace);
+            Symbol aggregate = (feature.Features.Unit._Value.Name, feature.Features.Unit.Namespace);
+            Symbol fact = (feature._Value.Mutational.Fact, feature.Namespace);
 
-            string[] assignments = feature.Features.Unit.Value.Attributes
-                .Where(attribute => feature.Value.Parameters.Any(parameter => IsMatch(attribute, parameter)))
+            string[] assignments = feature.Features.Unit._Value.Attributes
+                .Where(attribute => feature._Value.Parameters.Any(parameter => IsMatch(attribute, parameter)))
                 .Select(attribute => $"{attribute.Name} = fact.{attribute.Name},")
                 .ToArray();
 

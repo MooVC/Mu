@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.GenerateIdentifierComparabilityLessThanOrEqualOperatorWhenComponentVisitedTests;
+namespace Muify.Domain.GenerateIdentifierComparabilityLessThanOrEqualOperatorWhenComponentVisitedTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -24,7 +24,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateIdentifierComparabilityLessThanOrEqualOperatorWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .WithComparability(comparability => comparability
@@ -48,7 +48,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateIdentifierComparabilityLessThanOrEqualOperatorWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .WithComparability(comparability => comparability.HasLessThanOrEqualOperator(true))));

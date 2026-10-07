@@ -15,7 +15,7 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (!feature.Value.Metadata.IsPartial || feature.Value.Metadata.HasRegistrar || feature.Value.Metadata.IsOutOfScope)
+            if (!feature._Value.Metadata.IsPartial || feature._Value.Metadata.HasRegistrar || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
@@ -24,17 +24,17 @@ namespace Muify.Service
 
             string content = Builder
                 .New<Definition>()
-                .For<Record>(record => record.WithRegistrar(registrations, feature.Value.Name))
+                .For<Record>(record => record.WithRegistrar(registrations, feature._Value.Name))
                 .From(feature.Namespace)
                 .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature.Value.Name}.Registrar");
+            yield return new File(content, $"{feature._Value.Name}.Registrar");
         }
 
         private static void ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, List<string> registrations)
         {
-            foreach (Qualification registrar in feature.Value.Metadata.Registrars.Distinct())
+            foreach (Qualification registrar in feature._Value.Metadata.Registrars.Distinct())
             {
                 registrations.Add($"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);");
             }
@@ -42,7 +42,7 @@ namespace Muify.Service
 
         private static Snippet GetRegistrations(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            var registrations = feature.Value.Metadata.References
+            var registrations = feature._Value.Metadata.References
                 .Where(reference => !reference.Qualification.IsUnnamed
                     && (reference.HasBinder
                         || (reference.IsPartial
@@ -55,14 +55,14 @@ namespace Muify.Service
                 .Select(reference => reference.ToBinding())
                 .ToList();
 
-            registrations.Add(((Symbol)(feature.Value.Name, Qualifier: feature.Namespace)).ToBinding());
+            registrations.Add(((Symbol)(feature._Value.Name, Qualifier: feature.Namespace)).ToBinding());
 
-            if (feature.Value.Metadata.Handler.IsUnnamed
-            && (feature.Value.Type.IsMutational || feature.Value.Results.Length > 0))
+            if (feature._Value.Metadata.Handler.IsUnnamed
+            && (feature._Value.Type.IsMutational || feature._Value.Results.Length > 0))
             {
                 registrations.Add(DefineMutationalHandlerRegistration(feature));
 
-                if (feature.Value.Type.IsMutational && feature.Value.Metadata.Service.IsUnnamed)
+                if (feature._Value.Type.IsMutational && feature._Value.Metadata.Service.IsUnnamed)
                 {
                     registrations.Add(DefineMutationalServiceRegistration(feature));
                 }
@@ -70,9 +70,10 @@ namespace Muify.Service
 
             ApplyRegistrars(feature, registrations);
 
-            if (feature.Value.Type.IsMutational)
+            if (feature._Value.Type.IsMutational)
             {
                 ApplyCollections(feature, registrations);
+                registrations.Add(DefineMutationalRootRegistration(feature));
             }
 
             return Snippet.From(Configuration.Options, registrations.ToArray());
@@ -80,9 +81,9 @@ namespace Muify.Service
 
         private static void ApplyCollections(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, List<string> registrations)
         {
-            Symbol aggregate = (feature.Features.Unit.Value.Name, feature.Features.Unit.Namespace);
-            Symbol request = (feature.Value.Name, feature.Namespace);
-            Symbol fact = (feature.Value.Mutational.Fact, feature.Namespace);
+            Symbol aggregate = (feature.Features.Unit._Value.Name, feature.Features.Unit.Namespace);
+            Symbol request = (feature._Value.Name, feature.Namespace);
+            Symbol fact = (feature._Value.Mutational.Fact, feature.Namespace);
 
             Symbol invariants = Symbol.Undefined
                 .Named((Name: "IInvariant", Qualifier: "Mu.Modelling.Integrity"))
@@ -94,11 +95,11 @@ namespace Muify.Service
                 .WithArguments(aggregate)
                 .WithArguments(fact);
 
-            IEnumerable<Qualification> implementations = feature.Value.Metadata.Transforms.IsDefaultOrEmpty
+            IEnumerable<Qualification> implementations = feature._Value.Metadata.Transforms.IsDefaultOrEmpty
                 ? new Qualification[] { (Name: "Transform", Qualifier: feature.Namespace) }
-                : feature.Value.Metadata.Transforms.AsEnumerable();
+                : feature._Value.Metadata.Transforms.AsEnumerable();
 
-            registrations.Add(GetCollectionRegistration(invariants, feature.Value.Metadata.Invariants));
+            registrations.Add(GetCollectionRegistration(invariants, feature._Value.Metadata.Invariants));
             registrations.Add(GetCollectionRegistration(transforms, implementations));
         }
 
@@ -124,21 +125,21 @@ namespace Muify.Service
         {
             Qualification DefineMutationalResult()
             {
-                return feature.Value.Mutational.Type.IsCreational
-                    ? feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace).Name
+                return feature._Value.Mutational.Type.IsCreational
+                    ? feature.Features.Unit._Value.Identity.GetSymbol(feature.Features.Unit.Namespace).Name
                     : (Name: "Revision", Qualifier: "Mu.Modelling.State");
             }
 
             Symbol DefineUseCase(Symbol usecase)
             {
-                return usecase.Named((feature.Value.Name, feature.Namespace));
+                return usecase.Named((feature._Value.Name, feature.Namespace));
             }
 
             Symbol DefineResult(Symbol outcome)
             {
-                Qualification result = feature.Value.Results.Length == 0
+                Qualification result = feature._Value.Results.Length == 0
                     ? DefineMutationalResult()
-                    : (Name: $"{feature.Value.Name}.Result", Qualifier: feature.Namespace);
+                    : (Name: $"{feature._Value.Name}.Result", Qualifier: feature.Namespace);
 
                 return outcome.Named(result);
             }
@@ -156,25 +157,44 @@ namespace Muify.Service
             return GetRegistration(contract, service);
         }
 
+        private static string DefineMutationalRootRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
+        {
+            Symbol aggregate = (feature.Features.Unit._Value.Name, feature.Features.Unit.Namespace);
+            Symbol request = (feature._Value.Name, feature.Namespace);
+            Symbol fact = (feature._Value.Mutational.Fact, feature.Namespace);
+
+            Symbol contract = Symbol.Undefined
+                .Named((Name: "IRoot", Qualifier: "Mu.Modelling.Services"))
+                .WithArguments(aggregate, request);
+
+            Symbol implementation = feature._Value.Metadata.Root.IsUnnamed
+                ? Symbol.Undefined
+                    .Named((Name: "Root", Qualifier: "Mu.Modelling.Services"))
+                    .WithArguments(aggregate, fact, request)
+                : (Symbol)feature._Value.Metadata.Root;
+
+            return GetRegistration(contract, implementation);
+        }
+
         private static string DefineMutationalServiceRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            Symbol identity = feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace);
+            Symbol identity = feature.Features.Unit._Value.Identity.GetSymbol(feature.Features.Unit.Namespace);
 
             Symbol contract = Symbol.Undefined
                 .Named((Name: "IService", Qualifier: "Mu.Modelling.Services"))
-                .WithArguments(usecase => usecase.Named((feature.Value.Name, feature.Namespace)))
+                .WithArguments(usecase => usecase.Named((feature._Value.Name, feature.Namespace)))
                 .WithArguments(identity);
 
             Symbol service = Symbol.Undefined
                 .Named(qualification => qualification
                     .From("Mu.Modelling.Services")
                     .ForkOn(
-                        _ => feature.Value.Mutational.Type.IsCreational,
+                        _ => feature._Value.Mutational.Type.IsCreational,
                         @true: creational => creational.KnownAs("CreationalService"),
                         @false: transitional => transitional.KnownAs("TransitionalService")))
-                .WithArguments(aggregate => aggregate.Named((feature.Features.Unit.Value.Name, feature.Features.Unit.Namespace)))
+                .WithArguments(aggregate => aggregate.Named((feature.Features.Unit._Value.Name, feature.Features.Unit.Namespace)))
                 .WithArguments(identity)
-                .WithArguments(usecase => usecase.Named((feature.Value.Name, feature.Namespace)));
+                .WithArguments(usecase => usecase.Named((feature._Value.Name, feature.Namespace)));
 
             return GetRegistration(contract, service);
         }

@@ -14,18 +14,18 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.HasService || feature.Value.Metadata.IsOutOfScope)
+            if (feature._Value.Metadata.HasService || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
-            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol request = (feature._Value.Name, feature.Namespace);
             Symbol result = feature.GetResultSymbol();
 
             Symbol response = Symbol.Undefined
                 .Named((Name: "Result", Qualifier: "Mu"))
                 .WithArguments(result);
-            Symbol contract = ($"I{feature.Value.Name}Service", Qualifier.Unqualified);
+            Symbol contract = ($"I{feature._Value.Name}Service", Qualifier.Unqualified);
             Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
 
             Symbol mediator = (Name: "IMediator", Qualifier: "Mu.Communications.Mediation");
@@ -38,7 +38,7 @@
                 .Named((Name: "Task", Qualifier: "System.Threading.Tasks"))
                 .WithArguments(response);
 
-            Variable parameter = feature.Value.Name;
+            Variable parameter = feature._Value.Name;
 
             Snippet body = Snippet
                 .From(
@@ -57,11 +57,11 @@
                 .New<Definition>()
                 .For<Class>(@class => @class
                     .Implements(contract)
-                    .Named($"{feature.Value.Name}Service")
+                    .Named($"{feature._Value.Name}Service")
                     .WithMethods(method => method
-                        .Accepts((feature.Value.Name, Type: request))
+                        .Accepts((feature._Value.Name, Type: request))
                         .Accepts((Name: "CancellationToken", Type: typeof(CancellationToken)))
-                        .Named(feature.Value.Name)
+                        .Named(feature._Value.Name)
                         .Returns(task)
                         .WithBody(body))
                     .WithParameters((Name: "Mediator", Type: mediator))
@@ -71,7 +71,7 @@
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature.Value.Name}Service");
+            yield return new File(content, $"{feature._Value.Name}Service");
         }
     }
 }

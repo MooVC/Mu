@@ -55,7 +55,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateGrpcServiceWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasGrpcService(false)
             .HasGrpcServiceContract(hasServiceContract));
 
@@ -76,7 +76,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateGrpcServiceWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasGrpcService(true)
             .IsPartial(true));
 

@@ -28,7 +28,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenUnitVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasRegistrar(false));
 
@@ -54,11 +54,11 @@ public sealed class WhenObserveIsCalled
         const string excludedBinding = "global::MooVC.Testing.Mechanics.Car.Pressure.Bind";
         var visitor = new GenerateRegistrarWhenUnitVisited();
 
-        Component wheel = TestData.Single.Wheel.Value.WithMetadata(metadata => metadata
+        Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata
             .HasBinder(hasBinder)
             .WithCharacteristics(characteristics => characteristics.IsClass(true)));
 
-        Unit car = TestData.Single.Car.Value
+        Unit car = TestData.Single.Car._Value
             .Owns(wheel)
             .WithMetadata(metadata => metadata
                 .IsPartial(true)
@@ -85,7 +85,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenUnitVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasRegistrar(true));
 
@@ -105,7 +105,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenUnitVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(false)
             .HasRegistrar(false));
 
@@ -124,7 +124,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateRegistrarWhenUnitVisited();
         Model model = TestData.Single.Model;
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car._Value);
 
         // Act
         IEnumerable<File> result = visitor.Observe(unit);

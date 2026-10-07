@@ -13,7 +13,7 @@ namespace Muify.Domain
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (!unit.Value.Metadata.IsPartial || unit.Value.Metadata.HasBinder || unit.Value.Metadata.IsOutOfScope)
+            if (!unit._Value.Metadata.IsPartial || unit._Value.Metadata.HasBinder || unit._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
@@ -22,18 +22,18 @@ namespace Muify.Domain
 
             string content = Builder
                 .New<Definition>()
-                .For<Record>(record => record.WithBinder(bindings, unit.Value.Name))
+                .For<Record>(record => record.WithBinder(bindings, unit._Value.Name))
                 .From(unit.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{unit.Value.Name}.Binder");
+            yield return new File(content, $"{unit._Value.Name}.Binder");
         }
 
         private static Snippet ApplyBindings(Model.Graph.Areas.Area.Units.Unit unit)
         {
             var bindings = new List<string>
             {
-                $"var meta = model.Add(typeof({unit.Value.Name}), false);",
+                $"var meta = model.Add(typeof({unit._Value.Name}), false);",
                 string.Empty,
                 "meta.UseConstructor = false;",
                 string.Empty,
@@ -43,7 +43,7 @@ namespace Muify.Domain
 
             int index = 3;
 
-            foreach (Attribute property in unit.Value.Attributes)
+            foreach (Attribute property in unit._Value.Attributes)
             {
                 bindings.Add($"meta.Add({index++}, \"{property.Name}\");");
             }

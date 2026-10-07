@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Register a scoped custom root for mutational features when a matching implementation exists, falling back to the default root through generated feature registrars.
 - Register scoped invariant and transform collections through generated feature registrars, including generated default transforms and custom registrars on nested and child-namespace implementations.
 - Apply aggregate and component protobuf binders through generated unit registrars and request and payload binders through generated feature registrars, assuming each model is bound exactly once and supporting custom binders on non-partial models.
 - Register the application service provider, scoped in-memory mediator, singleton scribe and scope manager, and logging through `AddMu()`, including hosts created with `BuildMu()`.

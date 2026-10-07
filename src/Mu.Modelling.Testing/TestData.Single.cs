@@ -57,19 +57,19 @@
 
                 Areas = new Model.Graph.Areas(Model, Model.Areas);
                 Mechanics = new Model.Graph.Areas.Area(Areas, 0, Model, Model.Areas[0]);
-                Units = new Model.Graph.Areas.Area.Units(Mechanics, Model, Mechanics.Value.Units);
-                Car = new Model.Graph.Areas.Area.Units.Unit(Units, 0, Model, Units.Value[0]);
-                Components = new Model.Graph.Areas.Area.Units.Unit.Components(Car, Model, Car.Value.Components);
-                Pressure = new Model.Graph.Areas.Area.Units.Unit.Components.Component(Components, 0, Model, Components.Value[0]);
-                Wheel = new Model.Graph.Areas.Area.Units.Unit.Components.Component(Components, 1, Model, Components.Value[1]);
-                Identity = new Model.Graph.Areas.Area.Units.Unit.Identity(Car, Model, Car.Value.Identity);
-                Registration = new Model.Graph.Areas.Area.Units.Unit.Identity.Component(Identity, Model, Identity.Value.Component);
-                Lists = new Model.Graph.Areas.Area.Units.Unit.Lists(Car, Model, Car.Value.Lists);
-                Location = new Model.Graph.Areas.Area.Units.Unit.Lists.List(Lists, 0, Model, Lists.Value[0]);
-                Features = new Model.Graph.Areas.Area.Units.Unit.Features(Car, Model, Car.Value.Features);
-                FindCarsBy = new Model.Graph.Areas.Area.Units.Unit.Features.Feature(Features, 0, Model, Features.Value[0]);
-                Register = new Model.Graph.Areas.Area.Units.Unit.Features.Feature(Features, 1, Model, Features.Value[1]);
-                Unregister = new Model.Graph.Areas.Area.Units.Unit.Features.Feature(Features, 2, Model, Features.Value[2]);
+                Units = new Model.Graph.Areas.Area.Units(Mechanics, Model, Mechanics._Value.Units);
+                Car = new Model.Graph.Areas.Area.Units.Unit(Units, 0, Model, Units._Value[0]);
+                Components = new Model.Graph.Areas.Area.Units.Unit.Components(Car, Model, Car._Value.Components);
+                Pressure = new Model.Graph.Areas.Area.Units.Unit.Components.Component(Components, 0, Model, Components._Value[0]);
+                Wheel = new Model.Graph.Areas.Area.Units.Unit.Components.Component(Components, 1, Model, Components._Value[1]);
+                Identity = new Model.Graph.Areas.Area.Units.Unit.Identity(Car, Model, Car._Value.Identity);
+                Registration = new Model.Graph.Areas.Area.Units.Unit.Identity.Component(Identity, Model, Identity._Value.Component);
+                Lists = new Model.Graph.Areas.Area.Units.Unit.Lists(Car, Model, Car._Value.Lists);
+                Location = new Model.Graph.Areas.Area.Units.Unit.Lists.List(Lists, 0, Model, Lists._Value[0]);
+                Features = new Model.Graph.Areas.Area.Units.Unit.Features(Car, Model, Car._Value.Features);
+                FindCarsBy = new Model.Graph.Areas.Area.Units.Unit.Features.Feature(Features, 0, Model, Features._Value[0]);
+                Register = new Model.Graph.Areas.Area.Units.Unit.Features.Feature(Features, 1, Model, Features._Value[1]);
+                Unregister = new Model.Graph.Areas.Area.Units.Unit.Features.Feature(Features, 2, Model, Features._Value[2]);
             }
 
             private static Feature DefineFindCarsBy(Feature findCarsBy)

@@ -17,25 +17,25 @@ internal sealed class Entity
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Components.Component component, CancellationToken cancellationToken)
     {
         return Create(
-            component.Value.Description,
-            component.Value.Identifier,
-            component.Value.Name,
+            component._Value.Description,
+            component._Value.Identifier,
+            component._Value.Name,
             component.Namespace,
             component.ProjectName,
-            component.Value.Attributes,
-            component.Root.Options);
+            component._Value.Attributes,
+            component._Root.Options);
     }
 
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Components.Component component, CancellationToken cancellationToken)
     {
         return Create(
-            component.Value.Description,
-            component.Value.Identifier,
-            component.Value.Name,
+            component._Value.Description,
+            component._Value.Identifier,
+            component._Value.Name,
             component.Namespace,
             component.ProjectName,
-            component.Value.Attributes,
-            component.Root.Options);
+            component._Value.Attributes,
+            component._Root.Options);
     }
 
     private static async IAsyncEnumerable<File> Create(

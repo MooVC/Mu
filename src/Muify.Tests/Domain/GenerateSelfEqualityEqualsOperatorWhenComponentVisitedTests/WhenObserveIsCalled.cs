@@ -24,7 +24,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateSelfEqualityEqualsOperatorWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithSelf(self => self
                     .WithEquality(equality => equality.HasEqualsOperator(false))));
@@ -46,7 +46,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateSelfEqualityEqualsOperatorWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithSelf(self => self
                     .WithEquality(equality => equality.HasEqualsOperator(true))));

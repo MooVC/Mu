@@ -55,7 +55,7 @@ public sealed partial class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateGrpcClientWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasGrpcClient(false));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasGrpcClient(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -72,7 +72,7 @@ public sealed partial class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateGrpcClientWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasGrpcClient(true));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasGrpcClient(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act

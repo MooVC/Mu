@@ -30,6 +30,10 @@ public sealed partial class WhenParseFeatureModelIsCalled
 
         namespace Mu.Modelling.Services
         {
+            public interface IRoot<TAggregate, TMutation>
+            {
+            }
+
             public interface ITransform<TAggregate, TFact>
             {
             }

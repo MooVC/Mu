@@ -13,7 +13,7 @@ namespace Muify.Domain
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (!unit.Value.Metadata.IsPartial || unit.Value.Metadata.HasRegistrar || unit.Value.Metadata.IsOutOfScope)
+            if (!unit._Value.Metadata.IsPartial || unit._Value.Metadata.HasRegistrar || unit._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
@@ -22,17 +22,17 @@ namespace Muify.Domain
 
             string content = Builder
                 .New<Definition>()
-                .For<Record>(record => record.WithRegistrar(registrations, unit.Value.Name))
+                .For<Record>(record => record.WithRegistrar(registrations, unit._Value.Name))
                 .From(unit.Namespace)
                 .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{unit.Value.Name}.Registrar");
+            yield return new File(content, $"{unit._Value.Name}.Registrar");
         }
 
         private static Snippet ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            var registrations = unit.Value.Components
+            var registrations = unit._Value.Components
                 .Where(component => !component.Metadata.IsOutOfScope)
                 .OrderBy(component => component.Name.ToString(), StringComparer.Ordinal)
                 .Select(component => (Symbol)(component.Name, Qualifier: unit.Namespace))
@@ -40,11 +40,11 @@ namespace Muify.Domain
                 .Select(component => component.ToBinding())
                 .ToList();
 
-            Symbol self = (unit.Value.Name, Qualifier: unit.Namespace);
+            Symbol self = (unit._Value.Name, Qualifier: unit.Namespace);
 
             registrations.Add(self.ToBinding());
 
-            registrations.AddRange(unit.Value.Metadata.Registrars
+            registrations.AddRange(unit._Value.Metadata.Registrars
                 .Select(registrar => $"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);"));
 
             return Snippet.From(Configuration.Options, registrations.ToArray());

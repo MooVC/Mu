@@ -13,7 +13,7 @@ internal sealed class Allocator
 {
     public async IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (unit.Value.Identity.IsType && unit.Value.Identity.Type == typeof(Guid))
+        if (unit._Value.Identity.IsType && unit._Value.Identity.Type == typeof(Guid))
         {
             yield break;
         }
@@ -21,14 +21,14 @@ internal sealed class Allocator
         var content = Builder
             .New<Definition>()
             .For<Class>(@class => @class
-                .Implements((Name: "IAllocator", Qualifier: "Mu.Modelling.Services"), @base => @base.WithArguments(unit.Value.Identity.GetSymbol(unit.Namespace)))
+                .Implements((Name: "IAllocator", Qualifier: "Mu.Modelling.Services"), @base => @base.WithArguments(unit._Value.Identity.GetSymbol(unit.Namespace)))
                 .Named("Allocator")
                 .WithMethods(allocate => DefineAllocate(allocate, unit))
                 .WithMethods(confirm => DefineConfirm(confirm, unit))
                 .WithMethods(surrender => DefineSurrender(surrender, unit)))
             .From(unit.Namespace)
             .ImportReferences(unit.Namespace)
-            .ToSnippet(unit.Root.Options);
+            .ToSnippet(unit._Root.Options);
 
         yield return new File(content, Extensions.Code, "Allocator", $"{Folders.Source}/{unit.ProjectName}/");
     }
@@ -48,7 +48,7 @@ internal sealed class Allocator
                         .WithBase((Name: "UseCase", Qualifier: "Mu.Modelling.Behavior")))
                     .Named("TUseCase")))
             .Returns(result => result
-                .OfType(typeof(ValueTask), task => task.WithArguments(unit.Value.Identity.GetSymbol(unit.Namespace)))
+                .OfType(typeof(ValueTask), task => task.WithArguments(unit._Value.Identity.GetSymbol(unit.Namespace)))
                 .WithMode(Result.Modes.Synchronous))
             .WithExtensibility(Modifiers.Override)
             .WithBody("throw new NotImplementedException();")
@@ -60,7 +60,7 @@ internal sealed class Allocator
         return confirm
             .Accepts(identity => identity
                 .Named("Identity")
-                .OfType(unit.Value.Identity.GetSymbol(unit.Namespace)))
+                .OfType(unit._Value.Identity.GetSymbol(unit.Namespace)))
             .Accepts(cancellationToken => cancellationToken
                 .Named("CancellationToken")
                 .OfType(typeof(CancellationToken)))
@@ -76,7 +76,7 @@ internal sealed class Allocator
         return surrender
             .Accepts(identity => identity
                 .Named("Identity")
-                .OfType(unit.Value.Identity.GetSymbol(unit.Namespace)))
+                .OfType(unit._Value.Identity.GetSymbol(unit.Namespace)))
             .Accepts(cancellationToken => cancellationToken
                 .Named("CancellationToken")
                 .OfType(typeof(CancellationToken)))

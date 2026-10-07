@@ -17,7 +17,7 @@ internal sealed class Project
     {
         string content = Builder
             .New<Template>()
-            .DescribedAs(feature.Value.Description)
+            .DescribedAs(feature._Value.Description)
             .WithItemGroups(group => group
                 .WithProject($"{Folders.Source}/{feature.DomainName}/{feature.DomainName}.{Extensions.Project}"))
             .ToString();

@@ -12,12 +12,12 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.HasServiceContract || feature.Value.Metadata.IsOutOfScope)
+            if (feature._Value.Metadata.HasServiceContract || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
-            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol request = (feature._Value.Name, feature.Namespace);
             Symbol result = feature.GetResultSymbol();
 
             Symbol response = Symbol.Undefined
@@ -31,17 +31,17 @@
             string content = Builder
                 .New<Definition>()
                 .For<Interface>(@interface => @interface
-                    .Named($"I{feature.Value.Name}Service")
+                    .Named($"I{feature._Value.Name}Service")
                     .WithMethods(method => method
-                        .Accepts((feature.Value.Name, Type: request))
+                        .Accepts((feature._Value.Name, Type: request))
                         .Accepts((Name: "CancellationToken", Type: typeof(CancellationToken)))
-                        .Named(feature.Value.Name)
+                        .Named(feature._Value.Name)
                         .Returns(task)))
                 .From(feature.Namespace)
                 .ToSnippet(Configuration.Options.WithTypes(types => types
                     .WithMethods(methods => methods.WithQualifications(types.Qualifications))));
 
-            yield return new File(content, $"I{feature.Value.Name}Service");
+            yield return new File(content, $"I{feature._Value.Name}Service");
         }
     }
 }

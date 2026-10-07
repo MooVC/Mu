@@ -12,7 +12,7 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (!feature.Value.Metadata.IsPartial || feature.Value.Metadata.HasBinder || feature.Value.Metadata.IsOutOfScope)
+            if (!feature._Value.Metadata.IsPartial || feature._Value.Metadata.HasBinder || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
@@ -21,18 +21,18 @@ namespace Muify.Service
 
             string content = Builder
                 .New<Definition>()
-                .For<Record>(record => record.WithBinder(bindings, feature.Value.Name))
+                .For<Record>(record => record.WithBinder(bindings, feature._Value.Name))
                 .From(feature.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature.Value.Name}.Binder");
+            yield return new File(content, $"{feature._Value.Name}.Binder");
         }
 
         private static Snippet ApplyBindings(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
             var bindings = new List<string>
             {
-                $"var meta = model.Add(typeof({feature.Value.Name}), false);",
+                $"var meta = model.Add(typeof({feature._Value.Name}), false);",
                 string.Empty,
                 "meta.UseConstructor = false;",
                 string.Empty,
@@ -43,7 +43,7 @@ namespace Muify.Service
 
             int index = 4;
 
-            foreach (Parameter property in feature.Value.Parameters)
+            foreach (Parameter property in feature._Value.Parameters)
             {
                 bindings.Add($"meta.Add({index++}, \"{property.Name.ToSnippet(Identifier.Options.Pascal)}\");");
             }

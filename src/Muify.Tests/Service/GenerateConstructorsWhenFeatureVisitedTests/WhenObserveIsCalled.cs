@@ -33,7 +33,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateConstructorsWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(false));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -73,7 +73,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateConstructorsWhenFeatureVisited();
-        Feature unregister = TestData.Single.Unregister.Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(false));
+        Feature unregister = TestData.Single.Unregister._Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 2, TestData.Single.Model, unregister);
 
         // Act
@@ -112,7 +112,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateConstructorsWhenFeatureVisited();
-        Feature findCarsBy = TestData.Single.FindCarsBy.Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(false));
+        Feature findCarsBy = TestData.Single.FindCarsBy._Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 0, TestData.Single.Model, findCarsBy);
 
         // Act
@@ -129,7 +129,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateConstructorsWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(true));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.IsPartial(true).HasConstructors(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -144,7 +144,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateConstructorsWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.IsPartial(false).HasConstructors(false));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.IsPartial(false).HasConstructors(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act

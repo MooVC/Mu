@@ -20,7 +20,7 @@
                                 {
                                     public string DomainName => Features.Unit.ProjectName;
 
-                                    public Qualifier Namespace => Features.Unit.Namespace.Append(Value.Name);
+                                    public Qualifier Namespace => Features.Unit.Namespace.Append(_Value.Name);
 
                                     public string ProjectName => Namespace;
                                 }

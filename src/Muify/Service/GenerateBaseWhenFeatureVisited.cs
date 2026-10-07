@@ -10,19 +10,19 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (!feature.Value.Metadata.IsPartial || feature.Value.Metadata.HasBase || feature.Value.Metadata.IsOutOfScope)
+            if (!feature._Value.Metadata.IsPartial || feature._Value.Metadata.HasBase || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
-            string name = feature.Value.Type.IsMutational
-                ? feature.Value.Mutational.Type.ToString()
+            string name = feature._Value.Type.IsMutational
+                ? feature._Value.Mutational.Type.ToString()
                 : "Query";
 
-            Symbol aggregate = (feature.Features.Unit.Value.Name, feature.Features.Unit.Namespace);
+            Symbol aggregate = (feature.Features.Unit._Value.Name, feature.Features.Unit.Namespace);
 
-            Token[] arguments = feature.Value.Type.IsMutational && feature.Value.Mutational.Type.IsTransitional
-                ? new Token[] { aggregate, feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace) }
+            Token[] arguments = feature._Value.Type.IsMutational && feature._Value.Mutational.Type.IsTransitional
+                ? new Token[] { aggregate, feature.Features.Unit._Value.Identity.GetSymbol(feature.Features.Unit.Namespace) }
                 : new Token[] { aggregate };
 
             var content = Builder
@@ -31,11 +31,11 @@ namespace Muify.Service
                     .DerivesFrom(@base => @base
                         .Named((Name: name, Qualifier: "Mu.Modelling.Behavior"))
                         .WithGenerics(arguments))
-                    .Named(feature.Value.Name))
+                    .Named(feature._Value.Name))
                 .From(feature.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, feature.Value.Name);
+            yield return new File(content, feature._Value.Name);
         }
     }
 }

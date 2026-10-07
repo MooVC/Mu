@@ -32,7 +32,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateBinderWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata
+        Component wheel = TestData.Single.Units._Value[0].Components[1].WithMetadata(metadata => metadata
             .WithCharacteristics(characteristics => characteristics.IsClass(true))
             .HasBinder(false));
 
@@ -73,7 +73,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateBinderWhenComponentVisited();
 
-        Component pressure = TestData.Single.Units.Value[0].Components[0].WithMetadata(metadata => metadata
+        Component pressure = TestData.Single.Units._Value[0].Components[0].WithMetadata(metadata => metadata
             .WithCharacteristics(characteristics => characteristics.IsRecord(true))
             .HasBinder(false));
 
@@ -93,7 +93,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateBinderWhenComponentVisited();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.HasBinder(true));
+        Component wheel = TestData.Single.Units._Value[0].Components[1].WithMetadata(metadata => metadata.HasBinder(true));
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act

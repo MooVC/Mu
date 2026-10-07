@@ -15,21 +15,21 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.HasGrpcClient || feature.Value.Metadata.IsOutOfScope)
+            if (feature._Value.Metadata.HasGrpcClient || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
             Symbol context = (Name: "CallContext", Qualifier: "ProtoBuf.Grpc");
             Symbol options = (Name: "CallOptions", Qualifier: "Grpc.Core");
-            Symbol contract = ($"I{feature.Value.Name}Service", Qualifier.Unqualified);
+            Symbol contract = ($"I{feature._Value.Name}Service", Qualifier.Unqualified);
             Symbol dateTime = (Name: "DateTime", Qualifier: "System");
             Symbol extensions = (Name: "CallContextExtensions", Qualifier: "Mu.Communications.Tracing");
-            Symbol grpc = ($"I{feature.Value.Name}Service.IGrpc", Qualifier.Unqualified);
+            Symbol grpc = ($"I{feature._Value.Name}Service.IGrpc", Qualifier.Unqualified);
             Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
             Symbol ledger = (Name: "Ledger", Qualifier: "Mu.Communications.Tracing");
             Symbol metadata = (Name: "Metadata", Qualifier: "Grpc.Core");
-            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol request = (feature._Value.Name, feature.Namespace);
             Symbol result = feature.GetResultSymbol();
 
             Symbol response = Symbol.Undefined
@@ -41,7 +41,7 @@
                 .Named((Name: "Task", Qualifier: "System.Threading.Tasks"))
                 .WithArguments(response);
 
-            Variable parameter = feature.Value.Name;
+            Variable parameter = feature._Value.Name;
 
             var body = Snippet.From(
                 Configuration.Options,
@@ -61,16 +61,16 @@
                 "    cancellationToken: cancellationToken);",
                 Snippet.Blank,
                 "return await client",
-                $"    .{feature.Value.Name}({parameter}, new {context.ToSnippet(Configuration.Options)}(callOptions))",
+                $"    .{feature._Value.Name}({parameter}, new {context.ToSnippet(Configuration.Options)}(callOptions))",
                 "    .ConfigureAwait(false);");
 
             Class client = Class.Undefined
                 .Implements(contract)
                 .Named("Client")
                 .WithMethods(method => method
-                    .Accepts((feature.Value.Name, Type: request))
+                    .Accepts((feature._Value.Name, Type: request))
                     .Accepts((Name: "CancellationToken", Type: typeof(CancellationToken)))
-                    .Named(feature.Value.Name)
+                    .Named(feature._Value.Name)
                     .Returns(task)
                     .WithBody(body))
                 .WithParameters((Name: "Client", Type: grpc))
@@ -84,14 +84,14 @@
                         .Containing(client)
                         .IsStatic(true)
                         .Named("Grpc"))
-                    .Named($"{feature.Value.Name}Service")
+                    .Named($"{feature._Value.Name}Service")
                     .WithExtensibility(Modifiers.Implicit)
                     .WithScope(Scopes.Unspecified))
                 .From(feature.Namespace)
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature.Value.Name}Service.Grpc.Client");
+            yield return new File(content, $"{feature._Value.Name}Service.Grpc.Client");
         }
     }
 }

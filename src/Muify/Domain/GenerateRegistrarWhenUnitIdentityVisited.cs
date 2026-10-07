@@ -12,18 +12,18 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Identity identity)
         {
-            if (identity.Unit.Value.Metadata.Allocator.HasRegistrar
-             || !identity.Unit.Value.Metadata.Allocator.IsPartial
-             || identity.Unit.Value.Metadata.Allocator.IsUndefined)
+            if (identity.Unit._Value.Metadata.Allocator.HasRegistrar
+             || !identity.Unit._Value.Metadata.Allocator.IsPartial
+             || identity.Unit._Value.Metadata.Allocator.IsUndefined)
             {
                 yield break;
             }
 
-            Service allocator = identity.Unit.Value.Metadata.Allocator;
+            Service allocator = identity.Unit._Value.Metadata.Allocator;
 
             Symbol contract = Symbol.Undefined
                 .Named((Name: "IAllocator", Qualifier: "Mu.Modelling.Services"))
-                .WithArguments(identity.Value.GetSymbol(identity.Unit.Namespace));
+                .WithArguments(identity._Value.GetSymbol(identity.Unit.Namespace));
 
             string predicate = $"context => context.Consumer.ImplementationType.Namespace.StartsWith(\"{identity.Unit.Namespace}\", StringComparison.Ordinal)";
             string registration = $"container.RegisterConditional<{Render(contract)}, {Render(allocator.Definition)}>({Render(LifeStyles.Scoped)}, {predicate});";

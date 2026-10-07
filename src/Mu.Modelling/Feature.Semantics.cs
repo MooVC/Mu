@@ -47,6 +47,8 @@
 
             public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;
 
+            public Qualification Root { get; set; } = Qualification.Unnamed;
+
             public Qualification Service { get; set; } = Qualification.Unnamed;
 
             public Symbol TargetIdentity { get; set; } = Symbol.Undefined;

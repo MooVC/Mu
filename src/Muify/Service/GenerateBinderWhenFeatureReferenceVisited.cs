@@ -13,12 +13,12 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)
         {
-            if (!poco.Value.IsPartial
-              || poco.Value.HasBinder
-              || poco.Value.Qualification.IsUnnamed
-              || poco.Value.Characteristics.IsUndefined
-              || poco.Value.Attributes.IsEmpty
-              || poco.Value.IsUndefined)
+            if (!poco._Value.IsPartial
+              || poco._Value.HasBinder
+              || poco._Value.Qualification.IsUnnamed
+              || poco._Value.Characteristics.IsUndefined
+              || poco._Value.Attributes.IsEmpty
+              || poco._Value.IsUndefined)
             {
                 yield break;
             }
@@ -28,23 +28,23 @@
             string content = Builder
                 .New<Definition>()
                 .ForkOn(
-                    _ => poco.Value.Characteristics.IsRecord,
-                    @true: type => type.For<Record>(record => record.WithBinder(bindings, poco.Value.Qualification.Moniker)),
+                    _ => poco._Value.Characteristics.IsRecord,
+                    @true: type => type.For<Record>(record => record.WithBinder(bindings, poco._Value.Qualification.Moniker)),
                     @false: next => next.ForkOn(
-                        _ => poco.Value.Characteristics.IsStruct,
-                        @true: type => type.For<Struct>(@struct => @struct.WithBinder(bindings, poco.Value.Characteristics, poco.Value.Qualification.Moniker)),
-                        @false: type => type.For<Class>(@class => @class.WithBinder(bindings, poco.Value.Qualification.Moniker))))
-                .From(poco.Value.Qualification.Qualifier)
+                        _ => poco._Value.Characteristics.IsStruct,
+                        @true: type => type.For<Struct>(@struct => @struct.WithBinder(bindings, poco._Value.Characteristics, poco._Value.Qualification.Moniker)),
+                        @false: type => type.For<Class>(@class => @class.WithBinder(bindings, poco._Value.Qualification.Moniker))))
+                .From(poco._Value.Qualification.Qualifier)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{poco.Value.Qualification.Qualifier}.{poco.Value.Qualification.Moniker}.Binder");
+            yield return new File(content, $"{poco._Value.Qualification.Qualifier}.{poco._Value.Qualification.Moniker}.Binder");
         }
 
         private static Snippet ApplyBindings(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)
         {
             var bindings = new List<string>
             {
-                $"var meta = model.Add(typeof({poco.Value.Qualification.Moniker}), false);",
+                $"var meta = model.Add(typeof({poco._Value.Qualification.Moniker}), false);",
                 string.Empty,
                 "meta.UseConstructor = false;",
                 string.Empty,
@@ -52,7 +52,7 @@
 
             int index = 4;
 
-            foreach (Attribute property in poco.Value.Attributes)
+            foreach (Attribute property in poco._Value.Attributes)
             {
                 bindings.Add($"meta.Add({index++}, \"{property.Name}\");");
             }

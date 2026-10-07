@@ -28,7 +28,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateIdentifierImplicitConversionWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier.HasImplicitConversion(false)));
 
@@ -49,7 +49,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateIdentifierImplicitConversionWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier.HasImplicitConversion(true)));
 

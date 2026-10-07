@@ -13,17 +13,17 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature.Value.Metadata.HasGrpcService || feature.Value.Metadata.IsOutOfScope)
+            if (feature._Value.Metadata.HasGrpcService || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
-            Symbol contract = ($"I{feature.Value.Name}Service.IGrpc", Qualifier.Unqualified);
+            Symbol contract = ($"I{feature._Value.Name}Service.IGrpc", Qualifier.Unqualified);
             Symbol extensions = (Name: "CallContextExtensions", Qualifier: "Mu.Communications.Tracing");
             Symbol guard = (Name: "Guard", Qualifier: "Ardalis.GuardClauses");
             Symbol ledger = (Name: "Ledger", Qualifier: "Mu.Communications.Tracing");
             Symbol manager = (Name: "IScopeManager", Qualifier: "Mu.Auditing");
-            Symbol request = (feature.Value.Name, feature.Namespace);
+            Symbol request = (feature._Value.Name, feature.Namespace);
             Symbol result = feature.GetResultSymbol();
 
             Symbol response = Symbol.Undefined
@@ -39,7 +39,7 @@
                 .WithArguments(response);
 
             string message = SymbolDisplay.FormatLiteral(ObserveRequestRequired, quote: true);
-            Variable parameter = feature.Value.Name;
+            Variable parameter = feature._Value.Name;
 
             Snippet body = Snippet
                 .From(
@@ -58,12 +58,12 @@
                 .Implements(contract)
                 .Named("Service")
                 .WithMethods(method => method
-                    .Accepts((feature.Value.Name, Type: request))
+                    .Accepts((feature._Value.Name, Type: request))
                     .Accepts(context => context
                         .DefaultedTo("default")
                         .Named("Context")
                         .OfType((Name: "CallContext", Qualifier: "ProtoBuf.Grpc")))
-                    .Named(feature.Value.Name)
+                    .Named(feature._Value.Name)
                     .Returns(task)
                     .WithBody(body))
                 .WithParameters((Name: "Mediator", Type: mediator))
@@ -77,14 +77,14 @@
                         .Containing(service)
                         .IsStatic(true)
                         .Named("Grpc"))
-                    .Named($"{feature.Value.Name}Service")
+                    .Named($"{feature._Value.Name}Service")
                     .WithExtensibility(Modifiers.Implicit)
                     .WithScope(Scopes.Unspecified))
                 .From(feature.Namespace)
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature.Value.Name}Service.Grpc.Service");
+            yield return new File(content, $"{feature._Value.Name}Service.Grpc.Service");
         }
     }
 }

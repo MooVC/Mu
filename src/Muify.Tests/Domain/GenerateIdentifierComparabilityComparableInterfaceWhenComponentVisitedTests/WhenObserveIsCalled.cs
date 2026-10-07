@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.GenerateIdentifierComparabilityComparableInterfaceWhenComponentVisitedTests;
+namespace Muify.Domain.GenerateIdentifierComparabilityComparableInterfaceWhenComponentVisitedTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -21,7 +21,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateIdentifierComparabilityComparableInterfaceWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .WithComparability(comparability => comparability.IsComparable(Presence.Missing))));
@@ -43,7 +43,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateIdentifierComparabilityComparableInterfaceWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .WithComparability(comparability => comparability.IsComparable(Presence.Present))));

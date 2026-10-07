@@ -33,7 +33,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenUnitIdentityVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Car.Value
+        Unit car = TestData.Single.Car._Value
             .WithMetadata(metadata => metadata
                 .WithAllocator(allocator => allocator
                     .HasRegistrar(false)
@@ -41,7 +41,7 @@ public sealed class WhenObserveIsCalled
                     .WithDefinition((Name: "Allocator", Qualifier: "MooVC.Testing.Mechanics.Car"))));
 
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
-        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit._Value.Identity);
 
         // Act
         IEnumerable<File> result = visitor.Observe(identity);
@@ -59,12 +59,12 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenUnitIdentityVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+        Unit car = TestData.Single.Car._Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
             .IsPartial(true)
             .HasRegistrar(true)));
 
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
-        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit._Value.Identity);
 
         // Act
         IEnumerable<File> result = visitor.Observe(identity);
@@ -80,12 +80,12 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateRegistrarWhenUnitIdentityVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Car.Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+        Unit car = TestData.Single.Car._Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
             .IsPartial(false)
             .HasRegistrar(false)));
 
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
-        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit._Value.Identity);
 
         // Act
         IEnumerable<File> result = visitor.Observe(identity);
@@ -100,8 +100,8 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateRegistrarWhenUnitIdentityVisited();
         Model model = TestData.Single.Model;
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
-        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit.Value.Identity);
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car._Value);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit._Value.Identity);
 
         // Act
         IEnumerable<File> result = visitor.Observe(identity);

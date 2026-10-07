@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.GenerateBaseWhenUnitVisitedTests;
+namespace Muify.Domain.GenerateBaseWhenUnitVisitedTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -18,7 +18,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateBaseWhenUnitVisited();
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
 
         // Act
@@ -35,7 +35,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateBaseWhenUnitVisited();
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasBase(true));
 
@@ -53,7 +53,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateBaseWhenUnitVisited();
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(false)
             .HasBase(false));
 

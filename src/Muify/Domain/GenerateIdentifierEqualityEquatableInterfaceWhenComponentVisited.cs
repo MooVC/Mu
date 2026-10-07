@@ -11,12 +11,12 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Components.Component component)
         {
-            return Generate(component.Value, component.Namespace);
+            return Generate(component._Value, component.Namespace);
         }
 
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Components.Component component)
         {
-            return Generate(component.Value, component.Namespace);
+            return Generate(component._Value, component.Namespace);
         }
 
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)

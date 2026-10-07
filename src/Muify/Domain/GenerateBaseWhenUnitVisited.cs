@@ -10,7 +10,7 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit)
         {
-            if (!unit.Value.Metadata.IsPartial || unit.Value.Metadata.HasBase || unit.Value.Metadata.IsOutOfScope)
+            if (!unit._Value.Metadata.IsPartial || unit._Value.Metadata.HasBase || unit._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
@@ -19,11 +19,11 @@
                 .New<Definition>()
                 .For<Record>(record => record
                     .DerivesFrom((Name: "Aggregate", Qualifier: "Mu.Modelling.State"))
-                    .Named(unit.Value.Name))
+                    .Named(unit._Value.Name))
                 .From(unit.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, unit.Value.Name);
+            yield return new File(content, unit._Value.Name);
         }
     }
 }

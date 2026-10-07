@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.GenerateGetHashCodeOverrideWhenComponentVisitedTests;
+namespace Muify.Domain.GenerateGetHashCodeOverrideWhenComponentVisitedTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -23,7 +23,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateGetHashCodeOverrideWhenComponentVisited();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.HasGetHashCodeOverride(false));
+        Component wheel = TestData.Single.Units._Value[0].Components[1].WithMetadata(metadata => metadata.HasGetHashCodeOverride(false));
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act
@@ -40,7 +40,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateGetHashCodeOverrideWhenComponentVisited();
-        Component wheel = TestData.Single.Units.Value[0].Components[1].WithMetadata(metadata => metadata.HasGetHashCodeOverride(true));
+        Component wheel = TestData.Single.Units._Value[0].Components[1].WithMetadata(metadata => metadata.HasGetHashCodeOverride(true));
         Model.Graph.Areas.Area.Units.Unit.Components.Component component = new(TestData.Single.Components, 0, TestData.Single.Model, wheel);
 
         // Act

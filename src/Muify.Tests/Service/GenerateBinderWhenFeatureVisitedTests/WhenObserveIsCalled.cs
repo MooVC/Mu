@@ -37,7 +37,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateBinderWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasBinder(false));
 
@@ -58,7 +58,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateBinderWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasBinder(true));
 
@@ -77,7 +77,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateBinderWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(false)
             .HasBinder(false));
 

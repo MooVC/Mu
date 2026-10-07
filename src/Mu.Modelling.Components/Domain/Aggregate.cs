@@ -18,14 +18,14 @@ internal sealed class Aggregate
                 .AttributedWith(aggregate => aggregate
                     .Named(name => name
                         .Named((Name: "UnitAttribute", Qualifier: "Muify.Domain"))
-                        .WithArguments(identity => identity.Named(unit.Value.Identity))))
-                .DescribedAs(unit.Value.Description)
-                .Named(unit.Value.Name)
-                .WithParameters(unit.Value.Attributes))
+                        .WithArguments(identity => identity.Named(unit._Value.Identity))))
+                .DescribedAs(unit._Value.Description)
+                .Named(unit._Value.Name)
+                .WithParameters(unit._Value.Attributes))
             .From(unit.Namespace)
             .ImportReferences(unit.Namespace)
-            .ToSnippet(unit.Root.Options);
+            .ToSnippet(unit._Root.Options);
 
-        yield return new File(content, Extensions.Code, unit.Value.Name, $"{Folders.Source}/{unit.ProjectName}/");
+        yield return new File(content, Extensions.Code, unit._Value.Name, $"{Folders.Source}/{unit.ProjectName}/");
     }
 }

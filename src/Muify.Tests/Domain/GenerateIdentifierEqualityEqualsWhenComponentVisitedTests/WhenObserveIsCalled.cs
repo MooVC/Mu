@@ -1,4 +1,4 @@
-﻿namespace Muify.Domain.GenerateIdentifierEqualityEqualsWhenComponentVisitedTests;
+namespace Muify.Domain.GenerateIdentifierEqualityEqualsWhenComponentVisitedTests;
 
 using Mu.Modelling;
 using Mu.Modelling.Testing;
@@ -24,7 +24,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateIdentifierEqualityEqualsWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .WithEquality(equality => equality.HasEquatable(false))));
@@ -46,7 +46,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateIdentifierEqualityEqualsWhenComponentVisited();
 
-        Component wheel = TestData.Single.Units.Value[0].Components[1]
+        Component wheel = TestData.Single.Units._Value[0].Components[1]
             .WithMetadata(metadata => metadata
                 .WithIdentifier(identifier => identifier
                     .WithEquality(equality => equality.HasEquatable(true))));

@@ -16,7 +16,7 @@ internal sealed class Project
 {
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area area, CancellationToken cancellationToken)
     {
-        return Create(area.Value.Description, kernel: string.Empty, area.ProjectName, area.Projects);
+        return Create(area._Value.Description, kernel: string.Empty, area.ProjectName, area.Projects);
     }
 
     public IAsyncEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit unit, CancellationToken cancellationToken)
@@ -28,7 +28,7 @@ internal sealed class Project
             kernel = unit.KernelName;
         }
 
-        return Create(unit.Value.Description, kernel, unit.ProjectName, unit.Projects);
+        return Create(unit._Value.Description, kernel, unit.ProjectName, unit.Projects);
     }
 
     private static async IAsyncEnumerable<File> Create(Description description, string kernel, string project, ImmutableArray<Qualifier> projects)

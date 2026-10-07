@@ -18,8 +18,8 @@ internal sealed class Result
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        ImmutableArray<ResultModel> results = feature.Value.Results;
-        bool isCreational = feature.Value.Type.IsMutational && feature.Value.Mutational.Type.IsCreational;
+        ImmutableArray<ResultModel> results = feature._Value.Results;
+        bool isCreational = feature._Value.Type.IsMutational && feature._Value.Mutational.Type.IsCreational;
 
         if (results.Length == 0 && !isCreational)
         {
@@ -34,23 +34,23 @@ internal sealed class Result
                     .Named(nameof(Result))
                     .ForkOn(_ => isCreational, @true: result => DefineIdentity(feature, result), @false: _ => _)
                     .WithParameters(results))
-                .Named(feature.Value.Name))
+                .Named(feature._Value.Name))
             .From(feature.Namespace)
             .ImportReferences(feature.Namespace)
-            .ToSnippet(feature.Root.Options);
+            .ToSnippet(feature._Root.Options);
 
-        yield return new File(content, Extensions.Code, $"{feature.Value.Name}.{nameof(Result)}", $"{Folders.Source}/{feature.ProjectName}/");
+        yield return new File(content, Extensions.Code, $"{feature._Value.Name}.{nameof(Result)}", $"{Folders.Source}/{feature.ProjectName}/");
     }
 
     private static Record DefineIdentity(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, Record record)
     {
-        string description = $"The {nameof(feature.Features.Unit.Value.Identity)} of the Newly Created {feature.Features.Unit.Value.Name}";
+        string description = $"The {nameof(feature.Features.Unit._Value.Identity)} of the Newly Created {feature.Features.Unit._Value.Name}";
 
         return record.WithParameters(identity => identity
             .AttributedWith(
                 typeof(DescriptionAttribute),
                 attribute => attribute.WithArguments((Name: string.Empty, Value: $"\"{description}\"")))
-            .Named(nameof(feature.Features.Unit.Value.Identity))
-            .OfType(feature.Features.Unit.Value.Identity.GetSymbol(feature.Namespace)));
+            .Named(nameof(feature.Features.Unit._Value.Identity))
+            .OfType(feature.Features.Unit._Value.Identity.GetSymbol(feature.Namespace)));
     }
 }

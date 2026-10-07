@@ -1,4 +1,4 @@
-﻿namespace Muify.Service.GenerateGrpcServiceContractWhenFeatureVisitedTests;
+namespace Muify.Service.GenerateGrpcServiceContractWhenFeatureVisitedTests;
 
 using System.Collections.Generic;
 using Mu.Modelling;
@@ -31,7 +31,7 @@ public sealed class WhenObserveIsCalled
 
         var visitor = new GenerateGrpcServiceContractWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasGrpcService(hasService)
             .HasGrpcServiceContract(false));
 
@@ -52,7 +52,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateGrpcServiceContractWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .HasGrpcServiceContract(true)
             .IsPartial(true));
 

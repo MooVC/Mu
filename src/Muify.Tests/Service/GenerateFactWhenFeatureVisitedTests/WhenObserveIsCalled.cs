@@ -52,7 +52,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateFactWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasFact(false));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasFact(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -100,8 +100,8 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateFactWhenFeatureVisited();
 
         Feature register = Feature.Undefined
-            .Named(TestData.Single.Register.Value.Name)
-            .IsMutational(_ => TestData.Single.Register.Value.Mutational)
+            .Named(TestData.Single.Register._Value.Name)
+            .IsMutational(_ => TestData.Single.Register._Value.Mutational)
             .WithMetadata(metadata => metadata.HasFact(false));
 
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
@@ -120,7 +120,7 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         var visitor = new GenerateFactWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.HasFact(true));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasFact(true));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act

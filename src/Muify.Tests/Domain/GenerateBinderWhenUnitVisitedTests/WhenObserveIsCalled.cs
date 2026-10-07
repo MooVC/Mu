@@ -37,7 +37,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateBinderWhenUnitVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasBinder(false));
 
@@ -59,7 +59,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateBinderWhenUnitVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasBinder(true));
 
@@ -79,7 +79,7 @@ public sealed class WhenObserveIsCalled
         var visitor = new GenerateBinderWhenUnitVisited();
         Model model = TestData.Single.Model;
 
-        Unit car = TestData.Single.Units.Value[0].WithMetadata(metadata => metadata
+        Unit car = TestData.Single.Units._Value[0].WithMetadata(metadata => metadata
             .IsPartial(false)
             .HasBinder(false));
 
@@ -98,7 +98,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateBinderWhenUnitVisited();
         Model model = TestData.Single.Model;
-        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car.Value);
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, TestData.Single.Car._Value);
 
         // Act
         IEnumerable<File> result = visitor.Observe(unit);

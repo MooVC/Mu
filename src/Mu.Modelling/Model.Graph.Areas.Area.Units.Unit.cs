@@ -17,29 +17,29 @@
                     {
                         public sealed partial class Unit
                         {
-                            public bool HasKernel => Units.Area.Value.Components.Length > 0;
+                            public bool HasKernel => Units.Area._Value.Components.Length > 0;
 
                             public string KernelName => Units.Area.Namespace;
 
-                            public Qualifier Namespace => Units.Area.Namespace.Append(Value.Name);
+                            public Qualifier Namespace => Units.Area.Namespace.Append(_Value.Name);
 
                             public string ProjectName => Namespace;
 
-                            public ImmutableArray<Qualifier> Projects => Value.Attributes
+                            public ImmutableArray<Qualifier> Projects => _Value.Attributes
                                 .Select(attribute => attribute.Type)
-                                .Union(Value.Components
+                                .Union(_Value.Components
                                     .SelectMany(component => component.Attributes)
                                     .Select(attribute => attribute.Type))
-                                .Union(Value.Features
+                                .Union(_Value.Features
                                     .SelectMany(feature => feature.Parameters)
                                     .Select(parameter => parameter.Type))
-                                .Union(Value.Features
+                                .Union(_Value.Features
                                     .SelectMany(feature => feature.Results)
                                     .Select(result => result.Type))
-                                 .Union(Value.Views
+                                 .Union(_Value.Views
                                     .SelectMany(view => view.Attributes)
                                     .Select(view => view.Type))
-                                .GetProjects(Root.Company, Root.Name, Units.Area.Value.Name, Value.Name);
+                                .GetProjects(_Root.Company, _Root.Name, Units.Area._Value.Name, _Value.Name);
                         }
                     }
                 }

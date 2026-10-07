@@ -16,18 +16,18 @@ internal sealed class Mirror(IHttpClientFactory factory)
 
     public async IAsyncEnumerable<File> Observe(Model.Graph.Options options, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (!options.Value.Github.IsConfigured)
+        if (!options._Value.Github.IsConfigured)
         {
             yield break;
         }
 
         HttpClient httpClient = factory.CreateClient(nameof(Mirror));
-        ImmutableArray<string> paths = await GetPaths(httpClient, options.Value.Github, cancellationToken)
+        ImmutableArray<string> paths = await GetPaths(httpClient, options._Value.Github, cancellationToken)
             .ConfigureAwait(false);
 
         foreach (string relativePath in paths)
         {
-            string content = await GetFileContent(httpClient, options.Value.Github, relativePath, cancellationToken)
+            string content = await GetFileContent(httpClient, options._Value.Github, relativePath, cancellationToken)
                 .ConfigureAwait(false);
 
             string extension = GetExtension(relativePath);

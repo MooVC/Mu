@@ -16,9 +16,9 @@
 
     [Fluentify]
 #if NET5_0_OR_GREATER
-    [Graphify]
+    [Graphify(PropertyPrefix = "_")]
 #else
-    [Graphify(Mode = Modes.Synchronous)]
+    [Graphify(Mode = Modes.Synchronous, PropertyPrefix = "_")]
 #endif
     [Valuify]
     public sealed partial class Model

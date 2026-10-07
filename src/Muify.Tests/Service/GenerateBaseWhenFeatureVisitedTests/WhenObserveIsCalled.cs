@@ -18,7 +18,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateBaseWhenFeatureVisited();
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
@@ -42,7 +42,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateBaseWhenFeatureVisited();
-        Feature unregister = TestData.Single.Unregister.Value.WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
+        Feature unregister = TestData.Single.Unregister._Value.WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 2, TestData.Single.Model, unregister);
 
         // Act
@@ -66,7 +66,7 @@ public sealed class WhenObserveIsCalled
             """;
 
         var visitor = new GenerateBaseWhenFeatureVisited();
-        Feature findCarsBy = TestData.Single.FindCarsBy.Value.WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
+        Feature findCarsBy = TestData.Single.FindCarsBy._Value.WithMetadata(metadata => metadata.IsPartial(true).HasBase(false));
         Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 0, TestData.Single.Model, findCarsBy);
 
         // Act
@@ -84,7 +84,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateBaseWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
             .HasBase(true));
 
@@ -103,7 +103,7 @@ public sealed class WhenObserveIsCalled
         // Arrange
         var visitor = new GenerateBaseWhenFeatureVisited();
 
-        Feature register = TestData.Single.Register.Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(false)
             .HasBase(false));
 

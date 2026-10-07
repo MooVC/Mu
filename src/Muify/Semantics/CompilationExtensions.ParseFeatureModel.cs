@@ -54,6 +54,7 @@ namespace Muify.Semantics
                     .HasServiceContract(contract is object)
                     .IsPartial(request.IsPartial())
                     .WithHandler(request.GetImplementation("IHandler`2", "Mu.Communications.Mediation"))
+                    .WithRoot(request.GetRoot(aggregate))
                     .WithService(request.GetImplementation("IService`2", "Mu.Modelling.Services"))
                     .WithTargetIdentity(@base.GetTargetIdentity()));
 

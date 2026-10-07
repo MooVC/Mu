@@ -8,13 +8,13 @@ namespace Muify.Modelling
     {
         public static Symbol GetResultSymbol(this Feature feature)
         {
-            if (feature.Value.Results.Length > 0 || !feature.Value.Type.IsMutational)
+            if (feature._Value.Results.Length > 0 || !feature._Value.Type.IsMutational)
             {
-                return (Name: $"{feature.Value.Name}.Result", Qualifier: feature.Namespace);
+                return (Name: $"{feature._Value.Name}.Result", Qualifier: feature.Namespace);
             }
 
-            return feature.Value.Mutational.Type.IsCreational
-                ? feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace)
+            return feature._Value.Mutational.Type.IsCreational
+                ? feature.Features.Unit._Value.Identity.GetSymbol(feature.Features.Unit.Namespace)
                 : (Symbol)(Name: "Revision", Qualifier: "Mu.Modelling.State");
         }
     }

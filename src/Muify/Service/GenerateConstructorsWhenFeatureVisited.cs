@@ -16,12 +16,12 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (!feature.Value.Metadata.IsPartial || feature.Value.Metadata.HasConstructors || feature.Value.Metadata.IsOutOfScope)
+            if (!feature._Value.Metadata.IsPartial || feature._Value.Metadata.HasConstructors || feature._Value.Metadata.IsOutOfScope)
             {
                 yield break;
             }
 
-            Parameter[] payload = feature.Value.Parameters
+            Parameter[] payload = feature._Value.Parameters
                 .OrderBy(parameter => parameter.Name)
                 .Select(parameter => Parameter.Undefined.Named(parameter.Name).OfType(parameter.Type))
                 .ToArray();
@@ -32,13 +32,13 @@ namespace Muify.Service
                 (Name: "Proposed", Type: typeof(DateTimeOffset)),
             };
 
-            bool isTransitional = feature.Value.Type.IsMutational && feature.Value.Mutational.Type.IsTransitional;
+            bool isTransitional = feature._Value.Type.IsMutational && feature._Value.Mutational.Type.IsTransitional;
 
             if (isTransitional)
             {
-                Symbol identity = feature.Value.Metadata.TargetIdentity.IsUndefined
-                    ? feature.Features.Unit.Value.Identity.GetSymbol(feature.Features.Unit.Namespace)
-                    : feature.Value.Metadata.TargetIdentity;
+                Symbol identity = feature._Value.Metadata.TargetIdentity.IsUndefined
+                    ? feature.Features.Unit._Value.Identity.GetSymbol(feature.Features.Unit.Namespace)
+                    : feature._Value.Metadata.TargetIdentity;
 
                 Symbol target = Symbol.Undefined
                     .Named((Name: "Reference", Qualifier: "Mu.Modelling.State"))
@@ -63,7 +63,7 @@ namespace Muify.Service
             var content = Builder
                 .New<Definition>()
                 .For<Record>(record => record
-                    .Named(feature.Value.Name)
+                    .Named(feature._Value.Name)
                     .WithConstructors(constructor => constructor
                         .WithArguments(isTransitional ? "target: default" : string.Empty)
                         .WithScope(Scopes.Public))
@@ -91,7 +91,7 @@ namespace Muify.Service
                 source = declaration.ReplaceNode(constructor, constructor.WithInitializer(null)).ToFullString();
             }
 
-            yield return new File(source, $"{feature.Value.Name}.ctor");
+            yield return new File(source, $"{feature._Value.Name}.ctor");
         }
     }
 }
