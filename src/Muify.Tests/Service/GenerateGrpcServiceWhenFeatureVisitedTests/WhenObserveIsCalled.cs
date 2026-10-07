@@ -12,7 +12,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAFeatureWhenHasGrpcServiceIsFalseThenServiceIsGenerated(bool hasServiceContract)
     {
         // Arrange
-        const string expectedHint = "RegisterService.Grpc.Service";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Service";
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 

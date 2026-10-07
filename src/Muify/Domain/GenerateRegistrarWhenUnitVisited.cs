@@ -27,7 +27,7 @@ namespace Muify.Domain
                 .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{unit._Value.Name}.Registrar");
+            yield return new File(content, $"{unit.Namespace}.{unit._Value.Name}.Registrar");
         }
 
         private static Snippet ApplyRegistrars(Model.Graph.Areas.Area.Units.Unit unit)

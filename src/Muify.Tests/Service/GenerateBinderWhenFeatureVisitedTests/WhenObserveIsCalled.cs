@@ -10,7 +10,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAPartialRequestWhenHasBinderIsFalseThenBinderDefinitionIsGenerated()
     {
         // Arrange
-        const string expectedHint = "Register.Binder";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Register.Register.Binder";
         string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 

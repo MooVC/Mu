@@ -36,7 +36,7 @@
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Self.IEquatable");
+            yield return new File(content, $"{@namespace}.{component.Name}.Self.IEquatable");
         }
     }
 }

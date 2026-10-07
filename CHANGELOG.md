@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Include the namespace in generated source hint names to avoid collisions between types with the same name in different namespaces.
 - Add `MediationOptions` and `RegisterMediator` container extensions accepting options or configuration and registering a scoped in-memory mediator by default.
 - Add `RegisterAuditor` container extensions accepting audit options or configuration and registering a singleton in-memory auditor by default.
 - Add `InMemoryAuditor` with thread-safe message capture, outcome and failure recording, and immutable audit entry snapshots for development and testing.

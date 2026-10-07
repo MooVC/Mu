@@ -35,7 +35,7 @@ namespace Muify.Service
                 .From(feature.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, feature._Value.Name);
+            yield return new File(content, $"{feature.Namespace}.{feature._Value.Name}");
         }
     }
 }

@@ -7,6 +7,34 @@ using Muify;
 public sealed class WhenObserveIsCalled
 {
     [Test]
+    public async Task GivenMutationalFeaturesInDifferentNamespacesThenTheirTransformsHaveDistinctHints()
+    {
+        // Arrange
+        string[] expectedHints =
+        [
+            "MooVC.Testing.Mechanics.Car.Register.Transform",
+            "MooVC.Testing.Mechanics.Car.Unregister.Transform",
+        ];
+
+        var visitor = new GenerateTransformWhenFeatureVisited();
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata.HasFact(false));
+        Feature unregister = TestData.Single.Unregister._Value.WithMetadata(metadata => metadata.HasFact(false));
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature registerFeature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature unregisterFeature = new(TestData.Single.Features, 2, TestData.Single.Model, unregister);
+
+        // Act
+        string[] hints = visitor
+            .Observe(registerFeature)
+            .Concat(visitor.Observe(unregisterFeature))
+            .Select(file => file.Hint)
+            .ToArray();
+
+        // Assert
+        _ = await Assert.That(hints).IsEquivalentTo(expectedHints);
+        _ = await Assert.That(hints.Distinct().Count()).IsEqualTo(hints.Length);
+    }
+
+    [Test]
     public async Task GivenAMutationalFeatureWhenQualificationsAreEmptyThenTransformDefinitionIsGenerated()
     {
         // Arrange
@@ -42,7 +70,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo("Transform");
+        _ = await Assert.That(definition.Hint).IsEqualTo("MooVC.Testing.Mechanics.Car.Register.Transform");
     }
 
     [Test]

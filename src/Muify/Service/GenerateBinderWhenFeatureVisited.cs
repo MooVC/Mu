@@ -25,7 +25,7 @@ namespace Muify.Service
                 .From(feature.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature._Value.Name}.Binder");
+            yield return new File(content, $"{feature.Namespace}.{feature._Value.Name}.Binder");
         }
 
         private static Snippet ApplyBindings(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)

@@ -26,7 +26,7 @@ namespace Muify.Domain
                 .From(unit.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{unit._Value.Name}.Binder");
+            yield return new File(content, $"{unit.Namespace}.{unit._Value.Name}.Binder");
         }
 
         private static Snippet ApplyBindings(Model.Graph.Areas.Area.Units.Unit unit)

@@ -71,7 +71,7 @@
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{feature._Value.Name}Service");
+            yield return new File(content, $"{feature.Namespace}.{feature._Value.Name}Service");
         }
     }
 }

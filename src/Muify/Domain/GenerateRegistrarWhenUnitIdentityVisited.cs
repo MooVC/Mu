@@ -37,7 +37,7 @@
                 .Referencing((Alias: string.Empty, Qualifier: "SimpleInjector"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, "Allocator.Registrar");
+            yield return new File(content, $"{identity.Unit.Namespace}.Allocator.Registrar");
         }
     }
 }

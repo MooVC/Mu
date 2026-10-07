@@ -42,7 +42,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint.ToString()).IsEqualTo("Register.ctor");
+        _ = await Assert.That(definition.Hint.ToString()).IsEqualTo("MooVC.Testing.Mechanics.Car.Register.Register.ctor");
     }
 
     [Test]
@@ -82,7 +82,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint.ToString()).IsEqualTo("Unregister.ctor");
+        _ = await Assert.That(definition.Hint.ToString()).IsEqualTo("MooVC.Testing.Mechanics.Car.Unregister.Unregister.ctor");
     }
 
     [Test]
@@ -121,7 +121,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint.ToString()).IsEqualTo("FindCarsBy.ctor");
+        _ = await Assert.That(definition.Hint.ToString()).IsEqualTo("MooVC.Testing.Mechanics.Car.FindCarsBy.FindCarsBy.ctor");
     }
 
     [Test]

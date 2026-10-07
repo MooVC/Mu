@@ -12,7 +12,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAFeatureWhenHasServiceIsFalseThenServiceIsGenerated(bool hasServiceContract)
     {
         // Arrange
-        const string expectedHint = "RegisterService";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Register.RegisterService";
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 

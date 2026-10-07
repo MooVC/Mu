@@ -23,7 +23,7 @@
                 .From(unit.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, unit._Value.Name);
+            yield return new File(content, $"{unit.Namespace}.{unit._Value.Name}");
         }
     }
 }

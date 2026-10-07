@@ -49,7 +49,7 @@
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Identifier.IComparable.CompareTo");
+            yield return new File(content, $"{@namespace}.{component.Name}.Identifier.IComparable.CompareTo");
         }
     }
 }

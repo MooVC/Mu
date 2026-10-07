@@ -44,7 +44,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo("Wheel.Binder");
+        _ = await Assert.That(definition.Hint).IsEqualTo("MooVC.Testing.Mechanics.Car.Wheel.Binder");
     }
 
     [Test]
@@ -85,7 +85,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo("Pressure.Binder");
+        _ = await Assert.That(definition.Hint).IsEqualTo("MooVC.Testing.Mechanics.Car.Pressure.Binder");
     }
 
     [Test]

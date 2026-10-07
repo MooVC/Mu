@@ -10,7 +10,7 @@ public sealed partial class WhenObserveIsCalled
     public async Task GivenAFeatureWhenHasGrpcClientIsFalseThenClientIsGenerated()
     {
         // Arrange
-        const string expectedHint = "RegisterService.Grpc.Client";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Client";
         const string expected = """
             namespace MooVC.Testing.Mechanics.Car.Register;
 

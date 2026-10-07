@@ -39,7 +39,7 @@
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Self.Comparison.NotEquals");
+            yield return new File(content, $"{@namespace}.{component.Name}.Self.Comparison.NotEquals");
         }
     }
 }

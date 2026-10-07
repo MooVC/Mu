@@ -45,7 +45,7 @@ namespace Muify.Domain
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Self.IComparable.CompareTo");
+            yield return new File(content, $"{@namespace}.{component.Name}.Self.IComparable.CompareTo");
         }
     }
 }

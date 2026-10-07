@@ -79,7 +79,7 @@ namespace Muify.Service
                 .ImportReferences(feature.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, fact);
+            yield return new File(content, $"{feature.Namespace}.{fact}");
         }
     }
 }

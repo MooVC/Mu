@@ -55,7 +55,7 @@ namespace Muify.Service
                 .Referencing(feature.Features.Unit.Namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, "Transform");
+            yield return new File(content, $"{feature.Namespace}.Transform");
         }
 
         private static bool IsMatch(Attribute attribute, Parameter parameter)

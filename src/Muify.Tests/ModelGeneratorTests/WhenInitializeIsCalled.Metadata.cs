@@ -44,13 +44,13 @@ public sealed partial class WhenInitializeIsCalled
         // Assert
         _ = await Assert.That(result.Diagnostics).IsEmpty();
         string[] hints = result.GeneratedSources.Select(definition => definition.HintName).ToArray();
-        _ = await Assert.That(hints).Contains("Wheel.Binder.g.cs");
-        _ = await Assert.That(hints).Contains("Details.Binder.g.cs");
-        _ = await Assert.That(hints).Contains("Wheel.Equals.g.cs");
-        _ = await Assert.That(hints).Contains("Wheel.GetHashCode.g.cs");
-        _ = await Assert.That(hints).Contains("Wheel.Identifier.IEquatable.Equals.g.cs");
-        _ = await Assert.That(hints).Contains("Wheel.Self.IEquatable.Equals.g.cs");
-        _ = await Assert.That(hints).Contains("Wheel.Self.IComparable.CompareTo.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Wheel.Binder.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Details.Binder.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Wheel.Equals.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Wheel.GetHashCode.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Wheel.Identifier.IEquatable.Equals.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Wheel.Self.IEquatable.Equals.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Wheel.Self.IComparable.CompareTo.g.cs");
         _ = await Assert.That(generated.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)).IsEmpty();
 
         GeneratorRunResult repeated = CSharpGeneratorDriver.Create(new ModelGenerator()).RunGenerators(generated).GetRunResult().Results.Single();
@@ -93,11 +93,11 @@ public sealed partial class WhenInitializeIsCalled
         // Assert
         _ = await Assert.That(result.Diagnostics).IsEmpty();
         string[] hints = result.GeneratedSources.Select(definition => definition.HintName).ToArray();
-        _ = await Assert.That(hints).Contains("SearchService.g.cs");
-        _ = await Assert.That(hints).Contains("ISearchService.g.cs");
-        _ = await Assert.That(hints).Contains("SearchService.Grpc.Client.g.cs");
-        _ = await Assert.That(hints).Contains("SearchService.Grpc.Service.g.cs");
-        _ = await Assert.That(hints).Contains("ISearchService.Grpc.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.SearchService.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.ISearchService.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.SearchService.Grpc.Client.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.SearchService.Grpc.Service.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.ISearchService.Grpc.g.cs");
         _ = await Assert.That(generated.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)).IsEmpty();
 
         GeneratorRunResult repeated = CSharpGeneratorDriver.Create(new ModelGenerator()).RunGenerators(generated).GetRunResult().Results.Single();

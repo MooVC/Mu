@@ -37,17 +37,17 @@ public sealed partial class WhenInitializeIsCalled
         // Arrange
         const string domainAssemblyName = "MooVC.Testing.Modelling.Account";
         const string featureAssemblyName = "MooVC.Testing.Modelling.Account.Open";
-        const string expectedBaseHint = "Open.g.cs";
+        const string expectedBaseHint = "MooVC.Testing.Modelling.Account.Open.Open.g.cs";
         const string expectedBase = """
             namespace MooVC.Testing.Modelling.Account.Open;
 
             public sealed partial record Open
                 : global::Mu.Modelling.Behavior.Creational<global::MooVC.Testing.Modelling.Account.Account>;
             """;
-        const string expectedHint = "Opened.g.cs";
+        const string expectedHint = "MooVC.Testing.Modelling.Account.Open.Opened.g.cs";
         const string expectedNamespace = "namespace MooVC.Testing.Modelling.Account.Open;";
         const string expectedPayload = "global::MooVC.Testing.Modelling.Account.Owner Owner";
-        const string expectedTransformHint = "Transform.g.cs";
+        const string expectedTransformHint = "MooVC.Testing.Modelling.Account.Open.Transform.g.cs";
         const string expectedTransform = """
             namespace MooVC.Testing.Modelling.Account.Open;
 
@@ -162,7 +162,7 @@ public sealed partial class WhenInitializeIsCalled
     public async Task GivenAPartialAllocatorWithoutARegistrarThenAllocatorRegistrarIsGenerated()
     {
         // Arrange
-        const string expectedHint = "Allocator.Registrar.g.cs";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Allocator.Registrar.g.cs";
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
@@ -190,7 +190,7 @@ public sealed partial class WhenInitializeIsCalled
     public async Task GivenAPartialUnitWithoutABinderThenBinderIsGenerated()
     {
         // Arrange
-        const string expectedHint = "Car.Binder.g.cs";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Car.Binder.g.cs";
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
@@ -214,7 +214,7 @@ public sealed partial class WhenInitializeIsCalled
     {
         // Arrange
         const string featureAssemblyName = "MooVC.Testing.Mechanics.Car.Register";
-        const string expectedFeatureHint = "Register.Binder.g.cs";
+        const string expectedFeatureHint = "MooVC.Testing.Mechanics.Car.Register.Register.Binder.g.cs";
         const string expectedReferenceHint = "MooVC.Testing.Mechanics.Car.Register.Details.Binder.g.cs";
         const string expectedNestedReferenceHint = "MooVC.Testing.Mechanics.Car.Register.Extras.Details.Binder.g.cs";
         const string source = """

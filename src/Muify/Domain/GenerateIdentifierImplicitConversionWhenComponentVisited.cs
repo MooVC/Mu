@@ -49,7 +49,7 @@
                 .Referencing((Alias: string.Empty, Qualifier: "Ardalis.GuardClauses"))
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Identifier.Conversion.Implicit");
+            yield return new File(content, $"{@namespace}.{component.Name}.Identifier.Conversion.Implicit");
         }
     }
 }

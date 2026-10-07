@@ -42,7 +42,7 @@
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Identifier.Comparison.GreaterThanOrEqual");
+            yield return new File(content, $"{@namespace}.{component.Name}.Identifier.Comparison.GreaterThanOrEqual");
         }
     }
 }

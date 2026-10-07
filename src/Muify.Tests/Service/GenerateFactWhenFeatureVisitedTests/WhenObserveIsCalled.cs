@@ -61,7 +61,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(register.Mutational.Fact);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{feature.Namespace}.{register.Mutational.Fact}");
     }
 
     [Test]
@@ -112,7 +112,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(register.Mutational.Fact);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{feature.Namespace}.{register.Mutational.Fact}");
     }
 
     [Test]

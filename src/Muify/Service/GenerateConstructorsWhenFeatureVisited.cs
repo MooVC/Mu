@@ -91,7 +91,7 @@ namespace Muify.Service
                 source = declaration.ReplaceNode(constructor, constructor.WithInitializer(null)).ToFullString();
             }
 
-            yield return new File(source, $"{feature._Value.Name}.ctor");
+            yield return new File(source, $"{feature.Namespace}.{feature._Value.Name}.ctor");
         }
     }
 }

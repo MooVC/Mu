@@ -27,7 +27,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(register.Name);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{feature.Namespace}.{register.Name}");
     }
 
     [Test]
@@ -51,7 +51,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(unregister.Name);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{feature.Namespace}.{unregister.Name}");
     }
 
     [Test]
@@ -75,7 +75,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(findCarsBy.Name);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{feature.Namespace}.{findCarsBy.Name}");
     }
 
     [Test]

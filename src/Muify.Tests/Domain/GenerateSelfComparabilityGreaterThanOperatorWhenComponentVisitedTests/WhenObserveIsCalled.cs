@@ -42,7 +42,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo($"{wheel.Name}.Self.Comparison.GreaterThan");
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{component.Namespace}.{wheel.Name}.Self.Comparison.GreaterThan");
     }
 
     [Test]

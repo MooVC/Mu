@@ -13,7 +13,7 @@ public sealed class WhenGetServiceIsCalled
     public async Task GivenAnAreaComponentThenItsBinderIsGenerated()
     {
         // Arrange
-        const string expectedHint = "Wheel.Binder";
+        const string expectedHint = "MooVC.Testing.Mechanics.Wheel.Binder";
         var provider = new ModelGenerator.ServiceProvider();
         Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata.HasBinder(false));
         var components = new AreaComponents(TestData.Single.Mechanics, TestData.Single.Model, [wheel]);
@@ -34,17 +34,17 @@ public sealed class WhenGetServiceIsCalled
         // Arrange
         string[] expectedHints =
         [
-            "IRegisterService",
-            "IRegisterService.Grpc",
-            "Register",
-            "Register.Binder",
-            "Register.ctor",
-            "Register.Registrar",
-            "Registered",
-            "RegisterService",
-            "RegisterService.Grpc.Client",
-            "RegisterService.Grpc.Service",
-            "Transform",
+            "MooVC.Testing.Mechanics.Car.Register.IRegisterService",
+            "MooVC.Testing.Mechanics.Car.Register.IRegisterService.Grpc",
+            "MooVC.Testing.Mechanics.Car.Register.Register",
+            "MooVC.Testing.Mechanics.Car.Register.Register.Binder",
+            "MooVC.Testing.Mechanics.Car.Register.Register.ctor",
+            "MooVC.Testing.Mechanics.Car.Register.Register.Registrar",
+            "MooVC.Testing.Mechanics.Car.Register.Registered",
+            "MooVC.Testing.Mechanics.Car.Register.RegisterService",
+            "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Client",
+            "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Service",
+            "MooVC.Testing.Mechanics.Car.Register.Transform",
         ];
 
         var provider = new ModelGenerator.ServiceProvider();
@@ -77,7 +77,7 @@ public sealed class WhenGetServiceIsCalled
     public async Task GivenAUnitComponentThenItsBinderIsGenerated()
     {
         // Arrange
-        const string expectedHint = "Wheel.Binder";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Wheel.Binder";
         var provider = new ModelGenerator.ServiceProvider();
         Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata.HasBinder(false));
         var component = new UnitComponent(TestData.Single.Components, 1, TestData.Single.Model, wheel);
@@ -89,5 +89,35 @@ public sealed class WhenGetServiceIsCalled
         // Assert
         File binder = await Assert.That(files).HasSingleItem();
         _ = await Assert.That(binder.Hint).IsEqualTo(expectedHint);
+    }
+
+    [Test]
+    public async Task GivenComponentsWithTheSameNameInDifferentNamespacesThenTheirBindersHaveDistinctHints()
+    {
+        // Arrange
+        string[] expectedHints =
+        [
+            "MooVC.Testing.Mechanics.Wheel.Binder",
+            "MooVC.Testing.Mechanics.Car.Wheel.Binder",
+        ];
+
+        var provider = new ModelGenerator.ServiceProvider();
+        Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata.HasBinder(false));
+        var components = new AreaComponents(TestData.Single.Mechanics, TestData.Single.Model, [wheel]);
+        var areaComponent = new AreaComponent(components, 0, TestData.Single.Model, wheel);
+        var unitComponent = new UnitComponent(TestData.Single.Components, 1, TestData.Single.Model, wheel);
+        var areaVisitors = (IEnumerable<IModelVisitor<AreaComponent, File>>)provider.GetService(typeof(IEnumerable<IModelVisitor<AreaComponent, File>>));
+        var unitVisitors = (IEnumerable<IModelVisitor<UnitComponent, File>>)provider.GetService(typeof(IEnumerable<IModelVisitor<UnitComponent, File>>));
+
+        // Act
+        string[] hints = areaVisitors
+            .SelectMany(visitor => visitor.Observe(areaComponent))
+            .Concat(unitVisitors.SelectMany(visitor => visitor.Observe(unitComponent)))
+            .Select(file => file.Hint)
+            .ToArray();
+
+        // Assert
+        _ = await Assert.That(hints).IsEquivalentTo(expectedHints);
+        _ = await Assert.That(hints.Distinct().Count()).IsEqualTo(hints.Length);
     }
 }

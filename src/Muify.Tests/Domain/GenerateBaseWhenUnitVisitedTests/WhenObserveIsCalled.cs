@@ -27,7 +27,7 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
-        _ = await Assert.That(definition.Hint).IsEqualTo(car.Name);
+        _ = await Assert.That(definition.Hint).IsEqualTo($"{unit.Namespace}.{car.Name}");
     }
 
     [Test]

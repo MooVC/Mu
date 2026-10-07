@@ -1,6 +1,5 @@
 ﻿namespace Mu.Communications.PubSub;
 
-using Microsoft.Extensions.DependencyInjection;
 using Mu.Communications.Messaging;
 
 public interface IPolicyDirectory

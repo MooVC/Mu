@@ -20,8 +20,8 @@ public sealed partial class WhenInitializeIsCalled
     {
         // Arrange
         const string featureAssemblyName = "MooVC.Testing.Mechanics.Car.Register";
-        const string expectedHint = "Register.ctor.g.cs";
-        const string expectedBaseHint = "Register.g.cs";
+        const string expectedHint = "MooVC.Testing.Mechanics.Car.Register.Register.ctor.g.cs";
+        const string expectedBaseHint = "MooVC.Testing.Mechanics.Car.Register.Register.g.cs";
         const string identityText = "1bb066c1-b4fc-417e-a1cf-f5ae50ecf30e";
         const string proposedText = "2026-09-12T12:34:56+00:00";
         const string targetText = "66b7d3bd-8c39-4df0-bd52-1e9a10c53579";

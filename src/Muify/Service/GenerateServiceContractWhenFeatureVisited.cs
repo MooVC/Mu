@@ -41,7 +41,7 @@
                 .ToSnippet(Configuration.Options.WithTypes(types => types
                     .WithMethods(methods => methods.WithQualifications(types.Qualifications))));
 
-            yield return new File(content, $"I{feature._Value.Name}Service");
+            yield return new File(content, $"{feature.Namespace}.I{feature._Value.Name}Service");
         }
     }
 }

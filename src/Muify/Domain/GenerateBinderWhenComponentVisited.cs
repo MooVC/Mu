@@ -43,7 +43,7 @@ namespace Muify.Domain
                 .From(@namespace)
                 .ToSnippet(Configuration.Options);
 
-            yield return new File(content, $"{component.Name}.Binder");
+            yield return new File(content, $"{@namespace}.{component.Name}.Binder");
         }
 
         private static Snippet ApplyBindings(Component component)
