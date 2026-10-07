@@ -22,7 +22,7 @@ Mu must embrace automation wherever possible, enabling engineers to concentrate 
 
 ## Application composition
 
-`AddMu()` registers the shared application services in Simple Injector: the container itself as `IServiceProvider`, a scoped `IMediator` implemented by `InMemoryMediator`, and singleton `IScribe` and `IScopeManager` implementations. It also configures logging so the mediator can resolve its logger. `IHostApplicationBuilder.AddMu()` and `WebApplicationBuilder.BuildMu()` use the same registrations.
+`IServiceCollection.AddMu()` registers the shared application services in Simple Injector: the container itself as `IServiceProvider` and singleton `IScribe` and `IScopeManager` implementations. It also configures logging and the asynchronous scoped lifestyle. `WebApplicationBuilder.BuildMu()` uses these shared registrations. `IHostApplicationBuilder.AddMu()` also reads `AuditOptions` and `MediationOptions` from host configuration to register the auditor and mediator.
 
 Applications configure their domain handlers, identity allocation, persistence, and gRPC endpoints. Generated unit registrars apply the aggregate and component binders to `RuntimeTypeModel.Default`; generated feature registrars apply the request and local payload binders. Each model must be bound exactly once during application startup. Models with custom binders are supported alongside generated binders.
 
@@ -31,6 +31,16 @@ For mutational features, generated feature registrars register scoped collection
 Generated feature registrars also register a scoped `IRoot<TAggregate, TMutation>` for mutational features. A matching concrete root in the feature namespace or its children is used when available; otherwise, `Root<TAggregate, TFact, TMutation>` is registered with the feature's invariant and transform collections.
 
 Custom Simple Injector configuration remains available through the options callback; set `container.Options.AllowOverridingRegistrations` to `true` before replacing a default registration.
+
+## In-memory mediation
+
+Import `Mu.Communications.Mediation.Composition` and call `container.RegisterMediator()` to register `InMemoryMediator` as a scoped implementation of `IMediator`. You can supply `MediationOptions` directly or pass an `IConfiguration` that contains a `MediationOptions` section. Missing options use `MediationOptions.Default`, whose `Type` is `MediatorType.InMemory`. Configure an asynchronous scoped lifestyle, a logger, and an `IServiceProvider` when using the extension with a standalone container. Mediator instances are shared within a scope and differ between scopes.
+
+## In-memory auditing
+
+For development and testing, import `Mu.Auditing.Composition` and call `container.RegisterAuditor()` to register `InMemoryAuditor` as a singleton implementation of `IAuditor`. You can supply `AuditOptions` directly or pass an `IConfiguration` that contains an `AuditOptions` section. Missing options use `AuditOptions.Default`, whose `Type` is `AuditorType.InMemory`.
+
+`Capture` returns a unique audit identity for each message; `Complete` stores its typed outcome and `Fail` stores the exception. Its `Entries` property returns an immutable snapshot containing each identity, captured message, outcome, and failure cause. Pending entries have no outcome or cause. Unknown identities and repeated completion or failure are rejected, and canceled operations leave entries unchanged. Entries remain in memory for the lifetime of the auditor instance.
 
 # Key Changes
 

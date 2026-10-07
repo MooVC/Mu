@@ -3,9 +3,11 @@ namespace Mu.Composition;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.DependencyInjection;
 using Mu.Auditing;
+using Mu.Auditing.Composition;
 using Mu.Communications.Ipc.Grpc;
 using Mu.Communications.Mediation;
 using Mu.Communications.Tracing;
+using Mu.Communications.Tracing.Composition;
 using Mu.Serialization;
 using ProtoBuf.Grpc.Server;
 using ProtoBuf.Meta;
@@ -47,10 +49,10 @@ public static class IServiceCollectionExtensions
             container = new Container();
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
-            container.RegisterInstance<IServiceProvider>(container);
-            container.Register<IMediator, InMemoryMediator>(Lifestyle.Scoped);
-            container.RegisterSingleton<IScopeManager, ScopeManager>();
-            container.RegisterSingleton<IScribe, Scribe>();
+            container
+                .RegisterScopeManager()
+                .RegisterScribe()
+                .RegisterInstance<IServiceProvider>(container);
 
             _ = services
                 .AddLogging()

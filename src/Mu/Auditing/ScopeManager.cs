@@ -2,7 +2,7 @@
 
 using System;
 
-public sealed class ScopeManager
+public sealed partial class ScopeManager
     : IScopeManager
 {
     private static readonly AsyncLocal<State?> _current = new();
@@ -29,35 +29,6 @@ public sealed class ScopeManager
 
         _current.Value = current;
 
-        return new ScopeLease(current);
-    }
-
-    private sealed record State(State? Previous, Scope Scope);
-
-    private sealed class ScopeLease
-        : IDisposable
-    {
-        private readonly State _state;
-        private bool _disposed;
-
-        public ScopeLease(State state)
-        {
-            _state = state;
-        }
-
-        public void Dispose()
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (ReferenceEquals(_current.Value, _state))
-            {
-                _current.Value = _state.Previous;
-            }
-
-            _disposed = true;
-        }
+        return new Lease(current);
     }
 }

@@ -9,10 +9,48 @@
     <PackageReference Include="SimpleInjector.Integration.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Auditing\Composition\ContainerExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainerExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Auditing\Composition\ContainerExtensions.Resources.resx">
+      <LogicalName>Mu.Auditing.Composition.ContainerExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Auditing\InMemoryAuditor.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InMemoryAuditor.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Auditing\InMemoryAuditor.Resources.resx">
+      <LogicalName>Mu.Auditing.InMemoryAuditor.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InMemoryAuditor.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Communications\Mediation\Composition\ContainerExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainerExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Mediation\Composition\ContainerExtensions.Resources.resx">
+      <LogicalName>Mu.Communications.Mediation.Composition.ContainerExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Compile Update="Communications\Tracing\Scribe.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Scribe.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Persistence\Composition\ContainerExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainerExtensions.Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +188,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>InMemoryStream.Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Persistence\Composition\ContainerExtensions.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Persistence\InMemoryStream.Resources.resx">
       <LogicalName>Mu.Persistence.InMemoryStream.Resources.resources</LogicalName>
       <WithCulture>false</WithCulture>

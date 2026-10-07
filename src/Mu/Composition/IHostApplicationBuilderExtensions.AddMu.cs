@@ -2,6 +2,8 @@ namespace Mu.Composition;
 
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Hosting;
+using Mu.Auditing.Composition;
+using Mu.Communications.Mediation.Composition;
 using SimpleInjector;
 using static Mu.Composition.IHostApplicationBuilderExtensions_Resources;
 
@@ -23,7 +25,9 @@ public static partial class IHostApplicationBuilderExtensions
 
             _ = root.Services.AddMu(out Container container);
 
-            return container;
+            return container
+                .RegisterAuditor(root.Configuration)
+                .RegisterMediator(root.Configuration);
         }
     }
 }

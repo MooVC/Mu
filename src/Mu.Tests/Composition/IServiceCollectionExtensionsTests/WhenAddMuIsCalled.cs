@@ -3,6 +3,7 @@ namespace Mu.Composition.IServiceCollectionExtensionsTests;
 using Microsoft.Extensions.DependencyInjection;
 using Mu.Auditing;
 using Mu.Communications.Mediation;
+using Mu.Communications.Mediation.Composition;
 using Mu.Communications.Messaging;
 using Mu.Communications.Tracing;
 using Mu.Testing;
@@ -19,7 +20,9 @@ public sealed class WhenAddMuIsCalled
     {
         // Arrange
         var services = new ServiceCollection();
-        _ = services.AddMu(out Container container, options: configureOptions ? _ => { } : default);
+        _ = services.AddMu(out Container container, options: configureOptions ? _ => { }
+        : default);
+        _ = container.RegisterMediator();
         IHandler<TestQuery, string> handler = Substitute.For<IHandler<TestQuery, string>>();
         container.Register<IHandler<TestQuery, string>>(() => handler, Lifestyle.Scoped);
 
@@ -78,6 +81,7 @@ public sealed class WhenAddMuIsCalled
         _ = services.AddMu(out Container container, options =>
         {
             configured = options.Container;
+            _ = configured.RegisterMediator();
             configured.Options.AllowOverridingRegistrations = true;
             configured.RegisterInstance(expected);
         });
@@ -97,6 +101,7 @@ public sealed class WhenAddMuIsCalled
         // Arrange
         var services = new ServiceCollection();
         _ = services.AddMu(out Container container);
+        _ = container.RegisterMediator();
         using ServiceProvider provider = services.BuildServiceProvider();
         _ = provider.UseSimpleInjector(container);
 

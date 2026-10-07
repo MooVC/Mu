@@ -1,7 +1,12 @@
 ﻿namespace Mu.Auditing.Configuration;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+public sealed record AuditOptions
+{
+    public static readonly AuditOptions Default = new();
 
-public sealed record AuditOptions(AuditOperationScope Mutational = AuditOperationScope.All, AuditOperationScope NonMutational = AuditOperationScope.External);
+    public AuditOperationScope Mutational { get; init; } = AuditOperationScope.All;
+
+    public AuditOperationScope NonMutational { get; init; } = AuditOperationScope.External;
+
+    public AuditorType Type { get; init; } = AuditorType.InMemory;
+}

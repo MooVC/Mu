@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CaptureMessageRequired" xml:space="preserve">
+    <value>The message to audit must be provided.</value>
+  </data>
+  <data name="CompleteOutcomeRequired" xml:space="preserve">
+    <value>The audit outcome must be provided.</value>
+  </data>
+  <data name="FailCauseRequired" xml:space="preserve">
+    <value>The cause of the audit failure must be provided.</value>
+  </data>
+  <data name="UpdateIdentityCapturedRequired" xml:space="preserve">
+    <value>No message has been captured for audit identity `{0}`.</value>
+  </data>
+  <data name="UpdateIdentityPendingRequired" xml:space="preserve">
+    <value>The audit for identity `{0}` has already completed or failed.</value>
+  </data>
+  <data name="UpdateIdentityRequired" xml:space="preserve">
+    <value>The audit identity must be provided.</value>
+  </data>
+</root>
