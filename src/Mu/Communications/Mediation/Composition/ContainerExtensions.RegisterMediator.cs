@@ -43,7 +43,7 @@ public static partial class ContainerExtensions
 
         private Container RegisterInMemoryMediator()
         {
-            container.Register<IMediator, InMemoryMediator>(Lifestyle.Scoped);
+            container.RegisterConditional<IMediator, InMemoryMediator>(Lifestyle.Scoped, context => !context.Handled);
 
             return container;
         }

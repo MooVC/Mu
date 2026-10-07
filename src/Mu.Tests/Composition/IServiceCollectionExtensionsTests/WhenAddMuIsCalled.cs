@@ -70,7 +70,9 @@ public sealed class WhenAddMuIsCalled
     }
 
     [Test]
-    public async Task GivenCustomOptionsThenApplicationCanOverrideDefaultMediator()
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenConditionalMediatorWhenOptionsAreConfiguredThenMatchingRegistrationIsUsed(bool matches)
     {
         // Arrange
         var services = new ServiceCollection();
@@ -81,18 +83,27 @@ public sealed class WhenAddMuIsCalled
         _ = services.AddMu(out Container container, options =>
         {
             configured = options.Container;
+            Registration registration = Lifestyle.Singleton.CreateRegistration(() => expected, configured);
+            configured.RegisterConditional<IMediator>(registration, _ => matches);
             _ = configured.RegisterMediator();
-            configured.Options.AllowOverridingRegistrations = true;
-            configured.RegisterInstance(expected);
         });
 
         using ServiceProvider provider = services.BuildServiceProvider();
         _ = provider.UseSimpleInjector(container);
+        using DependencyScope scope = AsyncScopedLifestyle.BeginScope(container);
         IMediator result = container.GetInstance<IMediator>();
 
         // Assert
         _ = await Assert.That(configured).IsSameReferenceAs(container);
-        _ = await Assert.That(result).IsSameReferenceAs(expected);
+
+        if (matches)
+        {
+            _ = await Assert.That(result).IsSameReferenceAs(expected);
+        }
+        else
+        {
+            _ = await Assert.That(result).IsTypeOf<InMemoryMediator>();
+        }
     }
 
     [Test]

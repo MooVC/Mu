@@ -11,7 +11,7 @@ public static partial class ContainerExtensions
     {
         public Container RegisterScribe()
         {
-            container.Register<IScribe, Scribe>(Lifestyle.Singleton);
+            container.RegisterConditional<IScribe, Scribe>(Lifestyle.Singleton, context => !context.Handled);
 
             return container;
         }

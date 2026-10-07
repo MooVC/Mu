@@ -32,7 +32,7 @@ For mutational features, generated feature registrars register scoped collection
 
 Generated feature registrars also register a scoped `IRoot<TAggregate, TMutation>` for mutational features. A matching concrete root in the feature namespace or its children is used when available; otherwise, `Root<TAggregate, TFact, TMutation>` is registered with the feature's invariant and transform collections.
 
-Custom Simple Injector configuration remains available through the options callback; set `container.Options.AllowOverridingRegistrations` to `true` before replacing a default registration.
+The default auditor, mediator, scope manager, and scribe registrations are conditional fallbacks. Register custom implementations with `RegisterConditional` before calling the corresponding registration extension so matching custom registrations take precedence. For mediator registration through the `IServiceCollection.AddMu()` options callback, add the custom conditional registration before calling `RegisterMediator()`. Simple Injector does not allow mixing conditional and unconditional registrations for these interfaces, even when `AllowOverridingRegistrations` is enabled.
 
 ## In-memory mediation
 

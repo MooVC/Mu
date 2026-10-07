@@ -43,7 +43,7 @@ public static partial class ContainerExtensions
 
         private Container RegisterInMemoryAuditor()
         {
-            container.Register<IAuditor, InMemoryAuditor>(Lifestyle.Singleton);
+            container.RegisterConditional<IAuditor, InMemoryAuditor>(Lifestyle.Singleton, context => !context.Handled);
 
             return container;
         }

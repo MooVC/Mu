@@ -8,7 +8,7 @@ public static partial class ContainerExtensions
     {
         public Container RegisterScopeManager()
         {
-            container.Register<IScopeManager, ScopeManager>(Lifestyle.Singleton);
+            container.RegisterConditional<IScopeManager, ScopeManager>(Lifestyle.Singleton, context => !context.Handled);
 
             return container;
         }
