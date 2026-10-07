@@ -8,6 +8,7 @@ using Mu.Communications.Messaging;
 using Mu.Communications.Tracing;
 using Mu.Testing;
 using SimpleInjector;
+using SimpleInjector.Integration.ServiceCollection;
 using SimpleInjector.Lifestyles;
 using DependencyScope = SimpleInjector.Scope;
 
@@ -20,8 +21,9 @@ public sealed class WhenAddMuIsCalled
     {
         // Arrange
         var services = new ServiceCollection();
-        _ = services.AddMu(out Container container, options: configureOptions ? _ => { }
-        : default);
+        Action<SimpleInjectorAddOptions>? options = configureOptions ? _ => { }
+        : default;
+        _ = services.AddMu(out Container container, options: options);
         _ = container.RegisterMediator();
         IHandler<TestQuery, string> handler = Substitute.For<IHandler<TestQuery, string>>();
         container.Register<IHandler<TestQuery, string>>(() => handler, Lifestyle.Scoped);
