@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Generate partial feature options records derived from `Mu.Configuration.Options`, preserving existing derivations and requiring partial declarations before extending existing options.
 - Register default auditors, mediators, scope managers, and scribes conditionally so earlier matching conditional registrations take precedence.
 - Include the namespace in generated source hint names to avoid collisions between types with the same name in different namespaces.
 - Add `MediationOptions` and `RegisterMediator` container extensions accepting options or configuration and registering a scoped in-memory mediator by default.

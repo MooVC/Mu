@@ -54,6 +54,7 @@ namespace Muify
             {
                 typeof(GenerateBaseWhenFeatureVisited),
                 typeof(GenerateBinderWhenFeatureVisited),
+                typeof(GenerateConfigurationWhenFeatureVisited),
                 typeof(GenerateConstructorsWhenFeatureVisited),
                 typeof(GenerateFactWhenFeatureVisited),
                 typeof(GenerateGrpcClientWhenFeatureVisited),

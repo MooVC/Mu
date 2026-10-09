@@ -43,6 +43,8 @@
 
             public bool IsPartial { get; set; }
 
+            public Poco Options { get; set; } = Poco.Undefined;
+
             public ImmutableArray<Poco> References { get; set; } = ImmutableArray<Poco>.Empty;
 
             public ImmutableArray<Qualification> Registrars { get; set; } = ImmutableArray<Qualification>.Empty;

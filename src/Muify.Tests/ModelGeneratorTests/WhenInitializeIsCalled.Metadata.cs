@@ -98,6 +98,7 @@ public sealed partial class WhenInitializeIsCalled
         _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.SearchService.Grpc.Client.g.cs");
         _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.SearchService.Grpc.Service.g.cs");
         _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.ISearchService.Grpc.g.cs");
+        _ = await Assert.That(hints).Contains("MooVC.Testing.Mechanics.Car.Search.SearchOptions.g.cs");
         _ = await Assert.That(generated.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)).IsEmpty();
 
         GeneratorRunResult repeated = CSharpGeneratorDriver.Create(new ModelGenerator()).RunGenerators(generated).GetRunResult().Results.Single();

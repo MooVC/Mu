@@ -28,6 +28,10 @@ Applications configure their domain handlers, identity allocation, persistence, 
 
 Generated source hint names include the namespace, for example `MooVC.Testing.Mechanics.Car.Wheel.Binder.g.cs`. This keeps files distinct when types in different namespaces share a name, including each feature's generated `Transform`.
 
+Muify generates a public sealed partial `{Feature.Name}Options` record in the feature namespace, deriving from `Mu.Configuration.Options`. An existing direct or indirect derivation in the feature namespace, its children, or nested types suppresses generation, including derivations with a custom name.
+
+To add configuration properties before generation, declare a partial `{Feature.Name}Options` record without a base record. Muify adds the options base while preserving the declaration's accessibility and modifiers. Non-partial declarations, incompatible type kinds, and records with another base are left unchanged. The feature itself does not need to be partial for its options to be generated.
+
 For mutational features, generated feature registrars register scoped collections of matching `IInvariant<TAggregate, TIntent>` and `ITransform<TAggregate, TFact>` implementations, including implementations in child namespaces and nested types. The generated transform is registered when no custom transform exists, and an empty invariant collection is registered when no invariants exist. Feature registrars also invoke custom `IRegistrar` implementations in the feature namespace and its children, including registrars implemented by invariants and transforms.
 
 Generated feature registrars also register a scoped `IRoot<TAggregate, TMutation>` for mutational features. A matching concrete root in the feature namespace or its children is used when available; otherwise, `Root<TAggregate, TFact, TMutation>` is registered with the feature's invariant and transform collections.

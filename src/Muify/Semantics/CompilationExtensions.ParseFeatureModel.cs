@@ -29,6 +29,7 @@ namespace Muify.Semantics
             INamedTypeSymbol service = request.ContainingNamespace.GetTypeMembers($"{request.Name}Service").FirstOrDefault();
             INamedTypeSymbol contract = request.ContainingNamespace.GetTypeMembers($"I{request.Name}Service").FirstOrDefault();
             INamedTypeSymbol grpc = service?.GetTypeMembers("Grpc").FirstOrDefault();
+            INamedTypeSymbol options = request.GetOptions();
             ITypeSymbol fact = mutation?.TypeArguments.FirstOrDefault();
 
             ITypeSymbol aggregate = GetAggregate(names, request, @base);
@@ -54,6 +55,7 @@ namespace Muify.Semantics
                     .HasServiceContract(contract is object)
                     .IsPartial(request.IsPartial())
                     .WithHandler(request.GetImplementation("IHandler`2", "Mu.Communications.Mediation"))
+                    .WithOptions(options.CatalogOptions())
                     .WithRoot(request.GetRoot(aggregate))
                     .WithService(request.GetImplementation("IService`2", "Mu.Modelling.Services"))
                     .WithTargetIdentity(@base.GetTargetIdentity()));

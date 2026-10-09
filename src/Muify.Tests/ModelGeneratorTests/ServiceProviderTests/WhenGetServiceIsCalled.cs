@@ -41,6 +41,7 @@ public sealed class WhenGetServiceIsCalled
             "MooVC.Testing.Mechanics.Car.Register.Register.ctor",
             "MooVC.Testing.Mechanics.Car.Register.Register.Registrar",
             "MooVC.Testing.Mechanics.Car.Register.Registered",
+            "MooVC.Testing.Mechanics.Car.Register.RegisterOptions",
             "MooVC.Testing.Mechanics.Car.Register.RegisterService",
             "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Client",
             "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Service",
