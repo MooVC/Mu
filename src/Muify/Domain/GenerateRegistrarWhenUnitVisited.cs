@@ -7,6 +7,7 @@ namespace Muify.Domain
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
     using Muify.Syntax.CSharp;
+    using static Muify.Configuration;
 
     internal sealed class GenerateRegistrarWhenUnitVisited
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit, File>
@@ -43,6 +44,13 @@ namespace Muify.Domain
             Symbol self = (unit._Value.Name, Qualifier: unit.Namespace);
 
             registrations.Add(self.ToBinding());
+
+            Symbol extensions = (Name: "ContainerExtensions", Qualifier: "Mu.Persistence.Composition");
+            Symbol identity = unit._Value.Identity.IsType && unit._Value.Identity.Type.IsUnnamed
+                ? Identity.Default.GetSymbol(unit.Namespace)
+                : unit._Value.Identity.GetSymbol(unit.Namespace);
+
+            registrations.Add($"_ = {Render(extensions)}.RegisterWriteStore<{Render(self)}, {Render(identity)}>(container, configuration);");
 
             registrations.AddRange(unit._Value.Metadata.Registrars
                 .Select(registrar => $"{registrar.ToSnippet(Configuration.Options.Types)}.Register(configuration, container);"));

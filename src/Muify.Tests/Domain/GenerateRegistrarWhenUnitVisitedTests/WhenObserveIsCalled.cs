@@ -1,8 +1,10 @@
 namespace Muify.Domain.GenerateRegistrarWhenUnitVisitedTests;
 
+using MooVC.Syntax.CSharp;
 using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
+using Type = System.Type;
 
 public sealed class WhenObserveIsCalled
 {
@@ -10,7 +12,7 @@ public sealed class WhenObserveIsCalled
     public async Task GivenAPartialUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
         // Arrange
-        string expected = """
+        const string expected = """
             namespace MooVC.Testing.Mechanics.Car;
 
             using SimpleInjector;
@@ -21,6 +23,9 @@ public sealed class WhenObserveIsCalled
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
                     _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration>(
+                        container,
+                        configuration);
                 }
             }
             """;
@@ -51,6 +56,11 @@ public sealed class WhenObserveIsCalled
         // Arrange
         const string expectedBinding = "_ = global::MooVC.Testing.Mechanics.Car.Wheel.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);";
         const string expectedRegistrar = "global::MooVC.Testing.Mechanics.Car.Allocator.Register(configuration, container);";
+        const string expectedWriteStore = """
+            _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration>(
+                        container,
+                        configuration);
+            """;
         const string excludedBinding = "global::MooVC.Testing.Mechanics.Car.Pressure.Bind";
         var visitor = new GenerateRegistrarWhenUnitVisited();
 
@@ -73,9 +83,40 @@ public sealed class WhenObserveIsCalled
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).Contains(expectedBinding);
+        _ = await Assert.That(definition.Content).Contains(expectedWriteStore);
         _ = await Assert.That(definition.Content.Contains(excludedBinding, StringComparison.Ordinal)).IsFalse();
         _ = await Assert.That(definition.Content.IndexOf(expectedBinding, StringComparison.Ordinal))
+            .IsLessThan(definition.Content.IndexOf(expectedWriteStore, StringComparison.Ordinal));
+        _ = await Assert.That(definition.Content.IndexOf(expectedWriteStore, StringComparison.Ordinal))
             .IsLessThan(definition.Content.IndexOf(expectedRegistrar, StringComparison.Ordinal));
+    }
+
+    [Test]
+    [Arguments(default, "global::System.Guid")]
+    [Arguments(typeof(Guid), "global::System.Guid")]
+    [Arguments(typeof(long), "long")]
+    public async Task GivenAUnitWhenItsIdentityIsDefaultOrExplicitThenItsWriteStoreUsesTheCorrectTypes(Type? identity, string expectedIdentity)
+    {
+        // Arrange
+        string expected = $$"""
+            _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, {{expectedIdentity}}>(
+                        container,
+                        configuration);
+            """;
+        var visitor = new GenerateRegistrarWhenUnitVisited();
+        Unit car = TestData.Single.Car._Value
+            .IdentifiedBy(identity is null ? Qualification.Unnamed : (Qualification)identity)
+            .WithMetadata(metadata => metadata
+                .IsPartial(true)
+                .HasRegistrar(false));
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, TestData.Single.Model, car);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(unit);
+
+        // Assert
+        File definition = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(definition.Content).Contains(expected);
     }
 
     [Test]

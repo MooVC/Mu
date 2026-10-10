@@ -26,6 +26,8 @@ Mu must embrace automation wherever possible, enabling engineers to concentrate 
 
 Applications configure their domain handlers, identity allocation, persistence, and gRPC endpoints. Generated unit registrars apply the aggregate and component binders to `RuntimeTypeModel.Default`; generated feature registrars apply the request and local payload binders. Each model must be bound exactly once during application startup. Models with custom binders are supported alongside generated binders.
 
+Generated unit registrars call `global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<TAggregate, TIdentity>(container, configuration)` after binding the aggregate and before invoking custom registrars. The globally qualified static call avoids ambiguity with types and extension methods in the target project. This reads `WriteStoreOptions` from configuration and defaults to the transient `WriteStore<TAggregate, TIdentity>`. Applications provide its `IStream<TIdentity>` and `ITransform<TAggregate>` dependencies.
+
 Generated source hint names include the namespace, for example `MooVC.Testing.Mechanics.Car.Wheel.Binder.g.cs`. This keeps files distinct when types in different namespaces share a name, including each feature's generated `Transform`.
 
 Muify generates a public sealed partial `{Feature.Name}Options` record in the feature namespace, deriving from `Mu.Configuration.Options`. An existing direct or indirect derivation in the feature namespace, its children, or nested types suppresses generation, including derivations with a custom name.
