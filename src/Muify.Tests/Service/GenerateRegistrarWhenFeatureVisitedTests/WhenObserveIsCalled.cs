@@ -4,7 +4,7 @@ using Mu.Modelling;
 using Mu.Modelling.Testing;
 using Muify;
 
-public sealed class WhenObserveIsCalled
+public sealed partial class WhenObserveIsCalled
 {
     [Test]
     public async Task GivenAPartialFeatureWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()

@@ -36,6 +36,8 @@ For mutational features, generated feature registrars register scoped collection
 
 Generated feature registrars also register a scoped `IRoot<TAggregate, TMutation>` for mutational features. A matching concrete root in the feature namespace or its children is used when available; otherwise, `Root<TAggregate, TFact, TMutation>` is registered with the feature's invariant and transform collections.
 
+When a generated creational service uses a `Guid` identity and no custom allocator exists in the domain or feature assembly, its feature registrar conditionally registers a scoped `GuidAllocator`. The registration applies only to that feature's `CreationalService<TAggregate, Guid, TUseCase>`. Earlier matching conditional allocator registrations take precedence, including those installed by custom feature registrars.
+
 The default auditor, mediator, scope manager, and scribe registrations are conditional fallbacks. Register custom implementations with `RegisterConditional` before calling the corresponding registration extension so matching custom registrations take precedence. For mediator registration through the `IServiceCollection.AddMu()` options callback, add the custom conditional registration before calling `RegisterMediator()`. Simple Injector does not allow mixing conditional and unconditional registrations for these interfaces, even when `AllowOverridingRegistrations` is enabled.
 
 ## In-memory mediation

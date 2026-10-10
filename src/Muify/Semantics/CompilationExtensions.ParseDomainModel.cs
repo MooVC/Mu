@@ -48,7 +48,7 @@ namespace Muify.Semantics
                             .HasBase(definition.HasAggregateBase())
                             .HasBinder(definition.HasBinder())
                             .HasRegistrar(definition.HasRegistrar())
-                            .WithAllocator(definition.Allocator()))
+                            .WithAllocator(definition.Allocator(compilation.Assembly)))
                         .Featuring(feature)
                         .Owns(components)
                         .Sets(lists)));

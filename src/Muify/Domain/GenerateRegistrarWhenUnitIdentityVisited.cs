@@ -12,14 +12,15 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Identity identity)
         {
-            if (identity.Unit._Value.Metadata.Allocator.HasRegistrar
-             || !identity.Unit._Value.Metadata.Allocator.IsPartial
-             || identity.Unit._Value.Metadata.Allocator.IsUndefined)
+            Service allocator = identity.Unit._Value.Metadata.Allocator;
+
+            if (allocator.HasRegistrar
+             || !allocator.IsPartial
+             || allocator.IsUndefined
+             || !allocator.Definition.Qualifier.Equals(identity.Unit.Namespace))
             {
                 yield break;
             }
-
-            Service allocator = identity.Unit._Value.Metadata.Allocator;
 
             Symbol contract = Symbol.Undefined
                 .Named((Name: "IAllocator", Qualifier: "Mu.Modelling.Services"))

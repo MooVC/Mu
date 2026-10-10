@@ -8,6 +8,9 @@ using Muify;
 
 public sealed class WhenObserveIsCalled
 {
+    private const string DescendantFeatureAllocatorNamespace = "MooVC.Testing.Mechanics.Car.Register.Allocation";
+    private const string FeatureAllocatorNamespace = "MooVC.Testing.Mechanics.Car.Register";
+
     [Test]
     public async Task GivenAPartialUnitWhenHasRegistrarIsFalseThenRegistrarDefinitionIsGenerated()
     {
@@ -84,6 +87,29 @@ public sealed class WhenObserveIsCalled
             .IsPartial(false)
             .HasRegistrar(false)));
 
+        Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
+        Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit._Value.Identity);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(identity);
+
+        // Assert
+        _ = await Assert.That(result).IsEmpty();
+    }
+
+    [Test]
+    [Arguments(DescendantFeatureAllocatorNamespace)]
+    [Arguments(FeatureAllocatorNamespace)]
+    public async Task GivenAPartialAllocatorWhenDefinedInAFeatureNamespaceThenNothingIsGenerated(string allocatorNamespace)
+    {
+        // Arrange
+        const string allocatorName = "FeatureAllocator";
+        var visitor = new GenerateRegistrarWhenUnitIdentityVisited();
+        Model model = TestData.Single.Model;
+        Unit car = TestData.Single.Car._Value.WithMetadata(metadata => metadata.WithAllocator(allocator => allocator
+            .HasRegistrar(false)
+            .IsPartial(true)
+            .WithDefinition((Name: allocatorName, Qualifier: allocatorNamespace))));
         Model.Graph.Areas.Area.Units.Unit unit = new(TestData.Single.Units, 0, model, car);
         Model.Graph.Areas.Area.Units.Unit.Identity identity = new(unit, model, unit._Value.Identity);
 
