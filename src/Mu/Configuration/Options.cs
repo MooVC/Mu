@@ -2,5 +2,9 @@ namespace Mu.Configuration;
 
 public record Options
 {
-    public IpcType Ipc { get; init; } = IpcType.Grpc;
+    public ModeType Mode { get; init; } = ModeType.Hosted;
+
+    public Hosted Hosted { get; init; } = new();
+
+    public Remote Remote { get; init; } = new();
 }

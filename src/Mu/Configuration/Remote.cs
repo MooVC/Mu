@@ -1,0 +1,8 @@
+﻿namespace Mu.Configuration;
+
+public sealed partial record Remote
+{
+    public IpcType Ipc { get; init; } = IpcType.Grpc;
+
+    public GrpcOptions Grpc { get; init; } = new();
+}

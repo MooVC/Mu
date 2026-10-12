@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add hosted and remote gRPC feature configuration for the listening port or service address, client timeout, detailed errors, and nullable message-size limits.
 - Register the configured write store through generated unit registrars using each unit's aggregate and identity types and a globally qualified static call to avoid target-project name ambiguity.
 - Conditionally register a scoped GUID allocator for each generated creational service when no custom allocator exists in the domain or feature assembly.
 - Generate partial feature options records derived from `Mu.Configuration.Options`, preserving existing derivations and requiring partial declarations before extending existing options.

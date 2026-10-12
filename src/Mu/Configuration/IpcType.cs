@@ -3,5 +3,5 @@
 public enum IpcType
 {
     None = 0,
-    Grpc,
+    Grpc = 1,
 }
