@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Generate and register protobuf binders for feature result/view records and recursively referenced local output DTOs, including collection elements, nested types, and empty results, while preserving custom binders and partial-declaration guards.
 - Support extra project namespace nodes in the model scope, identify units and features by their same-name record's aggregate/causal base or role attribute, and preserve `.Host` project composition without a host class, record, or attribute. Generated feature projects include `OutputType=Exe`; handwritten feature executables set it explicitly because project name length no longer selects their output type. Host projects retain the executable default.
 - Generate executable feature and `.Host` programs with one-call builder composition, host extensions named after the namespace node before `Host`, referenced feature discovery, independent entry-point/build overrides, once-per-container registrars, and replaceable in-memory persistence and shared-service defaults.
 - Restore causal metadata and transitional targets during protobuf deserialization while keeping their public API immutable; reserve the computed model's old field number and preserve existing request payload tags.

@@ -47,7 +47,7 @@ namespace Muify.Semantics
                 .Enumerate(AddParameter, parameters)
                 .Enumerate((result, subject) => result.CreateResult(subject), results)
                 .WithMetadata(metadata => metadata
-                    .Enumerate((reference, subject) => subject.WithReferences(reference), request.GetReferences())
+                    .Enumerate((reference, subject) => subject.WithReferences(reference), request.GetReferences(aggregate))
                     .Enumerate((invariant, subject) => subject.WithInvariants(invariant), request.GetInvariants(aggregate))
                     .Enumerate((registrar, subject) => subject.WithRegistrars(registrar), request.ContainingNamespace.GetRegistrars(includeDescendants: true))
                     .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms(aggregate, fact))

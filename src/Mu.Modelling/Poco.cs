@@ -2,6 +2,7 @@
 {
     using System.Collections.Immutable;
     using Fluentify;
+    using Graphify;
     using MooVC.Syntax.CSharp;
     using Valuify;
     using Ignore = Valuify.IgnoreAttribute;
@@ -16,9 +17,14 @@
 
         public Characteristics Characteristics { get; set; } = Characteristics.Undefined;
 
+        [Traverse(Scope = TraverseScope.None)]
+        public ImmutableArray<Poco> ContainingTypes { get; set; } = ImmutableArray<Poco>.Empty;
+
         public bool HasBase { get; set; }
 
         public bool HasBinder { get; set; }
+
+        public bool HasDomainBinder { get; set; }
 
         public bool HasOptionsBase { get; set; }
 

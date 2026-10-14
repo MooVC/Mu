@@ -38,12 +38,12 @@ namespace Muify.Domain
                 .OrderBy(component => component.Name.ToString(), StringComparer.Ordinal)
                 .Select(component => (Symbol)(component.Name, Qualifier: unit.Namespace))
                 .Distinct()
-                .Select(component => component.ToBinding())
+                .Select(component => component.ToBinding(whenUndefined: true))
                 .ToList();
 
             Symbol self = (unit._Value.Name, Qualifier: unit.Namespace);
 
-            registrations.Add(self.ToBinding());
+            registrations.Add(self.ToBinding(whenUndefined: true));
 
             Symbol extensions = (Name: "ContainerExtensions", Qualifier: "Mu.Persistence.Composition");
             Symbol identity = unit._Value.Identity.IsType && unit._Value.Identity.Type.IsUnnamed

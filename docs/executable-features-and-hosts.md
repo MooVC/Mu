@@ -43,6 +43,8 @@ Hosted features run their domain registrar before their feature registrar. Missi
 
 Request protobuf binders preserve causal identity and proposal time, reserve field 3 for the formerly serialized computed model, and keep payload fields starting at 4. Transitional targets are appended after the payload fields. The model remains derived from the request's aggregate type, and deserialization restores metadata through non-public initialization accessors.
 
+Feature registrars also apply protobuf binders for the nested `{Feature.Name}.Result` record and its local output DTOs, including collection elements and recursively referenced view types. Result/view binders use payload fields starting at 4 and include empty partial results. A generated binder requires the type and every enclosing declaration to be partial; a custom `IBinder` implementation suppresses generation and is still registered, including implementations in referenced assemblies. Domain-owned types reuse their existing or generated domain binder. Shared type registrations check whether the runtime model already defines the type, allowing hosted and remote features to share domain and view contracts.
+
 ## Host project
 
 A host has a namespace ending in `.Host`, with its build extension named after the preceding node. Both `MooVC.Testing.Modelling.Account.Host` and `MooVC.Testing.Payments.Internal.Modelling.Account.Host` generate `BuildAccount()`. Short hosts such as `My.Project.Host` remain supported and generate `BuildProject()`. The configured `RootNamespace` is used when provided; otherwise the assembly name is used.

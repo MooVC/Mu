@@ -60,7 +60,10 @@ public sealed partial class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    _ = global::MooVC.Testing.Mechanics.Car.Register.Extras.Details.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    if (!global::Mu.Serialization.RuntimeTypeModelExtensions.HasBinding<global::MooVC.Testing.Mechanics.Car.Register.Extras.Details>(global::ProtoBuf.Meta.RuntimeTypeModel.Default))
+                    {
+                        _ = global::MooVC.Testing.Mechanics.Car.Register.Extras.Details.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    }
                     _ = global::MooVC.Testing.Mechanics.Car.Register.Register.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
                     _ = global::MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterMode(container, configuration);
                 }

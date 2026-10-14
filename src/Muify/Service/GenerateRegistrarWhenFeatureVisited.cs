@@ -32,16 +32,9 @@ namespace Muify.Service
 
         private static bool CanBindReference(Poco reference)
         {
-            return !reference.Qualification.IsUnnamed
-                && (reference.HasBinder || CanGenerateReferenceBinder(reference));
-        }
-
-        private static bool CanGenerateReferenceBinder(Poco reference)
-        {
-            return reference.IsPartial
-                && !reference.Characteristics.IsUndefined
-                && !reference.Attributes.IsEmpty
-                && !reference.IsUndefined;
+            return reference.IsAccessible
+                && !reference.Qualification.IsUnnamed
+                && (reference.HasBinder || reference.HasDomainBinder || GenerateBinderWhenFeatureReferenceVisited.CanGenerateBinder(reference));
         }
 
         private static bool CanGenerateRegistrar(Feature feature)
@@ -51,14 +44,19 @@ namespace Muify.Service
                 && !feature.Metadata.IsOutOfScope;
         }
 
+        private static string GetBinding(Poco reference)
+        {
+            return ((Symbol)reference.Qualification).ToBinding(whenUndefined: true);
+        }
+
         private static Snippet GetRegistrations(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
             var registrations = feature._Value.Metadata.References
                 .Where(CanBindReference)
                 .OrderBy(reference => reference.Qualification.ToString(), StringComparer.Ordinal)
-                .Select(reference => (Symbol)reference.Qualification)
-                .Distinct()
-                .Select(reference => reference.ToBinding())
+                .GroupBy(reference => (Symbol)reference.Qualification)
+                .Select(group => group.First())
+                .Select(GetBinding)
                 .ToList();
 
             registrations.Add(((Symbol)(feature._Value.Name, Qualifier: feature.Namespace)).ToBinding());

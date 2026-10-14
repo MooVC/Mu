@@ -22,7 +22,10 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    if (!global::Mu.Serialization.RuntimeTypeModelExtensions.HasBinding<global::MooVC.Testing.Mechanics.Car.Car>(global::ProtoBuf.Meta.RuntimeTypeModel.Default))
+                    {
+                        _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    }
                     _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration>(
                         container,
                         configuration);
@@ -64,8 +67,14 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    _ = global::MooVC.Testing.Mechanics.Car.Wheel.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
-                    _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    if (!global::Mu.Serialization.RuntimeTypeModelExtensions.HasBinding<global::MooVC.Testing.Mechanics.Car.Wheel>(global::ProtoBuf.Meta.RuntimeTypeModel.Default))
+                    {
+                        _ = global::MooVC.Testing.Mechanics.Car.Wheel.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    }
+                    if (!global::Mu.Serialization.RuntimeTypeModelExtensions.HasBinding<global::MooVC.Testing.Mechanics.Car.Car>(global::ProtoBuf.Meta.RuntimeTypeModel.Default))
+                    {
+                        _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    }
                     _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration>(
                         container,
                         configuration);
@@ -114,7 +123,10 @@ public sealed class WhenObserveIsCalled
             {
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
-                    _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    if (!global::Mu.Serialization.RuntimeTypeModelExtensions.HasBinding<global::MooVC.Testing.Mechanics.Car.Car>(global::ProtoBuf.Meta.RuntimeTypeModel.Default))
+                    {
+                        _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    }
                     _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, {{expectedIdentity}}>(
                         container,
                         configuration);

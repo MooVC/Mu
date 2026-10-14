@@ -171,7 +171,7 @@ namespace Muify.Service
 
             Symbol DefineResult(Symbol outcome)
             {
-                Qualification result = feature._Value.Results.Length == 0
+                Qualification result = feature._Value.Type.IsMutational && feature._Value.Results.Length == 0
                     ? DefineMutationalResult()
                     : (Name: $"{feature._Value.Name}.Result", Qualifier: feature.Namespace);
 
@@ -295,10 +295,16 @@ namespace Muify.Service
             return Snippet.From(Configuration.Options, registrations.ToArray());
         }
 
+        private static bool HasFeatureResult(Feature feature)
+        {
+            return feature.Results.Length > 0
+                || feature.Metadata.References.Any(reference => reference.Qualification.Moniker.ToString() == $"{feature.Name}.Result");
+        }
+
         private static bool ShouldRegisterDefaultHandler(Feature feature)
         {
             return feature.Metadata.Handler.IsUnnamed
-                && (feature.Type.IsMutational || feature.Results.Length > 0);
+                && (feature.Type.IsMutational || HasFeatureResult(feature));
         }
 
         private static bool ShouldRegisterDefaultService(Feature feature)
