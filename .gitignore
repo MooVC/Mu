@@ -350,6 +350,10 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+# Keep repository MSBuild properties under source control.
+!/build/
+/build/*
+!/build/*.props
 develop-eggs/
 dist/
 downloads/

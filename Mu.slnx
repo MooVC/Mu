@@ -13,6 +13,7 @@
   </Folder>
   <Folder Name="/Build/">
     <File Path="build/Libraries.props" />
+    <File Path="build/Mu.Executables.props" />
     <File Path="build/Roslyn.props" />
     <File Path="build/Tests.props" />
     <File Path="Directory.Build.props" />
