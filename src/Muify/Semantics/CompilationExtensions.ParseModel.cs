@@ -9,6 +9,7 @@ namespace Muify.Semantics
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
     using Muify.Service;
+    using static Muify.Semantics.INamedTypeSymbolExtensions;
 
     internal static partial class CompilationExtensions
     {
@@ -26,52 +27,85 @@ namespace Muify.Semantics
                 .Select(reference => reference.Name)
                 .ToImmutableArray();
 
-            string[] segments = assemblyName.Split('.');
+            string hostNamespace = HasHostSuffix(applicationNamespace) ? applicationNamespace : assemblyName;
 
-            if (HasHostSuffix(applicationNamespace) || HasHostSuffix(assemblyName))
+            if (HasHostSuffix(hostNamespace))
             {
-                string hostNamespace = HasHostSuffix(applicationNamespace) ? applicationNamespace : assemblyName;
                 string[] hostSegments = hostNamespace.Split('.');
                 string buildName = $"Build{hostSegments[hostSegments.Length - 2]}";
-                Model host = Model.Undefined.For(hostSegments[0]).Named(hostSegments[1]);
+                Model host = Model.Undefined
+                    .For(hostSegments[0])
+                    .Named(hostSegments[1])
+                    .ScopedWithin(GetModelScope(hostSegments, hostSegments.Length - 3));
 
-                return compilation.WithApplicationMetadata(host, assemblies, applicationNamespace, buildName, true, compilation.GetHostedFeatures());
+                return compilation.WithApplicationMetadata(host, assemblies, hostNamespace, buildName, true, compilation.GetHostedFeatures());
             }
 
-            const int MinimumSegments = 4;
+            INamedTypeSymbol definition = compilation.GetProjectDefinition(applicationNamespace);
+            ProjectKind kind = definition.GetProjectKind();
 
-            if (segments.Length < MinimumSegments)
+            if (kind == ProjectKind.Undefined && applicationNamespace != assemblyName)
+            {
+                definition = compilation.GetProjectDefinition(assemblyName);
+                kind = definition.GetProjectKind();
+            }
+
+            string projectNamespace = definition?.ContainingNamespace.ToDisplayString() ?? applicationNamespace;
+            string[] segments = projectNamespace.Split('.');
+
+            const int MinimumUnitSegments = 4;
+            const int MinimumFeatureSegments = 5;
+
+            bool isFeature = kind == ProjectKind.Feature && segments.Length >= MinimumFeatureSegments;
+            bool isUnit = kind == ProjectKind.Unit && segments.Length >= MinimumUnitSegments;
+
+            if (!isFeature && !isUnit)
             {
                 return compilation.WithApplicationMetadata(Model.Undefined, assemblies, applicationNamespace, string.Empty, false, ImmutableArray<Qualification>.Empty);
             }
 
             Name company = segments[0];
             Name name = segments[1];
-
+            int areaIndex = segments.Length - (isFeature ? 3 : 2);
+            int unitIndex = areaIndex + 1;
             Feature feature = Feature.Undefined;
 
-            const int FeatureSegments = 5;
-
-            if (segments.Length == FeatureSegments)
+            if (isFeature)
             {
-                feature = compilation.ParseFeatureModel((Area: segments[2], Feature: segments[4], Unit: segments[3]));
+                feature = compilation.ParseFeatureModel((Area: segments[areaIndex], Feature: definition.Name, Unit: segments[unitIndex]), definition);
             }
 
+            string domainNamespace = isFeature
+                ? projectNamespace.Substring(0, projectNamespace.LastIndexOf('.'))
+                : projectNamespace;
+
             Model model = compilation
-                .ParseDomainModel(feature, (Area: segments[2], Unit: segments[3]), cancellationToken)
-                .For(company)
-                .Named(name);
+                .ParseDomainModel(feature, (Area: segments[areaIndex], Unit: segments[unitIndex]), cancellationToken, domainNamespace);
+
+            if (model.IsUndefined)
+            {
+                return compilation.WithApplicationMetadata(Model.Undefined, assemblies, projectNamespace, string.Empty, false, ImmutableArray<Qualification>.Empty);
+            }
+
+            model = model.For(company)
+                .Named(name)
+                .ScopedWithin(GetModelScope(segments, areaIndex));
 
             ImmutableArray<Qualification> features = feature.IsUndefined
                 ? ImmutableArray<Qualification>.Empty
-                : ImmutableArray.Create<Qualification>((Name: segments[segments.Length - 1], Qualifier: assemblyName));
+                : ImmutableArray.Create(definition.ToQualification());
             bool canBuild = feature.Metadata.HasBuildExtension
                 || feature.Metadata.HasBuilderBuildExtension
                 || ((feature.Metadata.IsPartial || feature.Metadata.HasRegistrar)
                     && GenerateRegisterModeWhenFeatureVisited.CanGenerate(feature));
             string featureBuildName = !feature.IsUndefined && canBuild ? $"Build{feature.Name}" : string.Empty;
 
-            return compilation.WithApplicationMetadata(model, assemblies, feature.IsUndefined ? applicationNamespace : assemblyName, featureBuildName, false, features);
+            return compilation.WithApplicationMetadata(model, assemblies, projectNamespace, featureBuildName, false, features);
+        }
+
+        private static Qualifier GetModelScope(string[] segments, int areaIndex)
+        {
+            return new Qualifier(segments.Skip(2).Take(areaIndex - 2).Select(segment => (Name)segment).ToImmutableArray());
         }
     }
 }

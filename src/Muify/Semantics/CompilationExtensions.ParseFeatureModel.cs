@@ -15,6 +15,11 @@ namespace Muify.Semantics
         {
             INamedTypeSymbol request = compilation.GetTypeByMetadataName($"{compilation.AssemblyName}.{names.Feature}");
 
+            return compilation.ParseFeatureModel(names, request);
+        }
+
+        private static Feature ParseFeatureModel(this Compilation compilation, (Name Area, Name Feature, Name Unit) names, INamedTypeSymbol request)
+        {
             if (request is null || !SymbolEqualityComparer.Default.Equals(request.ContainingAssembly, compilation.Assembly))
             {
                 return Feature.Undefined;

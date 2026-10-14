@@ -2,9 +2,27 @@
 
 A Mu application consists of a domain project containing its aggregate and a feature project containing its request and optional result. Muify generates the protobuf binders, registrars, services, configuration, and application composition.
 
-The existing feature naming convention is `Company.Project.Area.Unit.Feature`: the domain assembly is `Company.Project.Area.Unit`, and the request is `Feature` in the feature assembly's namespace. Muify's MSBuild props default conventional feature projects and projects ending in `.Host` to `OutputType=Exe`. An explicit project `OutputType` takes precedence; library projects keep their composition extensions without a generated entry point.
+Project names can contain additional namespace nodes between the model and area:
 
-If a differently named project sets its host `RootNamespace` or conventional feature `AssemblyName` only inside its project file, also set `<OutputType>Exe</OutputType>` there. Executable defaults are selected during the early SDK imports; names supplied earlier in `Directory.Build.props` are detected automatically.
+- Unit: `Company.Model.[extra nodes...].Area.Unit`
+- Feature: `Company.Model.[extra nodes...].Area.Unit.Feature`
+- Host: `Company.Model.[extra nodes...].Area.Unit.Host`
+
+Muify identifies units and features from the record whose name matches the final node in its namespace. A unit record derives from `Aggregate<TIdentity>` or has `Muify.Domain.Unit<TIdentity>`. A feature record derives from `Causal` or has a `Muify.Service.Creational<TFact>`, `Transitional<TFact>`, or `NonMutational` attribute. Hosts are identified by the final `.Host` namespace node and require no marker record, class, or attribute. Ordinary projects without a unit or feature record are excluded unless they use the host convention.
+
+Additional nodes are retained in `Model.Scope`, set through `ScopedWithin`, and included in generated namespaces. For example, `MooVC.Testing.Payments.Internal.Modelling.Account.Open` has company `MooVC`, model `Testing`, scope `Payments.Internal`, area `Modelling`, unit `Account`, and feature `Open`.
+
+Generated feature project files include `<OutputType>Exe</OutputType>`. Set it explicitly in handwritten feature executable projects:
+
+```xml
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+</PropertyGroup>
+```
+
+The number of name nodes no longer selects executable output in MSBuild. Muify's props default projects ending in `.Host` to `OutputType=Exe`, while an explicit `OutputType` takes precedence. Library projects keep their composition extensions without a generated entry point.
+
+If an aliased host supplies its `.Host` `AssemblyName` or `RootNamespace` only inside the project file, also set `<OutputType>Exe</OutputType>` there. Executable defaults are selected during the early SDK imports; names supplied earlier in `Directory.Build.props` are detected automatically.
 
 ## Standalone feature
 
@@ -27,9 +45,9 @@ Request protobuf binders preserve causal identity and proposal time, reserve fie
 
 ## Host project
 
-A host's final namespace node is `Host`, with its build extension named after the preceding node. Both `My.Project.Host` and `MooVC.Testing.Modelling.Account.Host` are supported, generating `BuildProject()` and `BuildAccount()` respectively. The configured `RootNamespace` is used when provided; otherwise the assembly name is used.
+A host has a namespace ending in `.Host`, with its build extension named after the preceding node. Both `MooVC.Testing.Modelling.Account.Host` and `MooVC.Testing.Payments.Internal.Modelling.Account.Host` generate `BuildAccount()`. Short hosts such as `My.Project.Host` remain supported and generate `BuildProject()`. The configured `RootNamespace` is used when provided; otherwise the assembly name is used.
 
-Reference the feature projects from the host and include Mu and the Muify analyzer. Muify discovers referenced feature requests with callable application build methods, sorts them by qualification, and generates a host entry point and composition extensions. Ordinary referenced libraries are excluded. Each hosted feature's unit registrar runs once per container, including when several features reference the same domain.
+Reference the feature projects from the host and include Mu and the Muify analyzer. No host class or record is required. Muify discovers referenced feature requests with callable application build methods, sorts them by qualification, and generates a host entry point and composition extensions. Referenced features can have any supported number of name nodes. Ordinary referenced libraries are excluded. Each hosted feature's unit registrar runs once per container, including when several features reference the same domain.
 
 For the account host, a custom program's composition is simply `builder.BuildAccount()`. The application extensions also support manual chaining such as `builder.BuildMu().BuildOpen().BuildClose()` before startup.
 

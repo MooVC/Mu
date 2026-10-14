@@ -38,6 +38,7 @@ public sealed partial class WhenParseModelIsCalled
             using System;
             using Mu.Modelling.Services;
 
+            [Muify.Service.NonMutational]
             public sealed record Register;
 
             public sealed class FeatureAllocator : IAllocator<Guid>;
@@ -56,6 +57,7 @@ public sealed partial class WhenParseModelIsCalled
             featureAssemblyName,
             [
                 CSharpSyntaxTree.ParseText(ServicesSource),
+                CSharpSyntaxTree.ParseText(ClassificationAttributesSource),
                 CSharpSyntaxTree.ParseText(featureSource),
             ],
             _references.Append(domain.ToMetadataReference()),

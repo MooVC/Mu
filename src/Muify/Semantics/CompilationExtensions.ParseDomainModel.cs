@@ -7,17 +7,22 @@ namespace Muify.Semantics
     using MooVC;
     using MooVC.Syntax;
     using Mu.Modelling;
+    using static Muify.Semantics.INamedTypeSymbolExtensions;
 
     internal static partial class CompilationExtensions
     {
-        public static Model ParseDomainModel(this Compilation compilation, Feature feature, (Name Area, Name Unit) names, CancellationToken cancellationToken)
+        public static Model ParseDomainModel(this Compilation compilation, Feature feature, (Name Area, Name Unit) names, CancellationToken cancellationToken, string domainNamespace = null)
         {
-            const int DomainSegments = 4;
+            if (domainNamespace is null)
+            {
+                string projectNamespace = compilation.AssemblyName ?? string.Empty;
+                int separator = projectNamespace.LastIndexOf('.');
+                domainNamespace = feature.IsUndefined || separator < 0 ? projectNamespace : projectNamespace.Substring(0, separator);
+            }
 
-            string domainNamespace = string.Join(".", (compilation.AssemblyName ?? string.Empty).Split('.').Take(DomainSegments));
             INamedTypeSymbol definition = compilation.GetTypeByMetadataName($"{domainNamespace}.{names.Unit}");
 
-            if (definition is null || !definition.IsRecord)
+            if (definition.GetProjectKind() != ProjectKind.Unit)
             {
                 return Model.Undefined;
             }
@@ -49,7 +54,7 @@ namespace Muify.Semantics
                             .HasBinder(definition.HasBinder())
                             .HasRegistrar(definition.HasRegistrar())
                             .WithAllocator(definition.Allocator(compilation.Assembly)))
-                        .Featuring(feature)
+                        .Enumerate((defined, subject) => subject.Featuring(defined), feature.IsUndefined ? Array.Empty<Feature>() : new[] { feature })
                         .Owns(components)
                         .Sets(lists)));
         }

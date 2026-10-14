@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MooVC.Testing.Modelling.Account\MooVC.Testing.Modelling.Account.csproj" />
     <ProjectReference Include="..\Mu\Mu.csproj" />

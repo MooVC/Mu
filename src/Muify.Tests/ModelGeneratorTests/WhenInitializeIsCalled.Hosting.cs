@@ -80,20 +80,21 @@ public sealed partial class WhenInitializeIsCalled
     }
 
     [Test]
-    public async Task GivenAHostWithTwoReferencedFeaturesForOneDomainThenItsBuilderComposesBothFeaturesAndRegistersTheDomainOnce()
+    [Arguments(HostingAreaNamespace, "AccountExecutableHost")]
+    [Arguments("MooVC.Testing.Platform.Payments.Executables", "AccountExecutableScopedHost")]
+    public async Task GivenAHostWithTwoReferencedFeaturesForOneDomainThenItsBuilderComposesBothFeaturesAndRegistersTheDomainOnce(string areaNamespace, string unitName)
     {
         // Arrange
         const string firstFeature = "Open";
         const string secondFeature = "Start";
-        const string unitName = "AccountExecutableHost";
-        const string unrelatedName = "MooVC.Testing.Executables.Unrelated";
         const int expectedBindings = 1;
         const int expectedServices = 2;
-        string unitNamespace = $"{HostingAreaNamespace}.{unitName}";
+        string unrelatedName = $"{areaNamespace}.{unitName}.Unrelated";
+        string unitNamespace = $"{areaNamespace}.{unitName}";
         string firstNamespace = $"{unitNamespace}.{firstFeature}";
         string secondNamespace = $"{unitNamespace}.{secondFeature}";
         string hostNamespace = $"{unitNamespace}.Host";
-        HostingProject domain = await CompileHostingProject(CreateHostingDomainSource(unitName, countBindings: true), unitNamespace);
+        HostingProject domain = await CompileHostingProject(CreateHostingDomainSource(unitName, countBindings: true, areaNamespace: areaNamespace), unitNamespace);
         HostingProject first = await CompileHostingProject(
             CreateHostingFeatureSource(unitNamespace, firstFeature),
             firstNamespace,
@@ -106,9 +107,9 @@ public sealed partial class WhenInitializeIsCalled
             OutputKind.ConsoleApplication,
             "Definitions.cs",
             domain.Reference);
-        HostingProject unrelated = await CompileHostingProject("namespace MooVC.Testing.Executables.Unrelated; public sealed class Dependency;", unrelatedName);
+        HostingProject unrelated = await CompileHostingProject($"namespace {unrelatedName}; public sealed class Dependency;", unrelatedName);
         HostingProject host = await CompileHostingProject(
-            $"namespace {hostNamespace}; public sealed class HostMarker;",
+            CreateHostingHostSource(hostNamespace),
             hostNamespace,
             OutputKind.ConsoleApplication,
             "Definitions.cs",
@@ -147,11 +148,31 @@ public sealed partial class WhenInitializeIsCalled
         _ = await Assert.That(aggregate.GetProperty("Name")!.GetValue(firstAggregate)).IsEqualTo(HostingPayload);
         _ = await Assert.That(aggregate.GetProperty("Name")!.GetValue(secondAggregate)).IsEqualTo(HostingPayload);
         GeneratedSourceResult extension = await Assert.That(host.Result.GeneratedSources.Where(source => source.HintName == $"{hostNamespace}.WebApplicationExtensions.Build{unitName}.g.cs")).HasSingleItem();
-        string composition = extension.SourceText.ToString();
-        _ = await Assert.That(composition).Contains(firstNamespace);
-        _ = await Assert.That(composition).Contains(secondNamespace);
-        _ = await Assert.That(composition.IndexOf(firstNamespace, StringComparison.Ordinal)).IsLessThan(composition.IndexOf(secondNamespace, StringComparison.Ordinal));
-        _ = await Assert.That(composition.Contains(unrelatedName, StringComparison.Ordinal)).IsFalse();
+        string expected = $$"""
+            #nullable enable
+
+            namespace {{hostNamespace}};
+
+            public static partial class WebApplicationExtensions
+            {
+                extension(global::Microsoft.AspNetCore.Builder.WebApplication app)
+                {
+                    public global::Microsoft.AspNetCore.Builder.WebApplication Build{{unitName}}()
+                    {
+                        _ = global::Ardalis.GuardClauses.GuardClauseExtensions.Null(global::Ardalis.GuardClauses.Guard.Against, app, nameof(app), message: "The application must be provided.");
+
+                        var container = global::Mu.Composition.WebApplicationExtensions.GetMuContainer(app) ?? throw new global::System.InvalidOperationException("Mu must be added before building the host.");
+
+                        _ = global::{{firstNamespace}}.WebApplicationExtensions.Build{{firstFeature}}(app);
+                        _ = global::{{secondNamespace}}.WebApplicationExtensions.Build{{secondFeature}}(app);
+                        _ = global::Mu.Composition.ContainerExtensions.RegisterDefaults(container, app.Configuration);
+
+                        return app;
+                    }
+                }
+            }
+            """;
+        _ = await Assert.That(extension.SourceText.ToString()).IsEqualTo(expected);
     }
 
     [Test]
@@ -168,7 +189,7 @@ public sealed partial class WhenInitializeIsCalled
 
         // Act
         HostingProject host = await CompileHostingProject(
-            $"namespace {hostNamespace}; public sealed class HostMarker;",
+            CreateHostingHostSource(hostNamespace),
             hostNamespace,
             OutputKind.ConsoleApplication,
             "Definitions.cs",
@@ -180,7 +201,22 @@ public sealed partial class WhenInitializeIsCalled
         _ = await Assert.That(host.Result.GeneratedSources.Select(source => source.HintName)).Contains($"{hostNamespace}.WebApplicationExtensions.Build{extensionName}.g.cs");
         _ = await Assert.That(host.Assembly.EntryPoint).IsNotNull();
         GeneratedSourceResult program = await Assert.That(host.Result.GeneratedSources.Where(source => source.HintName == $"{hostNamespace}.Program.g.cs")).HasSingleItem();
-        _ = await Assert.That(program.SourceText.ToString()).Contains($"Build{extensionName}");
+        string expected = $$"""
+            #nullable enable
+
+            namespace {{hostNamespace}};
+
+            internal static class Program
+            {
+                public static async global::System.Threading.Tasks.Task Main(string[] args)
+                {
+                    var builder = global::Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
+                    await using var app = global::{{hostNamespace}}.WebApplicationBuilderExtensions.Build{{extensionName}}(builder);
+                    await app.RunAsync().ConfigureAwait(false);
+                }
+            }
+            """;
+        _ = await Assert.That(program.SourceText.ToString()).IsEqualTo(expected);
     }
 
     [Test]
@@ -225,7 +261,7 @@ public sealed partial class WhenInitializeIsCalled
 
         // Act
         HostingProject project = isHost
-            ? await CompileHostingProject($"namespace {unitNamespace}.Host; public sealed class HostMarker;", $"{unitNamespace}.Host", OutputKind.DynamicallyLinkedLibrary, "Definitions.cs", domain.Reference, feature.Reference)
+            ? await CompileHostingProject(CreateHostingHostSource($"{unitNamespace}.Host"), $"{unitNamespace}.Host", OutputKind.DynamicallyLinkedLibrary, "Definitions.cs", domain.Reference, feature.Reference)
             : feature;
 
         // Assert
@@ -245,7 +281,7 @@ public sealed partial class WhenInitializeIsCalled
         string hostNamespace = $"{unitNamespace}.Host";
         HostingProject domain = await CompileHostingProject(CreateHostingDomainSource(unitName), unitNamespace);
         HostingProject feature = await CompileHostingProject(CreateHostingFeatureSource(unitNamespace, featureName), featureNamespace, OutputKind.DynamicallyLinkedLibrary, "Definitions.cs", domain.Reference);
-        string source = $"namespace {hostNamespace}; internal static class CustomProgram {{ public static void Main() {{ }} }}";
+        string source = CreateHostingHostSource(hostNamespace) + " internal static class CustomProgram { public static void Main() { } }";
 
         // Act
         HostingProject host = await CompileHostingProject(source, hostNamespace, OutputKind.ConsoleApplication, "Definitions.cs", domain.Reference, feature.Reference);
@@ -443,7 +479,7 @@ public sealed partial class WhenInitializeIsCalled
         HostingProject domain = await CompileHostingProject(CreateHostingDomainSource(unitName), unitNamespace);
         HostingProject feature = await CompileHostingProject(CreateHostingFeatureSource(unitNamespace, featureName), featureNamespace, OutputKind.ConsoleApplication, "Definitions.cs", domain.Reference);
         HostingProject project = isHost
-            ? await CompileHostingProject($"namespace {unitNamespace}.Host; public sealed class HostMarker;", $"{unitNamespace}.Host", OutputKind.ConsoleApplication, "Definitions.cs", domain.Reference, feature.Reference)
+            ? await CompileHostingProject(CreateHostingHostSource($"{unitNamespace}.Host"), $"{unitNamespace}.Host", OutputKind.ConsoleApplication, "Definitions.cs", domain.Reference, feature.Reference)
             : feature;
 
         // Act
@@ -492,7 +528,7 @@ public sealed partial class WhenInitializeIsCalled
         return builder;
     }
 
-    private static string CreateHostingDomainSource(string unitName, bool countBindings = false)
+    private static string CreateHostingDomainSource(string unitName, bool countBindings = false, string areaNamespace = HostingAreaNamespace)
     {
         string binderContract = countBindings ? ", global::Mu.Serialization.IBinder" : string.Empty;
         string binder = countBindings
@@ -524,7 +560,7 @@ public sealed partial class WhenInitializeIsCalled
                 public sealed class CreationalAttribute<TFact> : global::System.Attribute;
             }
 
-            namespace {{HostingAreaNamespace}}.{{unitName}}
+            namespace {{areaNamespace}}.{{unitName}}
             {
                 [global::Muify.Domain.Unit<global::System.Guid>]
                 public sealed partial record {{unitName}} : global::Mu.Modelling.State.Aggregate{{binderContract}}
@@ -548,6 +584,15 @@ public sealed partial class WhenInitializeIsCalled
                     public string Name { get; init; } = global::System.String.Empty;
                 }
             }
+            """;
+    }
+
+    private static string CreateHostingHostSource(string hostNamespace)
+    {
+        return $$"""
+            namespace {{hostNamespace}};
+
+            public sealed class HostMarker;
             """;
     }
 

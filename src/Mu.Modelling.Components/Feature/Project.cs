@@ -18,6 +18,7 @@ internal sealed class Project
         string content = Builder
             .New<Template>()
             .DescribedAs(feature._Value.Description)
+            .WithPropertyGroups(group => group.WithProperty("OutputType", "Exe"))
             .WithItemGroups(group => group
                 .WithProject($"{Folders.Source}/{feature.DomainName}/{feature.DomainName}.{Extensions.Project}"))
             .ToString();

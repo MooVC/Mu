@@ -48,6 +48,10 @@
         [Traverse(Scope = TraverseScope.Property)]
         public Options Options { get; internal set; } = Options.Default;
 
+        [Descriptor("ScopedWithin")]
+        [Traverse(Scope = TraverseScope.None)]
+        public Qualifier Scope { get; internal set; } = Qualifier.Unqualified;
+
         internal Semantics Metadata { get; set; } = Semantics.OutOfScope;
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -68,6 +72,7 @@
                 .IncludeIf(!Areas.IsDefaultOrEmpty, nameof(Areas), area => !area.IsUndefined, results, Areas)
                 .AndIf(!Company.IsUnnamed, nameof(Company), Company)
                 .And(nameof(Name), name => !name.IsUnnamed, Name)
+                .AndIf(!Scope.IsUnqualified, nameof(Scope), Scope)
                 .Results;
         }
     }

@@ -6,8 +6,7 @@
     <_MuifyRootNamespace Condition="'$(_MuifyRootNamespace)' == ''">$(MSBuildProjectName.Replace(' ', '_'))</_MuifyRootNamespace>
     <_MuifyIsHost>$([System.Text.RegularExpressions.Regex]::IsMatch('$(_MuifyAssemblyName)', '^.+\.Host$'))</_MuifyIsHost>
     <_MuifyIsHost Condition="'$(_MuifyIsHost)' != 'True'">$([System.Text.RegularExpressions.Regex]::IsMatch('$(_MuifyRootNamespace)', '^.+\.Host$'))</_MuifyIsHost>
-    <_MuifyIsFeature>$([System.Text.RegularExpressions.Regex]::IsMatch('$(_MuifyAssemblyName)', '^[^.]+\.[^.]+\.[^.]+\.[^.]+\.[^.]+$'))</_MuifyIsFeature>
-    <OutputType Condition="'$(OutputType)' == '' AND ('$(IsTestProject)' != 'true') AND ('$(IsRoslynProject)' != 'true') AND ('$(_MuifyIsHost)' == 'True' OR '$(_MuifyIsFeature)' == 'True') AND !$([System.String]::Copy('$(_MuifyAssemblyName)').EndsWith('.Tests')) AND !$([System.String]::Copy('$(_MuifyAssemblyName)').EndsWith('.Analyzers')) AND !$([System.String]::Copy('$(_MuifyAssemblyName)').EndsWith('.Generators'))">Exe</OutputType>
+    <OutputType Condition="'$(OutputType)' == '' AND '$(IsTestProject)' != 'true' AND '$(IsRoslynProject)' != 'true' AND '$(_MuifyIsHost)' == 'True' AND !$([System.String]::Copy('$(_MuifyAssemblyName)').EndsWith('.Tests')) AND !$([System.String]::Copy('$(_MuifyAssemblyName)').EndsWith('.Analyzers')) AND !$([System.String]::Copy('$(_MuifyAssemblyName)').EndsWith('.Generators'))">Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <CompilerVisibleProperty Include="RootNamespace" />

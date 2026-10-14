@@ -83,6 +83,7 @@ public sealed partial class WhenParseModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car(string Model, byte Doors)
             {
                 public static string DefaultModel { get; set; }
@@ -122,6 +123,7 @@ public sealed partial class WhenParseModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car;
             """;
 
@@ -201,6 +203,7 @@ public sealed partial class WhenParseModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car
             {
+                [Muify.Domain.Unit<System.Guid>]
                 public sealed partial record Car;
             }
 

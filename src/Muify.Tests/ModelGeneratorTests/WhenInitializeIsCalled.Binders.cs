@@ -78,7 +78,7 @@ public sealed partial class WhenInitializeIsCalled
 
             namespace MooVC.Testing.Mechanics.Car.Search
             {
-                public sealed partial record Search
+                public sealed partial record Search : global::Mu.Modelling.Behavior.Query<global::MooVC.Testing.Mechanics.Car.Car>
                 {
                     public Search()
                     {

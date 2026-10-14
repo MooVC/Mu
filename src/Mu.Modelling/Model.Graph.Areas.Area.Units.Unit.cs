@@ -39,7 +39,7 @@
                                  .Union(_Value.Views
                                     .SelectMany(view => view.Attributes)
                                     .Select(view => view.Type))
-                                .GetProjects(_Root.Company, _Root.Name, Units.Area._Value.Name, _Value.Name);
+                                .GetScopedProjects(_Root.Company, _Root.Scope, _Root.Name, Units.Area._Value.Name, _Value.Name);
                         }
                     }
                 }

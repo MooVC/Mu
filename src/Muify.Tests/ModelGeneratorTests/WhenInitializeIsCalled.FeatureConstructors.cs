@@ -33,8 +33,13 @@ public sealed partial class WhenInitializeIsCalled
         bool isTransitional = kind == "Transitional";
         string arguments = isTransitional ? "Car, System.Guid" : "Car";
         string inheritance = generateBase ? string.Empty : $": {kind}<{arguments}>";
-        string attribute = kind == "Query" || !generateBase ? string.Empty : $"[{kind}<Registered>]";
-        string unitAttribute = generateBase ? "[Unit<System.Guid>]" : string.Empty;
+        string attribute = (generateBase, kind) switch
+        {
+            (false, _) => string.Empty,
+            (true, "Query") => "[NonMutational]",
+            _ => $"[{kind}<Registered>]",
+        };
+        const string unitAttribute = "[Unit<System.Guid>]";
 
         string source = $$"""
             namespace Mu.Modelling.Behavior
@@ -42,7 +47,9 @@ public sealed partial class WhenInitializeIsCalled
                 using System;
                 using Mu.Modelling.State;
 
-                public abstract record UseCase
+                public abstract record Causal;
+
+                public abstract record UseCase : Causal
                 {
                     protected UseCase()
                         : this(Guid.NewGuid(), DateTimeOffset.UtcNow)

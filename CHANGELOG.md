@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Support extra project namespace nodes in the model scope, identify units and features by their same-name record's aggregate/causal base or role attribute, and preserve `.Host` project composition without a host class, record, or attribute. Generated feature projects include `OutputType=Exe`; handwritten feature executables set it explicitly because project name length no longer selects their output type. Host projects retain the executable default.
 - Generate executable feature and `.Host` programs with one-call builder composition, host extensions named after the namespace node before `Host`, referenced feature discovery, independent entry-point/build overrides, once-per-container registrars, and replaceable in-memory persistence and shared-service defaults.
 - Restore causal metadata and transitional targets during protobuf deserialization while keeping their public API immutable; reserve the computed model's old field number and preserve existing request payload tags.
 - Generate `Build{Feature.Name}` application extensions that use the container associated by `BuildMu`, invoke feature registrars, and map hosted gRPC services; defer container verification and configured listener setup until startup to support fluent feature composition.

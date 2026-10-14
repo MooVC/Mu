@@ -13,75 +13,68 @@
     {
         public static ImmutableArray<Qualifier> GetProjects(this IEnumerable<Symbol> symbols, Name company, params Name[] names)
         {
+            return symbols.GetScopedProjects(company, Qualifier.Unqualified, names);
+        }
+
+        internal static ImmutableArray<Qualifier> GetScopedProjects(this IEnumerable<Symbol> symbols, Name company, Qualifier scope, params Name[] names)
+        {
             _ = Guard.Against.Null(symbols, message: GetProjectsSymbolsRequired);
             _ = Guard.Against.Null(company, message: GetProjectsCompanyRequired);
+            _ = Guard.Against.Null(scope, message: GetProjectsNamesRequired);
             _ = Guard.Against.Null(names, message: GetProjectsNamesRequired);
+
+            if (!HasName(names, 0))
+            {
+                return ImmutableArray<Qualifier>.Empty;
+            }
+
+            ImmutableArray<Name> prefix = (company.IsUnnamed
+                ? ImmutableArray.Create(names[0])
+                : ImmutableArray.Create(company, names[0]))
+                .AddRange(scope.ToImmutableArray());
 
             IEnumerable<Qualifier> unique = symbols
                 .SelectMany(symbol => symbol)
-                .Distinct();
+                .Distinct()
+                .Where(qualifier => qualifier.Take(prefix.Length).SequenceEqual(prefix));
 
             var projects = new HashSet<Qualifier>();
 
-            if (company.IsUnnamed)
-            {
-                GetProjects(0, projects, names, unique);
-            }
-            else
-            {
-                foreach (IGrouping<Name, Qualifier> name in unique.GroupBy(qualifier => qualifier[0]))
-                {
-                    if (name.Key == company)
-                    {
-                        GetProjects(1, projects, names, unique);
-                    }
-                }
-            }
+            GetProjects(prefix.Length, projects, names, unique);
 
             return projects.ToImmutableArray();
         }
 
-        private static void GetProjects(int offset, HashSet<Qualifier> projects, Name[] names, IEnumerable<Qualifier> unique)
+        private static void GetProjects(int areaOffset, HashSet<Qualifier> projects, Name[] names, IEnumerable<Qualifier> model)
         {
-            if (!HasName(names, offset))
+            const int AreaIndex = 1;
+            const int UnitIndex = 2;
+
+            if (!HasName(names, AreaIndex))
             {
+                AddProjects(projects, model, areaOffset + 1);
                 return;
             }
 
-            IGrouping<Name, Qualifier> model = FindGroup(unique, offset, names[offset]);
-
-            if (model is null)
-            {
-                return;
-            }
-
-            int areaOffset = offset + 1;
-
-            if (!HasName(names, areaOffset))
-            {
-                AddProjects(projects, model, areaOffset + 0);
-                return;
-            }
-
-            IGrouping<Name, Qualifier> area = FindGroup(model, areaOffset, names[areaOffset]);
+            IGrouping<Name, Qualifier> area = FindGroup(model, areaOffset, names[AreaIndex]);
 
             if (area is null)
             {
                 return;
             }
 
-            int unitOffset = offset + 2;
+            int unitOffset = areaOffset + 1;
 
-            if (!HasName(names, unitOffset))
+            if (!HasName(names, UnitIndex))
             {
                 AddProjects(projects, area, unitOffset);
 
                 return;
             }
 
-            foreach (IGrouping<Name, Qualifier> unit in model.GroupBy(qualifier => qualifier[unitOffset]))
+            foreach (IGrouping<Name, Qualifier> unit in area.GroupBy(qualifier => qualifier[unitOffset]))
             {
-                if (unit.Key == names[unitOffset])
+                if (unit.Key == names[UnitIndex])
                 {
                     continue;
                 }

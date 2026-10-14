@@ -11,6 +11,7 @@ public sealed partial class WhenParseModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car(Wheel Wheel);
 
             public sealed partial class Wheel
@@ -45,6 +46,7 @@ public sealed partial class WhenParseModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car(Wheel Wheel);
 
             public sealed partial class Wheel : System.IEquatable<int>, System.IEquatable<Wheel>
@@ -89,6 +91,7 @@ public sealed partial class WhenParseModelIsCalled
         string source = $$"""
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car(Wheel Wheel);
 
             public sealed partial {{kind}} Wheel
@@ -113,6 +116,7 @@ public sealed partial class WhenParseModelIsCalled
         string source = $$"""
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car(Wheel Wheel);
 
             public sealed {{kind}} Wheel
@@ -136,6 +140,7 @@ public sealed partial class WhenParseModelIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Car(Wheel Wheel);
 
             public partial struct Wheel

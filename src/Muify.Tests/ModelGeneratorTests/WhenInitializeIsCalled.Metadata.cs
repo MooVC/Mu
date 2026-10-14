@@ -13,10 +13,14 @@ public sealed partial class WhenInitializeIsCalled
             namespace Muify.Domain
             {
                 public sealed class IdentityAttribute : System.Attribute;
+
+                public sealed class UnitAttribute<TIdentity> : System.Attribute
+                    where TIdentity : struct;
             }
 
             namespace MooVC.Testing.Mechanics.Car
             {
+                [Muify.Domain.Unit<System.Guid>]
                 public sealed record Car(Wheel Wheel, Details Details);
 
                 public sealed partial record Details(string Value);
@@ -64,6 +68,11 @@ public sealed partial class WhenInitializeIsCalled
         // Arrange
         const string featureAssemblyName = "MooVC.Testing.Mechanics.Car.Search";
         const string source = """
+            namespace Muify.Service
+            {
+                public sealed class NonMutationalAttribute : System.Attribute;
+            }
+
             namespace MooVC.Testing.Mechanics.Car
             {
                 public sealed record Car : Mu.Modelling.State.Aggregate;
@@ -71,6 +80,7 @@ public sealed partial class WhenInitializeIsCalled
 
             namespace MooVC.Testing.Mechanics.Car.Search
             {
+                [Muify.Service.NonMutational]
                 public sealed partial record Search
                 {
                     public sealed record Result(string Value);

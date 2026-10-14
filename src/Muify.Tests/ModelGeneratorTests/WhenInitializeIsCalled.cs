@@ -27,6 +27,12 @@ public sealed partial class WhenInitializeIsCalled
             {
             }
         }
+
+        namespace Muify.Service
+        {
+            [System.AttributeUsage(System.AttributeTargets.Class)]
+            public sealed class NonMutationalAttribute : System.Attribute;
+        }
         """;
 
     private static readonly MetadataReference[] _references = GetReferences();
@@ -70,6 +76,7 @@ public sealed partial class WhenInitializeIsCalled
         const string domainSource = """
             namespace MooVC.Testing.Modelling.Account;
 
+            [Muify.Domain.Unit<System.Guid>]
             public sealed record Account(Owner Owner);
 
             public sealed record Owner(string Name);
@@ -126,7 +133,7 @@ public sealed partial class WhenInitializeIsCalled
 
         var domain = CSharpCompilation.Create(
             domainAssemblyName,
-            [CSharpSyntaxTree.ParseText(domainSource)],
+            [CSharpSyntaxTree.ParseText(ContractsSource), CSharpSyntaxTree.ParseText(domainSource)],
             _references,
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
@@ -220,11 +227,13 @@ public sealed partial class WhenInitializeIsCalled
         const string source = """
             namespace MooVC.Testing.Mechanics.Car
             {
+                [Muify.Domain.Unit<System.Guid>]
                 public sealed record Car;
             }
 
             namespace MooVC.Testing.Mechanics.Car.Register
             {
+                [Muify.Service.NonMutational]
                 public sealed partial record Register(Details Details, Extras.Details Extra);
 
                 public sealed partial record Details(string Value);

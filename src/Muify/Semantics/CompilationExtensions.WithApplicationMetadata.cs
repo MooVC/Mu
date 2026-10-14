@@ -10,20 +10,23 @@ namespace Muify.Semantics
     using MooVC;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using static Muify.Semantics.INamedTypeSymbolExtensions;
 
     internal static partial class CompilationExtensions
     {
         private static ImmutableArray<Qualification> GetHostedFeatures(this Compilation compilation)
         {
-            const int FeatureSegments = 5;
+            const int MinimumFeatureSegments = 5;
 
-            return compilation.SourceModule.ReferencedAssemblySymbols
-                .Select(assembly => (Assembly: assembly, Segments: assembly.Identity.Name.Split('.')))
-                .Where(reference => reference.Segments.Length == FeatureSegments && reference.Segments[FeatureSegments - 1] != "Host")
-                .Select(reference => reference.Assembly.GetTypeByMetadataName($"{reference.Assembly.Identity.Name}.{reference.Segments[FeatureSegments - 1]}"))
-                .Where(request => request is object
-                    && request.Arity == 0
-                    && request.HasUseCaseBase()
+            return compilation.References
+                .Where(reference => reference.Properties.Aliases.IsDefaultOrEmpty || reference.Properties.Aliases.Contains("global"))
+                .Select(compilation.GetAssemblyOrModuleSymbol)
+                .OfType<IAssemblySymbol>()
+                .SelectMany(assembly => assembly.GlobalNamespace.GetAllTypes())
+                .Where(request => request.Name == request.ContainingNamespace.Name
+                    && !HasHostSuffix(request.ContainingNamespace.ToDisplayString())
+                    && request.ContainingNamespace.ToDisplayString().Split('.').Length >= MinimumFeatureSegments
+                    && request.GetProjectKind() == ProjectKind.Feature
                     && compilation.IsSymbolAccessibleWithin(request, compilation.Assembly)
                     && request.ContainingNamespace.GetTypeMembers("WebApplicationExtensions").Any(extensions =>
                         extensions.HasApplicationExtension($"Build{request.Name}", "Microsoft.AspNetCore.Builder.WebApplication", compilation)))
@@ -33,9 +36,9 @@ namespace Muify.Semantics
                 .ToImmutableArray();
         }
 
-        private static bool HasHostSuffix(string name)
+        private static bool HasHostSuffix(string projectNamespace)
         {
-            string[] segments = name.Split('.');
+            string[] segments = projectNamespace.Split('.');
 
             return segments.Length >= 2 && segments[segments.Length - 1] == "Host";
         }

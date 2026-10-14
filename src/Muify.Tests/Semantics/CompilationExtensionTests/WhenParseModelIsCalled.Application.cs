@@ -31,12 +31,12 @@ public sealed partial class WhenParseModelIsCalled
     }
 
     [Test]
-    public async Task GivenAHostRootNamespaceWhenTheAssemblyNameDiffersThenTheConfiguredNamespaceIsUsed()
+    [Arguments("Custom.Runtime", "Custom.Component.Host", "Custom.Component.Host", "BuildComponent")]
+    [Arguments(HostAssemblyName, "Custom.Component", HostAssemblyName, "BuildAccount")]
+    [Arguments(HostAssemblyName, "Custom.Component.Host", "Custom.Component.Host", "BuildComponent")]
+    public async Task GivenHostAssemblyOrRootNamespacesThenTheHostNamespaceDeterminesTheApplication(string assemblyName, string rootNamespace, string expectedNamespace, string buildName)
     {
         // Arrange
-        const string assemblyName = "Custom.Runtime";
-        const string rootNamespace = "Custom.Component.Host";
-        const string buildName = "BuildComponent";
         CSharpCompilation compilation = CreateApplicationCompilation(assemblyName);
 
         // Act
@@ -44,7 +44,7 @@ public sealed partial class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Metadata.IsHost).IsTrue();
-        _ = await Assert.That(result.Metadata.ApplicationNamespace).IsEqualTo(rootNamespace);
+        _ = await Assert.That(result.Metadata.ApplicationNamespace).IsEqualTo(expectedNamespace);
         _ = await Assert.That(result.Metadata.BuildName).IsEqualTo(buildName);
     }
 
@@ -78,6 +78,7 @@ public sealed partial class WhenParseModelIsCalled
 
             namespace MooVC.Testing.Mechanics.Car.Open
             {
+                [global::Muify.Service.NonMutational]
                 public sealed partial record Open;
             }
             """;
@@ -135,14 +136,16 @@ public sealed partial class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Metadata.HasProgram).IsEqualTo(expected);
+        _ = await Assert.That(result.Metadata.IsHost).IsTrue();
+        _ = await Assert.That(result.Metadata.BuildName).IsEqualTo("BuildAccount");
     }
 
     [Test]
     public async Task GivenReferencedProjectsThenOnlyAccessibleGenuineFeaturesWithCallableApplicationBuildMethodsAreCatalogued()
     {
         // Arrange
-        const string firstAssemblyName = "Other.Company.Area.First.Open";
-        const string secondAssemblyName = "MooVC.Testing.Mechanics.Second.Read";
+        const string firstAssemblyName = "Other.Company.Platform.Area.First.Open";
+        const string secondAssemblyName = "MooVC.Testing.Platform.Payments.Mechanics.Second.Read";
         const string unrelatedAssemblyName = "MooVC.Testing.Mechanics.Other.Ignore";
         const string inaccessibleAssemblyName = "MooVC.Testing.Mechanics.Hidden.Hide";
         const string invalidAssemblyName = "MooVC.Testing.Mechanics.Invalid.Skip";
@@ -156,7 +159,7 @@ public sealed partial class WhenParseModelIsCalled
         MetadataReference unrelated = await CreateApplicationReference(unrelatedAssemblyName, CreateHostedReferenceSource(unrelatedAssemblyName, unrelatedMethod, hasBase: false));
         MetadataReference inaccessible = await CreateApplicationReference(inaccessibleAssemblyName, CreateHostedReferenceSource(inaccessibleAssemblyName, inaccessibleMethod, isAccessible: false));
         MetadataReference invalid = await CreateApplicationReference(invalidAssemblyName, CreateHostedReferenceSource(invalidAssemblyName, invalidMethod));
-        CSharpCompilation compilation = CreateApplicationCompilation(HostAssemblyName).AddReferences(second, unrelated, first, inaccessible, invalid);
+        CSharpCompilation compilation = CreateApplicationCompilation(HostAssemblyName, CreateHostSource(HostAssemblyName)).AddReferences(second, unrelated, first, inaccessible, invalid);
         Qualification[] expected =
         [
             (Name: "Read", Qualifier: secondAssemblyName),
@@ -168,6 +171,114 @@ public sealed partial class WhenParseModelIsCalled
 
         // Assert
         _ = await Assert.That(result.Metadata.Features.SequenceEqual(expected)).IsTrue();
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenAReferencedFeatureWithAnExternAliasThenItIsComposedOnlyWhenTheGlobalAliasIsAvailable(bool includesGlobal)
+    {
+        // Arrange
+        const string featureNamespace = "MooVC.Testing.Platform.Mechanics.Car.Open";
+        const string method = "public static global::Microsoft.AspNetCore.Builder.WebApplication BuildOpen(this global::Microsoft.AspNetCore.Builder.WebApplication app) { return app; }";
+        const string expectedWithFeature = """
+            #nullable enable
+
+            namespace MooVC.Testing.Mechanics.Account.Host;
+
+            public static partial class WebApplicationExtensions
+            {
+                extension(global::Microsoft.AspNetCore.Builder.WebApplication app)
+                {
+                    public global::Microsoft.AspNetCore.Builder.WebApplication BuildAccount()
+                    {
+                        _ = global::Ardalis.GuardClauses.GuardClauseExtensions.Null(global::Ardalis.GuardClauses.Guard.Against, app, nameof(app), message: "The application must be provided.");
+
+                        var container = global::Mu.Composition.WebApplicationExtensions.GetMuContainer(app) ?? throw new global::System.InvalidOperationException("Mu must be added before building the host.");
+
+                        _ = global::MooVC.Testing.Platform.Mechanics.Car.Open.WebApplicationExtensions.BuildOpen(app);
+                        _ = global::Mu.Composition.ContainerExtensions.RegisterDefaults(container, app.Configuration);
+
+                        return app;
+                    }
+                }
+            }
+            """;
+        const string expectedWithoutFeature = """
+            #nullable enable
+
+            namespace MooVC.Testing.Mechanics.Account.Host;
+
+            public static partial class WebApplicationExtensions
+            {
+                extension(global::Microsoft.AspNetCore.Builder.WebApplication app)
+                {
+                    public global::Microsoft.AspNetCore.Builder.WebApplication BuildAccount()
+                    {
+                        _ = global::Ardalis.GuardClauses.GuardClauseExtensions.Null(global::Ardalis.GuardClauses.Guard.Against, app, nameof(app), message: "The application must be provided.");
+
+                        var container = global::Mu.Composition.WebApplicationExtensions.GetMuContainer(app) ?? throw new global::System.InvalidOperationException("Mu must be added before building the host.");
+
+
+                        _ = global::Mu.Composition.ContainerExtensions.RegisterDefaults(container, app.Configuration);
+
+                        return app;
+                    }
+                }
+            }
+            """;
+        string[] aliases = includesGlobal ? ["featureOnly", "global"] : ["featureOnly"];
+        MetadataReference reference = (await CreateApplicationReference(featureNamespace, CreateHostedReferenceSource(featureNamespace, method))).WithAliases(aliases);
+        CSharpCompilation compilation = CreateApplicationCompilation(HostAssemblyName, CreateHostSource(HostAssemblyName)).AddReferences(reference);
+        Qualification[] expectedFeatures = includesGlobal ? [(Name: "Open", Qualifier: featureNamespace)] : [];
+        string expected = includesGlobal ? expectedWithFeature : expectedWithoutFeature;
+        GeneratorDriver driver = CSharpGeneratorDriver.Create(new ModelGenerator());
+
+        // Act
+        Model result = compilation.ParseModel(CancellationToken.None);
+        driver = driver.RunGeneratorsAndUpdateCompilation(compilation, out Compilation generated, out _);
+        GeneratorRunResult definitions = driver.GetRunResult().Results.Single();
+
+        // Assert
+        _ = await Assert.That(result.Metadata.Features).IsEquivalentTo(expectedFeatures);
+        _ = await Assert.That(definitions.Diagnostics).IsEmpty();
+        GeneratedSourceResult extension = await Assert.That(definitions.GeneratedSources.Where(source => source.HintName == $"{HostAssemblyName}.WebApplicationExtensions.BuildAccount.g.cs")).HasSingleItem();
+        _ = await Assert.That(extension.SourceText.ToString()).IsEqualTo(expected);
+        _ = await Assert.That(generated.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error)).IsEmpty();
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenAFeatureWithAMissingOrUnrecognizedReferencedUnitThenItsDomainAndApplicationAreNotGenerated(bool hasUnit)
+    {
+        // Arrange
+        const string unitNamespace = "MooVC.Testing.Platform.Mechanics.Car";
+        const string featureNamespace = $"{unitNamespace}.Open";
+        const string unitSource = $$"""
+            namespace {{unitNamespace}};
+
+            public sealed record Car;
+            """;
+        const string featureSource = $$"""
+            namespace {{featureNamespace}};
+
+            [global::Muify.Service.NonMutational]
+            public sealed partial record Open;
+            """;
+        MetadataReference reference = await CreateApplicationReference(unitNamespace, hasUnit ? unitSource : string.Empty);
+        CSharpCompilation compilation = CreateApplicationCompilation(featureNamespace, featureSource, OutputKind.ConsoleApplication).AddReferences(reference);
+
+        // Act
+        Model result = compilation.ParseModel(CancellationToken.None);
+        GeneratorRunResult definitions = CSharpGeneratorDriver.Create(new ModelGenerator()).RunGenerators(compilation).GetRunResult().Results.Single();
+
+        // Assert
+        _ = await Assert.That(result.Areas).IsEmpty();
+        _ = await Assert.That(result.Metadata.Features).IsEmpty();
+        _ = await Assert.That(result.Metadata.BuildName).IsEqualTo(string.Empty);
+        _ = await Assert.That(definitions.Diagnostics).IsEmpty();
+        _ = await Assert.That(definitions.GeneratedSources).IsEmpty();
     }
 
     [Test]
@@ -354,7 +465,10 @@ public sealed partial class WhenParseModelIsCalled
     {
         return CSharpCompilation.Create(
             assemblyName,
-            [CSharpSyntaxTree.ParseText(source ?? string.Empty, path: filePath)],
+            [
+                CSharpSyntaxTree.ParseText(ClassificationAttributesSource),
+                CSharpSyntaxTree.ParseText(source ?? string.Empty, path: filePath),
+            ],
             _references,
             new CSharpCompilationOptions(outputKind));
     }
@@ -368,6 +482,15 @@ public sealed partial class WhenParseModelIsCalled
         stream.Position = 0;
 
         return MetadataReference.CreateFromStream(stream);
+    }
+
+    private static string CreateHostSource(string hostNamespace)
+    {
+        return $$"""
+            namespace {{hostNamespace}};
+
+            public sealed class HostMarker;
+            """;
     }
 
     private static string CreateHostedReferenceSource(string assemblyName, string methods, bool hasBase = true, bool isAccessible = true)
