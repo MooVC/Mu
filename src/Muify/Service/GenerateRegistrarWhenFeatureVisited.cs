@@ -13,7 +13,7 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (!feature._Value.Metadata.IsPartial || feature._Value.Metadata.HasRegistrar || feature._Value.Metadata.IsOutOfScope)
+            if (!CanGenerateRegistrar(feature._Value))
             {
                 yield break;
             }
@@ -30,15 +30,31 @@ namespace Muify.Service
             yield return new File(content, $"{feature.Namespace}.{feature._Value.Name}.Registrar");
         }
 
+        private static bool CanBindReference(Poco reference)
+        {
+            return !reference.Qualification.IsUnnamed
+                && (reference.HasBinder || CanGenerateReferenceBinder(reference));
+        }
+
+        private static bool CanGenerateReferenceBinder(Poco reference)
+        {
+            return reference.IsPartial
+                && !reference.Characteristics.IsUndefined
+                && !reference.Attributes.IsEmpty
+                && !reference.IsUndefined;
+        }
+
+        private static bool CanGenerateRegistrar(Feature feature)
+        {
+            return feature.Metadata.IsPartial
+                && !feature.Metadata.HasRegistrar
+                && !feature.Metadata.IsOutOfScope;
+        }
+
         private static Snippet GetRegistrations(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
             var registrations = feature._Value.Metadata.References
-                .Where(reference => !reference.Qualification.IsUnnamed
-                    && (reference.HasBinder
-                        || (reference.IsPartial
-                            && !reference.Characteristics.IsUndefined
-                            && !reference.Attributes.IsEmpty
-                            && !reference.IsUndefined)))
+                .Where(CanBindReference)
                 .OrderBy(reference => reference.Qualification.ToString(), StringComparer.Ordinal)
                 .Select(reference => (Symbol)reference.Qualification)
                 .Distinct()

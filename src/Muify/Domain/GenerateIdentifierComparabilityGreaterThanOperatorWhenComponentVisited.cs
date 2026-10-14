@@ -19,11 +19,16 @@
             return Generate(component._Value, component.Namespace);
         }
 
+        private static bool CanGenerate(Component component)
+        {
+            return component.Metadata.Identifier.Comparability.IsComparable != Presence.NotApplicable
+                && !component.Metadata.Identifier.Comparability.HasGreaterThanOperator
+                && !component.Identifier.IsUndefined;
+        }
+
         private static IEnumerable<File> Generate(Component component, Qualifier @namespace)
         {
-            if (component.Metadata.Identifier.Comparability.IsComparable == Presence.NotApplicable
-             || component.Metadata.Identifier.Comparability.HasGreaterThanOperator
-             || component.Identifier.IsUndefined)
+            if (!CanGenerate(component))
             {
                 yield break;
             }

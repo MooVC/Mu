@@ -9,11 +9,7 @@ namespace Muify.Semantics
 
         public static bool IsAllocator(this INamedTypeSymbol type, ITypeSymbol identityType)
         {
-            INamedTypeSymbol definition = type.OriginalDefinition;
-
-            if (definition.MetadataName != AllocatorMetadataName
-             || definition.ContainingNamespace.ToDisplayString() != ServicesNamespace
-             || type.TypeArguments.Length == 0)
+            if (!IsAllocatorInterfaceType(type))
             {
                 return false;
             }
@@ -21,6 +17,15 @@ namespace Muify.Semantics
             return identityType is null
                 ? Unit.Undefined.Identity.Equals(type.TypeArguments[0].ToQualification())
                 : SymbolEqualityComparer.Default.Equals(type.TypeArguments[0], identityType);
+        }
+
+        private static bool IsAllocatorInterfaceType(INamedTypeSymbol type)
+        {
+            INamedTypeSymbol definition = type.OriginalDefinition;
+
+            return definition.MetadataName == AllocatorMetadataName
+                && definition.ContainingNamespace.ToDisplayString() == ServicesNamespace
+                && type.TypeArguments.Length != 0;
         }
     }
 }

@@ -13,12 +13,7 @@
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)
         {
-            if (!poco._Value.IsPartial
-              || poco._Value.HasBinder
-              || poco._Value.Qualification.IsUnnamed
-              || poco._Value.Characteristics.IsUndefined
-              || poco._Value.Attributes.IsEmpty
-              || poco._Value.IsUndefined)
+            if (!CanGenerateBinder(poco._Value))
             {
                 yield break;
             }
@@ -61,6 +56,16 @@
             bindings.Add("return model;");
 
             return bindings.ToSnippet(Configuration.Options);
+        }
+
+        private static bool CanGenerateBinder(Poco poco)
+        {
+            return poco.IsPartial
+                && !poco.HasBinder
+                && !poco.Qualification.IsUnnamed
+                && !poco.Characteristics.IsUndefined
+                && !poco.Attributes.IsEmpty
+                && !poco.IsUndefined;
         }
     }
 }

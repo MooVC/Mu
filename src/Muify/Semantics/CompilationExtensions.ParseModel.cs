@@ -94,18 +94,26 @@ namespace Muify.Semantics
             ImmutableArray<Qualification> features = feature.IsUndefined
                 ? ImmutableArray<Qualification>.Empty
                 : ImmutableArray.Create(definition.ToQualification());
-            bool canBuild = feature.Metadata.HasBuildExtension
-                || feature.Metadata.HasBuilderBuildExtension
-                || ((feature.Metadata.IsPartial || feature.Metadata.HasRegistrar)
-                    && GenerateRegisterModeWhenFeatureVisited.CanGenerate(feature));
+            bool canBuild = HasCustomFeatureBuildMethod(feature) || CanGenerateFeatureBuildMethod(feature);
             string featureBuildName = !feature.IsUndefined && canBuild ? $"Build{feature.Name}" : string.Empty;
 
             return compilation.WithApplicationMetadata(model, assemblies, projectNamespace, featureBuildName, false, features);
         }
 
+        private static bool CanGenerateFeatureBuildMethod(Feature feature)
+        {
+            return (feature.Metadata.IsPartial || feature.Metadata.HasRegistrar)
+                && GenerateRegisterModeWhenFeatureVisited.CanGenerate(feature);
+        }
+
         private static Qualifier GetModelScope(string[] segments, int areaIndex)
         {
             return new Qualifier(segments.Skip(2).Take(areaIndex - 2).Select(segment => (Name)segment).ToImmutableArray());
+        }
+
+        private static bool HasCustomFeatureBuildMethod(Feature feature)
+        {
+            return feature.Metadata.HasBuildExtension || feature.Metadata.HasBuilderBuildExtension;
         }
     }
 }

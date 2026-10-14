@@ -16,11 +16,7 @@ namespace Muify.Semantics
                 if (current
                     .GetMembers(CompareToMethodName)
                     .OfType<IMethodSymbol>()
-                    .Any(method => method.DeclaredAccessibility != Accessibility.Private
-                        && !method.IsStatic
-                        && method.Parameters.Length == 1
-                        && method.ReturnType.SpecialType == SpecialType.System_Int32
-                        && SymbolEqualityComparer.Default.Equals(method.Parameters[0].Type, parameterType)))
+                    .Any(method => IsCompatibleCompareToMethod(method, parameterType)))
                 {
                     return true;
                 }
@@ -29,6 +25,15 @@ namespace Muify.Semantics
             }
 
             return false;
+        }
+
+        private static bool IsCompatibleCompareToMethod(IMethodSymbol method, ITypeSymbol parameterType)
+        {
+            return method.DeclaredAccessibility != Accessibility.Private
+                && !method.IsStatic
+                && method.Parameters.Length == 1
+                && method.ReturnType.SpecialType == SpecialType.System_Int32
+                && SymbolEqualityComparer.Default.Equals(method.Parameters[0].Type, parameterType);
         }
     }
 }

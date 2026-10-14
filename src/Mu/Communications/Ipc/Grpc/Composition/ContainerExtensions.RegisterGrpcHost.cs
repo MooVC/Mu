@@ -1,5 +1,7 @@
 namespace Mu.Communications.Ipc.Grpc.Composition;
 
+using System;
+using System.Diagnostics.CodeAnalysis;
 using Ardalis.GuardClauses;
 using global::Grpc.AspNetCore.Server;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,11 +37,11 @@ public static partial class ContainerExtensions
 
             container.RegisterInstance<IOptions<GrpcServiceOptions<TService>>>(OptionsFactory.Create(settings));
 
-            if (container.ContainerScope.GetItem(typeof(IServiceCollection)) is IServiceCollection services)
+            if (TryGetApplicationServices(container, out IServiceCollection? services))
             {
-                if (container.ContainerScope.GetItem(typeof(CompositionContext)) is CompositionContext { ServiceProvider: not null } composition)
+                if (TryGetBuiltServiceProvider(container, out IServiceProvider? serviceProvider))
                 {
-                    GrpcServiceOptions<TService> grpc = composition.ServiceProvider.GetRequiredService<IOptions<GrpcServiceOptions<TService>>>().Value;
+                    GrpcServiceOptions<TService> grpc = serviceProvider.GetRequiredService<IOptions<GrpcServiceOptions<TService>>>().Value;
                     grpc.EnableDetailedErrors = options.EnableDetailedErrors;
                     grpc.MaxReceiveMessageSize = options.MaxReceiveMessageSize;
                     grpc.MaxSendMessageSize = options.MaxSendMessageSize;
@@ -60,5 +62,19 @@ public static partial class ContainerExtensions
 
             return container;
         }
+    }
+
+    private static bool TryGetApplicationServices(Container container, [NotNullWhen(true)] out IServiceCollection? services)
+    {
+        services = container.ContainerScope.GetItem(typeof(IServiceCollection)) as IServiceCollection;
+
+        return services is not null;
+    }
+
+    private static bool TryGetBuiltServiceProvider(Container container, [NotNullWhen(true)] out IServiceProvider? serviceProvider)
+    {
+        serviceProvider = (container.ContainerScope.GetItem(typeof(CompositionContext)) as CompositionContext)?.ServiceProvider;
+
+        return serviceProvider is not null;
     }
 }

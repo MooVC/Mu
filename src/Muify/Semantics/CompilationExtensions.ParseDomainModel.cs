@@ -30,10 +30,7 @@ namespace Muify.Semantics
             definition.IdentifyMembers(out Component[] components, out List[] lists, cancellationToken);
 
             IOrderedEnumerable<IPropertySymbol> attributes = definition
-                .GetProperties(property => property.DeclaredAccessibility == Accessibility.Public
-                    && !property.IsStatic
-                    && !property.IsIndexer
-                    && property.SetMethod?.DeclaredAccessibility == Accessibility.Public)
+                .GetProperties(IsAggregateStateProperty)
                 .OrderBy(property => property.Name, StringComparer.Ordinal);
 
             return Model.Undefined
@@ -57,6 +54,14 @@ namespace Muify.Semantics
                         .Enumerate((defined, subject) => subject.Featuring(defined), feature.IsUndefined ? Array.Empty<Feature>() : new[] { feature })
                         .Owns(components)
                         .Sets(lists)));
+        }
+
+        private static bool IsAggregateStateProperty(IPropertySymbol property)
+        {
+            return property.DeclaredAccessibility == Accessibility.Public
+                && !property.IsStatic
+                && !property.IsIndexer
+                && property.SetMethod?.DeclaredAccessibility == Accessibility.Public;
         }
     }
 }

@@ -8,8 +8,21 @@ namespace Muify.Semantics
         public static bool HasContainerExtension(this INamedTypeSymbol extensions, string name)
         {
             return extensions is object
-                && (extensions.GetMembers(name).OfType<IMethodSymbol>().Any(method => method.DeclaredAccessibility == Accessibility.Public)
-                    || extensions.GetTypeMembers().Where(type => type.IsImplicitlyDeclared).Any(type => type.HasContainerExtension(name)));
+                && (HasPublicContainerExtension(extensions, name) || HasNestedContainerExtension(extensions, name));
+        }
+
+        private static bool HasNestedContainerExtension(INamedTypeSymbol extensions, string name)
+        {
+            return extensions.GetTypeMembers()
+                .Where(type => type.IsImplicitlyDeclared)
+                .Any(type => type.HasContainerExtension(name));
+        }
+
+        private static bool HasPublicContainerExtension(INamedTypeSymbol extensions, string name)
+        {
+            return extensions.GetMembers(name)
+                .OfType<IMethodSymbol>()
+                .Any(method => method.DeclaredAccessibility == Accessibility.Public);
         }
     }
 }

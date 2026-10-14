@@ -10,9 +10,7 @@ namespace Muify.Semantics
 
             while (current is object)
             {
-                if (current.MetadataName == "Options"
-                    && current.ContainingType is null
-                    && current.ContainingNamespace.ToDisplayString() == "Mu.Configuration")
+                if (IsConfigurationOptionsType(current))
                 {
                     return true;
                 }
@@ -21,6 +19,13 @@ namespace Muify.Semantics
             }
 
             return false;
+        }
+
+        private static bool IsConfigurationOptionsType(INamedTypeSymbol type)
+        {
+            return type.MetadataName == "Options"
+                && type.ContainingType is null
+                && type.ContainingNamespace.ToDisplayString() == "Mu.Configuration";
         }
     }
 }

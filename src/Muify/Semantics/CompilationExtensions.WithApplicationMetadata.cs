@@ -16,24 +16,22 @@ namespace Muify.Semantics
     {
         private static ImmutableArray<Qualification> GetHostedFeatures(this Compilation compilation)
         {
-            const int MinimumFeatureSegments = 5;
-
             return compilation.References
-                .Where(reference => reference.Properties.Aliases.IsDefaultOrEmpty || reference.Properties.Aliases.Contains("global"))
+                .Where(IsGlobalReference)
                 .Select(compilation.GetAssemblyOrModuleSymbol)
                 .OfType<IAssemblySymbol>()
                 .SelectMany(assembly => assembly.GlobalNamespace.GetAllTypes())
-                .Where(request => request.Name == request.ContainingNamespace.Name
-                    && !HasHostSuffix(request.ContainingNamespace.ToDisplayString())
-                    && request.ContainingNamespace.ToDisplayString().Split('.').Length >= MinimumFeatureSegments
-                    && request.GetProjectKind() == ProjectKind.Feature
-                    && compilation.IsSymbolAccessibleWithin(request, compilation.Assembly)
-                    && request.ContainingNamespace.GetTypeMembers("WebApplicationExtensions").Any(extensions =>
-                        extensions.HasApplicationExtension($"Build{request.Name}", "Microsoft.AspNetCore.Builder.WebApplication", compilation)))
+                .Where(request => IsHostedFeature(request, compilation))
                 .Select(request => request.ToQualification())
                 .Distinct()
                 .OrderBy(feature => $"{feature.Qualifier}.{feature.Moniker}", StringComparer.Ordinal)
                 .ToImmutableArray();
+        }
+
+        private static bool HasFeatureApplicationBuildMethod(INamedTypeSymbol request, Compilation compilation)
+        {
+            return request.ContainingNamespace.GetTypeMembers("WebApplicationExtensions").Any(extensions =>
+                extensions.HasApplicationExtension($"Build{request.Name}", "Microsoft.AspNetCore.Builder.WebApplication", compilation));
         }
 
         private static bool HasHostSuffix(string projectNamespace)
@@ -46,9 +44,40 @@ namespace Muify.Semantics
         private static bool HasProgram(this Compilation compilation)
         {
             return compilation.GetEntryPoint(CancellationToken.None) is object
-                || compilation.SyntaxTrees.Any(tree =>
-                    string.Equals(Path.GetFileName(tree.FilePath), "Program.cs", StringComparison.OrdinalIgnoreCase)
-                    || tree.GetRoot().DescendantNodes().OfType<GlobalStatementSyntax>().Any());
+                || compilation.SyntaxTrees.Any(IsProgramSource);
+        }
+
+        private static bool IsExecutableOutput(OutputKind output)
+        {
+            return output == OutputKind.ConsoleApplication || output == OutputKind.WindowsApplication;
+        }
+
+        private static bool IsFeatureProjectRecord(INamedTypeSymbol request)
+        {
+            const int MinimumFeatureSegments = 5;
+
+            return request.Name == request.ContainingNamespace.Name
+                && !HasHostSuffix(request.ContainingNamespace.ToDisplayString())
+                && request.ContainingNamespace.ToDisplayString().Split('.').Length >= MinimumFeatureSegments
+                && request.GetProjectKind() == ProjectKind.Feature;
+        }
+
+        private static bool IsGlobalReference(MetadataReference reference)
+        {
+            return reference.Properties.Aliases.IsDefaultOrEmpty || reference.Properties.Aliases.Contains("global");
+        }
+
+        private static bool IsHostedFeature(INamedTypeSymbol request, Compilation compilation)
+        {
+            return IsFeatureProjectRecord(request)
+                && compilation.IsSymbolAccessibleWithin(request, compilation.Assembly)
+                && HasFeatureApplicationBuildMethod(request, compilation);
+        }
+
+        private static bool IsProgramSource(SyntaxTree tree)
+        {
+            return string.Equals(Path.GetFileName(tree.FilePath), "Program.cs", StringComparison.OrdinalIgnoreCase)
+                || tree.GetRoot().DescendantNodes().OfType<GlobalStatementSyntax>().Any();
         }
 
         private static Model WithApplicationMetadata(
@@ -71,7 +100,7 @@ namespace Muify.Semantics
                 .HasApplicationBuildExtension(applicationExtensions.HasApplicationExtension(buildName, "Microsoft.AspNetCore.Builder.WebApplication", compilation))
                 .HasBuilderBuildExtension(builderExtensions.HasApplicationExtension(buildName, "Microsoft.AspNetCore.Builder.WebApplicationBuilder", compilation))
                 .HasProgram(compilation.HasProgram())
-                .IsExecutable(compilation.Options.OutputKind == OutputKind.ConsoleApplication || compilation.Options.OutputKind == OutputKind.WindowsApplication)
+                .IsExecutable(IsExecutableOutput(compilation.Options.OutputKind))
                 .IsHost(isHost));
         }
     }

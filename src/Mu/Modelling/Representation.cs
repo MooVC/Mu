@@ -22,7 +22,7 @@ public sealed record Representation
             throw new ArgumentException(TypeAggregateRequired.Format(type, _basis), nameof(type));
         }
 
-        if (type != _basis && (type.IsAbstract || !type.IsSealed))
+        if (IsUnsealedOrAbstractAggregate(type))
         {
             throw new ArgumentException(TypeSealedConcreteRequired.Format(type, _basis), nameof(type));
         }
@@ -76,5 +76,10 @@ public sealed record Representation
             ?? throw new ArgumentException(ImplicitModelTypeRequired.Format(model));
 
         return type;
+    }
+
+    private static bool IsUnsealedOrAbstractAggregate(Type type)
+    {
+        return type != _basis && (type.IsAbstract || !type.IsSealed);
     }
 }

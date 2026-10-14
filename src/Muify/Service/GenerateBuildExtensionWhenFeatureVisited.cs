@@ -13,10 +13,9 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            bool canGenerate = GenerateRegisterModeWhenFeatureVisited.CanGenerate(feature)
-                && (feature._Value.Metadata.HasRegistrar || feature._Value.Metadata.IsPartial);
+            bool canGenerate = CanGenerateApplicationExtension(feature._Value);
 
-            if (feature._Value.Metadata.IsOutOfScope || (!canGenerate && !feature._Value.Metadata.HasBuildExtension))
+            if (!CanGenerateBuilderExtension(feature._Value, canGenerate))
             {
                 yield break;
             }
@@ -39,8 +38,7 @@ namespace Muify.Service
 
             Snippet registration = Snippet.Empty;
 
-            if (feature.Features.Unit._Value.Metadata.HasRegistrar
-                || (feature.Features.Unit._Value.Metadata.IsPartial && !feature.Features.Unit._Value.Metadata.IsOutOfScope))
+            if (CanRegisterUnit(feature.Features.Unit._Value))
             {
                 Symbol unit = (feature.Features.Unit._Value.Name, feature.Features.Unit.Namespace);
 
@@ -117,6 +115,24 @@ namespace Muify.Service
                 .Prepend(Configuration.Options, "#nullable enable");
 
             return new File(content, $"{@namespace}.WebApplicationBuilderExtensions.{method}");
+        }
+
+        private static bool CanGenerateApplicationExtension(Feature feature)
+        {
+            return GenerateRegisterModeWhenFeatureVisited.CanGenerate(feature)
+                && (feature.Metadata.HasRegistrar || feature.Metadata.IsPartial);
+        }
+
+        private static bool CanGenerateBuilderExtension(Feature feature, bool canGenerateApplicationExtension)
+        {
+            return !feature.Metadata.IsOutOfScope
+                && (canGenerateApplicationExtension || feature.Metadata.HasBuildExtension);
+        }
+
+        private static bool CanRegisterUnit(Unit unit)
+        {
+            return unit.Metadata.HasRegistrar
+                || (unit.Metadata.IsPartial && !unit.Metadata.IsOutOfScope);
         }
     }
 }

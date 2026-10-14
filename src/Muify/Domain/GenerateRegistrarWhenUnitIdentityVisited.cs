@@ -14,10 +14,7 @@
         {
             Service allocator = identity.Unit._Value.Metadata.Allocator;
 
-            if (allocator.HasRegistrar
-             || !allocator.IsPartial
-             || allocator.IsUndefined
-             || !allocator.Definition.Qualifier.Equals(identity.Unit.Namespace))
+            if (!CanGenerate(allocator, identity))
             {
                 yield break;
             }
@@ -39,6 +36,14 @@
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, $"{identity.Unit.Namespace}.Allocator.Registrar");
+        }
+
+        private static bool CanGenerate(Service allocator, Model.Graph.Areas.Area.Units.Unit.Identity identity)
+        {
+            return !allocator.HasRegistrar
+                && allocator.IsPartial
+                && !allocator.IsUndefined
+                && allocator.Definition.Qualifier.Equals(identity.Unit.Namespace);
         }
     }
 }

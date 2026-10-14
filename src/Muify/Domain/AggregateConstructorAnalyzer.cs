@@ -42,21 +42,14 @@ namespace Muify.Domain
                 return;
             }
 
-            INamedTypeSymbol unitAttribute = context.Compilation.GetTypeByMetadataName("Muify.Domain.UnitAttribute`1");
-
-            bool isUnit = unitAttribute is object && type
-                .GetAttributes()
-                .Any(attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass?.OriginalDefinition, unitAttribute));
-
-            if (!(type.HasAggregateBase() || isUnit || IsFeature(context.Compilation, type)) || SatisfiesConstructorConstraint(type))
+            if (!RequiresConstructorConstraint(context.Compilation, type) || SatisfiesConstructorConstraint(type))
             {
                 return;
             }
 
             foreach (SyntaxReference reference in type.DeclaringSyntaxReferences)
             {
-                if (reference.GetSyntax(context.CancellationToken) is RecordDeclarationSyntax declaration
-                 && declaration.ParameterList?.Parameters.Count > 0)
+                if (IsPositionalRecord(reference.GetSyntax(context.CancellationToken), out RecordDeclarationSyntax declaration))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(
                         ConstructorConstraintNotSatisfiedRule,
@@ -101,9 +94,32 @@ namespace Muify.Domain
 
             INamedTypeSymbol nonMutationalAttribute = compilation.GetTypeByMetadataName("Muify.Service.NonMutationalAttribute");
 
-            return type.GetAttributes().Any(attribute => attribute.AttributeClass.IsMutationalAttribute()
+            return type.GetAttributes().Any(attribute => IsFeatureAttribute(attribute, nonMutationalAttribute));
+        }
+
+        private static bool IsFeatureAttribute(AttributeData attribute, INamedTypeSymbol nonMutationalAttribute)
+        {
+            return attribute.AttributeClass.IsMutationalAttribute()
                 || (nonMutationalAttribute is object
-                    && SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, nonMutationalAttribute)));
+                    && SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, nonMutationalAttribute));
+        }
+
+        private static bool IsPositionalRecord(SyntaxNode syntax, out RecordDeclarationSyntax declaration)
+        {
+            declaration = syntax as RecordDeclarationSyntax;
+
+            return declaration?.ParameterList?.Parameters.Count > 0;
+        }
+
+        private static bool RequiresConstructorConstraint(Compilation compilation, INamedTypeSymbol type)
+        {
+            INamedTypeSymbol unitAttribute = compilation.GetTypeByMetadataName("Muify.Domain.UnitAttribute`1");
+
+            bool isUnit = unitAttribute is object && type
+                .GetAttributes()
+                .Any(attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass?.OriginalDefinition, unitAttribute));
+
+            return type.HasAggregateBase() || isUnit || IsFeature(compilation, type);
         }
 
         private static bool SatisfiesConstructorConstraint(INamedTypeSymbol type)

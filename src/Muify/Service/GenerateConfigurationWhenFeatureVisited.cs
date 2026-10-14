@@ -13,12 +13,7 @@ namespace Muify.Service
         {
             Poco options = feature._Value.Metadata.Options;
 
-            if (feature._Value.Metadata.IsOutOfScope
-                || (!options.IsUndefined
-                    && (!options.IsPartial
-                        || options.HasBase
-                        || !options.Characteristics.IsClass
-                        || !options.Characteristics.IsRecord)))
+            if (feature._Value.Metadata.IsOutOfScope || !CanGenerateOptions(options))
             {
                 yield break;
             }
@@ -40,6 +35,15 @@ namespace Muify.Service
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, $"{feature.Namespace}.{name}");
+        }
+
+        private static bool CanGenerateOptions(Poco options)
+        {
+            return options.IsUndefined
+                || (options.IsPartial
+                    && !options.HasBase
+                    && options.Characteristics.IsClass
+                    && options.Characteristics.IsRecord);
         }
     }
 }

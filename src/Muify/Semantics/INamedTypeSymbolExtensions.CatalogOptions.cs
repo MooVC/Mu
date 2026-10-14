@@ -29,20 +29,28 @@ namespace Muify.Semantics
 
             bool hasRequiredMembers = HasRequiredMembers(options);
 
-            return options.InstanceConstructors.Any(constructor => constructor.Parameters.All(parameter => parameter.IsOptional)
-                && (constructor.DeclaredAccessibility == Accessibility.Public
-                    || constructor.DeclaredAccessibility == Accessibility.Internal
-                    || constructor.DeclaredAccessibility == Accessibility.ProtectedOrInternal)
-                && (!hasRequiredMembers || constructor.GetAttributes().Any(attribute =>
-                    attribute.AttributeClass?.ToDisplayString() == "System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute")));
+            return options.InstanceConstructors.Any(constructor => CanInvokeOptionsConstructor(constructor, hasRequiredMembers));
+        }
+
+        private static bool CanInvokeOptionsConstructor(IMethodSymbol constructor, bool hasRequiredMembers)
+        {
+            return constructor.Parameters.All(parameter => parameter.IsOptional)
+                && HasAccessibleOptionsConstructor(constructor)
+                && (!hasRequiredMembers || SetsRequiredOptionsMembers(constructor));
+        }
+
+        private static bool HasAccessibleOptionsConstructor(IMethodSymbol constructor)
+        {
+            return constructor.DeclaredAccessibility == Accessibility.Public
+                || constructor.DeclaredAccessibility == Accessibility.Internal
+                || constructor.DeclaredAccessibility == Accessibility.ProtectedOrInternal;
         }
 
         private static bool HasRequiredMembers(INamedTypeSymbol options)
         {
             for (INamedTypeSymbol current = options; current is object; current = current.BaseType)
             {
-                if (current.GetMembers().Any(member => (member is IPropertySymbol property && property.IsRequired)
-                    || (member is IFieldSymbol field && field.IsRequired)))
+                if (current.GetMembers().Any(IsRequiredOptionsMember))
                 {
                     return true;
                 }
@@ -57,11 +65,7 @@ namespace Muify.Semantics
 
             while (current is object)
             {
-                if (current.Arity > 0
-                    || current.IsFileLocal
-                    || current.DeclaredAccessibility == Accessibility.Private
-                    || current.DeclaredAccessibility == Accessibility.Protected
-                    || current.DeclaredAccessibility == Accessibility.ProtectedAndInternal)
+                if (IsInaccessibleOptionsType(current))
                 {
                     return false;
                 }
@@ -70,6 +74,27 @@ namespace Muify.Semantics
             }
 
             return true;
+        }
+
+        private static bool IsInaccessibleOptionsType(INamedTypeSymbol options)
+        {
+            return options.Arity > 0
+                || options.IsFileLocal
+                || options.DeclaredAccessibility == Accessibility.Private
+                || options.DeclaredAccessibility == Accessibility.Protected
+                || options.DeclaredAccessibility == Accessibility.ProtectedAndInternal;
+        }
+
+        private static bool IsRequiredOptionsMember(ISymbol member)
+        {
+            return (member is IPropertySymbol property && property.IsRequired)
+                || (member is IFieldSymbol field && field.IsRequired);
+        }
+
+        private static bool SetsRequiredOptionsMembers(IMethodSymbol constructor)
+        {
+            return constructor.GetAttributes().Any(attribute =>
+                attribute.AttributeClass?.ToDisplayString() == "System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute");
         }
     }
 }

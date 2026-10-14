@@ -77,12 +77,7 @@ namespace Muify.Service
 
             return !feature.Metadata.IsOutOfScope
                 && options.IsAccessible
-                && (options.IsUndefined
-                    || options.HasOptionsBase
-                    || (options.IsPartial
-                        && !options.HasBase
-                        && options.Characteristics.IsClass
-                        && options.Characteristics.IsRecord));
+                && CanUseOptions(options);
         }
 
         internal static File CreateExtension(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature, string method, Snippet body)
@@ -143,6 +138,21 @@ namespace Muify.Service
 
             registrations.Add(GetCollectionRegistration(invariants, feature._Value.Metadata.Invariants));
             registrations.Add(GetCollectionRegistration(transforms, implementations));
+        }
+
+        private static bool CanExtendOptions(Poco options)
+        {
+            return options.IsPartial
+                && !options.HasBase
+                && options.Characteristics.IsClass
+                && options.Characteristics.IsRecord;
+        }
+
+        private static bool CanUseOptions(Poco options)
+        {
+            return options.IsUndefined
+                || options.HasOptionsBase
+                || CanExtendOptions(options);
         }
 
         private static string DefineMutationalHandlerRegistration(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
@@ -221,10 +231,7 @@ namespace Muify.Service
                 .WithArguments(identity)
                 .WithArguments(usecase => usecase.Named((feature._Value.Name, feature.Namespace)));
 
-            if (feature._Value.Mutational.Type.IsCreational
-                && unit.Metadata.Allocator.IsUndefined
-                && unit.Identity.IsType
-                && unit.Identity.Type.Equals((Qualification)typeof(Guid)))
+            if (ShouldRegisterGuidAllocator(feature._Value, unit))
             {
                 Symbol allocator = Symbol.Undefined
                     .Named((Name: "IAllocator", Qualifier: "Mu.Modelling.Services"))
@@ -267,12 +274,11 @@ namespace Muify.Service
             var registrations = new List<string>();
             var allocatorRegistrations = new List<string>();
 
-            if (feature._Value.Metadata.Handler.IsUnnamed
-                && (feature._Value.Type.IsMutational || feature._Value.Results.Length > 0))
+            if (ShouldRegisterDefaultHandler(feature._Value))
             {
                 registrations.Add(DefineMutationalHandlerRegistration(feature));
 
-                if (feature._Value.Type.IsMutational && feature._Value.Metadata.Service.IsUnnamed)
+                if (ShouldRegisterDefaultService(feature._Value))
                 {
                     registrations.Add(DefineMutationalServiceRegistration(feature, allocatorRegistrations));
                 }
@@ -287,6 +293,25 @@ namespace Muify.Service
             }
 
             return Snippet.From(Configuration.Options, registrations.ToArray());
+        }
+
+        private static bool ShouldRegisterDefaultHandler(Feature feature)
+        {
+            return feature.Metadata.Handler.IsUnnamed
+                && (feature.Type.IsMutational || feature.Results.Length > 0);
+        }
+
+        private static bool ShouldRegisterDefaultService(Feature feature)
+        {
+            return feature.Type.IsMutational && feature.Metadata.Service.IsUnnamed;
+        }
+
+        private static bool ShouldRegisterGuidAllocator(Feature feature, Unit unit)
+        {
+            return feature.Mutational.Type.IsCreational
+                && unit.Metadata.Allocator.IsUndefined
+                && unit.Identity.IsType
+                && unit.Identity.Type.Equals((Qualification)typeof(Guid));
         }
     }
 }

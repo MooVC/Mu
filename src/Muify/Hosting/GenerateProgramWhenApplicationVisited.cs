@@ -9,7 +9,7 @@ namespace Muify.Hosting
     {
         public IEnumerable<File> Observe(Model.Graph.Metadata metadata)
         {
-            if (!metadata._Value.IsExecutable || metadata._Value.HasProgram || string.IsNullOrEmpty(metadata._Value.BuildName))
+            if (!CanGenerateProgram(metadata._Value))
             {
                 yield break;
             }
@@ -32,6 +32,13 @@ namespace Muify.Hosting
                 .Prepend(Configuration.Options, "#nullable enable");
 
             yield return new File(content, $"{@namespace}.Program");
+        }
+
+        private static bool CanGenerateProgram(Model.Semantics metadata)
+        {
+            return metadata.IsExecutable
+                && !metadata.HasProgram
+                && !string.IsNullOrEmpty(metadata.BuildName);
         }
     }
 }

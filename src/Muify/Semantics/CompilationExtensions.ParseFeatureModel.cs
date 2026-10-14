@@ -20,7 +20,7 @@ namespace Muify.Semantics
 
         private static Feature ParseFeatureModel(this Compilation compilation, (Name Area, Name Feature, Name Unit) names, INamedTypeSymbol request)
         {
-            if (request is null || !SymbolEqualityComparer.Default.Equals(request.ContainingAssembly, compilation.Assembly))
+            if (!IsCurrentAssemblyRequest(request, compilation))
             {
                 return Feature.Undefined;
             }
@@ -73,7 +73,7 @@ namespace Muify.Semantics
                     .WithService(request.GetImplementation("IService`2", "Mu.Modelling.Services"))
                     .WithTargetIdentity(@base.GetTargetIdentity()));
 
-            if (@base?.Name == "Query" || (@base is null && mutation is null))
+            if (IsNonMutationalRequest(@base, mutation))
             {
                 return feature.IsNonMutational();
             }
@@ -125,6 +125,24 @@ namespace Muify.Semantics
                 : mutation.Name == $"{CreationalAttributeStrategy.Name}Attribute";
         }
 
+        private static bool IsCurrentAssemblyRequest(INamedTypeSymbol request, Compilation compilation)
+        {
+            return request is object && SymbolEqualityComparer.Default.Equals(request.ContainingAssembly, compilation.Assembly);
+        }
+
+        private static bool IsFeaturePayloadProperty(IPropertySymbol property)
+        {
+            return property.DeclaredAccessibility == Accessibility.Public
+                && !property.IsStatic
+                && !property.IsIndexer
+                && property.SetMethod is object;
+        }
+
+        private static bool IsNonMutationalRequest(INamedTypeSymbol @base, INamedTypeSymbol mutation)
+        {
+            return @base?.Name == "Query" || (@base is null && mutation is null);
+        }
+
         private static void ParseFeatureMetadata(
             this INamedTypeSymbol request,
             out INamedTypeSymbol @base,
@@ -140,10 +158,7 @@ namespace Muify.Semantics
                 .FirstOrDefault(attribute => attribute.IsMutationalAttribute());
 
             parameters = request
-                .GetProperties(property => property.DeclaredAccessibility == Accessibility.Public
-                    && !property.IsStatic
-                    && !property.IsIndexer
-                    && property.SetMethod is object)
+                .GetProperties(IsFeaturePayloadProperty)
                 .OrderBy(property => property.Name, StringComparer.Ordinal);
 
             results = request.GetResults();

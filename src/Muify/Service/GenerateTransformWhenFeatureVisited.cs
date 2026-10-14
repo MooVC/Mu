@@ -14,9 +14,7 @@ namespace Muify.Service
     {
         public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature feature)
         {
-            if (feature._Value.Type.IsNonMutational
-             || !feature._Value.Metadata.Transforms.IsDefaultOrEmpty
-             || feature._Value.Metadata.IsOutOfScope)
+            if (!CanGenerateTransform(feature._Value))
             {
                 yield break;
             }
@@ -56,6 +54,13 @@ namespace Muify.Service
                 .ToSnippet(Configuration.Options);
 
             yield return new File(content, $"{feature.Namespace}.Transform");
+        }
+
+        private static bool CanGenerateTransform(Feature feature)
+        {
+            return !feature.Type.IsNonMutational
+                && feature.Metadata.Transforms.IsDefaultOrEmpty
+                && !feature.Metadata.IsOutOfScope;
         }
 
         private static bool IsMatch(Attribute attribute, Parameter parameter)
