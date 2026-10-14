@@ -5,6 +5,7 @@ namespace Muify.Service
     using MooVC.Syntax;
     using MooVC.Syntax.CSharp;
     using Mu.Modelling;
+    using Muify.Serialization;
     using static Muify.Configuration;
     using static Muify.Service.GenerateBuildExtensionWhenFeatureVisited_Resources;
 
@@ -46,6 +47,13 @@ namespace Muify.Service
                     Configuration.Options,
                     $"_ = global::Mu.Composition.ContainerExtensions.RegisterOnce<{Render(unit)}>(container, app.Configuration);")
                     .Block(Configuration.Options, "if (options.Mode == global::Mu.Configuration.ModeType.Hosted)");
+            }
+
+            Snippet binders = GenerateBinderWhenSharedAssemblyVisited.GetApplicationRegistrations(feature._Root.Metadata.Binders);
+
+            if (!binders.IsEmpty)
+            {
+                registration = registration.IsEmpty ? binders : binders.Append(Configuration.Options, registration);
             }
 
             Snippet mapping = Snippet.From(

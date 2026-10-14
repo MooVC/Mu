@@ -22,6 +22,9 @@ namespace Mu.Modelling
             public ImmutableArray<string> Assemblies { get; set; } = ImmutableArray<string>.Empty;
 
             [Traverse(Scope = TraverseScope.None)]
+            public ImmutableArray<Qualification> Binders { get; set; } = ImmutableArray<Qualification>.Empty;
+
+            [Traverse(Scope = TraverseScope.None)]
             public string BuildName { get; set; } = string.Empty;
 
             [Traverse(Scope = TraverseScope.None)]
@@ -29,6 +32,9 @@ namespace Mu.Modelling
 
             [Traverse(Scope = TraverseScope.None)]
             public bool HasApplicationBuildExtension { get; set; }
+
+            [Traverse(Scope = TraverseScope.None)]
+            public bool HasBinder { get; set; }
 
             [Traverse(Scope = TraverseScope.None)]
             public bool HasBuilderBuildExtension { get; set; }
@@ -44,6 +50,12 @@ namespace Mu.Modelling
 
             [Ignore]
             public bool IsOutOfScope => this == OutOfScope;
+
+            [Traverse(Scope = TraverseScope.None)]
+            public bool IsSharedProject { get; set; }
+
+            [Traverse(Scope = TraverseScope.None)]
+            public ImmutableArray<Poco> SharedTypes { get; set; } = ImmutableArray<Poco>.Empty;
         }
     }
 }

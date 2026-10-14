@@ -10,6 +10,11 @@
 
     internal static partial class ITypeSymbolExtensions
     {
+        public static Poco CatalogReference(this ITypeSymbol type, IAssemblySymbol assembly)
+        {
+            return CatalogReference(type, assembly, new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default));
+        }
+
         public static ImmutableArray<Poco> GetReferences(this ITypeSymbol symbol, ITypeSymbol aggregate = null)
         {
             var domainBindings = new HashSet<ITypeSymbol>(GetDomainBindings(aggregate, symbol), SymbolEqualityComparer.Default);
@@ -19,11 +24,11 @@
                 .Concat(symbol.GetResultTypes())
                 .Where(type => !SymbolEqualityComparer.Default.Equals(type, symbol))
                 .Distinct<ITypeSymbol>(SymbolEqualityComparer.Default)
-                .Select(type => CatalogReference(type, symbol, domainBindings))
+                .Select(type => CatalogReference(type, symbol.ContainingAssembly, domainBindings))
                 .ToImmutableArray();
         }
 
-        private static Poco CatalogReference(ITypeSymbol type, ITypeSymbol request, ISet<ITypeSymbol> domainBindings)
+        private static Poco CatalogReference(ITypeSymbol type, IAssemblySymbol assembly, ISet<ITypeSymbol> domainBindings)
         {
             INamedTypeSymbol[] containers = GetReferenceContainers(type).ToArray();
 
@@ -37,22 +42,22 @@
                 .HasBinder(type is INamedTypeSymbol named && named.HasBinder())
                 .HasDomainBinder(domainBindings.Contains(type))
                 .IsAccessible(IsAccessibleReference(type) && containers.All(IsAccessibleReference))
-                .IsPartial(CanExtendReference(type, request) && containers.All(container => CanExtendReference(container, request)))
+                .IsPartial(CanExtendReference(type, assembly) && containers.All(container => CanExtendReference(container, assembly)))
                 .WithCharacteristics(type.GetCharacteristics())
                 .WithQualification(type.ToQualification());
         }
 
-        private static bool CanExtendReference(ITypeSymbol type, ITypeSymbol request)
+        private static bool CanExtendReference(ITypeSymbol type, IAssemblySymbol assembly)
         {
             return type.IsPartial()
-                && SymbolEqualityComparer.Default.Equals(type.ContainingAssembly, request.ContainingAssembly);
+                && SymbolEqualityComparer.Default.Equals(type.ContainingAssembly, assembly);
         }
 
         private static bool CanUseDomainBinder(ITypeSymbol type, ITypeSymbol request)
         {
             return type is INamedTypeSymbol named
                 && (named.TypeKind == TypeKind.Class || named.TypeKind == TypeKind.Struct)
-                && (named.HasBinder() || CanExtendReference(type, request));
+                && (named.HasBinder() || CanExtendReference(type, request.ContainingAssembly));
         }
 
         private static IEnumerable<ITypeSymbol> GetDomainBindings(ITypeSymbol aggregate, ITypeSymbol request)

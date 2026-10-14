@@ -5,6 +5,7 @@ namespace Muify
     using Mu.Modelling;
     using Muify.Domain;
     using Muify.Hosting;
+    using Muify.Serialization;
     using Muify.Service;
     using AreaComponent = Mu.Modelling.Model.Graph.Areas.Area.Components.Component;
     using Feature = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Features.Feature;
@@ -73,8 +74,10 @@ namespace Muify
 
             private static readonly Type[] _metadataVisitors = new Type[]
             {
+                typeof(GenerateBindersWhenSharedAssemblyVisited),
                 typeof(GenerateBuildExtensionWhenHostVisited),
                 typeof(GenerateProgramWhenApplicationVisited),
+                typeof(GenerateBinderWhenSharedAssemblyVisited),
             };
 
             private static readonly Type[] _unitIdentityVisitors = new Type[]

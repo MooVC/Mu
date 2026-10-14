@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using MooVC;
@@ -11,6 +12,7 @@
     using Muify.Syntax.CSharp;
     using Attribute = Mu.Modelling.Attribute;
     using BinderStructExtensions = Muify.Syntax.CSharp.StructExtensions;
+    using TimeSpan = System.TimeSpan;
 
     internal sealed class GenerateBinderWhenFeatureReferenceVisited
         : IModelVisitor<Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco, File>
@@ -26,28 +28,34 @@
                 && !poco.IsUndefined;
         }
 
-        public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)
+        public static IEnumerable<File> Generate(Poco poco)
         {
-            if (!CanGenerateBinder(poco._Value))
+            if (!CanGenerateBinder(poco))
             {
                 yield break;
             }
 
-            Snippet bindings = ApplyBindings(poco._Value);
-            Type declaration = CreateBinder(poco._Value, bindings);
+            Snippet bindings = ApplyBindings(poco);
+            Type declaration = CreateBinder(poco, bindings);
 
-            foreach (Poco containingType in poco._Value.ContainingTypes)
+            foreach (Poco containingType in poco.ContainingTypes)
             {
                 declaration = WrapInContainingType(declaration, containingType);
             }
 
             string content = Define(declaration)
-                .From(poco._Value.Qualification.Qualifier)
+                .From(poco.Qualification.Qualifier)
                 .ToSnippet(Configuration.Options);
 
-            content = ApplyBinderInterface(content, poco._Value);
+            content = NormalizeRecordStructDeclarations(content);
+            content = ApplyBinderInterface(content, poco);
 
-            yield return new File(content, $"{poco._Value.Qualification.Qualifier}.{poco._Value.Qualification.Moniker}.Binder");
+            yield return new File(content, $"{poco.Qualification.Qualifier}.{poco.Qualification.Moniker}.Binder");
+        }
+
+        public IEnumerable<File> Observe(Model.Graph.Areas.Area.Units.Unit.Features.Feature.Metadata.References.Poco poco)
+        {
+            return Generate(poco._Value);
         }
 
         private static string ApplyBinderInterface(string content, Poco poco)
@@ -145,6 +153,17 @@
             string moniker = poco.Qualification.Moniker.ToString();
 
             return moniker.Substring(moniker.LastIndexOf('.') + 1);
+        }
+
+        private static string NormalizeRecordStructDeclarations(string content)
+        {
+            // MooVC renders mutable record structs with the record keyword before the partial modifier.
+            return Regex.Replace(
+                content,
+                @"^(?<Indentation>[ \t]*)record[ \t]+partial[ \t]+struct(?=[ \t])",
+                "${Indentation}partial record struct",
+                RegexOptions.Multiline,
+                TimeSpan.FromSeconds(1));
         }
 
         private static Type WrapInContainingType(Type declaration, Poco containingType)

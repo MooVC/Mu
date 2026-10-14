@@ -61,7 +61,14 @@ namespace Muify.Semantics
 
             if (!isFeature && !isUnit)
             {
-                return compilation.WithApplicationMetadata(Model.Undefined, assemblies, applicationNamespace, string.Empty, false, ImmutableArray<Qualification>.Empty);
+                return compilation.WithApplicationMetadata(
+                    Model.Undefined,
+                    assemblies,
+                    applicationNamespace,
+                    string.Empty,
+                    false,
+                    ImmutableArray<Qualification>.Empty,
+                    isSharedProject: kind == ProjectKind.Undefined);
             }
 
             Name company = segments[0];

@@ -15,6 +15,9 @@
   <data name="AddMuModelRequired" xml:space="preserve">
     <value>The runtime type model to configure must be provided.</value>
   </data>
+  <data name="BindOnceModelRequired" xml:space="preserve">
+    <value>The runtime type model to bind must be provided.</value>
+  </data>
   <data name="HasBindingModelRequired" xml:space="preserve">
     <value>The runtime type model to inspect must be provided.</value>
   </data>

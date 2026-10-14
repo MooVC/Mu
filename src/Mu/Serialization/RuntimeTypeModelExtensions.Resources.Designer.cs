@@ -70,6 +70,15 @@ namespace Mu.Serialization {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to The runtime type model to bind must be provided..
+        /// </summary>
+        internal static string BindOnceModelRequired {
+            get {
+                return ResourceManager.GetString("BindOnceModelRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The runtime type model to inspect must be provided..
         /// </summary>
         internal static string HasBindingModelRequired {

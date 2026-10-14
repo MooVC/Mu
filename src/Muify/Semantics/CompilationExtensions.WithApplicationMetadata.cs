@@ -87,21 +87,30 @@ namespace Muify.Semantics
             string applicationNamespace,
             string buildName,
             bool isHost,
-            ImmutableArray<Qualification> features)
+            ImmutableArray<Qualification> features,
+            bool isSharedProject = false)
         {
             INamedTypeSymbol applicationExtensions = compilation.Assembly.GetTypeByMetadataName($"{applicationNamespace}.WebApplicationExtensions");
             INamedTypeSymbol builderExtensions = compilation.Assembly.GetTypeByMetadataName($"{applicationNamespace}.WebApplicationBuilderExtensions");
+            INamedTypeSymbol binder = compilation.Assembly.GetTypeByMetadataName($"{applicationNamespace}.Binder");
+            ImmutableArray<Poco> sharedTypes = isSharedProject
+                ? compilation.GetSharedTypes(applicationNamespace)
+                : ImmutableArray<Poco>.Empty;
 
             return model.WithMetadata(metadata => metadata
                 .Enumerate((assembly, subject) => subject.WithAssemblies(assembly), assemblies)
+                .Enumerate((assemblyBinder, subject) => subject.WithBinders(assemblyBinder), compilation.GetBinders())
                 .Enumerate((feature, subject) => subject.WithFeatures(feature), features)
+                .Enumerate((type, subject) => subject.WithSharedTypes(type), sharedTypes)
                 .WithApplicationNamespace(applicationNamespace)
                 .WithBuildName(buildName)
                 .HasApplicationBuildExtension(applicationExtensions.HasApplicationExtension(buildName, "Microsoft.AspNetCore.Builder.WebApplication", compilation))
+                .HasBinder(binder is object || compilation.HasAssemblyBinder())
                 .HasBuilderBuildExtension(builderExtensions.HasApplicationExtension(buildName, "Microsoft.AspNetCore.Builder.WebApplicationBuilder", compilation))
                 .HasProgram(compilation.HasProgram())
                 .IsExecutable(IsExecutableOutput(compilation.Options.OutputKind))
-                .IsHost(isHost));
+                .IsHost(isHost)
+                .IsSharedProject(isSharedProject));
         }
     }
 }

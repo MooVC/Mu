@@ -5,6 +5,7 @@ namespace Muify.Hosting
     using Microsoft.CodeAnalysis.CSharp;
     using MooVC.Syntax;
     using Mu.Modelling;
+    using Muify.Serialization;
     using Muify.Service;
     using static Muify.Hosting.GenerateBuildExtensionWhenHostVisited_Resources;
 
@@ -35,13 +36,21 @@ namespace Muify.Hosting
                 .Select(feature => $"_ = global::{feature.Qualifier}.WebApplicationExtensions.Build{feature.Moniker}(app);")
                 .ToArray();
 
+            var composition = Snippet.From(Configuration.Options, features);
+            Snippet binders = GenerateBinderWhenSharedAssemblyVisited.GetApplicationRegistrations(metadata._Value.Binders);
+
+            if (!binders.IsEmpty)
+            {
+                composition = binders.Append(Configuration.Options, composition);
+            }
+
             Snippet body = Snippet.From(
                 Configuration.Options,
                 GenerateRegisterModeWhenFeatureVisited.GetGuard("app", ObserveApplicationRequired),
                 Snippet.Blank,
                 $"var container = global::Mu.Composition.WebApplicationExtensions.GetMuContainer(app) ?? throw new global::System.InvalidOperationException({SymbolDisplay.FormatLiteral(ObserveContainerRequired, quote: true)});",
                 Snippet.Blank,
-                Snippet.From(Configuration.Options, features),
+                composition,
                 "_ = global::Mu.Composition.ContainerExtensions.RegisterDefaults(container, app.Configuration);",
                 Snippet.Blank,
                 "return app;")
