@@ -26,96 +26,105 @@ jobs:
   build:
     name: Build, Test & Publish
     runs-on: ubuntu-22.04
+    outputs:
+      semantic: ${{ steps.version.outputs.semantic }}
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v6.0.2
+      uses: actions/checkout@v7.0.1
       with:
         fetch-depth: 0
-        
+
     - name: Use .NET SDKs
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: |
           10.0.x
 
     - name: Cache NuGet Packages
-      uses: actions/cache@v5.0.3
+      uses: actions/cache@v6.1.0
       with:
         path: ${{ github.workspace }}/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', 'Directory.Packages.props', 'global.json', 'nuget.config') }}
         restore-keys: |
           ${{ runner.os }}-nuget-
-          
+
     - name: Restore Nuget Packages for Solution
       run: dotnet restore ${{ env.solution }}
 
     - name: Extract and Format Version from Tag
+      id: version
       run: |
+        $ErrorActionPreference = 'Stop'
         if ($env:GITHUB_REF -match '^refs/tags/') {
           $rawTag = $env:GITHUB_REF -replace '^refs/tags/', ''
         } else {
-          $rawTag = git describe --tags (git rev-list --tags --max-count=1)
+          $tagCommit = git rev-list --tags --max-count=1
+          if ($LASTEXITCODE -ne 0 -or -not $tagCommit) {
+            throw 'A release tag is required to run this workflow manually.'
+          }
+          $rawTag = git describe --tags --abbrev=0 $tagCommit
+          if ($LASTEXITCODE -ne 0 -or -not $rawTag) {
+            throw 'Unable to determine the release tag.'
+          }
         }
-        
-        $semantic = $rawTag -replace '^v', '' -replace '(alpha|beta|rc)0+', '$1.' 
-        $numeric = ($semantic -split "-")[0] + ".0"
-        
-        echo "version=$numeric" >> $env:GITHUB_ENV
-        echo "semantic=$semantic" >> $env:GITHUB_ENV
-        echo "informational=$rawTag" >> $env:GITHUB_ENV
+
+        $semantic = $rawTag -replace '^v', '' -replace '(alpha|beta|rc)0+', '$1.'
+        if ($semantic -notmatch '^((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*))(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$') {
+          throw "The release tag '$rawTag' must contain a semantic version."
+        }
+        $numeric = $Matches[1] + '.0'
+
+        "version=$numeric" >> $env:GITHUB_ENV
+        "semantic=$semantic" >> $env:GITHUB_ENV
+        "informational=$rawTag" >> $env:GITHUB_ENV
+        "semantic=$semantic" >> $env:GITHUB_OUTPUT
       shell: pwsh
 
     - name: Build Solution
       run: dotnet build ${{ env.solution }} --configuration ${{ env.configuration }} --no-restore -p:AssemblyVersion=${{ env.version }} -p:FileVersion=${{ env.version }} -p:InformationalVersion=${{ env.informational }} -p:PackageVersion=${{ env.semantic }} -p:Version=${{ env.version }}
 
     - name: Test Solution
-      run: dotnet test --solution ${{ env.solution }} --configuration ${{ env.configuration }} --no-build --ignore-exit-code 8
+      run: dotnet test --solution ${{ env.solution }} --configuration ${{ env.configuration }} --no-build
 
     - name: Upload Code Coverage
-      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Pack Solution
-      run: dotnet pack ${{ env.solution }} --configuration ${{ env.configuration }} --no-build --output ./artifacts -p:Version=${{ env.semantic }}
+      run: dotnet pack ${{ env.solution }} --configuration ${{ env.configuration }} --no-build --output ./artifacts -p:Version=${{ env.semantic }} -p:PackageVersion=${{ env.semantic }} -p:BuildProjectReferences=false
 
     - name: Upload Packages
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: nuget-packages
-        path: ./artifacts/*.nupkg
+        path: ./artifacts/Mu*.nupkg
+        if-no-files-found: error
 
     - name: Publish Packages to GitHub
-      if: ${{ github.event_name != 'workflow_dispatch' || inputs.deprecate_only != 'true' }}
-      run: dotnet nuget push **/Mu*.nupkg --source "https://nuget.pkg.github.com/Mu/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      if: ${{ github.event_name != 'workflow_dispatch' || !inputs.deprecate_only }}
+      run: dotnet nuget push './artifacts/Mu*.nupkg' --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key "$GITHUB_TOKEN" --skip-duplicate
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - name: Publish Packages to NuGet
-      if: ${{ github.event_name != 'workflow_dispatch' || inputs.deprecate_only != 'true' }}
-      run: dotnet nuget push **/Mu*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      if: ${{ github.event_name != 'workflow_dispatch' || !inputs.deprecate_only }}
+      run: dotnet nuget push './artifacts/Mu*.nupkg' --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   unlist:
     name: Unlist Previous Pre-release Package Versions
     runs-on: windows-latest
     needs: build
     if: ${{ needs.build.result == 'success' }}
+    env:
+      CURRENT_VERSION: ${{ needs.build.outputs.semantic }}
 
     steps:
-    - name: Extract and Format Version from Tag
-      run: |
-        $rawTag = '${{ github.ref_name }}'
-        $semantic = $rawTag -replace '^v', '' -replace '(alpha|beta|rc)0+', '$1.' 
-        $numeric = ($semantic -split "-")[0] + ".0"
-        
-        echo "version=$numeric" >> $env:GITHUB_ENV
-        echo "semantic=$semantic" >> $env:GITHUB_ENV
-        echo "informational=$rawTag" >> $env:GITHUB_ENV
-      shell: pwsh
-
     - name: Download Packages
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: nuget-packages
         path: ./artifacts
@@ -125,8 +134,8 @@ jobs:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       run: |
         $ErrorActionPreference = 'Stop'
-        $currentVersion = '${{ env.semantic }}'
-        $packages = Get-ChildItem -Path ./artifacts -Filter *.nupkg
+        $currentVersion = ($env:CURRENT_VERSION -split '\+')[0].ToLowerInvariant()
+        $packages = Get-ChildItem -Path ./artifacts -Filter Mu*.nupkg
         if (-not $packages) {
           throw 'No NuGet packages found to determine package IDs.'
         }
@@ -161,10 +170,16 @@ jobs:
           $versions = $null
 
           for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-            $response = Invoke-RestMethod -Uri $packageIndexUrl -Method Get
-            if ($response.versions -contains $currentVersion) {
-              $versions = $response.versions
-              break
+            try {
+              $response = Invoke-RestMethod -Uri $packageIndexUrl -Method Get
+              if ($response.versions -contains $currentVersion) {
+                $versions = $response.versions
+                break
+              }
+            } catch {
+              if ($_.Exception.Response.StatusCode -ne 404) {
+                throw
+              }
             }
 
             Write-Host "Waiting $delaySeconds seconds for $packageId $currentVersion to appear on NuGet (attempt $attempt of $maxAttempts)."
@@ -221,6 +236,9 @@ jobs:
 
             Write-Host "Unlisting $packageId $previousVersionText."
             dotnet nuget delete $packageId $previousVersionText --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --non-interactive
+            if ($LASTEXITCODE -ne 0) {
+              throw "Unable to unlist $packageId $previousVersionText."
+            }
           }
         }
       shell: pwsh
