@@ -30,7 +30,7 @@ public abstract record Transitional<TAggregate, TIdentity>
     /// <summary>
     /// Gets the aggregate reference targeted by the transition.
     /// </summary>
-    public Reference<TIdentity> Target { get; }
+    public Reference<TIdentity> Target { get; protected init; }
 
     /// <summary>
     /// Gets the model metadata associated with the transitional use case.

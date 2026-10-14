@@ -68,5 +68,23 @@ namespace Mu.Auditing.Composition {
                 return ResourceManager.GetString("RegisterAuditorConfigurationRequired", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The container used to register the auditor must be provided..
+        /// </summary>
+        internal static string RegisterAuditorContainerRequired {
+            get {
+                return ResourceManager.GetString("RegisterAuditorContainerRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The container used to register the scope manager must be provided..
+        /// </summary>
+        internal static string RegisterScopeManagerContainerRequired {
+            get {
+                return ResourceManager.GetString("RegisterScopeManagerContainerRequired", resourceCulture);
+            }
+        }
     }
 }

@@ -12,7 +12,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BuildMuBuilderRequired" xml:space="preserve">
+    <value>The builder for the Mu application must be provided.</value>
+  </data>
   <data name="ConfigureMuBuilderRequired" xml:space="preserve">
     <value>The builder to configure must be provided.</value>
+  </data>
+  <data name="GetMuContainerBuilderRequired" xml:space="preserve">
+    <value>The builder associated with the Mu container must be provided.</value>
   </data>
 </root>

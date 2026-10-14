@@ -34,6 +34,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Service\GenerateUseExtensionWhenFeatureVisitedTests\" />
+    <Folder Include="Service\GenerateBuildExtensionWhenFeatureVisitedTests\" />
   </ItemGroup>
 </Project>

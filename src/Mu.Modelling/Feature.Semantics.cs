@@ -20,9 +20,19 @@
 
             public bool HasBinder { get; set; } = true;
 
+            public bool HasBuilderBuildExtension { get; set; }
+
+            public bool HasBuildExtension { get; set; }
+
             public bool HasConstructors { get; set; } = true;
 
             public bool HasFact { get; set; } = true;
+
+            public bool HasIpcClientRegistration { get; set; }
+
+            public bool HasIpcHostRegistration { get; set; }
+
+            public bool HasModeRegistration { get; set; }
 
             public bool HasRegistrar { get; set; } = true;
 

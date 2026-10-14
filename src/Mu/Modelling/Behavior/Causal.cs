@@ -26,12 +26,12 @@ public abstract record Causal
     /// <summary>
     /// Gets the causal identity for the message.
     /// </summary>
-    public Guid Identity { get; }
+    public Guid Identity { get; protected init; }
 
     /// <summary>
     /// Gets the time at which the message was proposed.
     /// </summary>
-    public DateTimeOffset Proposed { get; }
+    public DateTimeOffset Proposed { get; protected init; }
 
     /// <summary>
     /// Gets the aggregate model associated with the message.

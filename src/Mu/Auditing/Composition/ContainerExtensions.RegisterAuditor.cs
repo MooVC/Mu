@@ -17,6 +17,7 @@ public static partial class ContainerExtensions
         /// <returns>The container.</returns>
         public Container RegisterAuditor(IConfiguration configuration)
         {
+            _ = Guard.Against.Null(container, message: RegisterAuditorContainerRequired);
             _ = Guard.Against.Null(configuration, message: RegisterAuditorConfigurationRequired);
 
             AuditOptions? options = configuration
@@ -33,6 +34,8 @@ public static partial class ContainerExtensions
         /// <returns>The container.</returns>
         public Container RegisterAuditor(AuditOptions? options = default)
         {
+            _ = Guard.Against.Null(container, message: RegisterAuditorContainerRequired);
+
             options ??= AuditOptions.Default;
 
             return options.Type switch

@@ -54,14 +54,26 @@ public sealed class WhenObserveIsCalled
     public async Task GivenOwnedComponentsWhenBindersAreGeneratedOrExistingThenTheyAreAppliedBeforeCustomRegistrars(bool hasBinder)
     {
         // Arrange
-        const string expectedBinding = "_ = global::MooVC.Testing.Mechanics.Car.Wheel.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);";
-        const string expectedRegistrar = "global::MooVC.Testing.Mechanics.Car.Allocator.Register(configuration, container);";
-        const string expectedWriteStore = """
-            _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration>(
+        const string expected = """
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using SimpleInjector;
+
+            partial record Car
+                : global::Mu.Composition.IRegistrar
+            {
+                public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
+                {
+                    _ = global::MooVC.Testing.Mechanics.Car.Wheel.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration>(
                         container,
                         configuration);
+                    global::MooVC.Testing.Mechanics.Car.Allocator.Register(configuration, container);
+                }
+            }
             """;
-        const string excludedBinding = "global::MooVC.Testing.Mechanics.Car.Pressure.Bind";
+
         var visitor = new GenerateRegistrarWhenUnitVisited();
 
         Component wheel = TestData.Single.Wheel._Value.WithMetadata(metadata => metadata
@@ -82,13 +94,7 @@ public sealed class WhenObserveIsCalled
 
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
-        _ = await Assert.That(definition.Content).Contains(expectedBinding);
-        _ = await Assert.That(definition.Content).Contains(expectedWriteStore);
-        _ = await Assert.That(definition.Content.Contains(excludedBinding, StringComparison.Ordinal)).IsFalse();
-        _ = await Assert.That(definition.Content.IndexOf(expectedBinding, StringComparison.Ordinal))
-            .IsLessThan(definition.Content.IndexOf(expectedWriteStore, StringComparison.Ordinal));
-        _ = await Assert.That(definition.Content.IndexOf(expectedWriteStore, StringComparison.Ordinal))
-            .IsLessThan(definition.Content.IndexOf(expectedRegistrar, StringComparison.Ordinal));
+        _ = await Assert.That(definition.Content).IsEqualTo(expected);
     }
 
     [Test]
@@ -99,10 +105,23 @@ public sealed class WhenObserveIsCalled
     {
         // Arrange
         string expected = $$"""
-            _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, {{expectedIdentity}}>(
+            namespace MooVC.Testing.Mechanics.Car;
+
+            using SimpleInjector;
+
+            partial record Car
+                : global::Mu.Composition.IRegistrar
+            {
+                public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
+                {
+                    _ = global::MooVC.Testing.Mechanics.Car.Car.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    _ = global::Mu.Persistence.Composition.ContainerExtensions.RegisterWriteStore<global::MooVC.Testing.Mechanics.Car.Car, {{expectedIdentity}}>(
                         container,
                         configuration);
+                }
+            }
             """;
+
         var visitor = new GenerateRegistrarWhenUnitVisited();
         Unit car = TestData.Single.Car._Value
             .IdentifiedBy(identity is null ? Qualification.Unnamed : (Qualification)identity)
@@ -116,7 +135,7 @@ public sealed class WhenObserveIsCalled
 
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
-        _ = await Assert.That(definition.Content).Contains(expected);
+        _ = await Assert.That(definition.Content).IsEqualTo(expected);
     }
 
     [Test]

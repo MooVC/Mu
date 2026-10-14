@@ -68,5 +68,14 @@ namespace Mu.Persistence.Composition {
                 return ResourceManager.GetString("RegisterWriteStoreConfigurationRequired", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The container used to register the write store must be provided..
+        /// </summary>
+        internal static string RegisterWriteStoreContainerRequired {
+            get {
+                return ResourceManager.GetString("RegisterWriteStoreContainerRequired", resourceCulture);
+            }
+        }
     }
 }

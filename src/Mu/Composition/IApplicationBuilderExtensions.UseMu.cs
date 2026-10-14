@@ -18,12 +18,18 @@ public static partial class IApplicationBuilderExtensions
         /// <returns>The configured application host.</returns>
         /// <exception cref="ArgumentNullException">Thrown when host or container are null references.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the dependency injection container is not properly configured.</exception>
-        public IApplicationBuilder UseMu(Container container, Action<SimpleInjectorUseOptions>? options = default)
+        public IApplicationBuilder UseMu(Container container, Action<SimpleInjectorUseOptions>? options = default, bool verify = true)
         {
             _ = Guard.Against.Null(host, message: UseMuHostRequired);
             _ = Guard.Against.Null(container, message: UseMuContainerRequired);
 
             options ??= _ => { };
+
+            if (container.ContainerScope.GetItem(typeof(CompositionContext)) is CompositionContext composition)
+            {
+                composition.ServiceProvider = host.ApplicationServices;
+                composition.VerifyOnStartup = !verify;
+            }
 
             host = host
                 .UseSimpleInjector(container, options)
@@ -35,7 +41,10 @@ public static partial class IApplicationBuilderExtensions
                     }
                 });
 
-            container.Verify();
+            if (verify)
+            {
+                container.Verify();
+            }
 
             return host;
         }

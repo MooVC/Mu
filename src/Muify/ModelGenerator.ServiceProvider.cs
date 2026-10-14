@@ -4,6 +4,7 @@ namespace Muify
     using System.Collections.Generic;
     using Mu.Modelling;
     using Muify.Domain;
+    using Muify.Hosting;
     using Muify.Service;
     using AreaComponent = Mu.Modelling.Model.Graph.Areas.Area.Components.Component;
     using Feature = Mu.Modelling.Model.Graph.Areas.Area.Units.Unit.Features.Feature;
@@ -54,6 +55,7 @@ namespace Muify
             {
                 typeof(GenerateBaseWhenFeatureVisited),
                 typeof(GenerateBinderWhenFeatureVisited),
+                typeof(GenerateBuildExtensionWhenFeatureVisited),
                 typeof(GenerateConfigurationWhenFeatureVisited),
                 typeof(GenerateConstructorsWhenFeatureVisited),
                 typeof(GenerateFactWhenFeatureVisited),
@@ -61,9 +63,18 @@ namespace Muify
                 typeof(GenerateGrpcServiceContractWhenFeatureVisited),
                 typeof(GenerateGrpcServiceWhenFeatureVisited),
                 typeof(GenerateRegistrarWhenFeatureVisited),
+                typeof(GenerateRegisterIpcClientWhenFeatureVisited),
+                typeof(GenerateRegisterIpcHostWhenFeatureVisited),
+                typeof(GenerateRegisterModeWhenFeatureVisited),
                 typeof(GenerateServiceContractWhenFeatureVisited),
                 typeof(GenerateServiceWhenFeatureVisited),
                 typeof(GenerateTransformWhenFeatureVisited),
+            };
+
+            private static readonly Type[] _metadataVisitors = new Type[]
+            {
+                typeof(GenerateBuildExtensionWhenHostVisited),
+                typeof(GenerateProgramWhenApplicationVisited),
             };
 
             private static readonly Type[] _unitIdentityVisitors = new Type[]
@@ -80,6 +91,7 @@ namespace Muify
 
             private static readonly IDictionary<Type, object> _services = new Dictionary<Type, object>
             {
+                { typeof(IEnumerable<IModelVisitor<Model.Graph.Metadata, File>>), new[] { new CollectionVisitor<Model.Graph.Metadata>(_metadataVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<AreaComponent, File>>), new[] { new CollectionVisitor<AreaComponent>(_componentVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<Feature, File>>), new[] { new CollectionVisitor<Feature>(_featureVisitors) } },
                 { typeof(IEnumerable<IModelVisitor<FeatureReference, File>>), new[] { new CollectionVisitor<FeatureReference>(_featureReferenceVisitors) } },

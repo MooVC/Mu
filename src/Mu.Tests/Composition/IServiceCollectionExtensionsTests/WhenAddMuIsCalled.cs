@@ -1,7 +1,9 @@
 namespace Mu.Composition.IServiceCollectionExtensionsTests;
 
+using Grpc.AspNetCore.Server;
 using Microsoft.Extensions.DependencyInjection;
 using Mu.Auditing;
+using Mu.Communications.Ipc.Grpc;
 using Mu.Communications.Mediation;
 using Mu.Communications.Mediation.Composition;
 using Mu.Communications.Messaging;
@@ -14,6 +16,35 @@ using DependencyScope = SimpleInjector.Scope;
 
 public sealed class WhenAddMuIsCalled
 {
+    [Test]
+    public async Task GivenGrpcServiceThenTheApplicationProviderActivatesTheScopedContainerRegistration()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        _ = services.AddMu(out Container container);
+        using (container)
+        {
+            container.Register<TestGrpcService>(Lifestyle.Scoped);
+            using ServiceProvider provider = services.BuildServiceProvider();
+            _ = provider.UseSimpleInjector(container);
+            using DependencyScope scope = AsyncScopedLifestyle.BeginScope(container);
+            TestGrpcService expected = container.GetInstance<TestGrpcService>();
+
+            // Act
+            IGrpcServiceActivator<TestGrpcService> activator = provider.GetRequiredService<IGrpcServiceActivator<TestGrpcService>>();
+            GrpcActivatorHandle<TestGrpcService> first = activator.Create(provider);
+            GrpcActivatorHandle<TestGrpcService> repeated = activator.Create(provider);
+            await activator.ReleaseAsync(first);
+
+            // Assert
+            _ = await Assert.That(activator).IsTypeOf<ServiceActivator<TestGrpcService>>();
+            _ = await Assert.That(first.Instance).IsSameReferenceAs(expected);
+            _ = await Assert.That(repeated.Instance).IsSameReferenceAs(expected);
+            _ = await Assert.That(first.Created).IsFalse();
+            _ = await Assert.That(expected.Scribe).IsSameReferenceAs(container.GetInstance<IScribe>());
+        }
+    }
+
     [Test]
     [Arguments(false)]
     [Arguments(true)]
@@ -142,5 +173,10 @@ public sealed class WhenAddMuIsCalled
         _ = await Assert.That(ReferenceEquals(firstMediator, secondMediator)).IsFalse();
         _ = await Assert.That(firstManager).IsSameReferenceAs(secondManager);
         _ = await Assert.That(firstScribe).IsSameReferenceAs(secondScribe);
+    }
+
+    public sealed class TestGrpcService(IScribe scribe)
+    {
+        public IScribe Scribe { get; } = scribe;
     }
 }

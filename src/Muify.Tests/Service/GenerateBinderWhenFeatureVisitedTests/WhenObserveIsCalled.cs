@@ -25,7 +25,6 @@ public sealed class WhenObserveIsCalled
 
                     meta.Add(1, "Identity");
                     meta.Add(2, "Proposed");
-                    meta.Add(3, "Model");
                     meta.Add(4, "Doors");
                     meta.Add(5, "Make");
                     meta.Add(6, "Model");
@@ -50,6 +49,43 @@ public sealed class WhenObserveIsCalled
         File definition = await Assert.That(result).HasSingleItem();
         _ = await Assert.That(definition.Content).IsEqualTo(expected);
         _ = await Assert.That(definition.Hint).IsEqualTo(expectedHint);
+    }
+
+    [Test]
+    public async Task GivenATransitionalRequestThenItsTargetIsBoundAfterTheExistingPayloadTags()
+    {
+        // Arrange
+        const string expected = """
+            namespace MooVC.Testing.Mechanics.Car.Unregister;
+
+            partial record Unregister
+                : global::Mu.Serialization.IBinder
+            {
+                public static global::ProtoBuf.Meta.RuntimeTypeModel Bind(global::ProtoBuf.Meta.RuntimeTypeModel model)
+                {
+                    var meta = model.Add(typeof(Unregister), false);
+
+                    meta.UseConstructor = false;
+
+                    meta.Add(1, "Identity");
+                    meta.Add(2, "Proposed");
+                    meta.Add(4, "Target");
+
+                    return model;
+                }
+            }
+            """;
+
+        var visitor = new GenerateBinderWhenFeatureVisited();
+        Feature unregister = TestData.Single.Unregister._Value.WithMetadata(metadata => metadata.IsPartial(true).HasBinder(false));
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 2, TestData.Single.Model, unregister);
+
+        // Act
+        IEnumerable<File> result = visitor.Observe(feature);
+
+        // Assert
+        File definition = await Assert.That(result).HasSingleItem();
+        _ = await Assert.That(definition.Content).IsEqualTo(expected);
     }
 
     [Test]

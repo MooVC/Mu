@@ -20,6 +20,12 @@
 
         public bool HasBinder { get; set; }
 
+        public bool HasOptionsBase { get; set; }
+
+        public bool HasParameterlessConstructor { get; set; } = true;
+
+        public bool IsAccessible { get; set; } = true;
+
         public bool IsPartial { get; set; }
 
         [Ignore]

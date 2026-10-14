@@ -20,6 +20,9 @@
     <ProjectReference Include="..\Mu.Modelling\Mu.Modelling.csproj" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\build\Mu.Executables.props" Pack="true" PackagePath="build\Muify.props;buildTransitive\Muify.props" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Domain\AggregateConstructorAnalyzer.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -123,6 +126,67 @@
       <WithCulture>false</WithCulture>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GenerateServiceWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Service\GenerateRegisterModeWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateRegisterModeWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateRegisterModeWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateRegisterModeWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateRegisterModeWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Service\GenerateRegisterIpcHostWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateRegisterIpcHostWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateRegisterIpcHostWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateRegisterIpcHostWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateRegisterIpcHostWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Service\GenerateRegisterIpcClientWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateRegisterIpcClientWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateRegisterIpcClientWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateRegisterIpcClientWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateRegisterIpcClientWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Service\GenerateBuildExtensionWhenFeatureVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateBuildExtensionWhenFeatureVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Service\GenerateBuildExtensionWhenFeatureVisited.Resources.resx">
+      <LogicalName>Muify.Service.GenerateBuildExtensionWhenFeatureVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateBuildExtensionWhenFeatureVisited.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Hosting\GenerateBuildExtensionWhenHostVisited.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GenerateBuildExtensionWhenHostVisited.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Hosting\GenerateBuildExtensionWhenHostVisited.Resources.resx">
+      <LogicalName>Muify.Hosting.GenerateBuildExtensionWhenHostVisited.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenerateBuildExtensionWhenHostVisited.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -15,9 +15,12 @@ public static partial class WebApplicationBuilderExtensions
         {
             _ = Guard.Against.Null(builder, message: ConfigureMuBuilderRequired);
 
-            kestrel ??= options => options.ListenAnyIP(50051, listen => listen.Protocols = HttpProtocols.Http2);
+            CompositionStartup.Configure(builder.Services).UseDefaultPort = kestrel is null;
 
-            _ = builder.WebHost.ConfigureKestrel(kestrel);
+            if (kestrel is not null)
+            {
+                _ = builder.WebHost.ConfigureKestrel(kestrel);
+            }
 
             return builder;
         }

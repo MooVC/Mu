@@ -2,8 +2,10 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" />
     <PackageReference Include="Fluentify" />
+    <PackageReference Include="Grpc.Net.Client" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="MooVC" />
+    <PackageReference Include="protobuf-net" />
     <PackageReference Include="protobuf-net.Grpc.AspNetCore" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="SimpleInjector.Integration.AspNetCore" />
@@ -31,6 +33,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InMemoryAuditor.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Compile Update="Communications\Ipc\Grpc\Composition\ContainerExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainerExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Ipc\Grpc\Composition\ContainerExtensions.Resources.resx">
+      <LogicalName>Mu.Communications.Ipc.Grpc.Composition.ContainerExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Compile Update="Communications\Mediation\Composition\ContainerExtensions.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -38,6 +51,17 @@
     </Compile>
     <EmbeddedResource Update="Communications\Mediation\Composition\ContainerExtensions.Resources.resx">
       <LogicalName>Mu.Communications.Mediation.Composition.ContainerExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Communications\Tracing\Composition\ContainerExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainerExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Communications\Tracing\Composition\ContainerExtensions.Resources.resx">
+      <LogicalName>Mu.Communications.Tracing.Composition.ContainerExtensions.Resources.resources</LogicalName>
       <WithCulture>false</WithCulture>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
@@ -106,6 +130,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CallContextExtensions.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Compile Update="Composition\ContainerExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContainerExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Composition\ContainerExtensions.Resources.resx">
+      <LogicalName>Mu.Composition.ContainerExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContainerExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Compile Update="Composition\IApplicationBuilderExtensions.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -138,6 +173,17 @@
       <WithCulture>false</WithCulture>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>IServiceCollectionExtensions.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Composition\WebApplicationExtensions.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebApplicationExtensions.Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Composition\WebApplicationExtensions.Resources.resx">
+      <LogicalName>Mu.Composition.WebApplicationExtensions.Resources.resources</LogicalName>
+      <WithCulture>false</WithCulture>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebApplicationExtensions.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Update="Composition\WebApplicationBuilderExtensions.Resources.Designer.cs">
       <DesignTime>True</DesignTime>

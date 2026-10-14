@@ -31,13 +31,13 @@ public readonly record struct Revision
     /// Gets the initiation timestamp for the revision.
     /// </summary>
     [ProtoMember(1, Name = nameof(InitiatedAt))]
-    public DateTimeOffset InitiatedAt { get; }
+    public DateTimeOffset InitiatedAt { get; private init; }
 
     /// <summary>
     /// Gets the monotonically increasing revision number.
     /// </summary>
     [ProtoMember(2, Name = nameof(Number))]
-    public ulong Number { get; }
+    public ulong Number { get; private init; }
 
     /// <summary>
     /// Increments the revision number and updates the initiation timestamp.

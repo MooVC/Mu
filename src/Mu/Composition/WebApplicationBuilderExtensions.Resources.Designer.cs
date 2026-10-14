@@ -61,11 +61,29 @@ namespace Mu.Composition {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to The builder for the Mu application must be provided..
+        /// </summary>
+        internal static string BuildMuBuilderRequired {
+            get {
+                return ResourceManager.GetString("BuildMuBuilderRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The builder to configure must be provided..
         /// </summary>
         internal static string ConfigureMuBuilderRequired {
             get {
                 return ResourceManager.GetString("ConfigureMuBuilderRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The builder associated with the Mu container must be provided..
+        /// </summary>
+        internal static string GetMuContainerBuilderRequired {
+            get {
+                return ResourceManager.GetString("GetMuContainerBuilderRequired", resourceCulture);
             }
         }
     }

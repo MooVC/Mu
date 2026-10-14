@@ -12,10 +12,10 @@ internal readonly record struct DateTimeOffsetSurrogate
     }
 
     [ProtoMember(1, Name = nameof(Ticks))]
-    public long Ticks { get; }
+    public long Ticks { get; private init; }
 
     [ProtoMember(2, Name = nameof(OffsetMinutes))]
-    public int OffsetMinutes { get; }
+    public int OffsetMinutes { get; private init; }
 
     public static implicit operator DateTimeOffset(DateTimeOffsetSurrogate surrogate)
     {

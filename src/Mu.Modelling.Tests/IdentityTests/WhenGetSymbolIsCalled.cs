@@ -9,7 +9,7 @@ public sealed class WhenGetSymbolIsCalled
     {
         // Arrange
         const string expectedMessage = "The namespace must be provided.";
-        Qualifier @namespace = null!;
+        Qualifier @namespace = default!;
         Exception? exception = null;
 
         // Act

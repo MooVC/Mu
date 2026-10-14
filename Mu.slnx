@@ -33,6 +33,7 @@
     <File Path=".github/SECURITY.md" />
     <File Path="CHANGELOG.md" />
     <File Path="docs/feature-constructors.md" />
+    <File Path="docs/executable-features-and-hosts.md" />
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
@@ -62,6 +63,7 @@
     <Project Path="src/Muify.Tests/Muify.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/Roslyn/">
+    <Project Path="src/MooVC.Testing.Modelling.Account.Host/MooVC.Testing.Modelling.Account.Host.csproj" />
     <Project Path="src/MooVC.Testing.Modelling.Account.Open/MooVC.Testing.Modelling.Account.Open.csproj" Id="31b04f1e-9534-4e78-ac2d-da3df81bcdce" />
     <Project Path="src/MooVC.Testing.Modelling.Account/MooVC.Testing.Modelling.Account.csproj" Id="b428dab7-f6ce-4cd6-b410-b55d5aaec5b2" />
   </Folder>

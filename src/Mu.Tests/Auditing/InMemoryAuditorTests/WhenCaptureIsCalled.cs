@@ -49,7 +49,7 @@ public sealed class WhenCaptureIsCalled
     public async Task GivenNullMessageThenThrowsArgumentNullException()
     {
         // Arrange
-        Message message = null!;
+        Message message = default!;
         var subject = new InMemoryAuditor();
 
         // Act

@@ -68,5 +68,14 @@ namespace Mu.Communications.Mediation.Composition {
                 return ResourceManager.GetString("RegisterMediatorConfigurationRequired", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The container used to register the mediator must be provided..
+        /// </summary>
+        internal static string RegisterMediatorContainerRequired {
+            get {
+                return ResourceManager.GetString("RegisterMediatorContainerRequired", resourceCulture);
+            }
+        }
     }
 }

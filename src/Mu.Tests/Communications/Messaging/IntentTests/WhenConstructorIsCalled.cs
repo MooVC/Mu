@@ -25,7 +25,7 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenNullUseCaseThenThrowsArgumentNullException()
     {
         // Arrange
-        TestData.TestMutation useCase = null!;
+        TestData.TestMutation useCase = default!;
 
         // Act
         Exception? exception = Capture(() => _ = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, useCase));

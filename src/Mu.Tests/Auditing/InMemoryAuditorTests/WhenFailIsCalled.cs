@@ -32,7 +32,7 @@ public sealed class WhenFailIsCalled
     public async Task GivenNullCauseThenThrowsArgumentNullExceptionAndPreservesEntry()
     {
         // Arrange
-        Exception cause = null!;
+        Exception cause = default!;
         var message = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, new TestData.TestMutation());
         var subject = new InMemoryAuditor();
         Guid identity = await subject.Capture(message, CancellationToken.None);

@@ -1,10 +1,13 @@
 namespace Mu.Composition;
 
 using Ardalis.GuardClauses;
+using Grpc.AspNetCore.Server;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mu.Auditing;
 using Mu.Auditing.Composition;
 using Mu.Communications.Ipc.Grpc;
+using Mu.Communications.Ipc.Grpc.Composition;
 using Mu.Communications.Mediation;
 using Mu.Communications.Tracing;
 using Mu.Communications.Tracing.Composition;
@@ -49,6 +52,14 @@ public static class IServiceCollectionExtensions
             container = new Container();
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
+            var composition = new CompositionContext(container);
+            container.ContainerScope.SetItem(typeof(CompositionContext), composition);
+            _ = services.AddSingleton(composition);
+
+            GrpcHostConfiguration configuration = CompositionStartup.Configure(services);
+            container.ContainerScope.SetItem(typeof(IServiceCollection), services);
+            container.ContainerScope.SetItem(typeof(GrpcHostConfiguration), configuration);
+
             container
                 .RegisterScopeManager()
                 .RegisterScribe()
@@ -56,8 +67,14 @@ public static class IServiceCollectionExtensions
 
             _ = services
                 .AddLogging()
-                .AddSimpleInjector(container, options)
+                .AddSimpleInjector(container, integration =>
+                {
+                    composition.IntegrationOptions = integration;
+                    options?.Invoke(integration);
+                })
                 .AddCodeFirstGrpc(options => options.Interceptors.Add<ExceptionInterceptor>());
+
+            _ = services.Replace(ServiceDescriptor.Singleton(typeof(IGrpcServiceActivator<>), typeof(ServiceActivator<>)));
 
             return services;
         }

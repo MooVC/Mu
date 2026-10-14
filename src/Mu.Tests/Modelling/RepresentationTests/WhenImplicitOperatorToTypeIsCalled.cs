@@ -21,7 +21,7 @@ public sealed class WhenImplicitOperatorToTypeIsCalled
     public async Task GivenNullRepresentationThenThrowsArgumentNullException()
     {
         // Arrange
-        Representation subject = null!;
+        Representation subject = default!;
 
         // Act
         Exception? exception = Capture(() =>

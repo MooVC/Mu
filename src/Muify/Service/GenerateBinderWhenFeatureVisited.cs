@@ -38,7 +38,6 @@ namespace Muify.Service
                 string.Empty,
                 "meta.Add(1, \"Identity\");",
                 "meta.Add(2, \"Proposed\");",
-                "meta.Add(3, \"Model\");",
             };
 
             int index = 4;
@@ -46,6 +45,11 @@ namespace Muify.Service
             foreach (Parameter property in feature._Value.Parameters)
             {
                 bindings.Add($"meta.Add({index++}, \"{property.Name.ToSnippet(Identifier.Options.Pascal)}\");");
+            }
+
+            if (feature._Value.Type.IsMutational && feature._Value.Mutational.Type.IsTransitional)
+            {
+                bindings.Add($"meta.Add({index}, \"Target\");");
             }
 
             bindings.Add(string.Empty);

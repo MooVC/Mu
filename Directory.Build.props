@@ -53,4 +53,5 @@
   <Import Condition="'$(IsLibraryProject)' == 'true'" Project="build/Libraries.props" />
   <Import Condition="'$(IsRoslynProject)' == 'true'" Project="build/Roslyn.props" />
   <Import Condition="'$(IsTestProject)' == 'true'" Project="build/Tests.props" />
+  <Import Project="build/Mu.Executables.props" />
 </Project>

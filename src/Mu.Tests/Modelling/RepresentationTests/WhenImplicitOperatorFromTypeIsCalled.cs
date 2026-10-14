@@ -60,7 +60,7 @@ public sealed class WhenImplicitOperatorFromTypeIsCalled
     public async Task GivenNullTypeThenThrowsArgumentNullException()
     {
         // Arrange
-        Type type = null!;
+        Type type = default!;
 
         // Act
         Exception? exception = Capture(() =>

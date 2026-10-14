@@ -37,12 +37,12 @@ public sealed partial class WhenParseFeatureModelIsCalled
     }
 
     [Test]
-    [Arguments("public sealed partial record RegisterOptions;", true, true, false)]
-    [Arguments("public sealed record RegisterOptions;", false, true, false)]
-    [Arguments("public sealed partial class RegisterOptions;", true, false, false)]
-    [Arguments("public sealed partial record RegisterOptions : OptionsBase;", true, true, true)]
-    [Arguments("public sealed partial record RegisterOptions : OtherBase; public abstract record OtherBase;", true, true, true)]
-    public async Task GivenConventionalOptionsThenTheirDeclarationIsCatalogued(string declaration, bool isPartial, bool isRecord, bool hasBase)
+    [Arguments("public sealed partial record RegisterOptions;", true, true, false, false)]
+    [Arguments("public sealed record RegisterOptions;", false, true, false, false)]
+    [Arguments("public sealed partial class RegisterOptions;", true, false, false, false)]
+    [Arguments("public sealed partial record RegisterOptions : OptionsBase;", true, true, true, true)]
+    [Arguments("public sealed partial record RegisterOptions : OtherBase; public abstract record OtherBase;", true, true, true, false)]
+    public async Task GivenConventionalOptionsThenTheirDeclarationIsCatalogued(string declaration, bool isPartial, bool isRecord, bool hasBase, bool hasOptionsBase)
     {
         // Arrange
         const string expectedName = "RegisterOptions";
@@ -62,8 +62,59 @@ public sealed partial class WhenParseFeatureModelIsCalled
         _ = await Assert.That(result.IsPartial).IsEqualTo(isPartial);
         _ = await Assert.That(result.Characteristics.IsRecord).IsEqualTo(isRecord);
         _ = await Assert.That(result.HasBase).IsEqualTo(hasBase);
+        _ = await Assert.That(result.HasOptionsBase).IsEqualTo(hasOptionsBase);
         _ = await Assert.That(result.Qualification.Moniker.ToString()).IsEqualTo(expectedName);
         _ = await Assert.That(result.Qualification.Qualifier.ToString()).IsEqualTo(AssemblyName);
+    }
+
+    [Test]
+    [Arguments("public sealed record CustomOptions : OptionsBase;", true)]
+    [Arguments("internal sealed record CustomOptions : OptionsBase;", true)]
+    [Arguments("public static class Settings { private sealed record CustomOptions : OptionsBase; }", false)]
+    [Arguments("file sealed record CustomOptions : OptionsBase;", false)]
+    [Arguments("public static class Settings<T> { public sealed record CustomOptions : OptionsBase; }", false)]
+    public async Task GivenOptionsWithDifferentVisibilityThenTheirAccessibilityIsCatalogued(string declaration, bool isAccessible)
+    {
+        // Arrange
+        string source = $$"""
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            public sealed record Register;
+
+            {{declaration}}
+            """;
+
+        // Act
+        Poco result = GetFeature(OptionsSupportSource + source).Metadata.Options;
+
+        // Assert
+        _ = await Assert.That(result.IsAccessible).IsEqualTo(isAccessible);
+    }
+
+    [Test]
+    [Arguments("public sealed record CustomOptions : OptionsBase;", true)]
+    [Arguments("public sealed record CustomOptions(string Description) : OptionsBase;", false)]
+    [Arguments("public sealed record CustomOptions(string Description = default) : OptionsBase;", true)]
+    [Arguments("public abstract record CustomOptions : OptionsBase;", false)]
+    [Arguments("public sealed record CustomOptions : OptionsBase { public required string Description { get; init; } }", false)]
+    [Arguments("public sealed record CustomOptions : OptionsBase { private CustomOptions() { } }", false)]
+    [Arguments("public sealed record CustomOptions : OptionsBase { [System.Diagnostics.CodeAnalysis.SetsRequiredMembers] public CustomOptions() { Description = string.Empty; } public required string Description { get; init; } }", true)]
+    public async Task GivenOptionsWithDifferentConstructionRequirementsThenTheirDefaultConstructionIsCatalogued(string declaration, bool canInitialize)
+    {
+        // Arrange
+        string source = $$"""
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            public sealed record Register;
+
+            {{declaration}}
+            """;
+
+        // Act
+        Poco result = GetFeature(OptionsSupportSource + source).Metadata.Options;
+
+        // Assert
+        _ = await Assert.That(result.HasParameterlessConstructor).IsEqualTo(canInitialize);
     }
 
     [Test]

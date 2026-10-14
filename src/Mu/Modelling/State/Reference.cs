@@ -29,13 +29,13 @@ public readonly record struct Reference<TIdentity>
     /// Gets the aggregate identity.
     /// </summary>
     [ProtoMember(1, Name = nameof(Identity))]
-    public TIdentity Identity { get; }
+    public TIdentity Identity { get; private init; }
 
     /// <summary>
     /// Gets the aggregate revision.
     /// </summary>
     [ProtoMember(2, Name = nameof(Revision))]
-    public ulong Revision { get; }
+    public ulong Revision { get; private init; }
 
     /// <summary>
     /// Defines an implicit conversion from a <see cref="Reference{TIdentity}"/> to its underlying identity type.

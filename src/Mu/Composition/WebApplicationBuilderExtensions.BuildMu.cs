@@ -1,14 +1,12 @@
 ﻿namespace Mu.Composition;
 
 using System;
-using Grpc.AspNetCore.Server;
+using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mu.Communications.Ipc.Grpc;
 using SimpleInjector;
 using SimpleInjector.Integration.ServiceCollection;
+using static Mu.Composition.WebApplicationBuilderExtensions_Resources;
 
 public static partial class WebApplicationBuilderExtensions
 {
@@ -28,14 +26,29 @@ public static partial class WebApplicationBuilderExtensions
             Action<KestrelServerOptions>? kestrel = default,
             Action<SimpleInjectorUseOptions>? use = default)
         {
-            _ = builder.Services.AddMu(out container, options: add);
-            _ = builder.Services.Replace(ServiceDescriptor.Singleton(typeof(IGrpcServiceActivator<>), typeof(ServiceActivator<>)));
+            _ = Guard.Against.Null(builder, message: BuildMuBuilderRequired);
+
+            var composition = CompositionContext.Find(builder.Services);
+
+            if (composition is null)
+            {
+                _ = builder.Services.AddMu(out container, options: add);
+            }
+            else
+            {
+                container = composition.Container;
+
+                if (add is not null && composition.IntegrationOptions is not null)
+                {
+                    add.Invoke(composition.IntegrationOptions);
+                }
+            }
 
             WebApplication host = builder
                 .ConfigureMu(kestrel: kestrel)
                 .Build();
 
-            _ = host.UseMu(container, options: use);
+            _ = host.UseMu(container, options: use, verify: false);
 
             return host;
         }

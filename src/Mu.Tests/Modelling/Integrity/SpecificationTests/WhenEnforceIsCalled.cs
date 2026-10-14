@@ -26,7 +26,7 @@ public sealed class WhenEnforceIsCalled
     {
         // Arrange
         var subject = new TestData.TestSpecification<TestQuery>();
-        TestQuery intent = null!;
+        TestQuery intent = default!;
 
         // Act
         Exception? exception = Capture(() => _ = subject.Enforce(intent, CancellationToken.None));

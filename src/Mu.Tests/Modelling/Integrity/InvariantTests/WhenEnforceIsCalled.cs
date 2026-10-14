@@ -29,7 +29,7 @@ public sealed class WhenEnforceIsCalled
     {
         // Arrange
         var subject = new TestInvariant();
-        TestData.TestAggregate aggregate = null!;
+        TestData.TestAggregate aggregate = default!;
         var mutation = new TestData.TestMutation();
 
         // Act
@@ -45,7 +45,7 @@ public sealed class WhenEnforceIsCalled
         // Arrange
         var subject = new TestInvariant();
         TestData.TestAggregate aggregate = TestData.CreateAggregate();
-        TestData.TestMutation mutation = null!;
+        TestData.TestMutation mutation = default!;
 
         // Act
         Exception? exception = Capture(() => _ = subject.Enforce(aggregate, mutation, CancellationToken.None));

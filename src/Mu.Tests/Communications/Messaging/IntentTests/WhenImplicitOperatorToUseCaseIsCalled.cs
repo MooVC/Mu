@@ -22,7 +22,7 @@ public sealed class WhenImplicitOperatorToUseCaseIsCalled
     public async Task GivenNullIntentThenThrowsArgumentNullException()
     {
         // Arrange
-        Intent<TestData.TestMutation> subject = null!;
+        Intent<TestData.TestMutation> subject = default!;
 
         // Act
         Exception? exception = Capture(() =>

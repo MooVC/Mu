@@ -21,15 +21,7 @@ public sealed partial class WhenObserveIsCalled
                 public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
                 {
                     _ = global::MooVC.Testing.Mechanics.Car.Register.Register.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
-                    container.Register<global::Mu.Communications.Mediation.IHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Communications.Mediation.ServiceHandler<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>>(global::SimpleInjector.Lifestyle.Scoped);
-                    container.Register<global::Mu.Modelling.Services.IService<global::MooVC.Testing.Mechanics.Car.Register.Register, global::MooVC.Testing.Mechanics.Car.Registration>, global::Mu.Modelling.Services.CreationalService<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Registration, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
-                    container.Collection.Register<global::Mu.Modelling.Integrity.IInvariant<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Register>>(
-                        global::System.Array.Empty<global::System.Type>(),
-                        global::SimpleInjector.Lifestyle.Scoped);
-                    container.Collection.Register<global::Mu.Modelling.Services.ITransform<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered>>(
-                        new[] { typeof(global::MooVC.Testing.Mechanics.Car.Register.Transform) },
-                        global::SimpleInjector.Lifestyle.Scoped);
-                    container.Register<global::Mu.Modelling.Services.IRoot<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Register>, global::Mu.Modelling.Services.Root<global::MooVC.Testing.Mechanics.Car.Car, global::MooVC.Testing.Mechanics.Car.Register.Registered, global::MooVC.Testing.Mechanics.Car.Register.Register>>(global::SimpleInjector.Lifestyle.Scoped);
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterMode(container, configuration);
                 }
             }
             """;
@@ -58,8 +50,23 @@ public sealed partial class WhenObserveIsCalled
     public async Task GivenPayloadReferencesWhenBindersAreGeneratedOrExistingThenOnlyAvailableBindersAreApplied(bool hasBinder, bool isPartial)
     {
         // Arrange
-        const string expectedBinding = "_ = global::MooVC.Testing.Mechanics.Car.Register.Extras.Details.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);";
-        const string excludedBinding = "global::MooVC.Testing.Mechanics.Car.Register.Unbound.Bind";
+        const string expected = """
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            using SimpleInjector;
+
+            partial record Register
+                : global::Mu.Composition.IRegistrar
+            {
+                public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
+                {
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.Extras.Details.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.Register.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterMode(container, configuration);
+                }
+            }
+            """;
+
         var visitor = new GenerateRegistrarWhenFeatureVisited();
 
         Poco details = Poco.Undefined
@@ -87,27 +94,44 @@ public sealed partial class WhenObserveIsCalled
 
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
-        _ = await Assert.That(definition.Content).Contains(expectedBinding);
-        _ = await Assert.That(definition.Content.Contains(excludedBinding, StringComparison.Ordinal)).IsFalse();
+        _ = await Assert.That(definition.Content).IsEqualTo(expected);
     }
 
     [Test]
-    public async Task GivenANonMutationalFeatureThenNoRootIsRegistered()
+    public async Task GivenCustomRegistrarsThenBindingsAndRegistrarsAreAppliedBeforeModeRegistration()
     {
         // Arrange
-        const string rootContract = "global::Mu.Modelling.Services.IRoot<";
+        const string expected = """
+            namespace MooVC.Testing.Mechanics.Car.Register;
+
+            using SimpleInjector;
+
+            partial record Register
+                : global::Mu.Composition.IRegistrar
+            {
+                public static void Register(global::Microsoft.Extensions.Configuration.IConfiguration configuration, global::SimpleInjector.Container container)
+                {
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.Register.Bind(global::ProtoBuf.Meta.RuntimeTypeModel.Default);
+                    global::MooVC.Testing.Mechanics.Car.Register.CustomRegistrar.Register(configuration, container);
+                    _ = global::MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterMode(container, configuration);
+                }
+            }
+            """;
+
         var visitor = new GenerateRegistrarWhenFeatureVisited();
-        Feature query = TestData.Single.FindCarsBy._Value.WithMetadata(metadata => metadata
+        Feature register = TestData.Single.Register._Value.WithMetadata(metadata => metadata
             .IsPartial(true)
-            .HasRegistrar(false));
-        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 0, TestData.Single.Model, query);
+            .HasRegistrar(false)
+            .WithRegistrars((Name: "CustomRegistrar", Qualifier: TestData.Single.Register.Namespace))
+            .WithRegistrars((Name: "CustomRegistrar", Qualifier: TestData.Single.Register.Namespace)));
+        Model.Graph.Areas.Area.Units.Unit.Features.Feature feature = new(TestData.Single.Features, 1, TestData.Single.Model, register);
 
         // Act
         IEnumerable<File> result = visitor.Observe(feature);
 
         // Assert
         File definition = await Assert.That(result).HasSingleItem();
-        _ = await Assert.That(definition.Content.Contains(rootContract, StringComparison.Ordinal)).IsFalse();
+        _ = await Assert.That(definition.Content).IsEqualTo(expected);
     }
 
     [Test]

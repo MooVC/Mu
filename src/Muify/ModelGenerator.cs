@@ -17,7 +17,10 @@ namespace Muify
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            IncrementalValueProvider<Model> models = context.CompilationProvider.Select(CompilationExtensions.ParseModel);
+            IncrementalValueProvider<string> namespaces = context.AnalyzerConfigOptionsProvider.Select((provider, _) =>
+                provider.GlobalOptions.TryGetValue("build_property.RootNamespace", out string rootNamespace) ? rootNamespace : string.Empty);
+            IncrementalValueProvider<Model> models = context.CompilationProvider.Combine(namespaces)
+                .Select((input, cancellationToken) => input.Left.ParseModel(input.Right, cancellationToken));
 
             context.RegisterSourceOutput(models, Generate);
         }

@@ -26,7 +26,7 @@ public sealed class WhenProposeIsCalled
     public async Task GivenNullAggregateThenThrowsArgumentNullException()
     {
         // Arrange
-        TestData.TestAggregate aggregate = null!;
+        TestData.TestAggregate aggregate = default!;
         var fact = new TestData.TestFact();
 
         // Act
@@ -41,7 +41,7 @@ public sealed class WhenProposeIsCalled
     {
         // Arrange
         TestData.TestAggregate aggregate = TestData.CreateAggregate();
-        TestData.TestFact fact = null!;
+        TestData.TestFact fact = default!;
 
         // Act
         Exception? exception = Capture(() => _ = aggregate.Propose(fact));

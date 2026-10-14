@@ -38,7 +38,7 @@ public sealed class WhenConstructorForUseCaseIsCalled
     {
         // Arrange
         const string expectedMessage = "The use case used to create the tracing ledger must be provided.";
-        TestData.TestMutation useCase = null!;
+        TestData.TestMutation useCase = default!;
 
         // Act
         Exception? exception = Capture(() => _ = new Scope(useCase));

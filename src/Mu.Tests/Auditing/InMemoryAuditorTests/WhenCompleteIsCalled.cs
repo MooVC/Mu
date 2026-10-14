@@ -53,7 +53,7 @@ public sealed class WhenCompleteIsCalled
     {
         // Arrange
         var message = new Intent<TestData.TestMutation>(TestData.CreateLedger(), TestData.PreparedAt, new TestData.TestMutation());
-        Outcome<string> outcome = null!;
+        Outcome<string> outcome = default!;
         var subject = new InMemoryAuditor();
         Guid identity = await subject.Capture(message, CancellationToken.None);
         InMemoryAuditor.Entry original = subject.Entries.Single();

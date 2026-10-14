@@ -30,6 +30,9 @@ namespace Muify.Semantics
             INamedTypeSymbol contract = request.ContainingNamespace.GetTypeMembers($"I{request.Name}Service").FirstOrDefault();
             INamedTypeSymbol grpc = service?.GetTypeMembers("Grpc").FirstOrDefault();
             INamedTypeSymbol options = request.GetOptions();
+            INamedTypeSymbol extensions = request.ContainingNamespace.GetTypeMembers("ContainerExtensions").FirstOrDefault();
+            INamedTypeSymbol applicationExtensions = request.ContainingNamespace.GetTypeMembers("WebApplicationExtensions").FirstOrDefault();
+            INamedTypeSymbol builderExtensions = request.ContainingNamespace.GetTypeMembers("WebApplicationBuilderExtensions").FirstOrDefault();
             ITypeSymbol fact = mutation?.TypeArguments.FirstOrDefault();
 
             ITypeSymbol aggregate = GetAggregate(names, request, @base);
@@ -45,8 +48,13 @@ namespace Muify.Semantics
                     .Enumerate((transform, subject) => subject.WithTransforms(transform), request.GetTransforms(aggregate, fact))
                     .HasBase(request.HasUseCaseBase())
                     .HasBinder(request.HasBinder())
+                    .HasBuilderBuildExtension(builderExtensions.HasApplicationExtension($"Build{request.Name}", "Microsoft.AspNetCore.Builder.WebApplicationBuilder", compilation))
+                    .HasBuildExtension(applicationExtensions.HasApplicationExtension($"Build{request.Name}", "Microsoft.AspNetCore.Builder.WebApplication", compilation))
                     .HasConstructors(request.HasConstructors())
                     .HasFact(request.HasFact())
+                    .HasIpcClientRegistration(extensions.HasContainerExtension("RegisterIpcClient"))
+                    .HasIpcHostRegistration(extensions.HasContainerExtension("RegisterIpcHost"))
+                    .HasModeRegistration(extensions.HasContainerExtension("RegisterMode"))
                     .HasGrpcClient(grpc?.GetTypeMembers("Client").Any() == true)
                     .HasGrpcService(grpc?.GetTypeMembers("Service").Any() == true)
                     .HasGrpcServiceContract(contract?.GetTypeMembers("IGrpc").Any() == true)

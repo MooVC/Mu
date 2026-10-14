@@ -17,6 +17,7 @@ public static partial class ContainerExtensions
         /// <returns>The container.</returns>
         public Container RegisterMediator(IConfiguration configuration)
         {
+            _ = Guard.Against.Null(container, message: RegisterMediatorContainerRequired);
             _ = Guard.Against.Null(configuration, message: RegisterMediatorConfigurationRequired);
 
             MediationOptions? options = configuration
@@ -33,6 +34,8 @@ public static partial class ContainerExtensions
         /// <returns>The container.</returns>
         public Container RegisterMediator(MediationOptions? options = default)
         {
+            _ = Guard.Against.Null(container, message: RegisterMediatorContainerRequired);
+
             options ??= MediationOptions.Default;
 
             return options.Type switch

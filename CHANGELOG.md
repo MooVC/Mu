@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Generate executable feature and `.Host` programs with one-call builder composition, host extensions named after the namespace node before `Host`, referenced feature discovery, independent entry-point/build overrides, once-per-container registrars, and replaceable in-memory persistence and shared-service defaults.
+- Restore causal metadata and transitional targets during protobuf deserialization while keeping their public API immutable; reserve the computed model's old field number and preserve existing request payload tags.
+- Generate `Build{Feature.Name}` application extensions that use the container associated by `BuildMu`, invoke feature registrars, and map hosted gRPC services; defer container verification and configured listener setup until startup to support fluent feature composition.
+- Validate container receivers and provide resource-backed guard messages for container composition extensions and generated feature mode and IPC registrations.
+- Generate feature container extensions for hosted and remote modes, move hosted domain registrations into `RegisterMode`, and apply gRPC host/client settings with scoped services, consumer-specific mediator fallbacks, and container-owned client channels.
 - Add hosted and remote gRPC feature configuration for the listening port or service address, client timeout, detailed errors, and nullable message-size limits.
 - Register the configured write store through generated unit registrars using each unit's aggregate and identity types and a globally qualified static call to avoid target-project name ambiguity.
 - Conditionally register a scoped GUID allocator for each generated creational service when no custom allocator exists in the domain or feature assembly.

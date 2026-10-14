@@ -30,7 +30,7 @@ public sealed class WhenConstructorIsCalled
     public async Task GivenNullFactThenThrowsArgumentNullException()
     {
         // Arrange
-        TestData.TestFact fact = null!;
+        TestData.TestFact fact = default!;
 
         // Act
         Exception? exception = Capture(() => _ = new Event<TestData.TestFact, Guid>(

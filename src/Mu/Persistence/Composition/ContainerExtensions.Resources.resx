@@ -120,4 +120,7 @@
   <data name="RegisterWriteStoreConfigurationRequired" xml:space="preserve">
     <value>The source for configuration values must be provided.</value>
   </data>
+  <data name="RegisterWriteStoreContainerRequired" xml:space="preserve">
+    <value>The container used to register the write store must be provided.</value>
+  </data>
 </root>

@@ -47,7 +47,7 @@ public sealed class WhenNextIsCalled
         // Arrange
         const string expectedMessage = "The use case for the next ledger scope must be provided.";
         IScribe subject = new Scribe();
-        UseCase useCase = null!;
+        UseCase useCase = default!;
         Ledger ledger = TestData.CreateLedger();
         var valid = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
 
@@ -70,7 +70,7 @@ public sealed class WhenNextIsCalled
         IScribe subject = new Scribe();
         var first = new TestData.TestMutation(TestData.Identity, TestData.ProposedAt);
         var second = new TestData.TestMutation(TestData.AlternateIdentity, TestData.ProposedAt);
-        UseCase useCase = null!;
+        UseCase useCase = default!;
         using IDisposable root = subject.Next(first, out _);
         using IDisposable child = subject.Next(second, out _);
 

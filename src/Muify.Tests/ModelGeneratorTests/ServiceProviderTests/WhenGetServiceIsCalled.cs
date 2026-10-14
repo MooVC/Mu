@@ -34,6 +34,9 @@ public sealed class WhenGetServiceIsCalled
         // Arrange
         string[] expectedHints =
         [
+            "MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterIpcClient",
+            "MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterIpcHost",
+            "MooVC.Testing.Mechanics.Car.Register.ContainerExtensions.RegisterMode",
             "MooVC.Testing.Mechanics.Car.Register.IRegisterService",
             "MooVC.Testing.Mechanics.Car.Register.IRegisterService.Grpc",
             "MooVC.Testing.Mechanics.Car.Register.Register",
@@ -46,6 +49,8 @@ public sealed class WhenGetServiceIsCalled
             "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Client",
             "MooVC.Testing.Mechanics.Car.Register.RegisterService.Grpc.Service",
             "MooVC.Testing.Mechanics.Car.Register.Transform",
+            "MooVC.Testing.Mechanics.Car.Register.WebApplicationBuilderExtensions.BuildRegister",
+            "MooVC.Testing.Mechanics.Car.Register.WebApplicationExtensions.BuildRegister",
         ];
 
         var provider = new ModelGenerator.ServiceProvider();

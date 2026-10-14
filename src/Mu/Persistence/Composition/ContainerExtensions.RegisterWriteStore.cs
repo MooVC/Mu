@@ -2,6 +2,8 @@
 
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Configuration;
+using Mu.Composition;
+using Mu.Modelling.Services;
 using Mu.Modelling.State;
 using Mu.Persistence.Configuration;
 using SimpleInjector;
@@ -15,6 +17,7 @@ public static partial class ContainerExtensions
             where TAggregate : Aggregate, new()
             where TIdentity : struct
         {
+            _ = Guard.Against.Null(container, message: RegisterWriteStoreContainerRequired);
             _ = Guard.Against.Null(configuration, message: RegisterWriteStoreConfigurationRequired);
 
             WriteStoreOptions? options = configuration
@@ -28,6 +31,8 @@ public static partial class ContainerExtensions
             where TAggregate : Aggregate, new()
             where TIdentity : struct
         {
+            _ = Guard.Against.Null(container, message: RegisterWriteStoreContainerRequired);
+
             options ??= WriteStoreOptions.Default;
 
             return options.Type switch
@@ -40,9 +45,10 @@ public static partial class ContainerExtensions
             where TAggregate : Aggregate, new()
             where TIdentity : struct
         {
-            container.Register<IWriteStore<TAggregate, TIdentity>, WriteStore<TAggregate, TIdentity>>(Lifestyle.Transient);
+            _ = RegistrationFallbacks.Register<IStream<TIdentity>, InMemoryStream<TIdentity>>(container, Lifestyle.Singleton);
+            _ = RegistrationFallbacks.Register<ITransform<TAggregate>, ReflectionTransform<TAggregate>>(container, Lifestyle.Scoped);
 
-            return container;
+            return RegistrationFallbacks.Register<IWriteStore<TAggregate, TIdentity>, WriteStore<TAggregate, TIdentity>>(container, Lifestyle.Transient);
         }
     }
 }

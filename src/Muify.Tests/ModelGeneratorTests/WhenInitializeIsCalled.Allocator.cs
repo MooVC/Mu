@@ -148,7 +148,7 @@ public sealed partial class WhenInitializeIsCalled
     {
         // Arrange
         const string allocatorName = "GuidAllocator";
-        const string registrarHint = $"{AllocatorFeatureAssemblyName}.Open.Registrar.g.cs";
+        const string registrarHint = $"{AllocatorFeatureAssemblyName}.ContainerExtensions.RegisterMode.g.cs";
         const string domainSource = """
             namespace Muify.Domain
             {

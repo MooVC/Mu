@@ -15,4 +15,7 @@
   <data name="RegisterMediatorConfigurationRequired" xml:space="preserve">
     <value>The source for configuration values must be provided.</value>
   </data>
+  <data name="RegisterMediatorContainerRequired" xml:space="preserve">
+    <value>The container used to register the mediator must be provided.</value>
+  </data>
 </root>

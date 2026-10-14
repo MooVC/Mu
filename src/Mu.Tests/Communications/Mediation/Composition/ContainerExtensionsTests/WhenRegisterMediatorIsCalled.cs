@@ -156,7 +156,7 @@ public sealed class WhenRegisterMediatorIsCalled
     {
         // Arrange
         const string expectedMessage = "The source for configuration values must be provided.";
-        IConfiguration configuration = null!;
+        IConfiguration configuration = default!;
         using Container subject = CreateContainer();
 
         // Act
@@ -165,6 +165,44 @@ public sealed class WhenRegisterMediatorIsCalled
         // Assert
         _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();
         _ = await Assert.That(((ArgumentNullException)exception!).ParamName).IsEqualTo(nameof(configuration));
+        _ = await Assert.That(exception.Message.StartsWith(expectedMessage, StringComparison.Ordinal)).IsTrue();
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenNullContainerWhenConfigurationIsPresentOrMissingThenThrowsArgumentNullExceptionForContainer(bool hasConfiguration)
+    {
+        // Arrange
+        const string expectedMessage = "The container used to register the mediator must be provided.";
+        Container container = default!;
+        IConfiguration configuration = hasConfiguration ? new ConfigurationBuilder().Build() : default!;
+
+        // Act
+        Exception? exception = Capture(() => _ = container.RegisterMediator(configuration));
+
+        // Assert
+        _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();
+        _ = await Assert.That(((ArgumentNullException)exception!).ParamName).IsEqualTo(nameof(container));
+        _ = await Assert.That(exception.Message.StartsWith(expectedMessage, StringComparison.Ordinal)).IsTrue();
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task GivenNullContainerWhenOptionsArePresentOrMissingThenThrowsArgumentNullExceptionForContainer(bool hasOptions)
+    {
+        // Arrange
+        const string expectedMessage = "The container used to register the mediator must be provided.";
+        Container container = default!;
+        MediationOptions? options = hasOptions ? new MediationOptions() : default;
+
+        // Act
+        Exception? exception = Capture(() => _ = container.RegisterMediator(options: options));
+
+        // Assert
+        _ = await Assert.That(exception).IsTypeOf<ArgumentNullException>();
+        _ = await Assert.That(((ArgumentNullException)exception!).ParamName).IsEqualTo(nameof(container));
         _ = await Assert.That(exception.Message.StartsWith(expectedMessage, StringComparison.Ordinal)).IsTrue();
     }
 
